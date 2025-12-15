@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        FBK Balkan</title>
+
+<!--  <link th:href="@{/css/input.css}" rel="stylesheet">-->
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <style>
+
+
+        .transparent-navbar
+        {
+            background-color: transparent !important;
+        }
+
+
+
+    </style>
+</head>
+<body class="min-h-screen  bg-base-200 transparent-navbar">
+
+<!--navbar-->
+<div class="absolute top-0 left-0 z-[10] right-0 ">
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</div>
+
+
+<!--hero-->
+<div class=" hero min-h-screen bg-cover  bg-center " style="background-image: url('/images/hero-image.png');">
+<!--    <div class="absolute inset-0  bg-black/50 z-0"></div>-->
+    <div class="hero-overlay bg-opacity-60"> </div>
+    <div class="hero-content text-center text-white relative z-10">
+        <div class="mx-auto">
+            <h1 class="text-7xl font-bold mb-5">we teach</h1>
+            <h1 class="text-7xl font-bold mb-5">we develop</h1>
+       <a href="/" class="btn btn-wide rounded-full border-2 text-2xl bg-opacity-10  text-base-100 hover:text-primary " >Register your child </a>
+        </div>
+
+
+
+         </div>
+
+
+
+
+
+</div>
+
+
+<!--footer-->
+<div class="mt-8">
+    <div th:replace="~{fragments/footer::footer}"></div>
+</div>
+
+</body>
+</html>
