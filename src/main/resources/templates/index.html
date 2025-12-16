@@ -31,14 +31,14 @@
 
 
 <!--hero-->
-<div class=" hero min-h-screen bg-cover  bg-center " style="background-image: url('/images/hero-image.png');">
+<div class=" hero min-h-screen bg-cover  bg-center mb-10 " style="background-image: url('/images/hero-image.png');">
 <!--    <div class="absolute inset-0  bg-black/50 z-0"></div>-->
     <div class="hero-overlay bg-opacity-60"> </div>
     <div class="hero-content text-center text-white relative z-10">
         <div class="mx-auto">
-            <h1 class="text-7xl font-bold mb-5">we teach</h1>
-            <h1 class="text-7xl font-bold mb-5">we develop</h1>
-       <a href="/" class="btn btn-wide rounded-full border-2 text-2xl bg-opacity-10  text-base-100 hover:text-primary " >Register your child </a>
+            <h1 class="text-7xl font-bold mb-5">Teknik</h1>
+            <h1 class="text-7xl font-bold mb-5">före långa bollar</h1>
+       <a href="/" class="btn btn-wide rounded-full border-2 text-2xl mt-8 bg-opacity-10  text-base-100 hover:text-primary " >Registrera ditt barn </a>
         </div>
 
 
@@ -51,6 +51,31 @@
 
 </div>
 
+
+
+<!-- latest video embed -->
+<div class="FBK-Balkan-youtube-embed flex justify-center">
+    <iframe class="latestVideoEmbed" cid="UCAcquTaKhJu0resneu7e2_w" width="80%" height="800" frameborder="0" allowfullscreen></iframe>
+
+    <script>
+        const loadVideo = (iframe) => {
+            const cid = iframe.getAttribute('cid');
+            const channelURL = encodeURIComponent(`https://www.youtube.com/feeds/videos.xml?channel_id=${cid}`);
+            const reqURL = `https://api.rss2json.com/v1/api.json?rss_url=${channelURL}`;
+
+            fetch(reqURL)
+                .then(response => response.json())
+                .then(result => {
+                    const link = result.items[0].link;
+                    const id = link.substr(link.indexOf("=") + 1);
+                    iframe.setAttribute("src", `https://youtube.com/embed/${id}?autoplay=0&rel=0`);
+                })
+                .catch(error => console.log('Error loading latest video:', error));
+        };
+
+        document.querySelectorAll('.latestVideoEmbed').forEach(loadVideo);
+    </script>
+</div>
 
 <!--footer-->
 <div class="mt-8">
