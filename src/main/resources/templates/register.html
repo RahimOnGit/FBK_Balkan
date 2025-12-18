@@ -1,12 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrera - FBK Balkan</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <script th:src="@{/js/auth.js}" defer></script>
 </head>
-<body>
+<body class="min-h-screen bg-base-200">
+    <!-- Navbar -->
+    <div th:replace="~{fragments/navbar::navbar}"></div>
 
+    <!-- Registration Form -->
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div>
+                <h2 class="mt-6 text-center text-4xl font-extrabold text-gray-900">
+                    Skapa konto
+                </h2>
+                <p class="mt-2 text-center text-sm text-gray-600">
+                    Eller
+                    <a href="/login" class="font-medium text-primary hover:text-primary-focus">
+                        logga in på ditt befintliga konto
+                    </a>
+                </p>
+            </div>
+            <form class="mt-8 space-y-6" id="registerForm">
+                <div class="space-y-4">
+                    <div>
+                        <label for="fullName" class="block text-sm font-medium text-gray-700">Fullständigt namn</label>
+                        <input id="fullName" name="fullName" type="text" required 
+                               class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" 
+                               placeholder="Förnamn Efternamn">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                        <input id="email" name="email" type="email" required 
+                               class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" 
+                               placeholder="din@email.com">
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700">Telefon</label>
+                        <input id="phone" name="phone" type="tel" required 
+                               class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" 
+                               placeholder="071234567">
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">Lösenord</label>
+                        <input id="password" name="password" type="password" required minlength="6"
+                               class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" 
+                               placeholder="Minst 6 tecken">
+                    </div>
+                    <div>
+                        <label for="role" class="block text-sm font-medium text-gray-700">Roll</label>
+                        <select id="role" name="role" required 
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                            <option value="">Välj roll</option>
+                            <option value="PARENT">Förälder</option>
+                            <option value="COACH">Tränare</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="error-message" class="hidden bg-error text-error-content p-4 rounded-lg"></div>
+                <div id="success-message" class="hidden bg-success text-success-content p-4 rounded-lg"></div>
+
+                <div>
+                    <button type="submit" 
+                            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-focus focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                        Registrera
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer::footer}"></div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+            const errorDiv = document.getElementById('error-message');
+            const successDiv = document.getElementById('success-message');
+            
+            errorDiv.classList.add('hidden');
+            successDiv.classList.add('hidden');
+            
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ fullName, email, phone, password, role })
+                });
+                
+                const data = await response.text();
+                
+                if (response.ok) {
+                    successDiv.textContent = 'Registrering lyckades! Omdirigerar till inloggning...';
+                    successDiv.classList.remove('hidden');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 2000);
+                } else {
+                    errorDiv.textContent = data || 'Registrering misslyckades';
+                    errorDiv.classList.remove('hidden');
+                }
+            } catch (error) {
+                errorDiv.textContent = 'Ett fel uppstod. Försök igen.';
+                errorDiv.classList.remove('hidden');
+            }
+        });
+    </script>
 </body>
 </html>

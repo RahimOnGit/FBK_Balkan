@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - FBK Balkan</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <script th:src="@{/js/auth.js}" defer></script>
+</head>
+<body class="min-h-screen bg-base-200">
+    <!-- Navbar -->
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+
+    <!-- Dashboard Content -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Loading State -->
+        <div id="loading" class="text-center py-12">
+            <span class="loading loading-spinner loading-lg"></span>
+            <p class="mt-4 text-gray-600">Laddar dashboard...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="error" class="hidden alert alert-error">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span id="error-message"></span>
+        </div>
+
+        <!-- Parent Dashboard -->
+        <div id="parent-dashboard" class="hidden">
+            <h1 class="text-4xl font-bold mb-8">Välkommen, <span id="parent-name"></span>!</h1>
+            
+            <!-- My Children Section -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-semibold mb-4">Mina barn</h2>
+                <div id="children-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Children cards will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Coaches Section -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-semibold mb-4">Tränare</h2>
+                <div id="coaches-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Coaches cards will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Coach Dashboard -->
+        <div id="coach-dashboard" class="hidden">
+            <h1 class="text-4xl font-bold mb-8">Välkommen, <span id="coach-name"></span>!</h1>
+            
+            <!-- My Teams Section -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-semibold mb-4">Mina lag</h2>
+                <div id="teams-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Teams cards will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Children/Parents Section -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-semibold mb-4">Barn och föräldrar</h2>
+                <div id="children-parents-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Children with parents cards will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer::footer}"></div>
+
+    <script>
+        // Check authentication
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        if (!token || !isAuthenticated()) {
+            window.location.href = '/login';
+            return;
+        }
+        
+        // Update navbar to show logout button
+        updateNavbar();
+
+        // Load dashboard data
+        async function loadDashboard() {
+            try {
+                const response = await fetch('/api/dashboard', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.status === 401) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    window.location.href = '/login';
+                    return;
+                }
+
+                const data = await response.json();
+
+                document.getElementById('loading').classList.add('hidden');
+
+                if (user.role === 'PARENT') {
+                    renderParentDashboard(data, user);
+                } else if (user.role === 'COACH') {
+                    renderCoachDashboard(data, user);
+                }
+            } catch (error) {
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('error').classList.remove('hidden');
+                document.getElementById('error-message').textContent = 'Kunde inte ladda dashboard. Försök igen.';
+            }
+        }
+
+        function renderParentDashboard(data, user) {
+            document.getElementById('parent-dashboard').classList.remove('hidden');
+            document.getElementById('parent-name').textContent = user.fullName;
+
+            // Render children
+            const childrenList = document.getElementById('children-list');
+            if (data.children && data.children.length > 0) {
+                childrenList.innerHTML = data.children.map(child => `
+                    <div class="card bg-base-100 shadow-xl">
+                        <div class="card-body">
+                            <h3 class="card-title">${child.fullName}</h3>
+                            ${child.birthYear ? `<p><strong>Födelseår:</strong> ${child.birthYear}</p>` : ''}
+                            ${child.teamCategory ? `<p><strong>Kategori:</strong> ${child.teamCategory}</p>` : ''}
+                            ${child.teams && child.teams.length > 0 ? `
+                                <div class="mt-2">
+                                    <p class="font-semibold">Lag:</p>
+                                    <ul class="list-disc list-inside">
+                                        ${child.teams.map(team => `<li>${team.name}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                            ${child.notes ? `<p class="mt-2 text-sm text-gray-600">${child.notes}</p>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                childrenList.innerHTML = '<p class="text-gray-600">Inga barn registrerade ännu.</p>';
+            }
+
+            // Render coaches
+            const coachesList = document.getElementById('coaches-list');
+            if (data.coaches && data.coaches.length > 0) {
+                coachesList.innerHTML = data.coaches.map(coach => `
+                    <div class="card bg-base-100 shadow-xl">
+                        <div class="card-body">
+                            <h3 class="card-title">${coach.fullName}</h3>
+                            <p><strong>Email:</strong> ${coach.email}</p>
+                            ${coach.phone ? `<p><strong>Telefon:</strong> ${coach.phone}</p>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                coachesList.innerHTML = '<p class="text-gray-600">Inga tränare tillgängliga.</p>';
+            }
+        }
+
+        function renderCoachDashboard(data, user) {
+            document.getElementById('coach-dashboard').classList.remove('hidden');
+            document.getElementById('coach-name').textContent = user.fullName;
+
+            // Render teams
+            const teamsList = document.getElementById('teams-list');
+            if (data.teams && data.teams.length > 0) {
+                teamsList.innerHTML = data.teams.map(team => `
+                    <div class="card bg-base-100 shadow-xl">
+                        <div class="card-body">
+                            <h3 class="card-title">${team.name}</h3>
+                            ${team.description ? `<p>${team.description}</p>` : ''}
+                            ${team.children && team.children.length > 0 ? `
+                                <div class="mt-2">
+                                    <p class="font-semibold">Barn i laget:</p>
+                                    <ul class="list-disc list-inside">
+                                        ${team.children.map(child => `<li>${child.fullName}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : '<p class="text-sm text-gray-600">Inga barn i laget ännu.</p>'}
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                teamsList.innerHTML = '<p class="text-gray-600">Inga lag tilldelade ännu.</p>';
+            }
+
+            // Render children with parents
+            const childrenParentsList = document.getElementById('children-parents-list');
+            if (data.childrenWithParents && data.childrenWithParents.length > 0) {
+                childrenParentsList.innerHTML = data.childrenWithParents.map(child => `
+                    <div class="card bg-base-100 shadow-xl">
+                        <div class="card-body">
+                            <h3 class="card-title">${child.fullName}</h3>
+                            ${child.birthYear ? `<p><strong>Födelseår:</strong> ${child.birthYear}</p>` : ''}
+                            ${child.teamCategory ? `<p><strong>Kategori:</strong> ${child.teamCategory}</p>` : ''}
+                            ${child.parents && child.parents.length > 0 ? `
+                                <div class="mt-2">
+                                    <p class="font-semibold">Föräldrar:</p>
+                                    <ul class="list-disc list-inside">
+                                        ${child.parents.map(parent => `
+                                            <li>
+                                                ${parent.fullName}<br>
+                                                <span class="text-sm text-gray-600">${parent.email}</span>
+                                                ${parent.phone ? `<br><span class="text-sm text-gray-600">${parent.phone}</span>` : ''}
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                childrenParentsList.innerHTML = '<p class="text-gray-600">Inga barn registrerade ännu.</p>';
+            }
+        }
+
+        // Load dashboard on page load
+        loadDashboard();
+    </script>
+</body>
+</html>
+
