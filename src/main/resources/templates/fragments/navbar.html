@@ -9,13 +9,15 @@
                     </svg>
                 </label>
                 <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                    <li><a href="/contact" class="hover:text-primary transition-colors hidden">Contact</a></li>
+                    <li><a href="/contact" class="hover:text-primary transition-colors hidden">Kontakt</a></li>
                     <!-- menu items for logged-in users -->
                     <li id="mobile-logout" class="hidden"><a href="/logout" class="hover:bg-error hover:text-error-content">Logout</a></li>
                 </ul>
             </div>
         </div>
 
+
+<!-- Desktop-->
 
         <!-- Left: Logo -->
         <div class="flex items-center">
@@ -25,10 +27,14 @@
         </div>
 
         <!-- Center: Navigation -->
-        <div class="hidden lg:flex items-center">
-            <nav>
-                <ul class="flex space-x-6">
-                    <li><a href="/contact" class=" text-base-100 font-virage  font-extrabold italic uppercase hover:text-gray-200">Contact</a></li>
+        <div class="hidden lg:flex">
+            <nav >
+                <ul class="space-x-6">
+                    <li><a href="/contact" class=" text-base-100 font-virage  font-extrabold italic uppercase hover:text-gray-200">Nyheter</a></li>
+                    <li><a href="/contact" class=" text-base-100 font-virage  font-extrabold italic uppercase hover:text-gray-200">Kommande Aktiviteter</a></li>
+                    <li><a href="/contact" class=" text-base-100 font-virage  font-extrabold italic uppercase hover:text-gray-200">Om Klubben</a></li>
+                    <li><a href="/contact" class=" text-base-100 font-virage  font-extrabold italic uppercase hover:text-gray-200">Intresseanmälan </a></li>
+
                 </ul>
 
 
@@ -38,7 +44,7 @@
         <!-- Right: Actions -->
         <div class="flex items-center space-x-4">
             <a href="/login" id="login-link" class="text-base-100 font-virage italic font-bold border px-4 py-2 rounded-full hover:bg-base-200 hover:text-primary">
-                Login
+                Logga in
             </a>
 
 
@@ -57,12 +63,12 @@
                     </label>
                     <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-xl bg-base-100 rounded-box w-64 border border-base-200">
                         <li class="menu-title px-4 py-2">
-                            <span class="text-sm font-semibold text-base-content">Welcome Back!</span>
+                            <span class="text-sm font-semibold text-base-content">Välkommen tillbaka</span>
                         </li>
                         <li class="px-4 py-2">
-                            <span class="text-sm font-medium text-base-content/80">Hello, <span id="user-name">User</span></span>
+                            <span class="text-sm font-medium text-base-content/80">Hej, <span id="user-name">Användare</span></span>
                         </li>
-                        <li><a href="/my-profile" class="hover:text-primary transition-colors">My Profile</a></li>
+                        <li><a href="/my-profile" class="hover:text-primary transition-colors">Min profil</a></li>
                         <li>
                             <a href="/my-appointments" class="justify-between hover:bg-base-200 rounded-lg transition-colors">
                                 <span>My Appointments</span>
@@ -70,7 +76,7 @@
                             </a>
                         </li>
                         <li><hr class="my-1"></li>
-                        <li><a href="/logout" class="hover:bg-error hover:text-error-content rounded-lg transition-colors">Logout</a></li>
+                        <li><a href="/logout" class="hover:bg-error hover:text-error-content rounded-lg transition-colors">logga ut</a></li>
                     </ul>
                 </div>
             </div>
