@@ -1,5 +1,5 @@
 <header class="shadow-inner" th:fragment="navbar">
-    <div class="navbar bg-opacity-60 backdrop-blur-sm border-none shadow-none p-8 flex items-center justify-between">
+    <div class="navbar bg-opacity-60 backdrop-blur-sm border-none shadow-none p-4 lg:p-6 flex items-center justify-between">
         <!-- Mobile hamburger menu -->
         <div class="flex-none lg:hidden">
             <div class="dropdown">
@@ -9,75 +9,75 @@
                     </svg>
                 </label>
                 <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                    <li><a href="/contact" class="hover:text-primary transition-colors hidden">Kontakt</a></li>
+                    <li><a href="/contact" class="hover:text-primary transition-colors">Kontakt</a></li>
                     <!-- menu items for logged-in users -->
                     <li id="mobile-logout" class="hidden"><a href="/logout" class="hover:bg-error hover:text-error-content">Logout</a></li>
                 </ul>
             </div>
         </div>
 
+        <!-- Desktop Layout -->
+        <div class="flex flex-1 items-center justify-between w-full p-5">
+            <!-- Left: Logo - Centered on mobile -->
+            <div class="flex items-center justify-center lg:justify-start w-full lg:w-auto">
+                <a href="/" class="lg:block">
+                    <img src="/images/FBK_BALKAN_logo.png" alt="FBK Balkan logo"
+                         class="h-20 w-auto lg:h-24 mx-auto lg:mx-0 lg:absolute  lg:top-5 lg:z-[0] lg:left-12">
+                </a>
+            </div>
 
-<!-- Desktop-->
-
-        <!-- Left: Logo -->
-        <div class="flex items-center">
-            <a href="/">
-                <img src="/images/FBK_BALKAN_logo.png" alt="FBK Balkan logo" class="h-24 w-auto absolute x-0 top-6 z-[0]  ">
-            </a>
-        </div>
-
-        <!-- Center: Navigation -->
-        <div class="hidden lg:flex">
-            <nav >
-                <ul class="space-x-6">
-                    <li><a href="/contact" class=" text-base-100 font-virage  font-extrabold italic uppercase hover:text-gray-200">Nyheter</a></li>
-                    <li><a href="/contact" class=" text-base-100 font-virage  font-extrabold italic uppercase hover:text-gray-200">Kommande Aktiviteter</a></li>
-                    <li><a href="/contact" class=" text-base-100 font-virage  font-extrabold italic uppercase hover:text-gray-200">Om Klubben</a></li>
-                    <li><a href="/contact" class=" text-base-100 font-virage  font-extrabold italic uppercase hover:text-gray-200">Intresseanmälan </a></li>
-
-                </ul>
-
-
-            </nav>
-        </div>
-
-        <!-- Right: Actions -->
-        <div class="flex items-center space-x-4">
-            <a href="/login" id="login-link" class="text-base-100 font-virage italic font-bold border px-4 py-2 rounded-full hover:bg-base-200 hover:text-primary">
-                Logga in
-            </a>
-
-
-            <!-- Profile Dropdown -->
-            <div id="profile-dropdown" class="hidden">
-                <div class="dropdown dropdown-end">
-                    <label tabindex="0" class="btn btn-ghost btn-circle avatar">
-                        <div class="w-10 rounded-full ring ring-base-100">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current text-base-100">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                            </svg>
-                        </div>
-                        <div class="absolute -top-1 -right-1" id="notification-badge" style="display: none;">
-                            <div class="w-6 h-6 rounded-full bg-error flex items-center justify-center text-white text-xs font-bold" id="upcoming-badge">0</div>
-                        </div>
-                    </label>
-                    <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-xl bg-base-100 rounded-box w-64 border border-base-200">
-                        <li class="menu-title px-4 py-2">
-                            <span class="text-sm font-semibold text-base-content">Välkommen tillbaka</span>
-                        </li>
-                        <li class="px-4 py-2">
-                            <span class="text-sm font-medium text-base-content/80">Hej, <span id="user-name">Användare</span></span>
-                        </li>
-                        <li><a href="/my-profile" class="hover:text-primary transition-colors">Min profil</a></li>
-                        <li>
-                            <a href="/my-appointments" class="justify-between hover:bg-base-200 rounded-lg transition-colors">
-                                <span>My Appointments</span>
-                                <span class="badge badge-secondary text-xs" id="appointments-badge">0</span>
-                            </a>
-                        </li>
-                        <li><hr class="my-1"></li>
-                        <li><a href="/logout" class="hover:bg-error hover:text-error-content rounded-lg transition-colors">logga ut</a></li>
+            <!-- Center: Navigation -->
+            <div class="hidden lg:flex flex-1 justify-center">
+                <nav class="mx-4">
+                    <ul class="flex space-x-4 lg:space-x-8">
+                        <li><a href="/contact" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-gray-200 transition-colors text-sm lg:text-base whitespace-nowrap">Nyheter</a></li>
+                        <li><a href="/contact" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-gray-200 transition-colors text-sm lg:text-base whitespace-nowrap">Kommande Aktiviteter</a></li>
+                        <li><a href="/contact" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-gray-200 transition-colors text-sm lg:text-base whitespace-nowrap">Om Klubben</a></li>
+                        <li><a href="/contact" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-gray-200 transition-colors text-sm lg:text-base whitespace-nowrap">Intresseanmälan</a></li>
                     </ul>
+                </nav>
+            </div>
+
+            <!-- Right: Actions -->
+            <div class="flex items-center space-x-2 lg:space-x-4 flex-shrink-0">
+                <a href="/login" id="login-link" class="flex items-center gap-2 text-base-100 font-virage italic font-bold px-3 lg:px-4 py-1.5 lg:py-2 rounded-full hover:bg-base-100 hover:text-primary transition-colors text-sm lg:text-base whitespace-nowrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6  fill-base-100 hover:fill-primary transition-colors" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <span>Logga in</span>
+                </a>
+
+                <!-- Profile Dropdown -->
+                <div id="profile-dropdown" class="hidden">
+                    <div class="dropdown dropdown-end">
+                        <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+                            <div class="w-8 lg:w-10 rounded-full ring ring-base-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 lg:w-8 lg:h-8 stroke-current text-base-100">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                            </div>
+                            <div class="absolute -top-1 -right-1" id="notification-badge" style="display: none;">
+                                <div class="w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-error flex items-center justify-center text-white text-xs font-bold" id="upcoming-badge">0</div>
+                            </div>
+                        </label>
+                        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-xl bg-base-100 rounded-box w-64 border border-base-200">
+                            <li class="menu-title px-4 py-2">
+                                <span class="text-sm font-semibold text-base-content">Välkommen tillbaka</span>
+                            </li>
+                            <li class="px-4 py-2">
+                                <span class="text-sm font-medium text-base-content/80">Hej, <span id="user-name">Användare</span></span>
+                            </li>
+                            <li><a href="/my-profile" class="hover:text-primary transition-colors">Min profil</a></li>
+                            <li>
+                                <a href="/my-appointments" class="justify-between hover:bg-base-200 rounded-lg transition-colors">
+                                    <span>My Appointments</span>
+                                    <span class="badge badge-secondary text-xs" id="appointments-badge">0</span>
+                                </a>
+                            </li>
+                            <li><hr class="my-1"></li>
+                            <li><a href="/logout" class="hover:bg-error hover:text-error-content rounded-lg transition-colors">logga ut</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
