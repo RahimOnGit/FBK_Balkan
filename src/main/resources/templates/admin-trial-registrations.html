@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Provtränings-registreringar</title>
+
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <style>
+        .transparent-navbar
+        {
+            background-color: transparent !important;
+        }
+
+    </style>
+</head>
+<body class="min-h-screen  bg-base-200 transparent-navbar">
+
+<!--navbar-->
+<div class="absolute top-0 left-0 z-[10] right-0 ">
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</div>
+
+<h1>Registreringar till provträning</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Barnets namn</th>
+        <th>Födelseår</th>
+        <th>Kön</th>
+        <th>Nuvarande klubb (år)</th>
+        <th>E-post</th>
+        <th>Telefon</th>
+        <th>Lag/åldersgrupp</th>
+        <th>Skapad</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="reg : ${registrations}">
+        <td th:text="${reg.id}"></td>
+        <td th:text="${reg.childName}"></td>
+        <td th:text="${reg.birthYear}"></td>
+        <td th:text="${reg.gender}"></td>
+        <td>
+            <span th:text="${reg.currentClub}"></span>
+            (<span th:text="${reg.yearsInCurrentClub}"></span>)
+        </td>
+        <td th:text="${reg.email}"></td>
+        <td th:text="${reg.phoneNumber}"></td>
+        <td th:text="${reg.teamCategory}"></td>
+        <td th:text="${#temporals.format(reg.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{'/'}">Tillbaka till startsidan</a>
+
+<!--footer-->
+<div class="mt-8">
+    <div th:replace="~{fragments/footer::footer}"></div>
+</div>
+
+</body>
+</html>
+
+
+

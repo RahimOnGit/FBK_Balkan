@@ -1,12 +1,208 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrering till Provträning</title>
 
+    <link th:href="@{/css/output.css}" rel="stylesheet">
 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <style>
+        .transparent-navbar
+        {
+            background-color: transparent !important;
+        }
+
+        .registration-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding-top: 6rem;
+            padding-bottom: 4rem;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 
+                        0 0 0 1px rgba(255, 255, 255, 0.1);
+            padding: 3rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35), 
+                        0 0 0 1px rgba(255, 255, 255, 0.15);
+        }
+
+        .form-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-control input,
+        .form-control select {
+            transition: all 0.3s ease;
+            border: 2px solid #e5e7eb;
+        }
+
+        .form-control input:focus,
+        .form-control select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            outline: none;
+        }
+
+        .form-control label {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            font-weight: 500;
+        }
+
+    </style>
 </head>
-<body>
+<body class="min-h-screen transparent-navbar">
+
+<!--navbar-->
+<div class="absolute top-0 left-0 z-[10] right-0 ">
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</div>
+
+<div class="registration-container">
+    <div class="container mx-auto px-4">
+        <div class="max-w-3xl mx-auto">
+            <div class="form-card">
+                <h1 class="text-5xl font-bold mb-2 form-title">Registrering till Provträning</h1>
+                <p class="text-gray-600 mb-8 text-lg">Fyll i formuläret nedan för att anmäla ditt barn till provträning</p>
+
+                <form th:action="@{/trial-registration}" th:object="${trialRegistration}" method="post">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="form-control">
+                            <label class="label" for="childName">
+                                <span class="label-text font-semibold">Barnets namn *</span>
+                            </label>
+                            <input id="childName" type="text" th:field="*{childName}" class="input input-bordered w-full" required>
+                            <div th:if="${#fields.hasErrors('childName')}" class="error-message" th:errors="*{childName}"></div>
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label" for="birthYear">
+                                <span class="label-text font-semibold">Födelseår *</span>
+                            </label>
+                            <select id="birthYear" th:field="*{birthYear}" class="select select-bordered w-full">
+                                <option value="">Välj år</option>
+                                <option th:each="year : ${#numbers.sequence(2005, 2022)}"
+                                        th:value="${year}"
+                                        th:text="${year}"></option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('birthYear')}" class="error-message" th:errors="*{birthYear}"></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="form-control">
+                            <label class="label" for="gender">
+                                <span class="label-text font-semibold">Kön *</span>
+                            </label>
+                            <select id="gender" th:field="*{gender}" class="select select-bordered w-full">
+                                <option value="">Välj</option>
+                                <option value="BOY">Pojke</option>
+                                <option value="GIRL">Flicka</option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('gender')}" class="error-message" th:errors="*{gender}"></div>
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label" for="currentClub">
+                                <span class="label-text font-semibold">Nuvarande klubb</span>
+                            </label>
+                            <input id="currentClub" type="text" th:field="*{currentClub}" class="input input-bordered w-full">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="form-control">
+                            <label class="label" for="yearsInCurrentClub">
+                                <span class="label-text font-semibold">Antal år i nuvarande klubb</span>
+                            </label>
+                            <input id="yearsInCurrentClub" type="number" min="0" max="15" th:field="*{yearsInCurrentClub}" class="input input-bordered w-full">
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label" for="email">
+                                <span class="label-text font-semibold">E-post *</span>
+                            </label>
+                            <input id="email" type="email" th:field="*{email}" class="input input-bordered w-full" required>
+                            <div th:if="${#fields.hasErrors('email')}" class="error-message" th:errors="*{email}"></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="form-control">
+                            <label class="label" for="phoneNumber">
+                                <span class="label-text font-semibold">Telefonnummer *</span>
+                            </label>
+                            <input id="phoneNumber" type="tel" th:field="*{phoneNumber}" class="input input-bordered w-full" required>
+                            <div th:if="${#fields.hasErrors('phoneNumber')}" class="error-message" th:errors="*{phoneNumber}"></div>
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label" for="teamCategory">
+                                <span class="label-text font-semibold">Önskad lag/åldersgrupp *</span>
+                            </label>
+                            <input id="teamCategory" type="text" th:field="*{teamCategory}" class="input input-bordered w-full" required
+                                   placeholder="t.ex. P2013, F2012">
+                            <div th:if="${#fields.hasErrors('teamCategory')}" class="error-message" th:errors="*{teamCategory}"></div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 flex justify-center">
+                        <button type="submit" class="submit-btn btn-lg">Skicka anmälan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--footer-->
+<div class="mt-8">
+    <div th:replace="~{fragments/footer::footer}"></div>
+</div>
 
 </body>
 </html>
