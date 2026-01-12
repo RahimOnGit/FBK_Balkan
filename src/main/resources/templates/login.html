@@ -10,10 +10,13 @@
 </head>
 <body class="min-h-screen bg-base-200">
 <!-- Navbar -->
-<div th:replace="~{fragments/navbar::navbar}"></div>
+<header class="bg-primary">
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+
+</header>
 
 <!-- Login Form -->
-<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen flex  justify-center py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
         <div>
             <h2 class="mt-6 text-center text-4xl font-extrabold text-gray-900">

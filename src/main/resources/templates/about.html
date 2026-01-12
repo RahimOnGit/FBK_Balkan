@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FBK Balkan</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<header  class="bg-primary">
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</header>
+
+
+<!---->
+<section class="bg-base-100 py-16">
+    <div class="max-w-6xl mx-auto px-4 space-y-20">
+
+        <!-- HERO -->
+        <div class="text-center space-y-4">
+            <h1 class="text-4xl md:text-5xl font-bold">
+                Vem är <span class="text-primary">FBK Balkan</span>?
+            </h1>
+            <p class="text-lg text-base-content/70 max-w-3xl mx-auto">
+                FBK Balkan är en fotbollsklubb från Malmö, grundad 1962, med stark lokal förankring
+                och ett av stadens största samhällsengagemang inom barn- och ungdomsfotboll.
+            </p>
+        </div>
+
+        <!-- QUICK FACTS -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="card bg-base-200 shadow">
+                <div class="card-body">
+                    <h3 class="card-title">⚽ Sport</h3>
+                    <p>Fotboll – herrlag & omfattande ungdomsverksamhet</p>
+                </div>
+            </div>
+
+            <div class="card bg-base-200 shadow">
+                <div class="card-body">
+                    <h3 class="card-title">📍 Ort</h3>
+                    <p>Malmö<br>Kirsebergs IP</p>
+                </div>
+            </div>
+
+            <div class="card bg-base-200 shadow">
+                <div class="card-body">
+                    <h3 class="card-title">🧒 Fokus</h3>
+                    <p>Utveckling, inkludering och integration</p>
+                </div>
+            </div>
+
+            <div class="card bg-base-200 shadow">
+                <div class="card-body">
+                    <h3 class="card-title">🏟️ Seniorlag</h3>
+                    <p>Division 2–3 nivå historiskt</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- STORY -->
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="space-y-4">
+                <h2 class="text-3xl font-bold">Mer än bara fotboll</h2>
+                <p class="text-base-content/80">
+                    FBK Balkan är känd som en <strong>talangfabrik</strong> där unga spelare får chansen
+                    att utvecklas – både på och utanför planen.
+                </p>
+                <p class="text-base-content/80">
+                    Om du inte visste det: <strong>Zlatan Ibrahimović</strong> tog sina första steg i
+                    fotbollen här – en del av klubbens stolta historia.
+                </p>
+            </div>
+
+            <div class="bg-base-200 p-8 rounded-2xl shadow space-y-3">
+                <h3 class="font-semibold text-xl">Vad utmärker klubben?</h3>
+                <ul class="list-disc list-inside space-y-2 text-base-content/80">
+                    <li>En av Malmös största ungdomsverksamheter</li>
+                    <li>Tydligt socialt ansvar och lokal närvaro</li>
+                    <li>Stark identitet som mötesplats för olika kulturer</li>
+                    <li>Vi satsar på att utveckla nästa stora talang</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- WHO IS WELCOME -->
+        <div class="bg-primary text-primary-content rounded-3xl p-10 space-y-4">
+            <h2 class="text-3xl font-bold">Vem är välkommen?</h2>
+            <p class="max-w-3xl">
+                Alla är välkomna till FBK Balkan. Man behöver inte komma från Balkanregionen –
+                namnet lever kvar sedan 1962. Alla barn och ungdomar kan träna, utvecklas och spela matcher med oss.
+            </p>
+        </div>
+
+        <!-- VALUES -->
+        <div class="space-y-10">
+            <h2 class="text-3xl font-bold text-center">Våra kärnvärden</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body text-center">
+                        <h3 class="card-title justify-center">Respekt</h3>
+                        <p>På och utanför planen</p>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body text-center">
+                        <h3 class="card-title justify-center">Trygghet</h3>
+                        <p>Vuxna förebilder och tydliga ramar</p>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body text-center">
+                        <h3 class="card-title justify-center">Ansvar</h3>
+                        <p>Individuellt och kollektivt</p>
+                    </div>
+                </div>
+
+                <div class="card bg-base-200 shadow">
+                    <div class="card-body text-center">
+                        <h3 class="card-title justify-center">Utveckling</h3>
+                        <p>Som spelare och människa</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUOTE -->
+        <div class="text-center max-w-3xl mx-auto text-lg italic text-base-content/70">
+            För många barn är Balkan Junior det första steget in i föreningslivet –
+            fokus ligger inte bara på resultat, utan på gemenskap, självkänsla och glädje.
+        </div>
+
+    </div>
+</section>
+
+
+</body>
+</html>
