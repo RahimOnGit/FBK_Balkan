@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - FBK Balkan</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <script th:src="@{/js/auth.js}" defer></script>
+</head>
+<body class="min-h-screen bg-base-200">
+<!-- Navbar -->
+<header class="bg-primary">
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+
+</header>
+
+<!-- Login Form -->
+<div class="min-h-screen flex  justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div>
+            <h2 class="mt-6 text-center text-4xl font-extrabold text-gray-900">
+                Logga in
+            </h2>
+            <p class="mt-2 text-center text-sm text-gray-600">
+                Eller
+                <a href="/register" class="font-medium text-primary hover:text-primary-focus">
+                    skapa ett nytt konto
+                </a>
+            </p>
+        </div>
+
+        <!-- Role Selection Cards -->
+        <div class="mt-8">
+            <label class="block text-sm font-medium text-gray-700 mb-4 text-center">
+                Välj din roll
+            </label>
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Parent Card -->
+<!--                <div id="role-parent"-->
+<!--                     class="role-card cursor-pointer p-6 rounded-lg border-2 border-base-300 bg-base-100 hover:border-primary hover:shadow-lg transition-all duration-300 ease-in-out"-->
+<!--                     data-role="PARENT">-->
+<!--                    <div class="flex flex-col items-center text-center relative">-->
+<!--                        &lt;!&ndash; Checkmark indicator &ndash;&gt;-->
+<!--                        <div class="role-checkmark absolute top-2 right-2 hidden">-->
+<!--                            <div class="badge badge-primary badge-circle">-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />-->
+<!--                                </svg>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="mb-3 p-3 rounded-full bg-primary/10 role-icon">-->
+<!--                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />-->
+<!--                            </svg>-->
+<!--                        </div>-->
+<!--                        <h3 class="text-lg font-semibold text-base-content">Förälder</h3>-->
+<!--                        &lt;!&ndash; <p class="text-xs text-base-content/60 mt-1">Parent</p> &ndash;&gt;-->
+<!--                    </div>-->
+<!--                </div>-->
+
+                <!-- Coach Card -->
+                <div id="role-coach"
+                     class="role-card cursor-pointer p-6 rounded-lg border-2 border-base-300 bg-base-100 hover:border-primary hover:shadow-lg transition-all duration-300 ease-in-out"
+                     data-role="COACH">
+                    <div class="flex flex-col items-center text-center relative">
+                        <!-- Checkmark indicator -->
+                        <div class="role-checkmark absolute top-2 right-2 hidden">
+                            <div class="badge badge-primary badge-circle">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="mb-3 p-3 rounded-full bg-secondary/10 role-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-base-content">Tränare</h3>
+                        <!-- <p class="text-xs text-base-content/60 mt-1">Coach</p> -->
+                    </div>
+                </div>
+            </div>
+            <p id="role-error" class="hidden text-sm text-error mt-2 text-center">Vänligen välj en roll</p>
+        </div>
+
+        <form class="mt-8 space-y-6" id="loginForm">
+            <div class="rounded-md shadow-sm -space-y-px">
+                <div>
+                    <label for="email" class="sr-only">Email</label>
+                    <input id="email" name="email" type="email" required
+                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
+                           placeholder="Email address">
+                </div>
+                <div>
+                    <label for="password" class="sr-only">Lösenord</label>
+                    <input id="password" name="password" type="password" required
+                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
+                           placeholder="Lösenord">
+                </div>
+            </div>
+
+            <div id="error-message" class="hidden bg-error text-error-content p-4 rounded-lg"></div>
+
+            <div>
+                <button type="submit" id="login-button"
+                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-focus focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200">
+                    Logga in
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer::footer}"></div>
+
+<style>
+    /*body {*/
+    /*    background: linear-gradient(135deg, #4169E1 0%, #1E3A8A 100%);*/
+    /*}*/
+    .role-card {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .role-card.active {
+        border-color: hsl(var(--p));
+        background: hsl(var(--p) / 0.1);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        transform: scale(1.02);
+    }
+
+    .role-card.active::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: hsl(var(--p));
+        animation: slideIn 0.3s ease-out;
+    }
+
+    .role-card.active .role-icon {
+        background: hsl(var(--p) / 0.2);
+        transform: scale(1.1);
+    }
+
+    .role-card.active .role-icon svg {
+        color: hsl(var(--p));
+    }
+
+    .role-card:not(.active) {
+        opacity: 0.75;
+    }
+
+    .role-card:not(.active):hover {
+        opacity: 1;
+        transform: translateY(-3px);
+        border-color: hsl(var(--p) / 0.5);
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: scaleX(0);
+        }
+        to {
+            transform: scaleX(1);
+        }
+    }
+
+    .role-icon {
+        transition: all 0.3s ease-in-out;
+    }
+
+    .role-checkmark {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.5);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+</style>
+
+<script>
+    let selectedRole = null;
+
+    // Role selection handlers
+    document.querySelectorAll('.role-card').forEach(card => {
+        card.addEventListener('click', function() {
+            // Remove active class from all cards
+            document.querySelectorAll('.role-card').forEach(c => {
+                c.classList.remove('active');
+                // Hide checkmark
+                const checkmark = c.querySelector('.role-checkmark');
+                if (checkmark) {
+                    checkmark.classList.add('hidden');
+                }
+            });
+
+            // Add active class to clicked card
+            this.classList.add('active');
+
+            // Show checkmark
+            const checkmark = this.querySelector('.role-checkmark');
+            if (checkmark) {
+                checkmark.classList.remove('hidden');
+            }
+
+            // Store selected role
+            selectedRole = this.getAttribute('data-role');
+
+            // Hide role error if shown
+            document.getElementById('role-error').classList.add('hidden');
+
+            // Enable login button
+            document.getElementById('login-button').disabled = false;
+        });
+    });
+
+    // Form submission handler
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const errorDiv = document.getElementById('error-message');
+        const roleError = document.getElementById('role-error');
+
+        errorDiv.classList.add('hidden');
+        roleError.classList.add('hidden');
+
+        // Validate role selection
+        if (!selectedRole) {
+            roleError.classList.remove('hidden');
+            // Scroll to role selection
+            document.querySelector('.role-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+
+        // Disable button during submission
+        const loginButton = document.getElementById('login-button');
+        loginButton.disabled = true;
+        loginButton.textContent = 'Loggar in...';
+
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Verify role matches
+                if (data.role && data.role.toUpperCase() !== selectedRole) {
+                    errorDiv.textContent = `Detta konto är registrerat som ${data.role === 'PARENT' ? 'Förälder' : 'Tränare'}. Vänligen välj rätt roll.`;
+                    errorDiv.classList.remove('hidden');
+                    loginButton.disabled = false;
+                    loginButton.textContent = 'Logga in';
+
+                    // Update role selection to match account
+                    document.querySelectorAll('.role-card').forEach(c => {
+                        c.classList.remove('active');
+                        if (c.getAttribute('data-role') === data.role.toUpperCase()) {
+                            c.classList.add('active');
+                            selectedRole = data.role.toUpperCase();
+                        }
+                    });
+                    return;
+                }
+
+                // Store token in localStorage
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify({
+                    userId: data.userId,
+                    email: data.email,
+                    fullName: data.fullName,
+                    role: data.role
+                }));
+
+                // Update navbar
+                if (typeof updateNavbar === 'function') {
+                    updateNavbar();
+                }
+
+                // Prevent back-button access
+                window.history.replaceState(null, null, '/dashboard');
+
+                // Redirect to dashboard
+                window.location.href = '/dashboard';
+            } else {
+                errorDiv.textContent = data.message || data || 'Inloggning misslyckades';
+                errorDiv.classList.remove('hidden');
+                loginButton.disabled = false;
+                loginButton.textContent = 'Logga in';
+            }
+        } catch (error) {
+            errorDiv.textContent = 'Ett fel uppstod. Försök igen.';
+            errorDiv.classList.remove('hidden');
+            loginButton.disabled = false;
+            loginButton.textContent = 'Logga in';
+        }
+    });
+
+    // Initialize - disable login button until role is selected
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('login-button').disabled = true;
+    });
+
+</script>
+</body>
+</html>
