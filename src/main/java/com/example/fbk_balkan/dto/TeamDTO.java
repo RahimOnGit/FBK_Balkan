@@ -15,5 +15,11 @@ public class TeamDTO {
     private String description;
     private List<ChildDTO> children;
     private CoachDTO coach;
+
+    public TeamDTO(Long teamId, String name, String description) {
+        this.teamId = teamId;
+        this.name = name;
+        this.description = description;
+    }
 }
 
