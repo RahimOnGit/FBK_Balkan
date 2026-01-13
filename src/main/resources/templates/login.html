@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - FBK Balkan</title>
+  <link th:href="@{/css/output.css}" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-base-200">
+<!-- Navbar -->
+<div class="absolute top-0 left-0 z-[10] right-0">
+  <div th:replace="~{fragments/navbar::navbar}"></div>
+</div>
+
+<!-- Login Form -->
+<div class="min-h-screen flex items-center justify-center px-4 py-20">
+  <div class="card w-full max-w-md bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title justify-center text-3xl mb-6">Coach Login</h2>
+
+      <div th:if="${error}" class="alert alert-error mb-4">
+        <span th:text="${error}"></span>
+      </div>
+
+      <form th:action="@{/login}" method="post">
+        <div class="form-control mb-4">
+          <label class="label">
+            <span class="label-text">Username</span>
+          </label>
+          <input type="text" name="username" placeholder="Enter your username"
+                 class="input input-bordered w-full" required autofocus/>
+        </div>
+
+        <div class="form-control mb-6">
+          <label class="label">
+            <span class="label-text">Password</span>
+          </label>
+          <input type="password" name="password" placeholder="Enter your password"
+                 class="input input-bordered w-full" required/>
+        </div>
+
+        <div class="form-control">
+          <button type="submit" class="btn btn-primary w-full">Logga in</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="mt-8">
+  <div th:replace="~{fragments/footer::footer}"></div>
+</div>
+</body>
+</html>
