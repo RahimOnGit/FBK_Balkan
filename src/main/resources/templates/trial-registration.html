@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trial Registration - FBK Balkan</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-base-200">
+<!-- Navbar -->
+<div class="absolute top-0 left-0 z-[10] right-0 bg-primary">
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</div>
+
+<!--registration form-->
+<div class="min-h-screen flex items-center justify-center px-4 py-20">
+    <div class="card w-full max-w-lg bg-base-100 shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title justify-center text-3xl mb-6">Trial Registration</h2>
+            <form th:action="@{/trial-registration}" th:object="${trialRegistrationDTO}" method="post">
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Child's First Name</span>
+                    </label>
+                    <input class="input input-bordered" type="text" th:field="*{firstName}" placeholder="Enter child's first name" required />
+                </div>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Child's Last Name</span>
+                    </label>
+                    <input class="input input-bordered" type="text" th:field="*{lastName}" placeholder="Enter child's last name" required />
+                </div>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Birth Date</span>
+                    </label>
+                    <input class="input input-bordered" type="date" th:field="*{birthDate}" required />
+                </div>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Parent/Guardian Name</span>
+                    </label>
+                    <input class="input input-bordered" type="text" th:field="*{relativeName}" placeholder="Enter parent/guardian name" required />
+                </div>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Contact Email</span>
+                    </label>
+                    <input class="input input-bordered" type="email" th:field="*{relativeEmail}" placeholder="Enter email address" required />
+                </div>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Contact Phone Number</span>
+                    </label>
+                    <input class="input input-bordered" type="tel" th:field="*{relativeNumber}" placeholder="Enter phone number" required />
+                </div>
+
+                <div class="form-control mb-6">
+                    <label class="label">
+                        <span class="label-text">Preferred Training Date</span>
+                    </label>
+                    <input class="input input-bordered" type="date" th:field="*{preferredTrainingDate}" required />
+
+<!--                    <select class="select select-bordered" th:field="*{preferredTrainingDate}" required>-->
+<!--                        <option value="" disabled selected>Select Training Date</option>-->
+<!--                        <option th:each="date : ${availableTrials}"-->
+<!--                                th:value="${#temporals.format(date, 'yyyy-MM-dd')}"-->
+<!--                                th:text="${#temporals.format(date, 'yyyy-MM-dd')}"></option>-->
+<!--                    </select>-->
+                </div>
+
+
+                <div class="form-control">
+                    <button type="submit" class="btn btn-primary w-full">Register for Trial</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="mt-8">
+    <div th:replace="~{fragments/footer::footer}"></div>
+</div>
+
+</body>
+</html>
