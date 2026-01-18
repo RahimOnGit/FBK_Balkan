@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Provträningsregistrering - FBK Balkan</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-base-200">
+<!-- Navbar -->
+<div class="absolute top-0 left-0 z-[10] right-0 bg-primary">
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</div>
+
+<!--registration form-->
+<div class="min-h-screen flex items-center justify-center px-4 py-20">
+    <div class="card w-full max-w-lg bg-base-100 shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title justify-center text-3xl mb-6">Provträningsregistrering</h2>
+            <form th:action="@{/trial-registration}" th:object="${trialRegistrationDTO}" method="post">
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Barnets förnamn</span>
+                    </label>
+                    <input class="input input-bordered" type="text" th:field="*{firstName}" placeholder="Ange barnets förnamn" required />
+                    <p th:if="${#fields.hasErrors('firstName')}"
+                       th:errors="*{firstName}"
+                    > </p>
+                </div>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Barnets efternamn</span>
+                    </label>
+                    <input class="input input-bordered" type="text" th:field="*{lastName}" placeholder="Ange barnets efternamn" required />
+                    <p th:if="${#fields.hasErrors('lastName')}"
+                       th:errors="*{lastName}"
+                    > </p>
+                </div>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Födelsedatum</span>
+                    </label>
+                    <input class="input input-bordered" type="date" th:field="*{birthDate}" required />
+                    <p th:if="${#fields.hasErrors('birthDate')}"
+                       th:errors="*{birthDate}"
+                    > </p>
+                </div>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Förälder/Vårdnadshavares namn</span>
+                    </label>
+                    <input class="input input-bordered" type="text" th:field="*{relativeName}" placeholder="Ange förälder/vårdnadshavares namn" required />
+                    <p th:if="${#fields.hasErrors('relativeName')}"
+                       th:errors="*{relativeName}"
+                    > </p>
+                </div>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Kontakt e-postadress</span>
+                    </label>
+                    <input class="input input-bordered" type="email" th:field="*{relativeEmail}" placeholder="Ange e-postadress" required />
+                    <p th:if="${#fields.hasErrors('relativeEmail')}"
+                       th:errors="*{relativeEmail}"
+                    > </p>
+                </div>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Kontakt telefonnummer</span>
+                    </label>
+                    <input class="input input-bordered" type="tel" th:field="*{relativeNumber}" placeholder="Ange telefonnummer" required />
+                    <p th:if="${#fields.hasErrors('relativeNumber')}"
+                        th:errors="*{relativeNumber}">
+
+                    </p>
+                </div>
+
+                <div class="form-control mb-6">
+                    <label class="label">
+                        <span class="label-text">Önskat provträningsdatum</span>
+                    </label>
+                    <input class="input input-bordered" type="date" th:field="*{preferredTrainingDate}" required />
+
+                </div>
+
+
+                <div class="form-control">
+                    <button type="submit" class="btn btn-primary w-full">Registrera för provträning</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="mt-8">
+    <div th:replace="~{fragments/footer::footer}"></div>
+</div>
+
+</body>
+</html>
