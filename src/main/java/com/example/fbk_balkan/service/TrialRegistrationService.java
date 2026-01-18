@@ -32,7 +32,7 @@ public class TrialRegistrationService {
 
         // Map entity back to DTO
         return new TrialRegistrationDTO(
-                trialRegistration.getChildId(),
+                trialRegistration.getId(),
                 trialRegistration.getFirstName(),
                 trialRegistration.getLastName(),
                 trialRegistration.getBirthDate(),

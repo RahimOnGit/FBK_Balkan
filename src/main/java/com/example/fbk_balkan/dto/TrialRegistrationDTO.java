@@ -25,7 +25,7 @@ public class TrialRegistrationDTO {
     private String lastName;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @NotBlank(message = "Birth date is required")
+ @NotNull(message = "Birth date is required")
     @Past(message = "Birth date must be in the past")
     private LocalDate birthDate;
 
@@ -45,7 +45,7 @@ public class TrialRegistrationDTO {
 
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @NotBlank(message = "Preferred training date is required")
+    @NotNull(message = "Preferred training date is required")
     private LocalDate preferredTrainingDate;
 
     private TrialStatus status;
@@ -56,7 +56,7 @@ public class TrialRegistrationDTO {
     public static TrialRegistrationDTO fromEntity(TrialRegistration entity) {
         if (entity == null) return null;
         return TrialRegistrationDTO.builder()
-                .id(entity.getChildId())
+                .id(entity.getId())
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())
                 .birthDate(entity.getBirthDate())
@@ -71,7 +71,7 @@ public class TrialRegistrationDTO {
 
     public TrialRegistration toEntity() {
         TrialRegistration e = new TrialRegistration();
-        e.setChildId(this.id);
+        e.setId(this.id);
         e.setFirstName(this.firstName);
         e.setLastName(this.lastName);
         e.setBirthDate(this.birthDate);
