@@ -18,8 +18,9 @@ import java.time.LocalDate;
 public class TrialRegistration {
 
     @Id
-   @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long childId;
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Column(name = "child_id" , nullable = false )
+    private Long id;
 
     @Column(nullable = false)
     private String firstName;
