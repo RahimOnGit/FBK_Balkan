@@ -27,9 +27,15 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+
+//                        publicly accessible URLs
                         .requestMatchers("/", "/css/**", "/images/**", "/login", "/login-error").permitAll()
-                        .requestMatchers("/trial-registration" , "/trial-registration-success").permitAll()
+                        .requestMatchers("/trial-registration" , "/trial-registration-success" , "/about").permitAll()
+
+//                      roles-based access control
                         .requestMatchers("/coach/**").hasRole("COACH")
+
+//                      authentication for all other requests
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
