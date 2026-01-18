@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
+<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Trial Registration - FBK Balkan</title>
+    <title>Provträningsregistrering - FBK Balkan</title>
     <link th:href="@{/css/output.css}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
 </head>
@@ -16,67 +16,80 @@
 <div class="min-h-screen flex items-center justify-center px-4 py-20">
     <div class="card w-full max-w-lg bg-base-100 shadow-xl">
         <div class="card-body">
-            <h2 class="card-title justify-center text-3xl mb-6">Trial Registration</h2>
+            <h2 class="card-title justify-center text-3xl mb-6">Provträningsregistrering</h2>
             <form th:action="@{/trial-registration}" th:object="${trialRegistrationDTO}" method="post">
                 <div class="form-control mb-4">
                     <label class="label">
-                        <span class="label-text">Child's First Name</span>
+                        <span class="label-text">Barnets förnamn</span>
                     </label>
-                    <input class="input input-bordered" type="text" th:field="*{firstName}" placeholder="Enter child's first name" required />
+                    <input class="input input-bordered" type="text" th:field="*{firstName}" placeholder="Ange barnets förnamn" required />
+                    <p th:if="${#fields.hasErrors('firstName')}"
+                       th:errors="*{firstName}"
+                    > </p>
                 </div>
 
                 <div class="form-control mb-4">
                     <label class="label">
-                        <span class="label-text">Child's Last Name</span>
+                        <span class="label-text">Barnets efternamn</span>
                     </label>
-                    <input class="input input-bordered" type="text" th:field="*{lastName}" placeholder="Enter child's last name" required />
+                    <input class="input input-bordered" type="text" th:field="*{lastName}" placeholder="Ange barnets efternamn" required />
+                    <p th:if="${#fields.hasErrors('lastName')}"
+                       th:errors="*{lastName}"
+                    > </p>
                 </div>
 
                 <div class="form-control mb-4">
                     <label class="label">
-                        <span class="label-text">Birth Date</span>
+                        <span class="label-text">Födelsedatum</span>
                     </label>
                     <input class="input input-bordered" type="date" th:field="*{birthDate}" required />
+                    <p th:if="${#fields.hasErrors('birthDate')}"
+                       th:errors="*{birthDate}"
+                    > </p>
                 </div>
 
                 <div class="form-control mb-4">
                     <label class="label">
-                        <span class="label-text">Parent/Guardian Name</span>
+                        <span class="label-text">Förälder/Vårdnadshavares namn</span>
                     </label>
-                    <input class="input input-bordered" type="text" th:field="*{relativeName}" placeholder="Enter parent/guardian name" required />
+                    <input class="input input-bordered" type="text" th:field="*{relativeName}" placeholder="Ange förälder/vårdnadshavares namn" required />
+                    <p th:if="${#fields.hasErrors('relativeName')}"
+                       th:errors="*{relativeName}"
+                    > </p>
                 </div>
 
                 <div class="form-control mb-4">
                     <label class="label">
-                        <span class="label-text">Contact Email</span>
+                        <span class="label-text">Kontakt e-postadress</span>
                     </label>
-                    <input class="input input-bordered" type="email" th:field="*{relativeEmail}" placeholder="Enter email address" required />
+                    <input class="input input-bordered" type="email" th:field="*{relativeEmail}" placeholder="Ange e-postadress" required />
+                    <p th:if="${#fields.hasErrors('relativeEmail')}"
+                       th:errors="*{relativeEmail}"
+                    > </p>
                 </div>
 
                 <div class="form-control mb-4">
                     <label class="label">
-                        <span class="label-text">Contact Phone Number</span>
+                        <span class="label-text">Kontakt telefonnummer</span>
                     </label>
-                    <input class="input input-bordered" type="tel" th:field="*{relativeNumber}" placeholder="Enter phone number" required />
+                    <input class="input input-bordered" type="tel" th:field="*{relativeNumber}" placeholder="Ange telefonnummer" required />
+                    <p th:if="${#fields.hasErrors('relativeNumber')}"
+                        th:errors="*{relativeNumber}">
+
+                    </p>
                 </div>
 
                 <div class="form-control mb-6">
                     <label class="label">
-                        <span class="label-text">Preferred Training Date</span>
+                        <span class="label-text">Önskat provträningsdatum</span>
                     </label>
                     <input class="input input-bordered" type="date" th:field="*{preferredTrainingDate}" required />
 
-<!--                    <select class="select select-bordered" th:field="*{preferredTrainingDate}" required>-->
-<!--                        <option value="" disabled selected>Select Training Date</option>-->
-<!--                        <option th:each="date : ${availableTrials}"-->
-<!--                                th:value="${#temporals.format(date, 'yyyy-MM-dd')}"-->
-<!--                                th:text="${#temporals.format(date, 'yyyy-MM-dd')}"></option>-->
-<!--                    </select>-->
                 </div>
 
 
                 <div class="form-control">
-                    <button type="submit" class="btn btn-primary w-full">Register for Trial</button>
+                    <button type="submit" class="btn btn-primary w-full">Registrera för provträning</button>
                 </div>
             </form>
         </div>

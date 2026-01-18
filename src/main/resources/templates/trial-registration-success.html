@@ -1,10 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html >
+<html lang="en" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
 </head>
-<body>
-success
+<body class="min-h-screen bg-base-200">
+<!-- Navbar -->
+<div class="absolute top-0 left-0 z-[10] right-0 bg-primary">
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</div>
+
+
+
+<!--&lt;!&ndash; Success Message &ndash;&gt;-->
+<!--<div class="min-h-screen flex items-center justify-center px-4 py-20">-->
+<!--    <div class="card w-full max-w-lg bg-base-100 shadow-xl">-->
+<!--        <div class="card-body text-center">-->
+<!--            <h2 class="card-title justify-center text-3xl mb-6">Registration Successful!</h2>-->
+<!--            <p class="mb-4">Thank you for registering your child for a trial session at FBK Balkan. We have received your information and will be in touch soon.</p>-->
+<!--            <a href="/" class="btn btn-primary">Return to Home</a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--Success Message in Swedish-->
+<div class="min-h-screen flex items-center justify-center px-4 py-20">
+     <div class="card w-full max-w-lg bg-base-100 shadow-xl">
+         <div class="card-body text-center">
+             <h2 class="card-title
+    justify-center text-3xl mb-6">Registrering lyckades!</h2>
+             <p class="mb-4">
+                 Tack för att du registrerade ditt barn för provträning hos FBK Balkan. Vi har tagit emot dina uppgifter och återkommer till dig inom kort.
+             </p>
+             <a href="/" class="btn btn-primary">Återvänd till startsidan</a>
+        </div>
+     </div>
+</div>
+
+<!-- Footer -->
+<div class="mt-8">
+    <div th:replace="~{fragments/footer::footer}"></div>
+</div>
 </body>
 </html>

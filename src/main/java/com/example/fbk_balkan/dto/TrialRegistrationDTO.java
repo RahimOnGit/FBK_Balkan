@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
@@ -17,19 +18,34 @@ import java.time.LocalDate;
 public class TrialRegistrationDTO {
     private Long id;
 
+    @NotBlank(message = "First name is required")
     private String firstName;
 
+    @NotBlank(message = "Last name is required")
     private String lastName;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotBlank(message = "Birth date is required")
+    @Past(message = "Birth date must be in the past")
     private LocalDate birthDate;
 
+    @NotBlank(message = "Relative name is required")
     private String relativeName;
-private String relativeEmail;
 
+    @NotBlank(message = "Relative email is required")
+    @Email(message = "email should be valid")
+    private String relativeEmail;
+
+    @NotBlank(message = "Relative number is required")
+    @Pattern(
+            regexp = "^[0-9+ ]{8,15}$",
+            message = " Invalid phone number"
+    )
     private String relativeNumber;
 
 
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @NotBlank(message = "Preferred training date is required")
     private LocalDate preferredTrainingDate;
 
     private TrialStatus status;

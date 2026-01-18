@@ -55,6 +55,13 @@
         </dependency>
 
 
+
+<!--        validation dep-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
 <!--        sqlite-->
         <dependency>
             <groupId>org.xerial</groupId>

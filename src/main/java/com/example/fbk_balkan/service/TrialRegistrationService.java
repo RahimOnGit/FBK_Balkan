@@ -12,7 +12,6 @@ public class TrialRegistrationService {
 
   @Autowired
     private  TrialRegistrationRepository trialRegistrationRepository;
-    private TrialRegistrationDTO trialRegistrationDTO;
 
 //    create method
     public TrialRegistrationDTO create(TrialRegistrationDTO trialRegistrationDTO) {
