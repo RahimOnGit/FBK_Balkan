@@ -13,6 +13,10 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -21,6 +25,8 @@ public class SecurityConfig {
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
+    @Autowired
+    private DataSource dataSource;   // Spring Boot auto-configures this from application.properties
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -45,11 +51,24 @@ public class SecurityConfig {
                         .failureUrl("/login-error")
                         .permitAll()
                 )
+                .rememberMe(rememberMe -> rememberMe
+                        .key("fbk-balkan-remember-me-secret-2026") // should be unique and secret
+                        .tokenValiditySeconds(60 * 60 * 24 * 14) // 14 days
+
+                        //.tokenValiditySeconds(120 ) 2min for testing
+
+                        .rememberMeParameter("remember-me") // name of checkbox in login form
+                        .tokenRepository(persistentTokenRepository())
+                        .userDetailsService(userDetailsService)
+                        .useSecureCookie(false)
+
+                )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
+                        .deleteCookies("JSESSIONID" , "remember-me")
+                        .clearAuthentication(true)
                         .permitAll()
                 );
 
@@ -65,4 +84,17 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+
+        // Important: Only set to true ONCE (first startup) to auto-create the table.
+        // After table exists → set to false or remove this line completely.
+         tokenRepository.setCreateTableOnStartup(false);
+
+        return tokenRepository;
+    }
+
 }
