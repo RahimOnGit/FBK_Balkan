@@ -1,4 +1,6 @@
-<header class="shadow-inner" th:fragment="navbar">
+<header class="shadow-inner" th:fragment="navbar"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
     <div class="navbar bg-opacity-60 backdrop-blur-sm border-none shadow-none p-4 lg:p-6 flex items-center justify-between">
         <!-- Mobile hamburger menu -->
         <div class="flex-none lg:hidden">
@@ -40,15 +42,24 @@
 
             <!-- Right: Actions -->
             <div class="flex items-center space-x-2 lg:space-x-4 flex-shrink-0 ">
-                <a href="/login" id="login-link" class="flex items-center gap-2 text-base-100 font-virage italic font-bold px-3 lg:px-4 py-1.5 lg:py-2 rounded-full hover:bg-base-100 hover:text-primary transition-colors text-sm lg:text-base whitespace-nowrap">
+                <!-- Login button (shown when not authenticated) -->
+                <a href="/login" sec:authorize="!isAuthenticated()" class="flex items-center gap-2 text-base-100 font-virage italic font-bold px-3 lg:px-4 py-1.5 lg:py-2 rounded-full hover:bg-base-100 hover:text-primary transition-colors text-sm lg:text-base whitespace-nowrap">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6  fill-base-100 hover:fill-primary transition-colors" viewBox="0 0 24 24">
                         <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                     </svg>
                     <span>Logga in</span>
                 </a>
+                
+<!--                &lt;!&ndash; Logout button (shown when authenticated) &ndash;&gt;-->
+<!--                <a href="/logout" sec:authorize="isAuthenticated()" class="flex items-center gap-2 text-base-100 font-virage italic font-bold px-3 lg:px-4 py-1.5 lg:py-2 rounded-full hover:bg-base-100 hover:text-primary transition-colors text-sm lg:text-base whitespace-nowrap">-->
+<!--                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-base-100 hover:fill-primary transition-colors" viewBox="0 0 24 24">-->
+<!--                        <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>-->
+<!--                    </svg>-->
+<!--                    <span>Logga ut</span>-->
+<!--                </a>-->
 
-                <!-- Profile Dropdown -->
-                <div id="profile-dropdown" class="hidden">
+                <!-- Profile Dropdown (shown when authenticated) -->
+                <div sec:authorize="isAuthenticated()">
                     <div class="dropdown dropdown-end">
                         <label tabindex="0" class="btn btn-ghost btn-circle avatar">
                             <div class="w-8 lg:w-10 rounded-full ring ring-base-100">

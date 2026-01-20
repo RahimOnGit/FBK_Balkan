@@ -4,6 +4,7 @@ import com.example.fbk_balkan.entity.Coach;
 import com.example.fbk_balkan.repository.CoachRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,6 +13,7 @@ import java.util.Optional;
 public class CoachService {
     private final CoachRepository coachRepository;
     private final PasswordEncoder passwordEncoder;
+
 
     @Autowired
     public CoachService(CoachRepository coachRepository, PasswordEncoder passwordEncoder) {
