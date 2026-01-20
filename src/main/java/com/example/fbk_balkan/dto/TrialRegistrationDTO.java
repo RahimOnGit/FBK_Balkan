@@ -45,13 +45,18 @@ public class TrialRegistrationDTO {
 
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    //@NotNull(message = "Preferred training date is required")
+    @NotNull(message = "Preferred training date is required")
     private LocalDate preferredTrainingDate;
 
     private TrialStatus status;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdAt;
+
+    // NEW FIELDS
+    private String gender;        // Kön
+    private String currentClub;   // Nuvarande klubb
+    private Integer clubYears;    // Antal år i nuvarande klubb
 
     public static TrialRegistrationDTO fromEntity(TrialRegistration entity) {
         if (entity == null) return null;
@@ -66,6 +71,9 @@ public class TrialRegistrationDTO {
                 .preferredTrainingDate(entity.getPreferredTrainingDate())
                 .status(entity.getStatus())
                 .createdAt(entity.getCreatedAt())
+                .gender(entity.getGender())               // NEW
+                .currentClub(entity.getCurrentClub())    // NEW
+                .clubYears(entity.getClubYears())        // NEW
                 .build();
     }
 
@@ -81,6 +89,9 @@ public class TrialRegistrationDTO {
         e.setPreferredTrainingDate(this.preferredTrainingDate);
         e.setStatus(this.status);
         e.setCreatedAt(this.createdAt);
+        e.setGender(this.gender);                 // NEW
+        e.setCurrentClub(this.currentClub);       // NEW
+        e.setClubYears(this.clubYears);          //New
         return e;
     }
 }

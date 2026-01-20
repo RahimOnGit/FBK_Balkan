@@ -58,6 +58,47 @@
                            required />
                     <p th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></p>
                 </div>
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Kön</span>
+                    </label>
+                    <select class="select select-bordered" th:field="*{gender}" required>
+                        <option value="">Välj kön</option>
+                        <option value="MALE">Man</option>
+                        <option value="FEMALE">Kvinna</option>
+
+                    </select>
+                    <p th:if="${#fields.hasErrors('gender')}"
+                       th:errors="*{gender}">
+                    </p>
+                </div>
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Nuvarande klubb</span>
+                    </label>
+                    <input class="input input-bordered"
+                           type="text"
+                           th:field="*{currentClub}"
+                           placeholder="Ange nuvarande klubb" />
+                    <p th:if="${#fields.hasErrors('currentClub')}"
+                       th:errors="*{currentClub}">
+                    </p>
+                </div>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Antal år i klubb</span>
+                    </label>
+                    <input class="input input-bordered"
+                           type="number"
+                           min="0"
+                           max="20"
+                           th:field="*{clubYears}"
+                           placeholder="Antal år" />
+                    <p th:if="${#fields.hasErrors('clubYears')}"
+                       th:errors="*{clubYears}">
+                    </p>
+                </div>
 
 
 
@@ -99,7 +140,7 @@
                     <label class="label">
                         <span class="label-text">Önskat provträningsdatum</span>
                     </label>
-                    <input class="input input-bordered" type="date" th:field="*{preferredTrainingDate}"  />
+                    <input class="input input-bordered" type="date" th:field="*{preferredTrainingDate}" required  />
 
                 </div>
 
