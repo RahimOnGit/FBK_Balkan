@@ -24,6 +24,9 @@ public class TrialRegistrationService {
         trialRegistration.setRelativeEmail(trialRegistrationDTO.getRelativeEmail());
         trialRegistration.setRelativeNumber(trialRegistrationDTO.getRelativeNumber());
         trialRegistration.setPreferredTrainingDate(trialRegistrationDTO.getPreferredTrainingDate());
+        trialRegistration.setGender(trialRegistrationDTO.getGender());          // NEW
+        trialRegistration.setCurrentClub(trialRegistrationDTO.getCurrentClub()); // NEW
+        trialRegistration.setClubYears(trialRegistrationDTO.getClubYears());     // NEW
         trialRegistration.setStatus(com.example.fbk_balkan.entity.TrialStatus.PENDING);
         trialRegistration.setCreatedAt(LocalDate.now());
 
@@ -31,18 +34,37 @@ public class TrialRegistrationService {
         trialRegistrationRepository.save(trialRegistration);
 
         // Map entity back to DTO
-        return new TrialRegistrationDTO(
-                trialRegistration.getId(),
-                trialRegistration.getFirstName(),
-                trialRegistration.getLastName(),
-                trialRegistration.getBirthDate(),
-                trialRegistration.getRelativeName(),
-                trialRegistration.getRelativeEmail(),
-                trialRegistration.getRelativeNumber(),
-                trialRegistration.getPreferredTrainingDate(),
-                trialRegistration.getStatus(),
-                trialRegistration.getCreatedAt()
-        );
+//        return new TrialRegistrationDTO(
+//                trialRegistration.getId(),
+//                trialRegistration.getFirstName(),
+//                trialRegistration.getLastName(),
+//                trialRegistration.getBirthDate(),
+//                trialRegistration.getRelativeName(),
+//                trialRegistration.getRelativeEmail(),
+//                trialRegistration.getRelativeNumber(),
+//                trialRegistration.getPreferredTrainingDate(),
+//                trialRegistration.getGender(),       // NEW
+//                trialRegistration.getCurrentClub(),  // NEW
+//                trialRegistration.getClubYears(),
+//                trialRegistration.getStatus(),
+//                trialRegistration.getCreatedAt()
+//        );
+        return TrialRegistrationDTO.builder()
+                .id(trialRegistration.getId())
+                .firstName(trialRegistration.getFirstName())
+                .lastName(trialRegistration.getLastName())
+                .birthDate(trialRegistration.getBirthDate())
+                .relativeName(trialRegistration.getRelativeName())
+                .relativeEmail(trialRegistration.getRelativeEmail())
+                .relativeNumber(trialRegistration.getRelativeNumber())
+                .preferredTrainingDate(trialRegistration.getPreferredTrainingDate())
+                .gender(trialRegistration.getGender())          // NEW
+                .currentClub(trialRegistration.getCurrentClub()) // NEW
+                .clubYears(trialRegistration.getClubYears())    // NEW
+                .status(trialRegistration.getStatus())
+                .createdAt(trialRegistration.getCreatedAt())
+                .build();
+
     }
 
 

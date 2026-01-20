@@ -48,6 +48,14 @@ public class TrialRegistration {
 
     @Column(name = "created_at")
     private LocalDate createdAt;
+    @Column(nullable = true)  // optional field
+    private String gender;  // Kön
+
+    @Column(nullable = true)
+    private String currentClub;  // Nuvarande klubb
+
+    @Column(nullable = true)
+    private Integer clubYears;
 
     @PrePersist
     protected void onCreate() {
