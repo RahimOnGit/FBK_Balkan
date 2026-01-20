@@ -38,15 +38,31 @@
                     > </p>
                 </div>
 
+<!--                <div class="form-control mb-4">-->
+<!--                    <label class="label">-->
+<!--                        <span class="label-text">Födelsedatum</span>-->
+<!--                    </label>-->
+<!--                    <input class="input input-bordered" type="date" th:field="*{birthDate}" required />-->
+<!--                    <p th:if="${#fields.hasErrors('birthDate')}"-->
+<!--                       th:errors="*{birthDate}"-->
+<!--                    > </p>-->
+<!--                </div>-->
                 <div class="form-control mb-4">
                     <label class="label">
                         <span class="label-text">Födelsedatum</span>
                     </label>
-                    <input class="input input-bordered" type="date" th:field="*{birthDate}" required />
-                    <p th:if="${#fields.hasErrors('birthDate')}"
-                       th:errors="*{birthDate}"
-                    > </p>
+                    <input class="input input-bordered"
+                           type="date"
+                           th:field="*{birthDate}"
+                           th:attr="min=${minBirthDate}, max=${maxBirthDate}"
+                           required />
+                    <p th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></p>
                 </div>
+
+
+
+
+
 
                 <div class="form-control mb-4">
                     <label class="label">
@@ -83,7 +99,7 @@
                     <label class="label">
                         <span class="label-text">Önskat provträningsdatum</span>
                     </label>
-                    <input class="input input-bordered" type="date" th:field="*{preferredTrainingDate}" required />
+                    <input class="input input-bordered" type="date" th:field="*{preferredTrainingDate}"  />
 
                 </div>
 

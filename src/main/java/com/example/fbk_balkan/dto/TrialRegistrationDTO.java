@@ -45,7 +45,7 @@ public class TrialRegistrationDTO {
 
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @NotNull(message = "Preferred training date is required")
+    //@NotNull(message = "Preferred training date is required")
     private LocalDate preferredTrainingDate;
 
     private TrialStatus status;

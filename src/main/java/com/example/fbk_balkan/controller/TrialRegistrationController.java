@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 import java.time.LocalDate;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/trial-registration")
@@ -23,13 +24,39 @@ public class TrialRegistrationController {
     private TrialRegistrationService trialRegistrationService;
 
 
-    @GetMapping
+//    @GetMapping
+//    public String showTrialRegistrationForm(Model model) {
+//        model.addAttribute("trialRegistrationDTO", new TrialRegistrationDTO());
+//        model.addAttribute("availableTrials", List.of(LocalDate.now().plusDays(3),
+//                                                    LocalDate.now().plusDays(5)));
+//        return "trial-registration";
+//    }
+@GetMapping
     public String showTrialRegistrationForm(Model model) {
         model.addAttribute("trialRegistrationDTO", new TrialRegistrationDTO());
-        model.addAttribute("availableTrials", List.of(LocalDate.now().plusDays(3),
-                                                    LocalDate.now().plusDays(5)));
+
+        // Example of available trials
+        model.addAttribute("availableTrials", List.of(
+                LocalDate.now().plusDays(3),
+                LocalDate.now().plusDays(5)
+        ));
+
+        // Birth year range configuration
+        int currentYear = LocalDate.now().getYear();
+        int yearsBack = 9; // <-- change this to any number of years you want
+
+        // Minimum and maximum birth dates
+        LocalDate minBirthDate = LocalDate.of(currentYear - yearsBack + 1, 1, 1); // Jan 1 of earliest year
+        LocalDate maxBirthDate = LocalDate.of(currentYear, 12, 31);               // Dec 31 current year
+
+        // Add to model
+        model.addAttribute("minBirthDate", minBirthDate);
+        model.addAttribute("maxBirthDate", maxBirthDate);
+
         return "trial-registration";
+
     }
+
     @PostMapping
     public String createTrialRegistration(
             @Valid
@@ -45,5 +72,6 @@ public class TrialRegistrationController {
         model.addAttribute("successMessage","Registration successful!");
         return "trial-registration-success";
       }
+
 
 }
