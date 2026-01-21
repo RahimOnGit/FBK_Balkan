@@ -64,8 +64,8 @@
                     </label>
                     <select class="select select-bordered" th:field="*{gender}" required>
                         <option value="">Välj kön</option>
-                        <option value="MALE">Man</option>
-                        <option value="FEMALE">Kvinna</option>
+                        <option value="MALE">Kille</option>
+                        <option value="FEMALE">Tjej</option>
 
                     </select>
                     <p th:if="${#fields.hasErrors('gender')}"
@@ -92,7 +92,7 @@
                     <input class="input input-bordered"
                            type="number"
                            min="0"
-                           max="20"
+                           max="5"
                            th:field="*{clubYears}"
                            placeholder="Antal år" />
                     <p th:if="${#fields.hasErrors('clubYears')}"
