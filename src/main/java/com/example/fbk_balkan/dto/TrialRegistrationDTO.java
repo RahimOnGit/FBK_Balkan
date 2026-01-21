@@ -55,7 +55,9 @@ public class TrialRegistrationDTO {
 
     // NEW FIELDS
     private String gender;        // Kön
-    private String currentClub;   // Nuvarande klubb
+    private String currentClub;// Nuvarande klubb
+    @Min(value = 0, message = "Antal år i klubb kan inte vara negativt")
+    @Max(value = 20, message = "Antal år i klubb kan inte vara mer än 5")
     private Integer clubYears;    // Antal år i nuvarande klubb
 
     public static TrialRegistrationDTO fromEntity(TrialRegistration entity) {

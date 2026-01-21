@@ -43,7 +43,7 @@ public class TrialRegistrationController {
 
         // Birth year range configuration
         int currentYear = LocalDate.now().getYear();
-        int yearsBack = 9; // <-- change this to any number of years you want
+        int yearsBack = 6; // <-- change this to any number of years you want
 
         // Minimum and maximum birth dates
         LocalDate minBirthDate = LocalDate.of(currentYear - yearsBack + 1, 1, 1); // Jan 1 of earliest year
