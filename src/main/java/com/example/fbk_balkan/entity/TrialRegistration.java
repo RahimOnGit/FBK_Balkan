@@ -41,8 +41,8 @@ public class TrialRegistration {
     private String relativeNumber;
 
 //    trial info
-    @Column(nullable = false)
-    private LocalDate preferredTrainingDate;
+   @Column(nullable = false)
+   private LocalDate preferredTrainingDate;
 
     private TrialStatus status;
 
