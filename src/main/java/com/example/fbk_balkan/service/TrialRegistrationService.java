@@ -10,10 +10,10 @@ import java.time.LocalDate;
 @Service
 public class TrialRegistrationService {
 
-  @Autowired
+    @Autowired
     private  TrialRegistrationRepository trialRegistrationRepository;
 
-//    create method
+    //    create method
     public TrialRegistrationDTO create(TrialRegistrationDTO trialRegistrationDTO) {
         // Map DTO to entity
         var trialRegistration = new com.example.fbk_balkan.entity.TrialRegistration();

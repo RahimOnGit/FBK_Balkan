@@ -25,7 +25,7 @@ public class TrialRegistrationDTO {
     private String lastName;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
- @NotNull(message = "Birth date is required")
+    @NotNull(message = "Birth date is required")
     @Past(message = "Birth date must be in the past")
     private LocalDate birthDate;
 
