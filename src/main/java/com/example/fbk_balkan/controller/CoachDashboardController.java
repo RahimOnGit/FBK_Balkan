@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class CoachDashboardController {
-private final CoachRepository coachRepository;
+    private final CoachRepository coachRepository;
     public CoachDashboardController(CoachRepository coachRepository) {
         this.coachRepository = coachRepository;
     }
@@ -22,7 +22,7 @@ private final CoachRepository coachRepository;
     public String dashboard(Model model ,
                             @AuthenticationPrincipal UserDetails userDetails
 
-                            )
+    )
     {
 
 // get coach details from userDetails and add to model

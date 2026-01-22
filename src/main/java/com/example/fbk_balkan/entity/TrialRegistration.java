@@ -18,8 +18,8 @@ import java.time.LocalDate;
 public class TrialRegistration {
 
     @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-@Column(name = "child_id" , nullable = false )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "child_id" , nullable = false )
     private Long id;
 
     @Column(nullable = false)
@@ -40,7 +40,7 @@ public class TrialRegistration {
     @Column(nullable = false)
     private String relativeNumber;
 
-//    trial info
+    //    trial info
     @Column(nullable = false)
     private LocalDate preferredTrainingDate;
 
@@ -55,6 +55,5 @@ public class TrialRegistration {
             this.createdAt = LocalDate.now();
 
         }
-         }
+    }
 }
-
