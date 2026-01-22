@@ -17,9 +17,10 @@ public class DataInitializer implements CommandLineRunner {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public void run(String... args) throws Exception {
-        // Create a default coach if none exists
-        if (coachRepository.count() == 0) {
+    public void run(String... args) {
+
+        // Create a coach if one doesn't already exist
+        if (!coachRepository.existsByUsername("coach")) {
             Coach coach = new Coach();
             coach.setUsername("coach");
             coach.setPassword(passwordEncoder.encode("password"));
@@ -27,7 +28,21 @@ public class DataInitializer implements CommandLineRunner {
             coach.setRole("COACH");
             coach.setEnabled(true);
             coachRepository.save(coach);
-            System.out.println("Default coach created - Username: coach, Password: password");
+
+            System.out.println("Default coach created");
+        }
+
+        // Create a socialadmin if one doesn't already exist
+        if (!coachRepository.existsByUsername("socialadmin")) {
+            Coach socialAdmin = new Coach();
+            socialAdmin.setUsername("socialadmin");
+            socialAdmin.setPassword(passwordEncoder.encode("password"));
+            socialAdmin.setEmail("social@fbkbalkan.se");
+            socialAdmin.setRole("SOCIAL_ADMIN,ADMIN");
+            socialAdmin.setEnabled(true);
+            coachRepository.save(socialAdmin);
+
+            System.out.println("Social admin created");
         }
     }
 }
