@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skapa Nyhet - FBK Balkan</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-base-200">
+<!-- Navbar -->
+<div class="absolute top-0 left-0 z-[10] right-0 bg-primary">
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</div>
+
+<!-- Create Form -->
+<div class="min-h-screen pt-32 px-4 py-12">
+    <div class="max-w-3xl mx-auto">
+        <div class="flex items-center mb-10">
+            <a th:href="@{/news/manage}" class="btn btn-ghost mr-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+            </a>
+            <h1 class="text-4xl font-bold text-base-content">Skapa Nyhet</h1>
+        </div>
+
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <form th:action="@{/news/create}" th:object="${newsDTO}" method="post">
+
+                    <!-- Title -->
+                    <div class="form-control mb-4">
+                        <label class="label">
+                            <span class="label-text font-semibold">Titel</span>
+                            <span class="label-text-alt text-error">*</span>
+                        </label>
+                        <input
+                                type="text"
+                                th:field="*{title}"
+                                placeholder="Ange nyhetens titel"
+                                class="input input-bordered w-full"
+                                th:classappend="${#fields.hasErrors('title')} ? 'input-error' : ''"
+                                required
+                        />
+                        <label class="label" th:if="${#fields.hasErrors('title')}">
+                            <span class="label-text-alt text-error" th:errors="*{title}"></span>
+                        </label>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="form-control mb-6">
+                        <label class="label">
+                            <span class="label-text font-semibold">Innehåll</span>
+                            <span class="label-text-alt text-error">*</span>
+                        </label>
+                        <textarea
+                                th:field="*{content}"
+                                placeholder="Skriv nyhetens innehåll här..."
+                                class="textarea textarea-bordered w-full h-64"
+                                th:classappend="${#fields.hasErrors('content')} ? 'textarea-error' : ''"
+                                required
+                        ></textarea>
+                        <label class="label" th:if="${#fields.hasErrors('content')}">
+                            <span class="label-text-alt text-error" th:errors="*{content}"></span>
+                        </label>
+                        <label class="label">
+                            <span class="label-text-alt">Använd Enter för nya stycken</span>
+                        </label>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="card-actions justify-end">
+                        <a th:href="@{/news/manage}" class="btn btn-ghost">Avbryt</a>
+                        <button type="submit" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            Publicera
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tips Card -->
+        <div class="card bg-base-100 shadow-xl mt-6">
+            <div class="card-body">
+                <h3 class="card-title text-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Tips för att skriva bra nyheter
+                </h3>
+                <ul class="list-disc list-inside space-y-2 text-sm text-base-content/80">
+                    <li>Håll titeln kort och informativ (max 100 tecken)</li>
+                    <li>Börja med det viktigaste först</li>
+                    <li>Använd korta stycken för bättre läsbarhet</li>
+                    <li>Kontrollera stavning och grammatik</li>
+                    <li>Nyheten publiceras omedelbart efter att du klickar på "Publicera"</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="mt-8">
+    <div th:replace="~{fragments/footer::footer}"></div>
+</div>
+</body>
+</html>

@@ -27,16 +27,21 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/css/**", "/images/**", "/login", "/login-error").permitAll()
+                        .requestMatchers("/trial-registration", "/trial-registration-success", "/about").permitAll()
+                        .requestMatchers("/news", "/news/{id}").permitAll()
 
-//                        publicly accessible URLs
-                                .requestMatchers("/", "/css/**", "/images/**", "/login", "/login-error").permitAll()
-                                .requestMatchers("/trial-registration" , "/trial-registration-success" , "/about").permitAll()
+                        .requestMatchers("/coach/**").hasRole("COACH")
 
-//                      roles-based access control
-                                .requestMatchers("/coach/**").hasRole("COACH")
+                        .requestMatchers(
+                                "/news/manage",
+                                "/news/create",
+                                "/news/edit/**",
+                                "/news/delete/**",
+                                "/news/unpublish/**"
+                        ).hasAnyRole("SOCIAL_ADMIN", "ADMIN")
 
-//                      authentication for all other requests
-                                .anyRequest().authenticated()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
