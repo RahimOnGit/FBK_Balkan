@@ -23,15 +23,7 @@ public class TrialRegistrationController {
     @Autowired
     private TrialRegistrationService trialRegistrationService;
 
-
-//    @GetMapping
-//    public String showTrialRegistrationForm(Model model) {
-//        model.addAttribute("trialRegistrationDTO", new TrialRegistrationDTO());
-//        model.addAttribute("availableTrials", List.of(LocalDate.now().plusDays(3),
-//                                                    LocalDate.now().plusDays(5)));
-//        return "trial-registration";
-//    }
-@GetMapping
+    @GetMapping
     public String showTrialRegistrationForm(Model model) {
         model.addAttribute("trialRegistrationDTO", new TrialRegistrationDTO());
 
