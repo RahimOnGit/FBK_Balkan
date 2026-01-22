@@ -33,22 +33,7 @@ public class TrialRegistrationService {
         // Save entity
         trialRegistrationRepository.save(trialRegistration);
 
-        // Map entity back to DTO
-//        return new TrialRegistrationDTO(
-//                trialRegistration.getId(),
-//                trialRegistration.getFirstName(),
-//                trialRegistration.getLastName(),
-//                trialRegistration.getBirthDate(),
-//                trialRegistration.getRelativeName(),
-//                trialRegistration.getRelativeEmail(),
-//                trialRegistration.getRelativeNumber(),
-//                trialRegistration.getPreferredTrainingDate(),
-//                trialRegistration.getGender(),       // NEW
-//                trialRegistration.getCurrentClub(),  // NEW
-//                trialRegistration.getClubYears(),
-//                trialRegistration.getStatus(),
-//                trialRegistration.getCreatedAt()
-//        );
+        // used here  builder methode to add new fields any time easily.
         return TrialRegistrationDTO.builder()
                 .id(trialRegistration.getId())
                 .firstName(trialRegistration.getFirstName())
