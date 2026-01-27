@@ -59,6 +59,10 @@ public class TrialRegistrationDTO {
     @Min(value = 0, message = "Antal år i klubb kan inte vara negativt")
     @Max(value = 20, message = "Antal år i klubb kan inte vara mer än 5")
     private Integer clubYears;    // Antal år i nuvarande klubb
+    // Referral info
+    private String referralSource;   // Dropdown selection
+    @Size(max = 50, message = "Max 50 characters")
+    private String referralOther;    // Only used if referralSource == "OTHER"
 
     public static TrialRegistrationDTO fromEntity(TrialRegistration entity) {
         if (entity == null) return null;
@@ -76,6 +80,8 @@ public class TrialRegistrationDTO {
                 .gender(entity.getGender())               // NEW
                 .currentClub(entity.getCurrentClub())    // NEW
                 .clubYears(entity.getClubYears())        // NEW
+                .referralSource(entity.getReferralSource())  // NEW
+                .referralOther(entity.getReferralOther())    // NEW
                 .build();
     }
 
@@ -93,7 +99,11 @@ public class TrialRegistrationDTO {
         e.setCreatedAt(this.createdAt);
         e.setGender(this.gender);                 // NEW
         e.setCurrentClub(this.currentClub);       // NEW
-        e.setClubYears(this.clubYears);          //New
+        e.setClubYears(this.clubYears);//New
+        e.setReferralSource(this.referralSource);  // NEW
+        e.setReferralOther(
+                "OTHER".equals(this.referralSource) ? this.referralOther : null
+        );  // NEW
         return e;
     }
 }

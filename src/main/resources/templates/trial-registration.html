@@ -127,6 +127,63 @@
                     </p>
                 </div>
 
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Vem rekommenderade dig? / Hur hittade ni oss?</span>
+                    </label>
+                    <select id="referralSource"
+                            class="select select-bordered"
+                            th:field="*{referralSource}"
+                            >
+                        <option value="">Välj källa</option>
+                        <option value="PLAYER">Spelare i klubben</option>
+                        <option value="COACH">Tränare i klubben</option>
+                        <option value="FAMILY">Familj/Vän</option>
+                        <option value="SOCIAL_MEDIA">Sociala medier</option>
+                        <option value="WEBSITE">Klubbens hemsida</option>
+                        <option value="EVENT">Lokalt evenemang</option>
+                        <option value="SCHOOL">Skola/Skolidrott</option>
+                        <option value="OTHER">Annat</option>
+                    </select>
+                </div>
+
+                <div class="form-control mb-4" id="referralOtherDiv" style="display: none;">
+                    <label class="label">
+                        <span class="label-text">Annat (max 50 tecken)</span>
+                    </label>
+                    <input id="referralOtherInput"
+                           class="input input-bordered"
+                           type="text"
+                           th:field="*{referralOther}"
+                           maxlength="50"
+                           placeholder="Ange annan källa (valfritt)">
+                </div>
+
+                <p class="text-error"
+                   th:if="${#fields.hasErrors('referralOther')}"
+                   th:errors="*{referralOther}">
+                </p>
+
+                <script>
+                    const referralSelect = document.getElementById('referralSource');
+                    const referralOtherDiv = document.getElementById('referralOtherDiv');
+
+                    // Show textbox if "OTHER" was previously selected (when form reloads)
+                    if (referralSelect.value === 'OTHER') {
+                        referralOtherDiv.style.display = 'block';
+                    }
+
+                    referralSelect.addEventListener('change', function() {
+                        if (this.value === 'OTHER') {
+                            referralOtherDiv.style.display = 'block';
+                        } else {
+                            referralOtherDiv.style.display = 'none';
+                            referralOtherDiv.querySelector('input').value = ''; // clear input
+                        }
+                    });
+                </script>
+
                 <div class="form-control mb-6">
                     <label class="label">
                         <span class="label-text">Önskat provträningsdatum</span>
