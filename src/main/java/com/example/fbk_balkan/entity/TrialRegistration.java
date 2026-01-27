@@ -57,6 +57,13 @@ public class TrialRegistration {
     @Column(nullable = true)
     private Integer clubYears;
 
+    @Column(name = "referral_source", length = 50)
+    private String referralSource;
+
+    @Column(name = "referral_other", length = 50)
+    private String referralOther;
+
+
     @PrePersist
     protected void onCreate() {
         if (createdAt == null) {

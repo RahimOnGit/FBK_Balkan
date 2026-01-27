@@ -52,9 +52,17 @@ public class TrialRegistrationController {
     @PostMapping
     public String createTrialRegistration(
             @Valid
-            @ModelAttribute("trial")
+            //@ModelAttribute("trial")
+            @ModelAttribute("trialRegistrationDTO")
             TrialRegistrationDTO trialRegistrationDTO ,
             BindingResult bindingResult , Model model) {
+        // Optional trimming logic
+        if ("OTHER".equals(trialRegistrationDTO.getReferralSource())
+                && trialRegistrationDTO.getReferralOther() != null) {
+            trialRegistrationDTO.setReferralOther(trialRegistrationDTO.getReferralOther().trim());
+        } else {
+            trialRegistrationDTO.setReferralOther(null);
+        }
 
         if (bindingResult.hasErrors()) {
             return "trial-registration";

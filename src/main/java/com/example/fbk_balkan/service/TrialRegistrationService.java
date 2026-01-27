@@ -27,6 +27,12 @@ public class TrialRegistrationService {
         trialRegistration.setGender(trialRegistrationDTO.getGender());          // NEW
         trialRegistration.setCurrentClub(trialRegistrationDTO.getCurrentClub()); // NEW
         trialRegistration.setClubYears(trialRegistrationDTO.getClubYears());     // NEW
+        trialRegistration.setReferralSource(trialRegistrationDTO.getReferralSource());// NEW
+        trialRegistration.setReferralOther(
+                "OTHER".equals(trialRegistrationDTO.getReferralSource()) ?
+                        trialRegistrationDTO.getReferralOther() : null
+        );
+
         trialRegistration.setStatus(com.example.fbk_balkan.entity.TrialStatus.PENDING);
         trialRegistration.setCreatedAt(LocalDate.now());
 
@@ -46,6 +52,8 @@ public class TrialRegistrationService {
                 .gender(trialRegistration.getGender())          // NEW
                 .currentClub(trialRegistration.getCurrentClub()) // NEW
                 .clubYears(trialRegistration.getClubYears())    // NEW
+                .referralSource(trialRegistration.getReferralSource())  // NEW
+                .referralOther(trialRegistration.getReferralOther())// NEW
                 .status(trialRegistration.getStatus())
                 .createdAt(trialRegistration.getCreatedAt())
                 .build();
