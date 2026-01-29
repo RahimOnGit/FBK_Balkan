@@ -1,0 +1,418 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title th:text="${isEdit ? 'Redigera Nyhet' : 'Skapa Nyhet'} + ' - FBK Balkan'">Nyhet - FBK Balkan</title>-->
+<!--    <link th:href="@{/css/output.css}" rel="stylesheet">-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">-->
+<!--</head>-->
+<!--<body class="min-h-screen bg-base-200">-->
+
+<!--<div th:replace="~{fragments/navbar::navbar}"></div>-->
+
+<!--<div class="container mx-auto px-4 py-8 pt-24">-->
+<!--    <div class="max-w-2xl mx-auto">-->
+<!--        <a href="/admin/news" class="btn btn-ghost mb-4">-->
+<!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />-->
+<!--            </svg>-->
+<!--            Tillbaka-->
+<!--        </a>-->
+
+<!--        <div class="card bg-base-100 shadow-xl">-->
+<!--            <div class="card-body">-->
+<!--                <h1 class="text-2xl font-bold font-virage text-primary mb-6" th:text="${isEdit ? 'Redigera Nyhet' : 'Skapa Nyhet'}">Formulär</h1>-->
+
+<!--                <form th:action="${isEdit ? '/admin/news/edit/' + newsId : '/admin/news/create'}" method="post" th:object="${newsDTO}" enctype="multipart/form-data">-->
+<!--                    <div class="form-control mb-4">-->
+<!--                        <label class="label">-->
+<!--                            <span class="label-text font-semibold">Titel *</span>-->
+<!--                        </label>-->
+<!--                        <input type="text" th:field="*{title}" class="input input-bordered w-full" placeholder="Skriv en titel..." required>-->
+<!--                        <label class="label" th:if="${#fields.hasErrors('title')}">-->
+<!--                            <span class="label-text-alt text-error" th:errors="*{title}">Fel</span>-->
+<!--                        </label>-->
+<!--                    </div>-->
+
+<!--                    <div class="form-control mb-4">-->
+<!--                        <label class="label">-->
+<!--                            <span class="label-text font-semibold">Innehåll *</span>-->
+<!--                        </label>-->
+<!--                        <textarea th:field="*{content}" class="textarea textarea-bordered h-48 w-full" placeholder="Skriv nyhetsinnehållet här..." required></textarea>-->
+<!--                        <label class="label" th:if="${#fields.hasErrors('content')}">-->
+<!--                            <span class="label-text-alt text-error" th:errors="*{content}">Fel</span>-->
+<!--                        </label>-->
+<!--                    </div>-->
+
+<!--                    <div class="form-control mb-4">-->
+<!--                        <label class="label">-->
+<!--                            <span class="label-text font-semibold">Ladda upp bild (valfritt)</span>-->
+<!--                        </label>-->
+<!--                        <input type="file" name="imageFile" accept="image/*" class="file-input file-input-bordered w-full">-->
+<!--                        <label class="label">-->
+<!--                            <span class="label-text-alt text-gray-500">Tillåtna format: JPG, PNG, GIF</span>-->
+<!--                        </label>-->
+<!--                    </div>-->
+
+<!--                    <div th:if="${newsDTO.imageUrl != null and !newsDTO.imageUrl.isEmpty()}" class="form-control mb-4">-->
+<!--                        <label class="label">-->
+<!--                            <span class="label-text font-semibold">Nuvarande bild</span>-->
+<!--                        </label>-->
+<!--                        <div class="flex items-start gap-4">-->
+<!--                            <img th:src="${newsDTO.imageUrl}" alt="Nuvarande bild" class="max-w-xs rounded-lg shadow-md">-->
+<!--                            <input type="hidden" th:field="*{imageUrl}">-->
+<!--                        </div>-->
+<!--                        <div th:if="${isEdit}" class="mt-2">-->
+<!--                            <button type="button" class="btn btn-error btn-sm" onclick="document.getElementById('deleteImageForm').submit();">-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />-->
+<!--                                </svg>-->
+<!--                                Ta bort bild-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    <div class="form-control mb-4">-->
+<!--                        <label class="label">-->
+<!--                            <span class="label-text font-semibold">Länk (valfritt)</span>-->
+<!--                        </label>-->
+<!--                        <input type="url" th:field="*{linkUrl}" class="input input-bordered w-full" placeholder="https://example.com">-->
+<!--                        <label class="label">-->
+<!--                            <span class="label-text-alt text-gray-500">Lägg till en klickbar länk som visas på nyheten</span>-->
+<!--                        </label>-->
+<!--                    </div>-->
+
+<!--                    <label class="flex items-center gap-2 cursor-pointer mb-6">-->
+<!--                        <input type="checkbox" th:field="*{published}" class="checkbox checkbox-primary checkbox-sm">-->
+<!--                        <span class="label-text font-semibold">Publicera direkt</span>-->
+<!--                    </label>-->
+
+<!--                    <div class="flex flex-col sm:flex-row gap-4">-->
+<!--                        <button type="submit" class="btn btn-primary flex-1">-->
+<!--                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />-->
+<!--                            </svg>-->
+<!--                            <span th:text="${isEdit ? 'Spara ändringar' : 'Skapa nyhet'}">Spara</span>-->
+<!--                        </button>-->
+<!--                        <a href="/admin/news" class="btn btn-ghost flex-1">Avbryt</a>-->
+<!--                    </div>-->
+<!--                </form>-->
+
+<!--                <form th:if="${isEdit and newsDTO.imageUrl != null}" id="deleteImageForm" th:action="@{/admin/news/delete-image/{id}(id=${newsId})}" method="post" class="hidden"></form>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<div th:replace="~{fragments/footer::footer}"></div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!--//-->
+
+<!DOCTYPE html>
+<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${isEdit ? 'Redigera Nyhet' : 'Skapa Nyhet'} + ' - FBK Balkan'">Nyhet - FBK Balkan</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <!--  Google Fonts -->
+    <!--        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">-->
+</head>
+<body class="min-h-screen bg-base-200">
+
+<div th:replace="~{fragments/navbar::navbar}"></div>
+
+<!-- Invoking Tailwind CSS via CDN with theme customization -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    sans: ['Inter', 'sans-serif'],
+                    heading: ['Oswald', 'sans-serif'],
+                },
+                colors: {
+                    primary: {
+                        50: '#eff6ff',
+                        100: '#dbeafe',
+                        500: '#3b82f6',
+                        600: '#2563eb',
+                        800: '#1e40af',
+                        900: '#1e3a8a',
+                    },
+                    accent: {
+                        500: '#dc2626',
+                    }
+                }
+            }
+        }
+    }
+</script>
+
+
+
+<style>
+    /* Simple customization of the cropped image borders because Tailwind does not have them by default */
+    .dashed-border {
+        background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='12' ry='12' stroke='%23CBD5E1FF' stroke-width='2' stroke-dasharray='8%2c 8' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+    }
+    .dashed-border:hover {
+        background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='12' ry='12' stroke='%233B82F6FF' stroke-width='2' stroke-dasharray='8%2c 8' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+    }
+</style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-primary-100 selection:text-primary-900">
+
+<!-- Main Content -->
+<main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+
+    <!-- Return path and header -->
+    <div class="mb-8">
+        <a href="/admin/news" class="inline-flex items-center text-sm font-medium text-slate-500 hover:text-primary-600 transition-colors group">
+            <svg class="w-4 h-4 mr-2 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Tillbaka till översikt
+        </a>
+        <div class="mt-4 sm:flex sm:items-end sm:justify-between">
+            <div>
+                <h1 class="text-3xl sm:text-4xl font-heading font-bold text-slate-900 tracking-tight" th:text="${isEdit ? 'Redigera Nyhet' : 'Skapa Nyhet'}">Skapa Nyhet</h1>
+                <p class="mt-2 text-slate-500 text-sm">Fyll i formuläret nedan för att publicera uppdateringar.</p>
+            </div>
+            <div th:if="${isEdit}" class="mt-4 sm:mt-0">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                        Utkast / Redigerar
+                    </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form container (Card) -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="p-6 sm:p-10 space-y-8">
+
+            <form th:action="${isEdit ? '/admin/news/edit/' + newsId : '/admin/news/create'}" method="post" th:object="${newsDTO}" enctype="multipart/form-data" id="newsForm" class="space-y-6">
+
+                <!-- Section: Basic Content -->
+                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+
+                    <!-- Address field -->
+                    <div class="sm:col-span-6">
+                        <label for="title" class="block text-sm font-semibold text-slate-700 mb-1.5">Titel <span class="text-accent-500">*</span></label>
+                        <div class="relative rounded-md shadow-sm">
+                            <input type="text" th:field="*{title}" id="title" required
+                                   class="block w-full rounded-lg border-slate-300 pr-12 focus:border-primary-500 focus:ring-primary-500 sm:text-sm py-3 px-4 border shadow-sm transition-all placeholder:text-slate-400"
+                                   placeholder="Ange en engagerande titel...">
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                <svg class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
+                            </div>
+                        </div>
+                        <p th:if="${#fields.hasErrors('title')}" class="mt-1 text-sm text-accent-500" th:errors="*{title}">Fel i titel</p>
+                    </div>
+
+                    <!-- Content field -->
+                    <div class="sm:col-span-6">
+                        <label for="content" class="block text-sm font-semibold text-slate-700 mb-1.5">Innehåll <span class="text-accent-500">*</span></label>
+                        <textarea th:field="*{content}" id="content" rows="6" required
+                                  class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm py-3 px-4 border transition-all resize-y placeholder:text-slate-400"
+                                  placeholder="Skriv hela nyhetstexten här..."></textarea>
+                        <p th:if="${#fields.hasErrors('content')}" class="mt-1 text-sm text-accent-500" th:errors="*{content}">Fel i innehåll</p>
+                    </div>
+                </div>
+
+                <hr class="border-slate-100">
+
+                <!-- Section: Media and Links -->
+                <div class="space-y-6">
+
+                    <!-- Upload image -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-3">Bild</label>
+
+                        <!-- Status: Image already exists (Edit Mode) -->
+                        <div th:if="${newsDTO.imageUrl != null and !newsDTO.imageUrl.isEmpty()}" class="relative group rounded-xl overflow-hidden border border-slate-200 shadow-sm">
+                            <img th:src="${newsDTO.imageUrl}" alt="Current Image" class="w-full h-64 object-cover">
+                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+                                <button type="button" onclick="document.getElementById('deleteImageForm').submit();" class="bg-white text-accent-500 hover:bg-red-50 px-6 py-2.5 rounded-lg font-semibold shadow-lg transition-all flex items-center gap-2 transform hover:scale-105">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                    Ta bort bild
+                                </button>
+                            </div>
+                            <input type="hidden" th:field="*{imageUrl}">
+                        </div>
+
+                        <!-- Status: Upload a new image or no image -->
+                        <div th:if="${newsDTO.imageUrl == null or newsDTO.imageUrl.isEmpty()}" class="dashed-border rounded-xl p-6 sm:p-10 text-center transition-all hover:bg-slate-50 relative group" id="dropZone">
+                            <input type="file" name="imageFile" id="imageFile" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+
+                            <!-- Default content for the region -->
+                            <div id="uploadPlaceholder" class="pointer-events-none space-y-3">
+                                <div class="mx-auto h-12 w-12 text-slate-400 group-hover:text-primary-500 transition-colors">
+                                    <svg stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                                <div class="text-sm text-slate-600">
+                                    <span class="font-semibold text-primary-600">Ladda upp en fil</span> eller dra och släpp den hit
+                                </div>
+                                <p class="text-xs text-slate-500">PNG, JPG, GIF upp till 5MB</p>
+                            </div>
+
+                            <!-- Preview -->
+                            <div id="previewContainer" class="hidden mt-4 relative rounded-lg overflow-hidden border border-slate-200 shadow-sm">
+                                <img id="imagePreview" src="#" alt="Preview" class="w-full h-48 object-cover">
+                                <button type="button" id="clearPreviewBtn" class="absolute top-2 right-2 bg-white/90 hover:bg-white text-slate-700 hover:text-accent-500 rounded-full p-1.5 shadow-sm transition-all">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- External link -->
+                    <div>
+                        <label for="linkUrl" class="block text-sm font-semibold text-slate-700 mb-1.5">Extern länk</label>
+                        <div class="relative rounded-md shadow-sm">
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                <svg class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+                            </div>
+                            <input type="url" th:field="*{linkUrl}" id="linkUrl"
+                                   class="block w-full rounded-lg border-slate-300 pl-10 focus:border-primary-500 focus:ring-primary-500 sm:text-sm py-3 px-4 border shadow-sm transition-all placeholder:text-slate-400"
+                                   placeholder="https://exempel.se">
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="border-slate-100">
+
+                <!-- Section: Publishing and Procedures -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+
+                    <!-- Toggle button -->
+                    <div class="flex items-center">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" th:field="*{published}" id="publishedCheck" class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                            <span class="ml-3 text-sm font-medium text-slate-700" id="publishLabelText">Spara som utkast</span>
+                        </label>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex w-full sm:w-auto gap-3">
+                        <a href="/admin/news" class="flex-1 sm:flex-none px-5 py-2.5 rounded-lg border border-slate-300 text-slate-700 font-medium hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition-all text-center">
+                            Avbryt
+                        </a>
+                        <button type="submit" class="flex-1 sm:flex-none px-6 py-2.5 rounded-lg border border-transparent text-white font-semibold bg-primary-900 hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-900 shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                            <span th:text="${isEdit ? 'Spara ändringar' : 'Publicera nyhet'}">Publicera nyhet</span>
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Card footer -->
+        <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <span>* Obligatoriska fält</span>
+            <span>Senast sparad: Automatiskt</span>
+        </div>
+    </div>
+</main>
+
+<!-- Hidden deletion form -->
+<form th:if="${isEdit and newsDTO.imageUrl != null}" id="deleteImageForm" th:action="@{/admin/news/delete-image/{id}(id=${newsId})}" method="post"></form>
+
+<!-- JavaScript  -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        //  (Preview Logic)
+        const fileInput = document.getElementById('imageFile');
+        const dropZone = document.getElementById('dropZone');
+        const previewContainer = document.getElementById('previewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+        const clearPreviewBtn = document.getElementById('clearPreviewBtn');
+
+        function showPreview(file) {
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imagePreview.src = e.target.result;
+                    previewContainer.classList.remove('hidden');
+                    uploadPlaceholder.classList.add('opacity-0', 'h-0', 'overflow-hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function resetPreview() {
+            fileInput.value = '';
+            previewContainer.classList.add('hidden');
+            uploadPlaceholder.classList.remove('opacity-0', 'h-0', 'overflow-hidden');
+        }
+
+        // fileInput.addEventListener('change', (e) => {
+        //     if (e.target.files[0]) showPreview(e.target.files[0]);
+        // });
+
+        fileInput.addEventListener("change", () => {
+            const file = fileInput.files[0];
+            if (file && file.size > 5 * 1024 * 1024) {
+                alert("File too large, max 5MB");
+                fileInput.value = "";
+            }
+        });
+
+
+        clearPreviewBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            resetPreview();
+        });
+
+        //  (Drag & Drop)
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
+
+        dropZone.addEventListener('dragenter', () => dropZone.classList.add('bg-slate-50', 'scale-[1.02]'));
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('bg-slate-50', 'scale-[1.02]'));
+        dropZone.addEventListener('drop', (e) => {
+            dropZone.classList.remove('bg-slate-50', 'scale-[1.02]');
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            fileInput.files = files;
+            if(files[0]) showPreview(files[0]);
+        });
+
+        //  (Toggle Switch Text)
+        const publishedCheck = document.getElementById('publishedCheck');
+        const publishLabel = document.getElementById('publishLabelText');
+
+        if(publishedCheck) {
+            const updateLabel = () => {
+                if(publishedCheck.checked) {
+                    publishLabel.textContent = "Publicera direkt";
+                    publishLabel.classList.add('text-primary-600');
+                } else {
+                    publishLabel.textContent = "Spara som utkast";
+                    publishLabel.classList.remove('text-primary-600');
+                }
+            };
+            publishedCheck.addEventListener('change', updateLabel);
+            updateLabel(); // Initial check
+        }
+    });
+</script>
+
+<div th:replace="~{fragments/footer::footer}"></div>
+
+</body>
+</html>

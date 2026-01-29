@@ -34,22 +34,9 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .build();
     }
 
-//    private Collection<? extends GrantedAuthority> getAuthorities(Coach coach) {
-//        List<GrantedAuthority> authorities = new ArrayList<>();
-//        authorities.add(new SimpleGrantedAuthority("ROLE_" + coach.getRole()));
-//        return authorities;
-//    }
-
     private Collection<? extends GrantedAuthority> getAuthorities(Coach coach) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-
-        String[] roles = coach.getRole().split(",");
-
-        for (String role : roles) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.trim()));
-        }
-
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + coach.getRole()));
         return authorities;
     }
-
 }

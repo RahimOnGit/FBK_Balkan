@@ -10,10 +10,8 @@
                 </label>
                 <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                     <li><a href="/news" class="hover:text-primary transition-colors">Nyheter</a></li>
-                    <li><a href="/contact" class="hover:text-primary transition-colors">Kommande Aktiviteter</a></li>
                     <li><a href="/about" class="hover:text-primary transition-colors">Om Klubben</a></li>
                     <li><a href="/trial-registration" class="hover:text-primary transition-colors">Intresseanmälan</a></li>
-                    <!-- menu items for logged-in users -->
                     <li id="mobile-logout" class="hidden"><a href="/logout" class="hover:bg-error hover:text-error-content">Logout</a></li>
                 </ul>
             </div>
@@ -25,7 +23,7 @@
             <div class="flex items-center justify-center lg:justify-start w-full lg:w-auto">
                 <a href="/" class="lg:block">
                     <img src="/images/FBK_BALKAN_logo.png" alt="FBK Balkan logo"
-                         class="h-20 w-auto lg:h-24 mx-auto lg:mx-0 lg:absolute lg:top-5 lg:z-[0] lg:left-12">
+                         class="h-20 w-auto lg:h-24 mx-auto lg:mx-0 lg:absolute  lg:top-5 lg:z-[0] lg:left-12">
                 </a>
             </div>
 
@@ -36,15 +34,15 @@
                         <li><a href="/news" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-secondary transition-colors text-sm lg:text-base whitespace-nowrap">Nyheter</a></li>
                         <li><a href="/contact" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-secondary transition-colors text-sm lg:text-base whitespace-nowrap">Kommande Aktiviteter</a></li>
                         <li><a href="/about" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-secondary transition-colors text-sm lg:text-base whitespace-nowrap">Om Klubben</a></li>
-                        <li><a href="/trial-registration" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-secondary transition-colors text-sm lg:text-base whitespace-nowrap">Intresseanmälan</a></li>
+                        <li><a href="/contact" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-secondary transition-colors text-sm lg:text-base whitespace-nowrap">Intresseanmälan</a></li>
                     </ul>
                 </nav>
             </div>
 
             <!-- Right: Actions -->
-            <div class="flex items-center space-x-2 lg:space-x-4 flex-shrink-0">
+            <div class="flex items-center space-x-2 lg:space-x-4 flex-shrink-0 ">
                 <a href="/login" id="login-link" class="flex items-center gap-2 text-base-100 font-virage italic font-bold px-3 lg:px-4 py-1.5 lg:py-2 rounded-full hover:bg-base-100 hover:text-primary transition-colors text-sm lg:text-base whitespace-nowrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-base-100 hover:fill-primary transition-colors" viewBox="0 0 24 24">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6  fill-base-100 hover:fill-primary transition-colors" viewBox="0 0 24 24">
                         <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                     </svg>
                     <span>Logga in</span>
@@ -71,7 +69,12 @@
                                 <span class="text-sm font-medium text-base-content/80">Hej, <span id="user-name">Användare</span></span>
                             </li>
                             <li><a href="/my-profile" class="hover:text-primary transition-colors">Min profil</a></li>
-                            <li><a href="/coach/dashboard" class="hover:text-primary transition-colors">Dashboard</a></li>
+                            <li>
+                                <a href="/my-appointments" class="justify-between hover:bg-base-200 rounded-lg transition-colors">
+                                    <span>My Appointments</span>
+                                    <span class="badge badge-secondary text-xs" id="appointments-badge">0</span>
+                                </a>
+                            </li>
                             <li><hr class="my-1"></li>
                             <li><a href="/logout" class="hover:bg-error hover:text-error-content rounded-lg transition-colors">logga ut</a></li>
                         </ul>

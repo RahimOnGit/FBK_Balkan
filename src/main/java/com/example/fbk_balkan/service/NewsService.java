@@ -1,3 +1,71 @@
+//package com.example.fbk_balkan.service;
+//
+//import com.example.fbk_balkan.dto.NewsDTO;
+//import com.example.fbk_balkan.entity.News;
+//import com.example.fbk_balkan.repository.NewsRepository;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.stereotype.Service;
+//import org.springframework.transaction.annotation.Transactional;
+//
+//import java.util.List;
+//import java.util.Optional;
+//
+//@Service
+//public class NewsService {
+//
+//    @Autowired
+//    private NewsRepository newsRepository;
+//
+//    public List<News> getAllPublishedNews() {
+//        return newsRepository.findByPublishedTrueOrderByCreatedAtDesc();
+//    }
+//
+//    public List<News> getAllNews() {
+//        return newsRepository.findAllByOrderByCreatedAtDesc();
+//    }
+//
+//    public Optional<News> getNewsById(Long id) {
+//        return newsRepository.findById(id);
+//    }
+//
+//    @Transactional
+//    public News createNews(NewsDTO newsDTO, String authorUsername) {
+//        News news = new News();
+//        news.setTitle(newsDTO.getTitle());
+//        news.setContent(newsDTO.getContent());
+//        news.setImageUrl(newsDTO.getImageUrl());
+//        news.setPublished(newsDTO.isPublished());
+//        news.setAuthorUsername(authorUsername);
+//        return newsRepository.save(news);
+//    }
+//
+//    @Transactional
+//    public News updateNews(Long id, NewsDTO newsDTO) {
+//        News news = newsRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Nyhet hittades inte"));
+//        news.setTitle(newsDTO.getTitle());
+//        news.setContent(newsDTO.getContent());
+//        news.setImageUrl(newsDTO.getImageUrl());
+//        news.setPublished(newsDTO.isPublished());
+//        return newsRepository.save(news);
+//    }
+//
+//    @Transactional
+//    public void deleteNews(Long id) {
+//        newsRepository.deleteById(id);
+//    }
+//
+//    @Transactional
+//    public void togglePublished(Long id) {
+//        News news = newsRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Nyhet hittades inte"));
+//        news.setPublished(!news.isPublished());
+//        newsRepository.save(news);
+//    }
+//}
+
+//\\
+
 package com.example.fbk_balkan.service;
 
 import com.example.fbk_balkan.dto.NewsDTO;
@@ -5,10 +73,10 @@ import com.example.fbk_balkan.entity.News;
 import com.example.fbk_balkan.repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.time.LocalDateTime;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class NewsService {
@@ -16,61 +84,62 @@ public class NewsService {
     @Autowired
     private NewsRepository newsRepository;
 
-    public List<NewsDTO> getAllPublishedNews() {
-        return newsRepository.findByPublishedTrueOrderByCreatedAtDesc()
-                .stream()
-                .map(NewsDTO::fromEntity)
-                .collect(Collectors.toList());
+    public List<News> getAllPublishedNews() {
+        return newsRepository.findByPublishedTrueOrderByCreatedAtDesc();
     }
 
-    public List<NewsDTO> getAllNews() {
-        return newsRepository.findAllByOrderByCreatedAtDesc()
-                .stream()
-                .map(NewsDTO::fromEntity)
-                .collect(Collectors.toList());
+    public List<News> getAllNews() {
+        return newsRepository.findAllByOrderByCreatedAtDesc();
     }
 
-    public Optional<NewsDTO> getNewsById(Long id) {
-        return newsRepository.findById(id)
-                .map(NewsDTO::fromEntity);
+    public Optional<News> getNewsById(Long id) {
+        return newsRepository.findById(id);
     }
 
-    public NewsDTO createNews(NewsDTO newsDTO, String authorUsername) {
-        News news = newsDTO.toEntity();
-        news.setAuthor(authorUsername);
-        news.setCreatedAt(LocalDateTime.now());
-        news.setPublished(true);
-        News savedNews = newsRepository.save(news);
-        return NewsDTO.fromEntity(savedNews);
+    @Transactional
+    public News createNews(NewsDTO newsDTO, String authorUsername) {
+        News news = new News();
+        news.setTitle(newsDTO.getTitle());
+        news.setContent(newsDTO.getContent());
+        news.setImageUrl(newsDTO.getImageUrl());
+        news.setLinkUrl(newsDTO.getLinkUrl());
+        news.setPublished(newsDTO.isPublished());
+        news.setAuthorUsername(authorUsername);
+        return newsRepository.save(news);
     }
 
-    public NewsDTO updateNews(Long id, NewsDTO newsDTO) {
-        return newsRepository.findById(id)
-                .map(existingNews -> {
-                    existingNews.setTitle(newsDTO.getTitle());
-                    existingNews.setContent(newsDTO.getContent());
-                    existingNews.setUpdatedAt(LocalDateTime.now());
-                    News updatedNews = newsRepository.save(existingNews);
-                    return NewsDTO.fromEntity(updatedNews);
-                })
-                .orElse(null);
+    @Transactional
+    public News updateNews(Long id, NewsDTO newsDTO) {
+        News news = newsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Nyhet hittades inte"));
+        news.setTitle(newsDTO.getTitle());
+        news.setContent(newsDTO.getContent());
+        news.setImageUrl(newsDTO.getImageUrl());
+        news.setLinkUrl(newsDTO.getLinkUrl());
+        news.setPublished(newsDTO.isPublished());
+        return newsRepository.save(news);
     }
 
-    public boolean deleteNews(Long id) {
-        if (newsRepository.existsById(id)) {
-            newsRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    @Transactional
+    public String clearNewsImage(Long id) {
+        News news = newsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Nyhet hittades inte"));
+        String oldImageUrl = news.getImageUrl();
+        news.setImageUrl(null);
+        newsRepository.save(news);
+        return oldImageUrl;
     }
 
-    public boolean unpublishNews(Long id) {
-        return newsRepository.findById(id)
-                .map(news -> {
-                    news.setPublished(false);
-                    newsRepository.save(news);
-                    return true;
-                })
-                .orElse(false);
+    @Transactional
+    public void deleteNews(Long id) {
+        newsRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void togglePublished(Long id) {
+        News news = newsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Nyhet hittades inte"));
+        news.setPublished(!news.isPublished());
+        newsRepository.save(news);
     }
 }
