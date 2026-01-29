@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${news.title + ' - FBK Balkan'}">Nyhet - FBK Balkan</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-base-200">
+
+<div th:replace="~{fragments/navbar::navbar}"></div>
+
+<div class="container mx-auto px-4 py-8 pt-24">
+    <div class="max-w-3xl mx-auto">
+        <a href="/news" class="btn btn-ghost mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Tillbaka till nyheter
+        </a>
+
+        <article class="card bg-base-100 shadow-xl">
+            <figure th:if="${news.imageUrl != null and !news.imageUrl.isEmpty()}">
+                <img th:src="${news.imageUrl}" alt="Nyhetsbild" class="w-full h-64 md:h-96 object-cover">
+            </figure>
+            <div class="card-body">
+                <h1 class="text-2xl md:text-4xl font-bold font-virage text-primary mb-4" th:text="${news.title}">Titel</h1>
+                <div class="flex flex-wrap gap-4 text-sm text-gray-500 mb-6">
+                    <span th:text="'Publicerad: ' + ${#temporals.format(news.createdAt, 'yyyy-MM-dd HH:mm')}">Datum</span>
+                    <span th:if="${news.authorUsername}" th:text="'Av: ' + ${news.authorUsername}">Författare</span>
+                </div>
+                <div class="prose max-w-none">
+                    <p th:text="${news.content}" class="whitespace-pre-wrap">Innehåll</p>
+                </div>
+
+                <div th:if="${news.linkUrl != null and !news.linkUrl.isEmpty()}" class="mt-6">
+                    <a th:href="${news.linkUrl}" target="_blank" rel="noopener noreferrer"
+                       class="btn btn-primary btn-outline">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                        Läs mer
+                    </a>
+                </div>
+            </div>
+        </article>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer::footer}"></div>
+
+</body>
+</html>

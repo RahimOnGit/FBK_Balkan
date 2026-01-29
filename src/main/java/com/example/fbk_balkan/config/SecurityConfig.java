@@ -27,26 +27,30 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/css/**", "/images/**", "/login", "/login-error").permitAll()
-                        .requestMatchers("/trial-registration", "/trial-registration-success", "/about").permitAll()
-                        .requestMatchers("/news", "/news/{id}").permitAll()
 
-                        .requestMatchers("/coach/**").hasRole("COACH")
+//                        publicly accessible URLs
+                                .requestMatchers("/", "/css/**", "/images/**", "/login", "/login-error").permitAll()
+                                .requestMatchers("/trial-registration" , "/trial-registration-success" , "/about").permitAll()
+                                .requestMatchers("/news", "/news/**").permitAll()
 
-                        .requestMatchers(
-                                "/news/manage",
-                                "/news/create",
-                                "/news/edit/**",
-                                "/news/delete/**",
-                                "/news/unpublish/**"
-                        ).hasAnyRole("SOCIAL_ADMIN", "ADMIN")
+//                      roles-based access control
+                                .requestMatchers("/coach/**").hasRole("COACH")
+                                .requestMatchers("/admin/news/**").hasAnyRole("SOCIAL_ADMIN", "ADMIN")
 
-                        .anyRequest().authenticated()
+//                      authentication for all other requests
+                                .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/coach/dashboard", true)
+                        .successHandler((request, response, authentication) -> {
+                            String role = authentication.getAuthorities().iterator().next().getAuthority();
+                            if (role.equals("ROLE_SOCIAL_ADMIN") || role.equals("ROLE_ADMIN")) {
+                                response.sendRedirect("/admin/news");
+                            } else {
+                                response.sendRedirect("/coach/dashboard");
+                            }
+                        })
                         .failureUrl("/login-error")
                         .permitAll()
                 )
