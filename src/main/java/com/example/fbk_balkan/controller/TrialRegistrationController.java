@@ -52,7 +52,6 @@ public class TrialRegistrationController {
     @PostMapping
     public String createTrialRegistration(
             @Valid
-            //@ModelAttribute("trial")
             @ModelAttribute("trialRegistrationDTO")
             TrialRegistrationDTO trialRegistrationDTO ,
             BindingResult bindingResult , Model model) {
