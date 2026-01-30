@@ -21,8 +21,8 @@
         </a>
 
         <article class="card bg-base-100 shadow-xl">
-            <figure th:if="${news.imageUrl != null and !news.imageUrl.isEmpty()}">
-                <img th:src="${news.imageUrl}" alt="Nyhetsbild" class="w-full h-64 md:h-96 object-cover">
+            <figure th:if="${news.displayImageUrl != null}">
+                <img th:src="${news.displayImageUrl}" alt="Nyhetsbild" class="w-full h-64 md:h-96 object-cover">
             </figure>
             <div class="card-body">
                 <h1 class="text-2xl md:text-4xl font-bold font-virage text-primary mb-4" th:text="${news.title}">Titel</h1>

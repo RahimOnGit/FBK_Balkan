@@ -21,6 +21,8 @@ public class NewsDTO {
 
     private String imageUrl;
 
+    private String externalImageUrl;
+
     private String linkUrl;
 
     private boolean published = true;
