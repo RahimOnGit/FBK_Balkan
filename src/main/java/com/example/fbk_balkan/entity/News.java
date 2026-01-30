@@ -26,8 +26,21 @@ public class News {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Column(name = "external_image_url")
+    private String externalImageUrl;
+
     @Column(name = "link_url")
     private String linkUrl;
+
+    public String getDisplayImageUrl() {
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            return imageUrl;
+        }
+        if (externalImageUrl != null && !externalImageUrl.isEmpty()) {
+            return externalImageUrl;
+        }
+        return null;
+    }
 
     @Column(nullable = false)
     private boolean published = true;
