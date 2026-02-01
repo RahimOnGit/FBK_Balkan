@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 @Controller
@@ -55,12 +56,32 @@ public class TrialRegistrationController {
             @ModelAttribute("trialRegistrationDTO")
             TrialRegistrationDTO trialRegistrationDTO ,
             BindingResult bindingResult , Model model) {
+        final Set<String> ALLOWED_GENDERS = Set.of("MALE", "FEMALE");
+        final Set<String> ALLOWED_REFERRAL_SOURCES = Set.of(
+                "PLAYER", "COACH", "FAMILY", "SOCIAL_MEDIA", "WEBSITE", "EVENT", "SCHOOL", "OTHER"
+        );
         // Optional trimming logic
         if ("OTHER".equals(trialRegistrationDTO.getReferralSource())
                 && trialRegistrationDTO.getReferralOther() != null) {
             trialRegistrationDTO.setReferralOther(trialRegistrationDTO.getReferralOther().trim());
         } else {
             trialRegistrationDTO.setReferralOther(null);
+        }
+        // Validate dropdowns
+        if (!ALLOWED_GENDERS.contains(trialRegistrationDTO.getGender())) {
+            bindingResult.rejectValue(
+                    "gender",
+                    "invalid",
+                    "Välj en giltig kön"
+            );
+        }
+
+        if (!ALLOWED_REFERRAL_SOURCES.contains(trialRegistrationDTO.getReferralSource())) {
+            bindingResult.rejectValue(
+                    "referralSource",
+                    "invalid",
+                    "Välj en giltig källa"
+            );
         }
 
         if (bindingResult.hasErrors()) {
