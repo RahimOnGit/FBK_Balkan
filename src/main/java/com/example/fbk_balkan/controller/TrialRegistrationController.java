@@ -27,7 +27,7 @@ public class TrialRegistrationController {
     public String showTrialRegistrationForm(Model model) {
         model.addAttribute("trialRegistrationDTO", new TrialRegistrationDTO());
         model.addAttribute("availableTrials", List.of(LocalDate.now().plusDays(3),
-                                                    LocalDate.now().plusDays(5)));
+                LocalDate.now().plusDays(5)));
         return "trial-registration";
     }
     @PostMapping
@@ -44,6 +44,6 @@ public class TrialRegistrationController {
         trialRegistrationService.create(trialRegistrationDTO);
         model.addAttribute("successMessage","Registration successful!");
         return "trial-registration-success";
-      }
+    }
 
 }
