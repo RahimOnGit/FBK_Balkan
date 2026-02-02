@@ -31,7 +31,7 @@ public class SecurityConfig {
 //                        publicly accessible URLs
                         .requestMatchers("/", "/css/**", "/images/**", "/login", "/login-error").permitAll()
                         .requestMatchers("/trial-registration" , "/trial-registration-success" , "/about").permitAll()
-
+                                .requestMatchers("/team-register").permitAll()
 //                      roles-based access control
                         .requestMatchers("/coach/**").hasRole("COACH")
 

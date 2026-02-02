@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- Navbar -->
+<div class="absolute top-0 left-0 z-[10] right-0 bg-primary
+">
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</div>
+<!-- Success Message -->
+<div class="min-h-screen flex items-center justify-center px-4 py-20" th:object="${teamRegisterDTO}">
+        <div class="card w-full max-w-lg bg-base-100 shadow-xl">
+            <div class="card-body text-center">
+                <h2 class="card-title
+    justify-center text-3xl mb-6">Registrering lyckades!</h2>
+            </div>
+
+<!--          sucess message body-->
+                <p class="mb-4">
+                    lag <span th:text="*{teamName}">Team Name</span> har registrerat ditt.
+                </p>
+                <a href="/team-register" class="btn btn-primary">Återvänd</a>
+           </div>
+        </div>
+</div>
+</body>
+</html>
