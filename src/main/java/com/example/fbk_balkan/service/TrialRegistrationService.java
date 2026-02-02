@@ -24,25 +24,40 @@ public class TrialRegistrationService {
         trialRegistration.setRelativeEmail(trialRegistrationDTO.getRelativeEmail());
         trialRegistration.setRelativeNumber(trialRegistrationDTO.getRelativeNumber());
         trialRegistration.setPreferredTrainingDate(trialRegistrationDTO.getPreferredTrainingDate());
+        trialRegistration.setGender(trialRegistrationDTO.getGender());          // NEW
+        trialRegistration.setCurrentClub(trialRegistrationDTO.getCurrentClub()); // NEW
+        trialRegistration.setClubYears(trialRegistrationDTO.getClubYears());     // NEW
+        trialRegistration.setReferralSource(trialRegistrationDTO.getReferralSource());// NEW
+        trialRegistration.setReferralOther(
+                "OTHER".equals(trialRegistrationDTO.getReferralSource()) ?
+                        trialRegistrationDTO.getReferralOther() : null
+        );
+
         trialRegistration.setStatus(com.example.fbk_balkan.entity.TrialStatus.PENDING);
         trialRegistration.setCreatedAt(LocalDate.now());
 
         // Save entity
         trialRegistrationRepository.save(trialRegistration);
 
-        // Map entity back to DTO
-        return new TrialRegistrationDTO(
-                trialRegistration.getId(),
-                trialRegistration.getFirstName(),
-                trialRegistration.getLastName(),
-                trialRegistration.getBirthDate(),
-                trialRegistration.getRelativeName(),
-                trialRegistration.getRelativeEmail(),
-                trialRegistration.getRelativeNumber(),
-                trialRegistration.getPreferredTrainingDate(),
-                trialRegistration.getStatus(),
-                trialRegistration.getCreatedAt()
-        );
+        // used here  builder methode to add new fields any time easily.
+        return TrialRegistrationDTO.builder()
+                .id(trialRegistration.getId())
+                .firstName(trialRegistration.getFirstName())
+                .lastName(trialRegistration.getLastName())
+                .birthDate(trialRegistration.getBirthDate())
+                .relativeName(trialRegistration.getRelativeName())
+                .relativeEmail(trialRegistration.getRelativeEmail())
+                .relativeNumber(trialRegistration.getRelativeNumber())
+                .preferredTrainingDate(trialRegistration.getPreferredTrainingDate())
+                .gender(trialRegistration.getGender())          // NEW
+                .currentClub(trialRegistration.getCurrentClub()) // NEW
+                .clubYears(trialRegistration.getClubYears())    // NEW
+                .referralSource(trialRegistration.getReferralSource())  // NEW
+                .referralOther(trialRegistration.getReferralOther())// NEW
+                .status(trialRegistration.getStatus())
+                .createdAt(trialRegistration.getCreatedAt())
+                .build();
+
     }
 
 

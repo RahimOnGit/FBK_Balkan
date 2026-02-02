@@ -17,10 +17,14 @@
     <div class="card w-full max-w-lg bg-base-100 shadow-xl">
         <div class="card-body">
             <h2 class="card-title justify-center text-3xl mb-6">Provträningsregistrering</h2>
+            <p class="text-sm text-gray-600 mb-4">
+                Fält markerade med <span aria-hidden="true">*</span> är obligatoriska.
+            </p>
+
             <form th:action="@{/trial-registration}" th:object="${trialRegistrationDTO}" method="post">
                 <div class="form-control mb-4">
                     <label class="label">
-                        <span class="label-text">Barnets förnamn</span>
+                        <span class="label-text">Barnets förnamn <span aria-hidden="true">*</span></span>
                     </label>
                     <input class="input input-bordered" type="text" th:field="*{firstName}" placeholder="Ange barnets förnamn" required />
                     <p th:if="${#fields.hasErrors('firstName')}"
@@ -30,7 +34,7 @@
 
                 <div class="form-control mb-4">
                     <label class="label">
-                        <span class="label-text">Barnets efternamn</span>
+                        <span class="label-text">Barnets efternamn <span aria-hidden="true">*</span></span>
                     </label>
                     <input class="input input-bordered" type="text" th:field="*{lastName}" placeholder="Ange barnets efternamn" required />
                     <p th:if="${#fields.hasErrors('lastName')}"
@@ -38,19 +42,67 @@
                     > </p>
                 </div>
 
+                  <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Födelsedatum <span aria-hidden="true">*</span></span>
+                    </label>
+                    <input class="input input-bordered"
+                           type="date"
+                           th:field="*{birthDate}"
+                           th:attr="min=${minBirthDate}, max=${maxBirthDate}"
+                           required />
+                    <p th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></p>
+                </div>
                 <div class="form-control mb-4">
                     <label class="label">
-                        <span class="label-text">Födelsedatum</span>
+                        <span class="label-text">Kön <span aria-hidden="true">*</span></span>
                     </label>
-                    <input class="input input-bordered" type="date" th:field="*{birthDate}" required />
-                    <p th:if="${#fields.hasErrors('birthDate')}"
-                       th:errors="*{birthDate}"
-                    > </p>
+                    <select class="select select-bordered" th:field="*{gender}" required>
+                        <option value="">Välj kön</option>
+                        <option value="MALE">Kille</option>
+                        <option value="FEMALE">Tjej</option>
+
+                    </select>
+                    <p th:if="${#fields.hasErrors('gender')}"
+                       th:errors="*{gender}">
+                    </p>
+                </div>
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Nuvarande klubb</span>
+                    </label>
+                    <input class="input input-bordered"
+                           type="text"
+                           th:field="*{currentClub}"
+                           placeholder="Ange nuvarande klubb" />
+                    <p th:if="${#fields.hasErrors('currentClub')}"
+                       th:errors="*{currentClub}">
+                    </p>
                 </div>
 
                 <div class="form-control mb-4">
                     <label class="label">
-                        <span class="label-text">Förälder/Vårdnadshavares namn</span>
+                        <span class="label-text">Antal år i klubb</span>
+                    </label>
+                    <input class="input input-bordered"
+                           type="number"
+                           min="0"
+                           max="5"
+                           th:field="*{clubYears}"
+                           placeholder="Antal år" />
+                    <p th:if="${#fields.hasErrors('clubYears')}"
+                       th:errors="*{clubYears}">
+                    </p>
+                </div>
+
+
+
+
+
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Förälder/Vårdnadshavares namn <span aria-hidden="true">*</span></span>
                     </label>
                     <input class="input input-bordered" type="text" th:field="*{relativeName}" placeholder="Ange förälder/vårdnadshavares namn" required />
                     <p th:if="${#fields.hasErrors('relativeName')}"
@@ -60,7 +112,7 @@
 
                 <div class="form-control mb-4">
                     <label class="label">
-                        <span class="label-text">Kontakt e-postadress</span>
+                        <span class="label-text">Kontakt e-postadress <span aria-hidden="true">*</span></span>
                     </label>
                     <input class="input input-bordered" type="email" th:field="*{relativeEmail}" placeholder="Ange e-postadress" required />
                     <p th:if="${#fields.hasErrors('relativeEmail')}"
@@ -70,7 +122,7 @@
 
                 <div class="form-control mb-4">
                     <label class="label">
-                        <span class="label-text">Kontakt telefonnummer</span>
+                        <span class="label-text">Kontakt telefonnummer <span aria-hidden="true">*</span></span>
                     </label>
                     <input class="input input-bordered" type="tel" th:field="*{relativeNumber}" placeholder="Ange telefonnummer" required />
                     <p th:if="${#fields.hasErrors('relativeNumber')}"
@@ -79,11 +131,68 @@
                     </p>
                 </div>
 
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Vem rekommenderade dig? / Hur hittade ni oss?</span>
+                    </label>
+                    <select id="referralSource"
+                            class="select select-bordered"
+                            th:field="*{referralSource}"
+                            >
+                        <option value="">Välj källa</option>
+                        <option value="PLAYER">Spelare i klubben</option>
+                        <option value="COACH">Tränare i klubben</option>
+                        <option value="FAMILY">Familj/Vän</option>
+                        <option value="SOCIAL_MEDIA">Sociala medier</option>
+                        <option value="WEBSITE">Klubbens hemsida</option>
+                        <option value="EVENT">Lokalt evenemang</option>
+                        <option value="SCHOOL">Skola/Skolidrott</option>
+                        <option value="OTHER">Annat</option>
+                    </select>
+                </div>
+
+                <div class="form-control mb-4" id="referralOtherDiv" style="display: none;">
+                    <label class="label">
+                        <span class="label-text">Annat (max 50 tecken)</span>
+                    </label>
+                    <input id="referralOtherInput"
+                           class="input input-bordered"
+                           type="text"
+                           th:field="*{referralOther}"
+                           maxlength="50"
+                           placeholder="Ange annan källa (valfritt)">
+                </div>
+
+                <p class="text-error"
+                   th:if="${#fields.hasErrors('referralOther')}"
+                   th:errors="*{referralOther}">
+                </p>
+
+                <script>
+                    const referralSelect = document.getElementById('referralSource');
+                    const referralOtherDiv = document.getElementById('referralOtherDiv');
+
+                    // Show textbox if "OTHER" was previously selected (when form reloads)
+                    if (referralSelect.value === 'OTHER') {
+                        referralOtherDiv.style.display = 'block';
+                    }
+
+                    referralSelect.addEventListener('change', function() {
+                        if (this.value === 'OTHER') {
+                            referralOtherDiv.style.display = 'block';
+                        } else {
+                            referralOtherDiv.style.display = 'none';
+                            referralOtherDiv.querySelector('input').value = ''; // clear input
+                        }
+                    });
+                </script>
+
                 <div class="form-control mb-6">
                     <label class="label">
                         <span class="label-text">Önskat provträningsdatum</span>
                     </label>
-                    <input class="input input-bordered" type="date" th:field="*{preferredTrainingDate}" required />
+                    <input class="input input-bordered" type="date" th:field="*{preferredTrainingDate}" required  />
 
                 </div>
 
