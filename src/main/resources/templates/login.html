@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-<html lang="sv" data-theme="corporate"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
-
+<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,47 +17,32 @@
 <div class="min-h-screen flex items-center justify-center px-4 py-20">
   <div class="card w-full max-w-md bg-base-100 shadow-xl">
     <div class="card-body">
-      <h2 class="card-title justify-center text-3xl mb-6">Tränarinloggning</h2>
+      <h2 class="card-title justify-center text-3xl mb-6">Login</h2>
 
       <div th:if="${error}" class="alert alert-error mb-4">
         <span th:text="${error}"></span>
       </div>
 
-      <form th:action="@{/login}" method="post" autocomplete="on">
+      <form th:action="@{/login}" method="post">
         <div class="form-control mb-4">
           <label class="label">
-            <span class="label-text">Användarnamn</span>
+            <span class="label-text">Username</span>
           </label>
-          <input type="text" name="username" placeholder="Ange ditt användarnamn" autocomplete="username"
+          <input type="text" name="username" placeholder="Enter your username"
                  class="input input-bordered w-full" required autofocus/>
         </div>
 
         <div class="form-control mb-6">
           <label class="label">
-            <span class="label-text">Lösenord</span>
+            <span class="label-text">Password</span>
           </label>
-          <input type="password" name="password" placeholder="Ange ditt lösenord" autocomplete="current-password"
+          <input type="password" name="password" placeholder="Enter your password"
                  class="input input-bordered w-full" required/>
         </div>
-        <!--    remember me checkbox    -->
-        <div class="form-control mb-6 inline-flex items-center">
-          <label class="cursor-pointer label ">
-            <input type="checkbox" name="remember-me" class="checkbox checkbox-primary mr-2"/>
-            <span class="label-text text-sm">kom ihåg mig</span>
-          </label>
-        </div>
-
-
 
         <div class="form-control">
           <button type="submit" class="btn btn-primary w-full">Logga in</button>
         </div>
-        <!--        forgot password link -->
-        <div class="form-control mt-4 text-center">
-          <p class="text-sm text-gray-500 underline cursor-pointer">Glömt lösenord? Kontakta admin</p>
-        </div>
-
-
       </form>
     </div>
   </div>

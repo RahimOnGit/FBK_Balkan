@@ -17,14 +17,14 @@ public class PlayerService {
         this.playerRepository = playerRepository;
     }
 
-public PlayerDTO create(PlayerDTO playerDTO) {
-    Player player = new Player();
-    player.setFirstName(playerDTO.getFirstName());
-    player.setLastName(playerDTO.getLastName());
+    public PlayerDTO create(PlayerDTO playerDTO) {
+        Player player = new Player();
+        player.setFirstName(playerDTO.getFirstName());
+        player.setLastName(playerDTO.getLastName());
 
-    playerRepository.save(player);
-    return new PlayerDTO(player.getId() , player.getFirstName(), player.getLastName());
-}
+        playerRepository.save(player);
+        return new PlayerDTO(player.getId() , player.getFirstName(), player.getLastName());
+    }
 
 
 }

@@ -1,0 +1,883 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="sv" data-theme="winter" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title th:text="${isEdit ? 'Redigera Nyhet' : 'Skapa Nyhet'} + ' - FBK Balkan'">Nyhet - FBK Balkan</title>-->
+
+<!--    &lt;!&ndash; DaisyUI &ndash;&gt;-->
+<!--    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />-->
+
+<!--    &lt;!&ndash; Google Fonts &ndash;&gt;-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">-->
+
+<!--    &lt;!&ndash; FontAwesome &ndash;&gt;-->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
+
+<!--    &lt;!&ndash; Tailwind Configuration &ndash;&gt;-->
+<!--    <script src="https://cdn.tailwindcss.com"></script>-->
+<!--    <script>-->
+<!--        tailwind.config = {-->
+<!--            theme: {-->
+<!--                extend: {-->
+<!--                    fontFamily: {-->
+<!--                        sans: ['Inter', 'sans-serif'],-->
+<!--                        heading: ['Oswald', 'sans-serif'],-->
+<!--                    },-->
+<!--                    colors: {-->
+<!--                        primary: {-->
+<!--                            50: '#eff6ff',-->
+<!--                            100: '#dbeafe',-->
+<!--                            500: '#3b82f6',-->
+<!--                            600: '#2563eb',-->
+<!--                            800: '#1e40af',-->
+<!--                            900: '#1e3a8a',-->
+<!--                        },-->
+<!--                        accent: {-->
+<!--                            500: '#dc2626',-->
+<!--                        }-->
+<!--                    }-->
+<!--                }-->
+<!--            }-->
+<!--        }-->
+<!--    </script>-->
+
+<!--    <style>-->
+<!--        /* Dashed Border Style for Upload Zone */-->
+<!--        .dashed-border {-->
+<!--            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='12' ry='12' stroke='%23CBD5E1FF' stroke-width='2' stroke-dasharray='8%2c 8' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");-->
+<!--        }-->
+<!--        .dashed-border:hover {-->
+<!--            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='12' ry='12' stroke='%233B82F6FF' stroke-width='2' stroke-dasharray='8%2c 8' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");-->
+<!--            background-color: #eff6ff;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body class="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-primary-100 selection:text-primary-900 flex flex-col">-->
+
+<!--&lt;!&ndash; Navbar Fragment &ndash;&gt;-->
+<!--<div th:replace="~{fragments/navbar::navbar}"></div>-->
+
+<!--&lt;!&ndash; Main Content &ndash;&gt;-->
+<!--<main class="flex-grow container mx-auto px-4 py-8 max-w-4xl mt-8">-->
+
+<!--    &lt;!&ndash; Header Section &ndash;&gt;-->
+<!--    <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">-->
+<!--        <div>-->
+<!--            <a href="/admin/news" class="link link-hover text-sm font-medium text-slate-500 flex items-center gap-1 mb-2 no-underline">-->
+<!--                <i class="fa-solid fa-arrow-left"></i> Tillbaka till översikt-->
+<!--            </a>-->
+<!--            <h1 class="text-4xl md:text-5xl font-heading font-bold text-slate-900 uppercase tracking-wide"-->
+<!--                th:text="${isEdit ? 'Redigera Nyhet' : 'Skapa Nyhet'}">-->
+<!--                Skapa Nyhet-->
+<!--            </h1>-->
+<!--            <p class="text-slate-500 mt-2 font-medium" th:text="${isEdit ? 'Uppdatera informationen nedan.' : 'Fyll i formuläret för att publicera en ny nyhet.'}">-->
+<!--                Fyll i formuläret för att publicera en ny nyhet.-->
+<!--            </p>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Form Card &ndash;&gt;-->
+<!--    <div class="card bg-white shadow-xl border border-slate-100 rounded-2xl overflow-hidden">-->
+<!--        <div class="card-body p-0">-->
+<!--            <form th:action="${isEdit ? '/admin/news/edit/' + newsId : '/admin/news/create'}"-->
+<!--                  method="post"-->
+<!--                  th:object="${newsDTO}"-->
+<!--                  enctype="multipart/form-data"-->
+<!--                  class="p-6 md:p-10 space-y-8">-->
+
+<!--                &lt;!&ndash; Rubrik &ndash;&gt;-->
+<!--                <div class="form-control w-full">-->
+<!--                    <label class="label py-1">-->
+<!--                        <span class="label-text font-bold text-slate-700 text-base">Rubrik <span class="text-accent-500">*</span></span>-->
+<!--                    </label>-->
+<!--                    <div class="relative group">-->
+<!--                        <input type="text"-->
+<!--                               th:field="*{title}"-->
+<!--                               class="input input-bordered w-full pl-12 h-14 text-lg font-medium border-slate-300 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 rounded-lg"-->
+<!--                               placeholder="T.ex. Ny träningsvecka startar på måndag"-->
+<!--                               required>-->
+<!--                        <i class="fa-solid fa-heading absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary-500 transition-colors"></i>-->
+<!--                    </div>-->
+<!--                    <label class="label py-1" th:if="${#fields.hasErrors('title')}">-->
+<!--                        <span class="label-text-alt text-error font-medium" th:errors="*{title}">Fel</span>-->
+<!--                    </label>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Innehåll &ndash;&gt;-->
+<!--                <div class="form-control w-full">-->
+<!--                    <label class="label py-1">-->
+<!--                        <span class="label-text font-bold text-slate-700 text-base">Innehåll <span class="text-accent-500">*</span></span>-->
+<!--                    </label>-->
+<!--                    <textarea th:field="*{content}"-->
+<!--                              class="textarea textarea-bordered w-full h-64 p-4 text-base leading-relaxed border-slate-300 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 resize-none rounded-lg bg-slate-50/50"-->
+<!--                              placeholder="Skriv nyhetsinnehållet här..."-->
+<!--                              required></textarea>-->
+<!--                    <label class="label py-1" th:if="${#fields.hasErrors('content')}">-->
+<!--                        <span class="label-text-alt text-error font-medium" th:errors="*{content}">Fel</span>-->
+<!--                    </label>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Bildhantering (Tabs) &ndash;&gt;-->
+<!--                <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 relative">-->
+<!--                    <h3 class="font-heading font-bold text-slate-800 text-xl mb-4 flex items-center gap-2">-->
+<!--                        <i class="fa-regular fa-image text-primary-600"></i> Bild-->
+<!--                    </h3>-->
+
+<!--                    &lt;!&ndash; Hidden flag for soft delete &ndash;&gt;-->
+<!--                    <input type="hidden" name="deleteImage" id="deleteImageFlag" value="false" />-->
+
+<!--                    &lt;!&ndash; DaisyUI Tabs &ndash;&gt;-->
+<!--                    <div role="tablist" class="tabs tabs-lifted tabs-sm bg-slate-100/50 rounded-lg p-1">-->
+
+<!--                        &lt;!&ndash; Tab 1: Upload File &ndash;&gt;-->
+<!--                        <input type="radio" name="image_tabs" role="tab" class="tab" aria-label="Ladda upp fil" checked onclick="showTab('upload')"/>-->
+<!--                        <div role="tabpanel" class="tab-content bg-base-100 rounded-box p-0 h-full min-h-[300px]">-->
+
+<!--                            &lt;!&ndash; Success Message (Hidden) &ndash;&gt;-->
+<!--                            <div id="uploadSuccessMsg" class="hidden mt-2 mb-2">-->
+<!--                                <div class="alert alert-success text-sm py-2">-->
+<!--                                    <i class="fa-solid fa-check-circle"></i>-->
+<!--                                    <span>Bild har valts och kommer att laddas upp vid sparande.</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+<!--                            &lt;!&ndash; State 1: Drop Zone &ndash;&gt;-->
+<!--                            <div id="dropZoneContainer" class="form-control pt-2">-->
+<!--                                <label class="label py-1">-->
+<!--                                    <span class="label-text text-slate-500">Välj en fil från din dator.</span>-->
+<!--                                </label>-->
+<!--                                <div class="dashed-border rounded-xl p-10 text-center cursor-pointer relative transition-colors group">-->
+<!--                                    <input type="file" name="imageFile" id="imageFileInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="handleFileSelect(this)">-->
+<!--                                    <div class="flex flex-col items-center justify-center pointer-events-none">-->
+<!--                                        <div class="bg-primary-50 p-4 rounded-full mb-3 group-hover:scale-110 transition-transform">-->
+<!--                                            <i class="fa-solid fa-cloud-arrow-up text-3xl text-primary-600"></i>-->
+<!--                                        </div>-->
+<!--                                        <span class="font-bold text-slate-700">Klicka eller dra filen hit</span>-->
+<!--                                        <span class="text-xs text-slate-400 mt-1">JPG, PNG, GIF (Max 5MB)</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+<!--                            &lt;!&ndash; State 2: Preview of Selected File &ndash;&gt;-->
+<!--                            <div id="filePreviewContainer" class="hidden pt-2 flex flex-col items-center">-->
+<!--                                <label class="label py-1 w-full">-->
+<!--                                    <span class="label-text font-semibold text-slate-600">Förhandsgranskning</span>-->
+<!--                                </label>-->
+<!--                                <div class="relative group w-full max-w-[300px]">-->
+<!--                                    <img id="filePreviewImg" src="" alt="Förhandsgranskning" class="w-full rounded-lg shadow-md border border-slate-200">-->
+<!--                                    <button type="button" onclick="clearFileInput()" class="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600">-->
+<!--                                        <i class="fa-solid fa-xmark"></i>-->
+<!--                                    </button>-->
+<!--                                </div>-->
+<!--                                <button type="button" onclick="clearFileInput()" class="btn btn-sm btn-ghost mt-4 text-primary-600 hover:bg-primary-50">-->
+<!--                                    Byt bild-->
+<!--                                </button>-->
+<!--                            </div>-->
+
+<!--                            &lt;!&ndash; Existing Image (Edit Mode Only) &ndash;&gt;-->
+<!--                            <div th:if="${newsDTO.imageUrl != null and !newsDTO.imageUrl.isEmpty()}" id="existingImageContainer" class="mt-6 border-t border-slate-100 pt-6">-->
+<!--                                <div class="label py-1">-->
+<!--                                    <span class="label-text font-semibold text-slate-600">Nuvarande bild</span>-->
+<!--                                </div>-->
+
+<!--                                &lt;!&ndash; Display Image &ndash;&gt;-->
+<!--                                <div id="currentImageDisplay" class="flex items-center gap-4 bg-white p-3 rounded-lg border border-slate-200 shadow-sm transition-all duration-300">-->
+<!--                                    <div class="avatar">-->
+<!--                                        <div class="w-20 rounded-lg overflow-hidden border border-slate-100">-->
+<!--                                            <img id="currentImageSrc" th:src="${newsDTO.imageUrl}" alt="Nuvarande bild" />-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <input type="hidden" th:field="*{imageUrl}">-->
+<!--                                    <div class="text-sm flex-1">-->
+<!--                                        <p class="font-medium text-slate-700">Bilduppladdning aktiv</p>-->
+<!--                                        <p class="text-xs text-slate-400 truncate max-w-[200px]" th:text="${newsDTO.imageUrl}"></p>-->
+<!--                                    </div>-->
+<!--                                    <div th:if="${isEdit}">-->
+<!--                                        <button type="button" id="deleteImageBtn" class="btn btn-error btn-sm btn-outline gap-2 rounded-lg" onclick="toggleSoftDelete()">-->
+<!--                                            <i class="fa-regular fa-trash-can"></i> Ta bort-->
+<!--                                        </button>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+
+<!--                                &lt;!&ndash; Deleted State &ndash;&gt;-->
+<!--                                <div id="deletedImageState" class="hidden animate-fade-in">-->
+<!--                                    <div class="flex items-center gap-3 bg-red-50 p-4 rounded-lg border border-red-100 text-red-800">-->
+<!--                                        <i class="fa-solid fa-triangle-exclamation text-xl"></i>-->
+<!--                                        <div>-->
+<!--                                            <p class="font-bold text-sm">Bild raderas vid sparande</p>-->
+<!--                                            <button type="button" class="text-xs underline hover:text-red-900 mt-1" onclick="undoSoftDelete()">Ångra borttagning</button>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+<!--                            &lt;!&ndash; File Size Error &ndash;&gt;-->
+<!--                            <div id="fileSizeError" class="hidden mt-3">-->
+<!--                                <div class="alert alert-error text-sm py-2 px-4 rounded-lg">-->
+<!--                                    <i class="fa-solid fa-circle-exclamation"></i>-->
+<!--                                    <div>-->
+<!--                                        <h3 class="font-bold">Filen är för stor</h3>-->
+<!--                                        <div class="text-xs">Maximal tillåten storlek är 5MB.</div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                        &lt;!&ndash; Tab 2: External URL &ndash;&gt;-->
+<!--                        <input type="radio" name="image_tabs" role="tab" class="tab" aria-label="Extern URL" onclick="showTab('url')"/>-->
+<!--                        <div role="tabpanel" class="tab-content bg-base-100 rounded-box p-0">-->
+<!--                            <div class="form-control pt-2">-->
+<!--                                <label class="label py-1">-->
+<!--                                    <span class="label-text text-slate-500">Ange en direktlänk till en bild.</span>-->
+<!--                                </label>-->
+<!--                                <div class="join w-full">-->
+<!--                                    <span class="btn btn-disabled join-item border-base-300 bg-slate-100 text-slate-500 no-underline rounded-s-lg px-4">-->
+<!--                                        <i class="fa-solid fa-link"></i>-->
+<!--                                    </span>-->
+<!--                                    <input type="url"-->
+<!--                                           th:field="*{externalImageUrl}"-->
+<!--                                           id="externalImageUrl"-->
+<!--                                           class="input input-bordered join-item w-full focus:border-primary-500 focus:ring-1 focus:ring-primary-500 rounded-e-lg"-->
+<!--                                           placeholder="https://example.com/bild.jpg"-->
+<!--                                           oninput="updateImagePreview(this.value)">-->
+<!--                                </div>-->
+<!--                                <label class="label py-1">-->
+<!--                                    <span class="label-text-alt text-slate-400">Måste börja med http:// eller https://</span>-->
+<!--                                </label>-->
+
+<!--                                <div id="externalImagePreview" class="hidden mt-4">-->
+<!--                                    <div class="bg-white p-4 rounded-lg border border-slate-200 inline-block shadow-sm">-->
+<!--                                        <img id="previewImg" src="" alt="Förhandsgranskning" class="max-w-[200px] rounded shadow-sm mx-auto block">-->
+<!--                                        <p class="text-xs text-center text-slate-400 mt-2">Förhandsgranskning</p>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Länk &ndash;&gt;-->
+<!--                <div class="form-control w-full">-->
+<!--                    <label class="label py-1">-->
+<!--                        <span class="label-text font-bold text-slate-700 text-base">Länk (Valfritt)</span>-->
+<!--                    </label>-->
+<!--                    <div class="relative group">-->
+<!--                        <input type="url" th:field="*{linkUrl}" class="input input-bordered w-full pl-12 border-slate-300 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 rounded-lg" placeholder="https://fotbollsbalkan.se/lank-till-event">-->
+<!--                        <i class="fa-solid fa-link absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary-500 transition-colors"></i>-->
+<!--                    </div>-->
+<!--                    <label class="label py-1">-->
+<!--                        <span class="label-text-alt text-slate-400">En länk visas som en knapp på nyhetsflödet.</span>-->
+<!--                    </label>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Publicering & Actions &ndash;&gt;-->
+<!--                <div class="pt-8 mt-6 border-t border-slate-100 flex flex-col items-center justify-center gap-6 w-full">-->
+
+<!--                    &lt;!&ndash; Checkbox &ndash;&gt;-->
+<!--                    <label class="cursor-pointer flex items-center gap-3 border border-slate-200 rounded-xl px-6 py-3 bg-white hover:bg-slate-50 transition-colors shadow-sm select-none">-->
+<!--                        <input type="checkbox" th:field="*{published}" class="checkbox checkbox-primary checkbox-lg border-slate-300">-->
+<!--                        <div class="flex flex-col items-center text-center">-->
+<!--                            <span class="font-bold text-slate-700 text-base">Publicera direkt</span>-->
+<!--                            <span class="text-xs text-slate-500 font-normal">Avmarkera för att spara som utkast</span>-->
+<!--                        </div>-->
+<!--                    </label>-->
+
+<!--                    &lt;!&ndash; Buttons &ndash;&gt;-->
+<!--                    <div class="flex gap-3 w-full justify-center">-->
+<!--                        <a href="/admin/news" class="btn btn-ghost btn-wide rounded-lg text-slate-600 hover:bg-slate-100 border border-slate-200">Avbryt</a>-->
+<!--                        <button type="submit" class="btn btn-primary btn-wide min-h-[3rem] text-white font-bold rounded-lg shadow-lg shadow-primary-500/20 hover:shadow-primary-500/40 border-none bg-primary-600 hover:bg-primary-700">-->
+<!--                            <i class="fa-solid fa-check"></i>-->
+<!--                            <span th:text="${isEdit ? 'Spara ändringar' : 'Publicera nyhet'}">Spara</span>-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</main>-->
+
+<!--&lt;!&ndash; Footer Fragment &ndash;&gt;-->
+<!--<div th:replace="~{fragments/footer::footer}"></div>-->
+
+<!--&lt;!&ndash; Legacy Delete Form (Kept just in case backend still references specific action, though logic now uses main form hidden input) &ndash;&gt;-->
+<!--<form th:if="${isEdit and newsDTO.imageUrl != null}" id="legacyDeleteForm" th:action="@{/admin/news/delete-image/{id}(id=${newsId})}" method="post" class="hidden"></form>-->
+
+<!--<script th:inline="javascript">-->
+<!--    // -&#45;&#45; 1. File Upload Preview Logic -&#45;&#45;-->
+<!--    function handleFileSelect(input) {-->
+<!--        const file = input.files[0];-->
+<!--        const maxSize = 5 * 1024 * 1024; // 5MB-->
+<!--        const errorMsg = document.getElementById('fileSizeError');-->
+<!--        const successMsg = document.getElementById('uploadSuccessMsg');-->
+<!--        const dropZone = document.getElementById('dropZoneContainer');-->
+<!--        const previewContainer = document.getElementById('filePreviewContainer');-->
+<!--        const previewImg = document.getElementById('filePreviewImg');-->
+
+<!--        if (file) {-->
+<!--            if (file.size > maxSize) {-->
+<!--                errorMsg.classList.remove('hidden');-->
+<!--                successMsg.classList.add('hidden');-->
+<!--                input.value = ''; // Clear input-->
+<!--            } else {-->
+<!--                errorMsg.classList.add('hidden');-->
+<!--                const reader = new FileReader();-->
+<!--                reader.onload = function(e) {-->
+<!--                    previewImg.src = e.target.result;-->
+<!--                    dropZone.classList.add('hidden');-->
+<!--                    previewContainer.classList.remove('hidden');-->
+<!--                    successMsg.classList.remove('hidden');-->
+<!--                }-->
+<!--                reader.readAsDataURL(file);-->
+<!--            }-->
+<!--        } else {-->
+<!--            errorMsg.classList.add('hidden');-->
+<!--            successMsg.classList.add('hidden');-->
+<!--        }-->
+<!--    }-->
+
+<!--    function clearFileInput() {-->
+<!--        const input = document.getElementById('imageFileInput');-->
+<!--        const dropZone = document.getElementById('dropZoneContainer');-->
+<!--        const previewContainer = document.getElementById('filePreviewContainer');-->
+<!--        const successMsg = document.getElementById('uploadSuccessMsg');-->
+
+<!--        input.value = '';-->
+<!--        dropZone.classList.remove('hidden');-->
+<!--        previewContainer.classList.add('hidden');-->
+<!--        successMsg.classList.add('hidden');-->
+<!--    }-->
+
+<!--    // -&#45;&#45; 2. Soft Delete Logic -&#45;&#45;-->
+<!--    function toggleSoftDelete() {-->
+<!--        const flag = document.getElementById('deleteImageFlag');-->
+<!--        const displayDiv = document.getElementById('currentImageDisplay');-->
+<!--        const deletedDiv = document.getElementById('deletedImageState');-->
+<!--        const btn = document.getElementById('deleteImageBtn');-->
+
+<!--        flag.value = "true";-->
+<!--        displayDiv.classList.add('hidden');-->
+<!--        deletedDiv.classList.remove('hidden');-->
+<!--        btn.classList.add('hidden');-->
+<!--    }-->
+
+<!--    function undoSoftDelete() {-->
+<!--        const flag = document.getElementById('deleteImageFlag');-->
+<!--        const displayDiv = document.getElementById('currentImageDisplay');-->
+<!--        const deletedDiv = document.getElementById('deletedImageState');-->
+<!--        const btn = document.getElementById('deleteImageBtn');-->
+
+<!--        flag.value = "false";-->
+<!--        displayDiv.classList.remove('hidden');-->
+<!--        deletedDiv.classList.add('hidden');-->
+<!--        btn.classList.remove('hidden');-->
+<!--    }-->
+
+<!--    // -&#45;&#45; 3. External URL Preview & Init -&#45;&#45;-->
+<!--    function updateImagePreview(url) {-->
+<!--        const previewContainer = document.getElementById('externalImagePreview');-->
+<!--        const img = document.getElementById('previewImg');-->
+
+<!--        if (url && (url.startsWith('http://') || url.startsWith('https://'))) {-->
+<!--            img.src = url;-->
+<!--            img.onerror = function() { previewContainer.classList.add('hidden'); };-->
+<!--            img.onload = function() { previewContainer.classList.remove('hidden'); };-->
+<!--        } else {-->
+<!--            previewContainer.classList.add('hidden');-->
+<!--        }-->
+<!--    }-->
+
+<!--    document.addEventListener('DOMContentLoaded', function() {-->
+<!--        const urlInput = document.getElementById('externalImageUrl');-->
+<!--        if (urlInput && urlInput.value) {-->
+<!--            updateImagePreview(urlInput.value);-->
+<!--            const urlTab = document.querySelector('input[aria-label="Extern URL"]');-->
+<!--            if(urlTab) urlTab.checked = true;-->
+<!--        }-->
+<!--    });-->
+
+<!--    function showTab(tabName) {-->
+<!--        console.log("Switched to tab: " + tabName);-->
+<!--    }-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
+                                    <!--//////\\\\\\-->
+
+<!DOCTYPE html>
+<html lang="sv" data-theme="winter" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${isEdit ? 'Redigera Nyhet' : 'Skapa Nyhet'} + ' - FBK Balkan'">Nyhet - FBK Balkan</title>
+
+    <!-- DaisyUI & Tailwind -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Oswald (Headers) & Inter (Body) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Oswald', 'sans-serif'], // Mapping to 'font-heading' class
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#1e3a8a',
+                            600: '#1e3a8a',
+                            700: '#1e3a8a',
+                            800: '#1e3a8a',
+                            900: '#1e3a8a',
+                        },
+                        secondary: '#475569',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles for Drag & Drop Zone */
+        .upload-zone {
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%23CBD5E1FF' stroke-width='2' stroke-dasharray='12%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+            transition: all 0.3s ease;
+        }
+        .upload-zone:hover, .upload-zone.drag-active {
+            background-color: #eff6ff;
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%233B82F6FF' stroke-width='2' stroke-dasharray='12%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+            transform: scale(1.01);
+        }
+
+        /* Smooth fade transition */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 font-sans flex flex-col">
+<!--<body class="min-h-screen bg-slate-50 bg-orange-400 font-sans flex flex-col">-->
+
+
+<!-- Navbar Fragment -->
+<div th:replace="~{fragments/navbar::navbar}"></div>
+
+<!-- Main Content -->
+<main class="flex-grow container mx-auto px-4 py-6 md:py-10 max-w-4xl mt-4">
+
+    <!-- Page Header -->
+    <div class="mb-8">
+        <a href="/admin/news" class="inline-flex items-center text-sm font-semibold text-slate-500 hover:text-primary-600 transition-colors mb-4 group">
+            <i class="fa-solid fa-arrow-left mr-2 transform group-hover:-translate-x-1 transition-transform"></i>
+            Tillbaka till översikt
+        </a>
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <div>
+                <h1 class="text-4xl md:text-5xl font-heading font-bold text-slate-900 uppercase tracking-tight leading-tight"
+                    th:text="${isEdit ? 'Redigera Nyhet' : 'Skapa Nyhet'}">
+                    Skapa Nyhet
+                </h1>
+                <p class="text-slate-500 mt-2 font-medium max-w-lg"
+                   th:text="${isEdit ? 'Uppdatera informationen och tryck på spara när du är klar.' : 'Fyll i fälten nedan för att publicera en ny nyhet på webbplatsen.'}">
+                    Fyll i fälten nedan för att publicera en ny nyhet på webbplatsen.
+                </p>
+            </div>
+
+            <!-- Status Badge (Only visible in Edit Mode) -->
+            <div th:if="${isEdit}" class="hidden md:block">
+                <div class="badge badge-lg badge-outline border-slate-300 text-slate-500 p-4 font-normal gap-2">
+                    <i class="fa-regular fa-pen-to-square"></i> Redigerar läge
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="card bg-base-100 shadow-lg border border-slate-200 rounded-3xl overflow-hidden">
+        <div class="card-body p-0">
+            <form th:action="${isEdit ? '/admin/news/edit/' + newsId : '/admin/news/create'}"
+                  method="post"
+                  th:object="${newsDTO}"
+                  enctype="multipart/form-data"
+                  class="p-6 md:p-10 space-y-10">
+
+                <!-- Section 1: Content -->
+                <div class="space-y-6">
+                    <!-- Title Input -->
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-bold text-slate-700 text-base">Rubrik <span class="text-error">*</span></span>
+                        </label>
+                        <div class="relative group">
+                            <input type="text"
+                                   th:field="*{title}"
+                                   class="input input-bordered w-full pl-12 h-14 text-lg font-medium border-slate-300 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 rounded-xl transition-all placeholder:text-slate-400"
+                                   placeholder="T.ex. Träningsmatch mot Malmö FF"
+                                   required>
+                            <i class="fa-solid fa-heading absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary-600 transition-colors text-lg"></i>
+                        </div>
+                        <label class="label" th:if="${#fields.hasErrors('title')}">
+                            <span class="label-text-alt text-error font-semibold flex items-center gap-1" th:errors="*{title}">
+                                <i class="fa-solid fa-circle-exclamation"></i> Fel i titel
+                            </span>
+                        </label>
+                    </div>
+
+                    <!-- Content Textarea -->
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-bold text-slate-700 text-base">Innehåll <span class="text-error">*</span></span>
+                        </label>
+                        <div class="relative group">
+                            <textarea th:field="*{content}"
+                                      class="textarea textarea-bordered w-full h-72 p-4 text-base leading-relaxed border-slate-300 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 resize-none rounded-xl bg-slate-50/30 transition-all placeholder:text-slate-400"
+                                      placeholder="Skriv nyhetstexten här..."
+                                      required></textarea>
+                            <!-- Character count could go here -->
+                        </div>
+                        <label class="label" th:if="${#fields.hasErrors('content')}">
+                            <span class="label-text-alt text-error font-semibold flex items-center gap-1" th:errors="*{content}">
+                                <i class="fa-solid fa-circle-exclamation"></i> Fel i innehåll
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="divider text-slate-300 my-0"></div>
+
+                <!-- Section 2: Media -->
+                <div class="bg-slate-50/50 rounded-2xl p-1 border border-slate-200">
+                    <div class="flex items-center justify-between px-4 pt-4 pb-2">
+                        <h3 class="font-heading font-bold text-slate-800 text-lg flex items-center gap-2">
+                            <i class="fa-regular fa-image text-primary-600"></i>
+                            Media
+                        </h3>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div role="tablist" class="tabs tabs-boxed bg-slate-200/50 rounded-xl p-1 mx-4 mb-4 h-12">
+                        <input type="radio" name="media_tabs" role="tab" class="tab h-10 px-6 text-sm font-medium" aria-label="Ladda upp" checked onclick="switchTab('upload')"/>
+                        <input type="radio" name="media_tabs" role="tab" class="tab h-10 px-6 text-sm font-medium" aria-label="Extern URL" onclick="switchTab('url')"/>
+                    </div>
+
+                    <!-- Tab Content: Upload -->
+                    <div id="tab-upload" class="px-6 pb-6 fade-in">
+
+                        <!-- Hidden flag for soft delete logic -->
+                        <input type="hidden" name="deleteImage" id="deleteImageFlag" value="false" />
+
+                        <!-- State A: New File Upload Area -->
+                        <div id="dropZoneContainer" class="form-control">
+                            <div id="dropZone" class="upload-zone rounded-2xl p-10 text-center cursor-pointer relative group">
+                                <input type="file" name="imageFile" id="imageFileInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="handleFileSelect(this)">
+                                <div class="pointer-events-none flex flex-col items-center justify-center space-y-4">
+                                    <div class="bg-white p-4 rounded-full shadow-sm group-hover:shadow-md group-hover:scale-110 transition-all duration-300">
+                                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-primary-500"></i>
+                                    </div>
+                                    <div>
+                                        <span class="font-bold text-slate-700 text-lg block">Klicka eller dra bild hit</span>
+                                        <span class="text-sm text-slate-400">JPG, PNG, GIF upp till 5MB</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Validation Alert -->
+                            <div id="fileSizeError" class="hidden mt-4 fade-in">
+                                <div class="alert alert-error shadow-sm">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    <div>
+                                        <h4 class="font-bold text-sm">Filen är för stor</h4>
+                                        <span class="text-xs">Maximal tillåten storlek är 5MB. Vänligen välj en annan bild.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- State B: Preview of New Selected File -->
+                        <div id="filePreviewContainer" class="hidden fade-in flex flex-col items-center">
+                            <div class="w-full max-w-md bg-white p-2 rounded-xl shadow-sm border border-slate-200">
+                                <div class="relative group rounded-lg overflow-hidden aspect-video">
+                                    <img id="filePreviewImg" src="" alt="Förhandsgranskning" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                        <button type="button" onclick="clearFileInput()" class="btn btn-circle bg-white/20 hover:bg-white text-white hover:text-red-500 backdrop-blur-md border-0">
+                                            <i class="fa-solid fa-xmark text-xl"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="p-3 flex justify-between items-center">
+                                    <span class="text-sm font-medium text-slate-600 truncate max-w-[200px]" id="fileNameDisplay">filnamn.jpg</span>
+                                    <span class="text-xs text-success bg-green-50 px-2 py-1 rounded-md font-medium flex items-center gap-1">
+                                        <i class="fa-solid fa-check"></i> Redo
+                                    </span>
+                                </div>
+                            </div>
+                            <button type="button" onclick="clearFileInput()" class="btn btn-sm btn-ghost text-slate-500 mt-4 hover:text-primary-600 hover:bg-primary-50">
+                                <i class="fa-solid fa-rotate-left"></i> Byt bild
+                            </button>
+                        </div>
+
+                        <!-- State C: Existing Image (Edit Mode) -->
+                        <div th:if="${newsDTO.imageUrl != null and !newsDTO.imageUrl.isEmpty()}" id="existingImageContainer" class="mt-4 border-t border-slate-200 pt-4">
+                            <div class="label py-1">
+                                <span class="label-text font-semibold text-slate-600">Nuvarande bild</span>
+                            </div>
+
+                            <!-- Visual: Current Image -->
+                            <div id="currentImageDisplay" class="group relative bg-white p-3 rounded-xl border border-slate-200 shadow-sm transition-all duration-300 hover:shadow-md">
+                                <div class="flex items-center gap-4">
+                                    <div class="relative w-24 h-16 rounded-lg overflow-hidden border border-slate-100 shrink-0">
+                                        <img id="currentImageSrc" th:src="${newsDTO.imageUrl}" alt="Nuvarande bild" class="w-full h-full object-cover">
+                                    </div>
+                                    <input type="hidden" th:field="*{imageUrl}">
+                                    <div class="flex-1 min-w-0">
+                                        <p class="font-medium text-slate-700 text-sm">Bilduppladdning aktiv</p>
+                                        <p class="text-xs text-slate-400 truncate" th:text="${newsDTO.imageUrl}"></p>
+                                    </div>
+                                    <div th:if="${isEdit}">
+                                        <button type="button" id="deleteImageBtn" class="btn btn-sm btn-outline btn-error gap-2 rounded-lg opacity-100 transition-opacity" onclick="toggleSoftDelete()">
+                                            <i class="fa-regular fa-trash-can"></i> Ta bort
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Visual: Deleted State -->
+                            <div id="deletedImageState" class="hidden fade-in">
+                                <div class="bg-red-50 border border-red-100 rounded-xl p-4 flex items-start gap-3">
+                                    <i class="fa-solid fa-trash-can text-red-500 mt-1"></i>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-bold text-red-800">Bild kommer att raderas</p>
+                                        <p class="text-xs text-red-600 mb-2">Denna ändring sparas när du trycker på "Publicera nyhet".</p>
+                                        <button type="button" class="text-xs font-bold text-red-700 underline hover:text-red-900" onclick="undoSoftDelete()">
+                                            Ångra borttagning
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: URL -->
+                    <div id="tab-url" class="hidden px-6 pb-6 fade-in">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text text-slate-500 text-sm">Klistra in en direktlänk till en bild (t.ex. från Imgur eller en pressbank).</span>
+                            </label>
+                            <div class="join w-full shadow-sm">
+                                <span class="btn btn-disabled join-item border-base-300 bg-slate-100 text-slate-500 border-r-0 rounded-l-xl px-4">
+                                    <i class="fa-solid fa-link"></i>
+                                </span>
+                                <input type="url"
+                                       th:field="*{externalImageUrl}"
+                                       id="externalImageUrl"
+                                       class="input input-bordered join-item w-full border-l-0 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 rounded-r-xl h-12"
+                                       placeholder="https://example.com/bild.jpg"
+                                       oninput="updateImagePreview(this.value)">
+                            </div>
+                        </div>
+
+                        <!-- Live Preview URL -->
+                        <div id="externalImagePreview" class="hidden mt-6 flex flex-col items-center">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Förhandsgranskning</span>
+                            <div class="bg-white p-2 rounded-xl border border-slate-200 shadow-sm inline-block">
+                                <img id="previewImg" src="" alt="Förhandsgranskning" class="max-w-[280px] rounded-lg object-cover h-48">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider text-slate-300 my-0"></div>
+
+                <!-- Section 3: Actions & Footer -->
+                <div class="space-y-6">
+                    <!-- Optional Link -->
+                    <div class="form-control">
+                        <label class="label py-0">
+                            <span class="label-text font-bold text-slate-700">Länk till event (Valfritt)</span>
+                        </label>
+                        <div class="relative">
+                            <input type="url" th:field="*{linkUrl}" class="input input-bordered w-full pl-11 border-slate-300 h-11 rounded-lg focus:ring-4 focus:ring-primary-500/10" placeholder="https://fotbollsbalkan.se/lank">
+                            <i class="fa-solid fa-link absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        </div>
+                        <label class="label py-0">
+                            <span class="label-text-alt text-slate-400">Länken visas som en knapp under nyheten.</span>
+                        </label>
+                    </div>
+
+                    <!-- Footer Actions Bar -->
+                    <div class="flex flex-col-reverse md:flex-row items-center justify-between gap-6 pt-6 border-t border-slate-100">
+
+                        <!-- Left: Toggle Switch -->
+                        <label class="cursor-pointer flex items-center gap-4 group select-none w-full md:w-auto justify-center md:justify-start">
+                            <div class="relative">
+                                <input type="checkbox" th:field="*{published}" class="sr-only peer" />
+                                <div class="w-14 h-8 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-600"></div>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="font-bold text-slate-700 text-sm">Publicera direkt</span>
+                                <span class="text-xs text-slate-400 group-hover:text-slate-500 transition-colors">Annars sparas som utkast</span>
+                            </div>
+                        </label>
+
+                        <!-- Right: Buttons -->
+                        <div class="flex w-full md:w-auto gap-3">
+                            <a href="/admin/news" class="flex-1 md:flex-none btn btn-md h-12 rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-50 hover:border-slate-400 bg-white font-medium">
+                                Avbryt
+                            </a>
+                            <button type="submit" class="flex-1 md:flex-none btn btn-primary btn-md h-12 rounded-xl bg-primary-600 hover:bg-primary-700 text-white border-none shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 font-bold gap-2 px-8">
+                                <i class="fa-regular fa-paper-plane"></i>
+                                <span th:text="${isEdit ? 'Spara ändringar' : 'Publicera nyhet'}">Publicera nyhet</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</main>
+
+<!-- Footer Fragment -->
+<div th:replace="~{fragments/footer::footer}"></div>
+
+<!-- Hidden Legacy Delete Form -->
+<form th:if="${isEdit and newsDTO.imageUrl != null}" id="legacyDeleteForm" th:action="@{/admin/news/delete-image/{id}(id=${newsId})}" method="post" class="hidden"></form>
+
+<script th:inline="javascript">
+    // --- 1. File Upload Logic ---
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('imageFileInput');
+
+    // Drag & Drop Effects
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.add('drag-active');
+        }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.remove('drag-active');
+        }, false);
+    });
+
+    // Handle Drop
+    dropZone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        fileInput.files = files; // Assign dropped files to input
+        handleFileSelect(fileInput); // Trigger handler
+    });
+
+    function handleFileSelect(input) {
+        const file = input.files[0];
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        const errorMsg = document.getElementById('fileSizeError');
+        const dropZoneContainer = document.getElementById('dropZoneContainer');
+        const previewContainer = document.getElementById('filePreviewContainer');
+        const previewImg = document.getElementById('filePreviewImg');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+        if (file) {
+            if (file.size > maxSize) {
+                errorMsg.classList.remove('hidden');
+                input.value = '';
+            } else {
+                errorMsg.classList.add('hidden');
+                fileNameDisplay.textContent = file.name;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    dropZoneContainer.classList.add('hidden');
+                    previewContainer.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    }
+
+    function clearFileInput() {
+        fileInput.value = '';
+        document.getElementById('dropZoneContainer').classList.remove('hidden');
+        document.getElementById('filePreviewContainer').classList.add('hidden');
+        document.getElementById('fileSizeError').classList.add('hidden');
+    }
+
+    // --- 2. Soft Delete Logic ---
+    function toggleSoftDelete() {
+        document.getElementById('deleteImageFlag').value = "true";
+        document.getElementById('currentImageDisplay').classList.add('hidden');
+        document.getElementById('deletedImageState').classList.remove('hidden');
+    }
+
+    function undoSoftDelete() {
+        document.getElementById('deleteImageFlag').value = "false";
+        document.getElementById('currentImageDisplay').classList.remove('hidden');
+        document.getElementById('deletedImageState').classList.add('hidden');
+    }
+
+    // --- 3. Tabs & External URL Logic ---
+    function switchTab(tabName) {
+        const uploadTab = document.getElementById('tab-upload');
+        const urlTab = document.getElementById('tab-url');
+
+        // Simple toggle for demo logic - DaisyUI handles the radio buttons visually
+        if (tabName === 'upload') {
+            uploadTab.classList.remove('hidden');
+            urlTab.classList.add('hidden');
+        } else {
+            uploadTab.classList.add('hidden');
+            urlTab.classList.remove('hidden');
+        }
+    }
+
+    function updateImagePreview(url) {
+        const previewContainer = document.getElementById('externalImagePreview');
+        const img = document.getElementById('previewImg');
+
+        if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+            img.src = url;
+            img.onerror = function() { previewContainer.classList.add('hidden'); };
+            img.onload = function() { previewContainer.classList.remove('hidden'); };
+        } else {
+            previewContainer.classList.add('hidden');
+        }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlInput = document.getElementById('externalImageUrl');
+        if (urlInput && urlInput.value) {
+            updateImagePreview(urlInput.value);
+            // Simulate radio check
+            const urlRadio = document.querySelector('input[aria-label="Extern URL"]');
+            if(urlRadio) {
+                urlRadio.checked = true;
+                switchTab('url');
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
