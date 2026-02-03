@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Registrera Lag - FBK Balkan</title>
+
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+<!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">-->
+
+    <style>
+        body {
+            font-family: 'Roboto Condensed', sans-serif;
+        }
+        .font-virage {
+            font-family: 'Roboto Condensed', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-primary/5 via-base-100 to-secondary/10 min-h-screen py-8 px-4">
+
+<div class="max-w-4xl mx-auto">
+
+    <!-- Header Section -->
+    <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-16 h-16  rounded-full  mb-4 shadow-lg">
+  <img src="/images/FBK_BALKAN_logo.png" alt="FBK Balkan Logo" >
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold text-primary font-virage italic uppercase tracking-tight">
+            Skapa nytt lag
+        </h1>
+        <p class="mt-2 text-lg text-base-content/70 max-w-lg mx-auto">
+            Registrera ett nytt ungdomslag i FBK Balkan. Fyll i informationen nedan för att komma igång.
+        </p>
+    </div>
+
+    <!-- Main Form Card -->
+    <div class="card bg-base-100 shadow-2xl border-0 overflow-hidden">
+        <!-- Progress Bar -->
+        <div class="h-1 w-full bg-base-200">
+            <div class="h-full bg-gradient-to-r from-primary to-secondary "></div>
+        </div>
+
+        <div class="card-body p-8 md:p-10">
+            <form th:action="@{/team-register}" method="post"  class="space-y-8">
+
+                <!-- Section 1: Basic Info -->
+                <div>
+                    <h2 class="text-xl font-bold text-primary mb-6 flex items-center gap-2">
+                        <i class="fas fa-info-circle"></i>
+                        Grundinformation
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Team Name -->
+                        <div class="form-control w-full">
+                            <label class="label">
+                                <span class="label-text font-bold text-base">Lagets namn <span class="text-error">*</span></span>
+                            </label>
+                            <div class="input-group w-full">
+                                    <span class="px-4 flex items-center">
+                                        <i class="fas fa-users text-base-content/50 mb-3"></i>
+                                    </span>
+                                <input
+                                        type="text"
+                                        placeholder="t.ex. FBK Balkan F12"
+                                        class="input input-bordered w-full focus:input-primary transition-all"
+                                        required
+                                />
+                            </div>
+                            <label class="label">
+                                <span class="label-text-alt text-base-content/50">Officiellt lag namn som visas på hemsidan</span>
+                            </label>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Section 2: Team Details -->
+                <div>
+                    <h2 class="text-xl font-bold text-primary mb-6 flex items-center gap-2">
+                        <i class="fas fa-list-alt"></i>
+                        Lagspecifikation
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Age Group -->
+                        <div class="form-control w-full">
+                            <label class="label">
+                                <span class="label-text font-bold text-base">Åldersgrupp <span class="text-error">*</span></span>
+                            </label>
+                            <div class="input-group w-full">
+                                    <span class="  px-4 flex items-center">
+                                        <i class="fas fa-calendar-alt text-base-content/50"></i>
+                                    </span>
+                                <select class="select select-bordered w-full focus:select-primary" required>
+                                    <option disabled selected>Välj ålder</option>
+                                    <option>P7 (2018)</option>
+                                    <option>P8 (2017)</option>
+                                    <option>P9 (2016)</option>
+                                    <option>P10 (2015)</option>
+                                    <option>P11 (2014)</option>
+                                    <option>P12 (2013)</option>
+                                    <option>P13 (2012)</option>
+                                    <option>P14 (2011)</option>
+                                    <option>P15 (2010)</option>
+                                    <option>P16 (2009)</option>
+                                    <option>P17 (2008)</option>
+                                    <option>F7 (2018)</option>
+                                    <option>F8 (2017)</option>
+                                    <option>F9 (2016)</option>
+                                    <option>F10 (2015)</option>
+                                    <option>F11 (2014)</option>
+                                    <option>F12 (2013)</option>
+                                    <option>F13 (2012)</option>
+                                    <option>F14 (2011)</option>
+                                    <option>F15 (2010)</option>
+                                    <option>F16 (2009)</option>
+                                    <option>F17 (2008)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Gender -->
+                        <div class="form-control w-full">
+                            <label class="label">
+                                <span class="label-text font-bold text-base">Kön <span class="text-error">*</span></span>
+                            </label>
+                            <div class="input-group w-full">
+                                    <span class=" px-4 flex items-center">
+                                        <i class="fas fa-venus-mars text-base-content/50"></i>
+                                    </span>
+                                <select class="select select-bordered w-full focus:select-primary" required>
+                                    <option disabled selected>Välj kön</option>
+                                    <option value="Flickor">Flickor</option>
+                                    <option value="Pojkar">Pojkar</option>
+                                    <option value="Mixat">Mixat</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Training Location -->
+                        <div class="form-control w-full">
+                            <label class="label">
+                                <span class="label-text font-bold text-base">Träningsplats <span class="text-error">*</span></span>
+                            </label>
+                            <div class="input-group w-full">
+                                    <span class=" px-4 flex items-center">
+                                        <i class="fas fa-map-marker-alt text-base-content/50"></i>
+                                    </span>
+                                <input
+                                        type="text"
+                                        placeholder="t.ex. Balkanplan"
+                                        class="input input-bordered w-full focus:input-primary"
+                                        required
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Section 3: Leadership -->
+                <div>
+                    <h2 class="text-xl font-bold text-primary mb-6 flex items-center gap-2">
+                        <i class="fas fa-user-tie"></i>
+                        Ledning
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Head Coach -->
+                        <div class="form-control w-full">
+                            <label class="label">
+                                <span class="label-text font-bold text-base">Huvudtränare</span>
+                            </label>
+                            <div class="input-group w-full">
+                                    <span class=" px-4 flex items-center">
+                                        <i class="fas fa-user text-base-content/50"></i>
+                                    </span>
+                                <input
+                                        type="text"
+                                        placeholder="Namn på huvudtränare"
+                                        class="input input-bordered w-full focus:input-primary"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- Assistant Coach -->
+                        <div class="form-control w-full">
+                            <label class="label">
+                                <span class="label-text font-bold text-base">Assisterande tränare</span>
+                            </label>
+                            <div class="input-group w-full">
+                                    <span class=" px-4 flex items-center">
+                                        <i class="fas fa-user-friends text-base-content/50"></i>
+                                    </span>
+                                <input
+                                        type="text"
+                                        placeholder="Namn på assisterande tränare"
+                                        class="input input-bordered w-full focus:input-primary"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Section 4: Status & Settings -->
+                <div class=" rounded-xl p-6">
+                    <h2 class="text-xl font-bold text-primary mb-4 flex items-center gap-2">
+                        <i class="fas fa-cog"></i>
+                        Inställningar
+                    </h2>
+
+                    <div class="flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+                        <!-- Active Toggle -->
+                        <div class="form-control">
+                            <label class="label cursor-pointer gap-4">
+                                <div class="flex flex-col">
+                                    <span class="label-text font-bold text-base">Aktivt lag</span>
+                                    <span class="text-sm text-base-content/60">Lag syns på hemsidan och kan boka aktiviteter</span>
+                                </div>
+                                <input type="checkbox" checked class="toggle toggle-primary toggle-lg" />
+                            </label>
+                        </div>
+
+                        <!-- Additional Options -->
+                        <div class="flex gap-4">
+                            <label class="label cursor-pointer gap-2">
+                                <input type="checkbox" class="checkbox checkbox-primary" />
+                                <span class="label-text">Söker spelare</span>
+                            </label>
+                            <label class="label cursor-pointer gap-2">
+                                <input type="checkbox" class="checkbox checkbox-primary" />
+                                <span class="label-text">Visa i matcher</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col-reverse sm:flex-row gap-4 justify-end pt-6">
+                    <a href="/teams" class="btn btn-ghost btn-lg px-8">
+                        Avbryt
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-lg px-8 gap-2 shadow-lg hover:shadow-xl transition-all">
+                        <i class="fas fa-save"></i>
+                        Skapa lag
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- Help Text -->
+    <div class="mt-8 text-center">
+        <div class="inline-flex items-center gap-2 text-sm text-base-content/60 bg-base-100 px-4 py-2 rounded-full shadow-sm">
+            <i class="fas fa-question-circle text-primary"></i>
+            <span>Behöver du hjälp? <a href="/contact" class="text-primary hover:underline font-bold">Kontakta oss</a></span>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
