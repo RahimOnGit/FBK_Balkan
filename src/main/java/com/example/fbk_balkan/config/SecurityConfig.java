@@ -42,6 +42,8 @@ public class SecurityConfig {
 //                      roles-based access control
                                 .requestMatchers("/coach/**").hasRole("COACH")
                                 .requestMatchers("/admin/news/**").hasAnyRole("SOCIAL_ADMIN", "ADMIN")
+                                .requestMatchers("/admin/dashboard", "/admin/teams", "/admin/age-groups", "/admin/coaches", "/admin/trials")
+                                .hasRole("ADMIN")
 
 //                      authentication for all other requests
                                 .anyRequest().authenticated()
@@ -52,9 +54,14 @@ public class SecurityConfig {
                         .successHandler((request, response, authentication) -> {
                             String role = authentication.getAuthorities().iterator().next().getAuthority();
                             if (role.equals("ROLE_SOCIAL_ADMIN") || role.equals("ROLE_ADMIN")) {
-                                response.sendRedirect("/admin/news");
-                            } else {
-                                response.sendRedirect("/coach/dashboard");
+//                                response.sendRedirect("/admin/news");
+                                response.sendRedirect("/admin/dashboard");
+                            }
+                                else if (role.equals("ROLE_COACH")) {
+                                    response.sendRedirect("/coach/dashboard");
+                            }
+                            else {
+                                response.sendRedirect("/");
                             }
                         })
                         .failureUrl("/login-error")
