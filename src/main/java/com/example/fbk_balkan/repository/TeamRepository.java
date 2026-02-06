@@ -7,5 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TeamRepository extends JpaRepository<Team , Long> {
 //    all crud methods are provided by JpaRepository
+boolean existsByNameAndAgeGroup(String name, String ageGroup);
+
 
 }
