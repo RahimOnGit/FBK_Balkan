@@ -33,6 +33,7 @@ public class Team {
     private String trainingLocation; // e.g., "kriseberg IP"
 
     @ManyToOne
+    //@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "coach_id") // Foreign key to Coach table
     private Coach coach;
 

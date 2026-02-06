@@ -69,11 +69,11 @@ public class HomeController {
         return "about";
     }
 
-// view page for /team-register
-    @GetMapping("/team-register")
-    public String teamRegister() {
-        return "private-pages/team-register";
-    }
+// //view page for /team-register
+//    @GetMapping("/team-register")
+//    public String teamRegister() {
+//        return "private-pages/team-register";
+//    }
 
 
 }
