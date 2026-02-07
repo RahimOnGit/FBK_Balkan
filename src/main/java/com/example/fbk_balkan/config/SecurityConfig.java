@@ -39,6 +39,9 @@ public class SecurityConfig {
                                 .requestMatchers("/trial-registration" , "/trial-registration-success" , "/about").permitAll()
                                 .requestMatchers("/news", "/news/**").permitAll()
 
+//                        test create coach
+                                .requestMatchers("/admin/register-coach").permitAll()
+
 //                      roles-based access control
                                 .requestMatchers("/coach/**").hasRole("COACH")
                                 .requestMatchers("/admin/news/**").hasAnyRole("SOCIAL_ADMIN", "ADMIN")

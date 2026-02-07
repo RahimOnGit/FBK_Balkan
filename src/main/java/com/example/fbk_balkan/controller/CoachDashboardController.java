@@ -26,10 +26,10 @@ public class CoachDashboardController {
     {
 
 // get coach details from userDetails and add to model
-        String coachUsername = userDetails.getUsername();
+        String coachEmail = userDetails.getUsername();
 //        OR
-        Coach coach = coachRepository.findByUsername(coachUsername).orElse(null);
-        String coachName = coach != null ? coach.getUsername() : "Coach";
+        Coach coach = coachRepository.findByEmail(coachEmail).orElse(null);
+        String coachName = coach != null ? coach.getFirstName() + " " + coach.getLastName() : "coach";
 
         model.addAttribute("coachName" , coachName);
         return "coach/dashboard";
