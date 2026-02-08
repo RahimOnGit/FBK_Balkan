@@ -26,35 +26,31 @@ public class SecurityConfig {
     @Autowired
     private CustomUserDetailsService userDetailsService;
     @Autowired
-    private DataSource dataSource;   // Spring Boot auto-configures this from application.properties
+    private DataSource dataSource;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        // Publicly accessible URLs
+                        .requestMatchers("/", "/css/**", "/images/**", "/login", "/login-error").permitAll()
+                        .requestMatchers("/trial-registration", "/trial-registration-success", "/about").permitAll()
+                        .requestMatchers("/news", "/news/**").permitAll()
 
-//                        publicly accessible URLs
-                                .requestMatchers("/", "/css/**", "/images/**", "/login", "/login-error").permitAll()
-                                .requestMatchers("/trial-registration" , "/trial-registration-success" , "/about").permitAll()
-                                .requestMatchers("/news", "/news/**").permitAll()
+                        // Role-based access control
+                        .requestMatchers("/coach/**").hasRole("COACH")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
 
-//                        test create coach
-                                .requestMatchers("/admin/register-coach").permitAll()
-
-//                      roles-based access control
-                                .requestMatchers("/coach/**").hasRole("COACH")
-                                .requestMatchers("/admin/news/**").hasAnyRole("SOCIAL_ADMIN", "ADMIN")
-
-//                      authentication for all other requests
-                                .anyRequest().authenticated()
+                        // Authentication for all other requests
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .successHandler((request, response, authentication) -> {
                             String role = authentication.getAuthorities().iterator().next().getAuthority();
-                            if (role.equals("ROLE_SOCIAL_ADMIN") || role.equals("ROLE_ADMIN")) {
+                            if (role.equals("ROLE_ADMIN")) {
                                 response.sendRedirect("/admin/news");
                             } else {
                                 response.sendRedirect("/coach/dashboard");
@@ -64,22 +60,18 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .rememberMe(rememberMe -> rememberMe
-                        .key("fbk-balkan-remember-me-secret-2026") // should be unique and secret
+                        .key("fbk-balkan-remember-me-secret-2026")
                         .tokenValiditySeconds(60 * 60 * 24 * 14) // 14 days
-
-                        //.tokenValiditySeconds(120 ) 2min for testing
-
-                        .rememberMeParameter("remember-me") // name of checkbox in login form
+                        .rememberMeParameter("remember-me")
                         .tokenRepository(persistentTokenRepository())
                         .userDetailsService(userDetailsService)
                         .useSecureCookie(false)
-
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID" , "remember-me")
+                        .deleteCookies("JSESSIONID", "remember-me")
                         .clearAuthentication(true)
                         .permitAll()
                 );
@@ -101,12 +93,7 @@ public class SecurityConfig {
     public PersistentTokenRepository persistentTokenRepository() {
         JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
         tokenRepository.setDataSource(dataSource);
-
-        // Important: Only set to true ONCE (first startup) to auto-create the table.
-        // After table exists → set to false or remove this line completely.
-         tokenRepository.setCreateTableOnStartup(false);
-
+        tokenRepository.setCreateTableOnStartup(false);
         return tokenRepository;
     }
-
 }
