@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -50,8 +51,11 @@ public class TrialRegistrationDTO {
 
     private TrialStatus status;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate createdAt;
+//    @JsonFormat(pattern = "yyyy-MM-dd")
+//    private LocalDate createdAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdAt;
 
     // NEW FIELDS
     private String gender;        // Kön

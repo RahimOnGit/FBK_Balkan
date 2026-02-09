@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.NumberFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -47,7 +48,8 @@ public class TrialRegistration {
     private TrialStatus status;
 
     @Column(name = "created_at")
-    private LocalDate createdAt;
+//    private LocalDate createdAt;
+    private LocalDateTime createdAt;
     @Column(nullable = true)  // optional field
     private String gender;  // Kön
 
@@ -67,8 +69,8 @@ public class TrialRegistration {
     @PrePersist
     protected void onCreate() {
         if (createdAt == null) {
-            this.createdAt = LocalDate.now();
-
+//            this.createdAt = LocalDate.now();
+            this.createdAt = LocalDateTime.now();
         }
          }
 }
