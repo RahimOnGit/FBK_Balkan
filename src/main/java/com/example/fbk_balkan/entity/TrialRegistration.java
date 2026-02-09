@@ -1,5 +1,7 @@
 package com.example.fbk_balkan.entity;
 
+import com.example.fbk_balkan.enums.Gender;
+import com.example.fbk_balkan.enums.ReferralSource;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +37,7 @@ public class TrialRegistration {
     @Column(nullable = false)
     private String relativeName;
 
-    @Column(nullable = false)
+    @Column(nullable = false )
     private String relativeEmail;
 
     @Column(nullable = false)
@@ -48,19 +50,23 @@ public class TrialRegistration {
     private TrialStatus status;
 
     @Column(name = "created_at")
-//    private LocalDate createdAt;
-    private LocalDateTime createdAt;
-    @Column(nullable = true)  // optional field
-    private String gender;  // Kön
+    private LocalDate createdAt;
+
+@Enumerated(EnumType.STRING)
+@Column(nullable = false)
+private Gender gender;
 
     @Column(nullable = true)
-    private String currentClub;  // Nuvarande klubb
+    private String currentClub;
+    // Nuvarande klubb
 
     @Column(nullable = true)
     private Integer clubYears;
 
-    @Column(name = "referral_source", length = 50)
-    private String referralSource;
+
+@Enumerated(EnumType.STRING)
+@Column(name = "referral_source", length = 50)
+private ReferralSource referralSource;
 
     @Column(name = "referral_other", length = 50)
     private String referralOther;
@@ -69,8 +75,8 @@ public class TrialRegistration {
     @PrePersist
     protected void onCreate() {
         if (createdAt == null) {
-//            this.createdAt = LocalDate.now();
-            this.createdAt = LocalDateTime.now();
+            this.createdAt = LocalDate.now();
+
         }
          }
 }
