@@ -91,6 +91,7 @@ public String registerTeam(
 
     //  Handle validation errors
     if (bindingResult.hasErrors()) {
+        model.addAttribute("coaches", coachRepository.findAll());
         return "private-pages/team-register"; // show form with errors
     }
 

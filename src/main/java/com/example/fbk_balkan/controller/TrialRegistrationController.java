@@ -1,6 +1,8 @@
 package com.example.fbk_balkan.controller;
 
 import com.example.fbk_balkan.dto.TrialRegistrationDTO;
+import com.example.fbk_balkan.enums.Gender;
+import com.example.fbk_balkan.enums.ReferralSource;
 import com.example.fbk_balkan.service.TrialRegistrationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ public class TrialRegistrationController {
     @GetMapping
     public String showTrialRegistrationForm(Model model) {
         model.addAttribute("trialRegistrationDTO", new TrialRegistrationDTO());
+        model.addAttribute("availableGenders", Gender.values());
+        model.addAttribute("availableReferralSources", ReferralSource.values());
 
         // Example of available trials
         model.addAttribute("availableTrials", List.of(
@@ -49,49 +53,90 @@ public class TrialRegistrationController {
         return "trial-registration";
 
     }
+//
+//    @PostMapping
+//    public String createTrialRegistration(
+//            @Valid
+//            @ModelAttribute("trialRegistrationDTO")
+//            TrialRegistrationDTO trialRegistrationDTO ,
+//            BindingResult bindingResult , Model model) {
+//        final Set<String> ALLOWED_GENDERS = Set.of("MALE", "FEMALE");
+//        final Set<String> ALLOWED_REFERRAL_SOURCES = Set.of(
+//                "PLAYER", "COACH", "FAMILY", "SOCIAL_MEDIA", "WEBSITE", "EVENT", "SCHOOL", "OTHER"
+//        );
+//        // Optional trimming logic
+//        if ("OTHER".equals(trialRegistrationDTO.getReferralSource())
+//                && trialRegistrationDTO.getReferralOther() != null) {
+//            trialRegistrationDTO.setReferralOther(trialRegistrationDTO.getReferralOther().trim());
+//        } else {
+//            trialRegistrationDTO.setReferralOther(null);
+//        }
+//        // Validate dropdowns
+//        if (!ALLOWED_GENDERS.contains(trialRegistrationDTO.getGender())) {
+//            bindingResult.rejectValue(
+//                    "gender",
+//                    "invalid",
+//                    "Välj en giltig kön"
+//            );
+//        }
+//
+//        if (!ALLOWED_REFERRAL_SOURCES.contains(trialRegistrationDTO.getReferralSource())) {
+//            bindingResult.rejectValue(
+//                    "referralSource",
+//                    "invalid",
+//                    "Välj en giltig källa"
+//            );
+//        }
+//
+//        if (bindingResult.hasErrors()) {
+//            return "trial-registration";
+//        }
+//
+//        trialRegistrationService.create(trialRegistrationDTO);
+//        model.addAttribute("successMessage","Registration successful!");
+//        return "trial-registration-success";
+//      }
+@PostMapping
+public String createTrialRegistration(
+        @Valid
+        @ModelAttribute("trialRegistrationDTO") TrialRegistrationDTO trialRegistrationDTO,
+        BindingResult bindingResult,
+        Model model) {
 
-    @PostMapping
-    public String createTrialRegistration(
-            @Valid
-            @ModelAttribute("trialRegistrationDTO")
-            TrialRegistrationDTO trialRegistrationDTO ,
-            BindingResult bindingResult , Model model) {
-        final Set<String> ALLOWED_GENDERS = Set.of("MALE", "FEMALE");
-        final Set<String> ALLOWED_REFERRAL_SOURCES = Set.of(
-                "PLAYER", "COACH", "FAMILY", "SOCIAL_MEDIA", "WEBSITE", "EVENT", "SCHOOL", "OTHER"
-        );
-        // Optional trimming logic
-        if ("OTHER".equals(trialRegistrationDTO.getReferralSource())
-                && trialRegistrationDTO.getReferralOther() != null) {
-            trialRegistrationDTO.setReferralOther(trialRegistrationDTO.getReferralOther().trim());
-        } else {
-            trialRegistrationDTO.setReferralOther(null);
-        }
-        // Validate dropdowns
-        if (!ALLOWED_GENDERS.contains(trialRegistrationDTO.getGender())) {
-            bindingResult.rejectValue(
-                    "gender",
-                    "invalid",
-                    "Välj en giltig kön"
-            );
-        }
+    // NEW: Handle referralOther dynamically
+    // If referralSource is NOT OTHER, clear referralOther
+    // This ensures database does not store irrelevant text
+    // =========================
+    if (trialRegistrationDTO.getReferralSource() != null &&
+            trialRegistrationDTO.getReferralSource() != ReferralSource.OTHER) {
+        trialRegistrationDTO.setReferralOther(null);
+    }
 
-        if (!ALLOWED_REFERRAL_SOURCES.contains(trialRegistrationDTO.getReferralSource())) {
-            bindingResult.rejectValue(
-                    "referralSource",
-                    "invalid",
-                    "Välj en giltig källa"
-            );
-        }
+    // =========================
+    // NEW: Trim referralOther input if present
+    // Optional cleanup to remove accidental whitespace
+    // =========================
+    if (trialRegistrationDTO.getReferralOther() != null) {
+        trialRegistrationDTO.setReferralOther(trialRegistrationDTO.getReferralOther().trim());
+    }
 
-        if (bindingResult.hasErrors()) {
-            return "trial-registration";
-        }
+    if (bindingResult.hasErrors()) {
+        // NEW: Re-add enum values to model for dropdowns
+        // This ensures the dropdowns keep all options after form reload
+        model.addAttribute("availableGenders", Gender.values());
+        model.addAttribute("availableReferralSources", ReferralSource.values());
+        return "trial-registration"; // redisplay form with errors
+    }
 
-        trialRegistrationService.create(trialRegistrationDTO);
-        model.addAttribute("successMessage","Registration successful!");
-        return "trial-registration-success";
-      }
+
+    trialRegistrationService.create(trialRegistrationDTO);
+
+    // =========================
+    // SUCCESS MESSAGE
+    // =========================
+    model.addAttribute("successMessage", "Registration successful!");
+    return "trial-registration-success"; // redirect to success page
+}
 
 
 }
