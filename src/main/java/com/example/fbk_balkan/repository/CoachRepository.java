@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface CoachRepository extends JpaRepository<Coach, Long> {
-    Optional<Coach> findByUsername(String username);
-    boolean existsByUsername(String username);
+    Optional<Coach> findByEmail(String email);
+
 }
