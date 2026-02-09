@@ -50,8 +50,7 @@ public class TrialRegistration {
 
     @Column(name = "created_at")
     private LocalDate createdAt;
-//    @Column(nullable = true)  // optional field
-//    private String gender;  // Kön
+
 @Enumerated(EnumType.STRING)
 @Column(nullable = false)
 private Gender gender;
@@ -63,8 +62,7 @@ private Gender gender;
     @Column(nullable = true)
     private Integer clubYears;
 
-//    @Column(name = "referral_source", length = 50)
-//    private String referralSource;
+
 @Enumerated(EnumType.STRING)
 @Column(name = "referral_source", length = 50)
 private ReferralSource referralSource;
