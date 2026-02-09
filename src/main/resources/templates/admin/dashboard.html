@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras-spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard – FBK Balkan</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-base-200">
+
+<div th:replace="~{fragments/navbar::navbar}"></div>
+
+<div class="container mx-auto px-4 py-8 pt-24">
+
+    <h1 class="text-4xl font-bold font-virage text-primary mb-10 text-center">
+        Admin Dashboard
+    </h1>
+
+    <!-- Statistik-kort -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body items-center text-center">
+                <h2 class="card-title text-5xl font-black text-primary">
+                    <span th:text="${teamCount}">0</span>
+                </h2>
+                <p class="text-lg font-medium">Lag</p>
+            </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body items-center text-center">
+                <h2 class="card-title text-5xl font-black text-primary">
+                    <span th:text="${playerCount}">0</span>
+                </h2>
+                <p class="text-lg font-medium">Registrerade spelare</p>
+            </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-xl relative">
+            <div class="card-body items-center text-center">
+                <h2 class="card-title text-5xl font-black text-primary">
+                    <span th:text="${pendingTrials}">0</span>
+                </h2>
+                <p class="text-lg font-medium">Väntande provträningar</p>
+
+                <div th:if="${pendingTrials > 0}"
+                     class="absolute -top-2 -right-2 badge badge-error badge-lg animate-pulse">
+                    NYTT!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Snabblänkar -->
+<!--    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">-->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 mb-12">
+        <a href="/admin/news"
+           class="btn btn-primary btn-lg btn-block flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+            </svg>
+            Hantera Nyhets
+        </a>
+        <a href="/admin/teams" class="btn btn-lg btn-primary btn-block">
+            Hantera lag
+        </a>
+        <a href="/admin/age-groups" class="btn btn-lg btn-primary btn-block">
+            Hantera åldersgrupper
+        </a>
+        <a href="/admin/coaches" class="btn btn-lg btn-primary btn-block">
+            Hantera tränare
+        </a>
+    </div>
+
+    <!-- Senaste provträningar -->
+    <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title text-2xl mb-6">Senaste provträningsanmälningar</h2>
+
+            <div th:if="${#lists.isEmpty(latestTrials)}" class="alert alert-info">
+                Inga provträningsanmälningar ännu.
+            </div>
+
+            <div th:unless="${#lists.isEmpty(latestTrials)}" class="overflow-x-auto">
+                <table class="table table-zebra w-full">
+                    <thead>
+                    <tr>
+                        <th>Namn</th>
+                        <th>Födelseår</th>
+                        <th>Datum anmäld</th>
+                        <th>Önskat datum</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="trial : ${latestTrials}">
+                        <td th:text="${trial.firstName + ' ' + trial.lastName}"></td>
+                        <td th:text="${#temporals.year(trial.birthDate)}"></td>
+                        <td th:text="${#temporals.format(trial.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+                        <td th:text="${#temporals.format(trial.preferredTrainingDate, 'yyyy-MM-dd')}"></td>
+                        <td>
+                            <span th:switch="${trial.status}" class="badge">
+                                <span th:case="'PENDING'" class="badge-warning">Väntar</span>
+                                <span th:case="'APPROVED'" class="badge-success">Godkänd</span>
+                                <span th:case="'REJECTED'" class="badge-error">Avvisad</span>
+                                <span th:case="*">Okänd</span>
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card-actions justify-end mt-6">
+                <a href="/admin/trials" class="btn btn-outline">Visa alla anmälningar →</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="~{fragments/footer::footer}"></div>
+
+</body>
+</html>

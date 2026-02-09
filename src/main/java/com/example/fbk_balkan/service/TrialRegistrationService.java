@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 public class TrialRegistrationService {
@@ -34,7 +35,7 @@ public class TrialRegistrationService {
         );
 
         trialRegistration.setStatus(com.example.fbk_balkan.entity.TrialStatus.PENDING);
-        trialRegistration.setCreatedAt(LocalDate.now());
+        trialRegistration.setCreatedAt(LocalDateTime.now());
 
         // Save entity
         trialRegistrationRepository.save(trialRegistration);
