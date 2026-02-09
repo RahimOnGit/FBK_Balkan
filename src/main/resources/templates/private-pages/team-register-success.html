@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org" data-theme="corporate">
+<head>
+    <meta charset="UTF-8">
+    <title>Lag registrerat</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-base-200">
+
+<!-- Navbar -->
+<div class="absolute top-0 left-0 z-[10] right-0 bg-primary">
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</div>
+
+<!-- SUCCESS CARD -->
+<div class="min-h-screen flex items-center justify-center px-4 py-20">
+
+    <div class="card w-full max-w-md bg-base-100 shadow-xl"
+         th:object="${team}">
+
+        <div class="card-body text-center">
+
+            <!-- Title -->
+            <h2 class="card-title justify-center text-3xl mb-4 text-success">
+                Lag registrerat!
+            </h2>
+
+            <!-- Success message -->
+            <p class="mb-4">
+                Laget <strong th:text="*{name}">Team Name</strong> har registrerats.
+            </p>
+
+            <!-- Optional: Age group -->
+            <p class="mb-4">
+                Åldersgrupp: <span th:text="*{ageGroup}">P16</span>
+            </p>
+
+            <!-- Back button -->
+            <a href="/team-register" class="btn btn-primary">Återvänd</a>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
+
+

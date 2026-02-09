@@ -22,12 +22,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     private CoachRepository coachRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Coach coach = coachRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Coach not found with username: " + username));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Coach coach = coachRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Coach not found with username: " + email));
 
         return User.builder()
-                .username(coach.getUsername())
+                .username(coach.getEmail())
                 .password(coach.getPassword())
                 .authorities(getAuthorities(coach))
                 .disabled(!coach.isEnabled())

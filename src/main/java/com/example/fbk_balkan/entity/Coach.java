@@ -16,7 +16,10 @@ public class Coach {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String username;
+    private String firstName;
+
+    @Column(unique = true, nullable = false)
+    private String lastName;
 
     @Column(nullable = false)
     private String password;
@@ -24,8 +27,11 @@ public class Coach {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    private String role = "COACH";
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     private boolean enabled = true;
+
 }
+
