@@ -1,16 +1,166 @@
-<header class="shadow-inner" th:fragment="navbar"
+<!--<header class="shadow-inner" th:fragment="navbar"-->
+<!--        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">-->
+
+<!--    <div class="navbar bg-opacity-60 backdrop-blur-sm border-none shadow-none p-4 lg:p-6 flex items-center justify-between">-->
+<!--        &lt;!&ndash; Mobile hamburger menu &ndash;&gt;-->
+<!--        <div class="flex-none lg:hidden">-->
+<!--            <div class="dropdown">-->
+<!--                <label tabindex="0" class="btn btn-ghost btn-circle text-base-100">-->
+<!--                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />-->
+<!--                    </svg>-->
+<!--                </label>-->
+<!--                <ul tabindex="0"-->
+<!--&lt;!&ndash;                    class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">&ndash;&gt;-->
+<!--                class="menu menu-sm dropdown-content mt-3 z-[9999] p-2 shadow-xl bg-base-100 rounded-box w-64 border border-base-200">-->
+<!--                    <li><a href="/news" class="hover:text-primary transition-colors">Nyheter</a></li>-->
+<!--                    <li><a href="/about" class="hover:text-primary transition-colors">Om Klubben</a></li>-->
+<!--                    <li><a href="/trial-registration" class="hover:text-primary transition-colors">Intresseanmälan</a></li>-->
+<!--                    <li id="mobile-logout" class="hidden"><a href="/logout" class="hover:bg-error hover:text-error-content">Logout</a></li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Desktop Layout &ndash;&gt;-->
+<!--        <div class="flex flex-1 items-center justify-between w-full p-5">-->
+<!--            &lt;!&ndash; Left: Logo - Centered on mobile &ndash;&gt;-->
+<!--            <div class="flex items-center justify-center lg:justify-start w-full lg:w-auto">-->
+<!--                <a href="/" class="lg:block">-->
+<!--                    <img src="/images/FBK_BALKAN_logo.png" alt="FBK Balkan logo"-->
+<!--                         class="h-20 w-auto lg:h-24 mx-auto lg:mx-0 lg:absolute  lg:top-5 lg:z-[0] lg:left-12">-->
+<!--                </a>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Center: Navigation &ndash;&gt;-->
+<!--            <div class="hidden lg:flex flex-1 justify-center">-->
+<!--                <nav class="mx-4">-->
+<!--                    <ul class="flex space-x-4 lg:space-x-8">-->
+<!--                        <li><a href="/news" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-secondary transition-colors text-sm lg:text-base whitespace-nowrap">Nyheter</a></li>-->
+<!--                        <li><a href="/contact" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-secondary transition-colors text-sm lg:text-base whitespace-nowrap">Kommande Aktiviteter</a></li>-->
+<!--                        <li><a href="/about" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-secondary transition-colors text-sm lg:text-base whitespace-nowrap">Om Klubben</a></li>-->
+<!--                        <li><a href="/contact" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-secondary transition-colors text-sm lg:text-base whitespace-nowrap">Intresseanmälan</a></li>-->
+<!--                    </ul>-->
+<!--                </nav>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Right: Actions &ndash;&gt;-->
+<!--            <div class="flex items-center space-x-2 lg:space-x-4 flex-shrink-0 ">-->
+<!--                &lt;!&ndash; Login button (shown when not authenticated) &ndash;&gt;-->
+<!--                <a href="/login" sec:authorize="!isAuthenticated()" class="flex items-center gap-2 text-base-100 font-virage italic font-bold px-3 lg:px-4 py-1.5 lg:py-2 rounded-full hover:bg-base-100 hover:text-primary transition-colors text-sm lg:text-base whitespace-nowrap">-->
+<!--                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6  fill-base-100 hover:fill-primary transition-colors" viewBox="0 0 24 24">-->
+<!--                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>-->
+<!--                    </svg>-->
+<!--                    <span>Logga in</span>-->
+<!--                </a>-->
+<!--                -->
+<!--&lt;!&ndash;                &lt;!&ndash; Logout button (shown when authenticated) &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                <a href="/logout" sec:authorize="isAuthenticated()" class="flex items-center gap-2 text-base-100 font-virage italic font-bold px-3 lg:px-4 py-1.5 lg:py-2 rounded-full hover:bg-base-100 hover:text-primary transition-colors text-sm lg:text-base whitespace-nowrap">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-base-100 hover:fill-primary transition-colors" viewBox="0 0 24 24">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </svg>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <span>Logga ut</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                </a>&ndash;&gt;-->
+
+<!--                &lt;!&ndash; Profile Dropdown (shown when authenticated) &ndash;&gt;-->
+<!--                <div sec:authorize="isAuthenticated()">-->
+<!--                    <div class="dropdown dropdown-end">-->
+<!--                        <label tabindex="0" class="btn btn-ghost btn-circle avatar">-->
+<!--                            <div class="w-8 lg:w-10 rounded-full ring ring-base-100">-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 lg:w-8 lg:h-8 stroke-current text-base-100">-->
+<!--                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>-->
+<!--                                </svg>-->
+<!--                            </div>-->
+<!--                            <div class="absolute -top-1 -right-1" id="notification-badge" style="display: none;">-->
+<!--                                <div class="w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-error flex items-center justify-center text-white text-xs font-bold" id="upcoming-badge">0</div>-->
+<!--                            </div>-->
+<!--                        </label>-->
+<!--                        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-xl bg-base-100 rounded-box w-64 border border-base-200">-->
+<!--                            <li class="menu-title px-4 py-2">-->
+<!--                                <span class="text-sm font-semibold text-base-content">Välkommen tillbaka</span>-->
+<!--                            </li>-->
+<!--&lt;!&ndash;                            <li class="px-4 py-2">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <span class="text-sm font-medium text-base-content/80">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    Hej, <span id="user-name">Användare</span></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </li>&ndash;&gt;-->
+
+<!--                            <li class="px-4 py-2">-->
+<!--                            <span class="text-sm font-medium text-base-content/80">-->
+<!--                                Hej, <sec:authentication property="principal.username"/>-->
+<!--                            </span>-->
+<!--                            </li>-->
+
+<!--                            <li><a href="/my-profile" class="hover:text-primary transition-colors">Min profil</a></li>-->
+<!--                            <li>-->
+<!--                                <a href="/my-appointments" class="justify-between hover:bg-base-200 rounded-lg transition-colors">-->
+<!--                                    <span>My Appointments</span>-->
+<!--                                    <span class="badge badge-secondary text-xs" id="appointments-badge">0</span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+
+<!--                            &lt;!&ndash; ADMIN Administrativ sektion – endast synlig för de med en roll &ndash;&gt;-->
+<!--                            <div sec:authorize="hasRole('ADMIN')">-->
+<!--                                <li><hr class="my-2"></li>-->
+<!--                                <li class="menu-title px-4 py-1 text-primary font-bold">-->
+<!--                                    <span>Admin Verktyg</span>-->
+<!--                                </li>-->
+<!--                                <li>-->
+<!--                                    <a href="/admin/dashboard" class="hover:bg-primary hover:text-white transition-colors flex items-center gap-2">-->
+<!--                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10h6m-6 0H3m12 0h6m-6-10h6m-6 0H9" />-->
+<!--                                        </svg>-->
+<!--                                        Admin Dashboard-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                                <li>-->
+<!--                                    <a href="/admin/news" class="hover:bg-primary hover:text-white transition-colors flex items-center gap-2">-->
+<!--                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />-->
+<!--                                        </svg>-->
+<!--                                        Hantera Nyheter-->
+<!--                                    </a>-->
+<!--                                </li>-->
+
+<!--                            </div>-->
+
+<!--                            <li><hr class="my-1"></li>-->
+<!--&lt;!&ndash;                            <li><a href="/logout" class="hover:bg-error hover:text-error-content rounded-lg transition-colors">logga ut</a></li>&ndash;&gt;-->
+
+<!--                            <li>-->
+<!--                                <a href="/logout" class="hover:bg-error hover:text-error-content rounded-lg transition-colors flex items-center gap-2">-->
+<!--                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />-->
+<!--                                    </svg>-->
+<!--                                    Logga ut-->
+<!--                                </a>-->
+<!--                            </li>-->
+
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</header>-->
+
+
+                                        <!--////////-->
+
+
+<header class="shadow-inner relative z-[100]" th:fragment="navbar"
         xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
     <div class="navbar bg-opacity-60 backdrop-blur-sm border-none shadow-none p-4 lg:p-6 flex items-center justify-between">
-        <!-- Mobile hamburger menu -->
-        <div class="flex-none lg:hidden">
-            <div class="dropdown">
+
+        <!-- Mobile hamburger menu – أضفنا z-index عالي جدًا + overflow-visible -->
+        <div class="flex-none lg:hidden relative z-[9999]">
+            <div class="dropdown dropdown-end">
                 <label tabindex="0" class="btn btn-ghost btn-circle text-base-100">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </label>
-                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                <ul tabindex="0"
+                    class="menu menu-sm dropdown-content mt-3 z-[9999] p-2 shadow-2xl bg-base-100 rounded-box w-64 border border-base-200 overflow-visible">
                     <li><a href="/news" class="hover:text-primary transition-colors">Nyheter</a></li>
                     <li><a href="/about" class="hover:text-primary transition-colors">Om Klubben</a></li>
                     <li><a href="/trial-registration" class="hover:text-primary transition-colors">Intresseanmälan</a></li>
@@ -21,11 +171,12 @@
 
         <!-- Desktop Layout -->
         <div class="flex flex-1 items-center justify-between w-full p-5">
-            <!-- Left: Logo - Centered on mobile -->
+
+            <!-- Left: Logo -->
             <div class="flex items-center justify-center lg:justify-start w-full lg:w-auto">
                 <a href="/" class="lg:block">
                     <img src="/images/FBK_BALKAN_logo.png" alt="FBK Balkan logo"
-                         class="h-20 w-auto lg:h-24 mx-auto lg:mx-0 lg:absolute  lg:top-5 lg:z-[0] lg:left-12">
+                         class="h-20 w-auto lg:h-24 mx-auto lg:mx-0 lg:absolute lg:top-5 lg:left-12">
                 </a>
             </div>
 
@@ -42,24 +193,18 @@
             </div>
 
             <!-- Right: Actions -->
-            <div class="flex items-center space-x-2 lg:space-x-4 flex-shrink-0 ">
-                <!-- Login button (shown when not authenticated) -->
-                <a href="/login" sec:authorize="!isAuthenticated()" class="flex items-center gap-2 text-base-100 font-virage italic font-bold px-3 lg:px-4 py-1.5 lg:py-2 rounded-full hover:bg-base-100 hover:text-primary transition-colors text-sm lg:text-base whitespace-nowrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6  fill-base-100 hover:fill-primary transition-colors" viewBox="0 0 24 24">
+            <div class="flex items-center space-x-2 lg:space-x-4 flex-shrink-0 relative z-[9999]">
+
+                <!-- Login button -->
+                <a sec:authorize="!isAuthenticated()" href="/login"
+                   class="flex items-center gap-2 text-base-100 font-virage italic font-bold px-3 lg:px-4 py-1.5 lg:py-2 rounded-full hover:bg-base-100 hover:text-primary transition-colors text-sm lg:text-base whitespace-nowrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-base-100 hover:fill-primary transition-colors" viewBox="0 0 24 24">
                         <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                     </svg>
                     <span>Logga in</span>
                 </a>
-                
-<!--                &lt;!&ndash; Logout button (shown when authenticated) &ndash;&gt;-->
-<!--                <a href="/logout" sec:authorize="isAuthenticated()" class="flex items-center gap-2 text-base-100 font-virage italic font-bold px-3 lg:px-4 py-1.5 lg:py-2 rounded-full hover:bg-base-100 hover:text-primary transition-colors text-sm lg:text-base whitespace-nowrap">-->
-<!--                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-base-100 hover:fill-primary transition-colors" viewBox="0 0 24 24">-->
-<!--                        <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>-->
-<!--                    </svg>-->
-<!--                    <span>Logga ut</span>-->
-<!--                </a>-->
 
-                <!-- Profile Dropdown (shown when authenticated) -->
+                <!-- Profile Dropdown -->
                 <div sec:authorize="isAuthenticated()">
                     <div class="dropdown dropdown-end">
                         <label tabindex="0" class="btn btn-ghost btn-circle avatar">
@@ -68,26 +213,61 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                 </svg>
                             </div>
+                            <!-- Notification badge -->
                             <div class="absolute -top-1 -right-1" id="notification-badge" style="display: none;">
                                 <div class="w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-error flex items-center justify-center text-white text-xs font-bold" id="upcoming-badge">0</div>
                             </div>
                         </label>
-                        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-xl bg-base-100 rounded-box w-64 border border-base-200">
+
+                        <!-- القائمة المنسدلة – z-index عالي جدًا + overflow-visible -->
+                        <ul tabindex="0"
+                            class="menu menu-sm dropdown-content mt-3 z-[9999] p-2 shadow-2xl bg-base-100 rounded-box w-64 border border-base-200 overflow-visible">
+
                             <li class="menu-title px-4 py-2">
                                 <span class="text-sm font-semibold text-base-content">Välkommen tillbaka</span>
                             </li>
                             <li class="px-4 py-2">
-                                <span class="text-sm font-medium text-base-content/80">Hej, <span id="user-name">Användare</span></span>
+                                <span class="text-sm font-medium text-base-content/80">
+                                    Hej, <sec:authentication property="principal.username"/>
+                                </span>
                             </li>
+
                             <li><a href="/my-profile" class="hover:text-primary transition-colors">Min profil</a></li>
+
+                            <!-- قسم الأدمن -->
+                            <div sec:authorize="hasRole('ADMIN')">
+                                <li><hr class="my-2"></li>
+                                <li class="menu-title px-4 py-1 text-primary font-bold">
+                                    <span>Admin Verktyg</span>
+                                </li>
+                                <li>
+                                    <a href="/admin/dashboard" class="hover:bg-primary hover:text-white transition-colors flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10h6m-6 0H3m12 0h6m-6-10h6m-6 0H9" />
+                                        </svg>
+                                        Admin Dashboard
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/admin/news" class="hover:bg-primary hover:text-white transition-colors flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                                        </svg>
+                                        Hantera Nyheter
+                                    </a>
+                                </li>
+                            </div>
+
+                            <li><hr class="my-2"></li>
+
                             <li>
-                                <a href="/my-appointments" class="justify-between hover:bg-base-200 rounded-lg transition-colors">
-                                    <span>My Appointments</span>
-                                    <span class="badge badge-secondary text-xs" id="appointments-badge">0</span>
+                                <a href="/logout" class="hover:bg-error hover:text-error-content rounded-lg transition-colors flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                    </svg>
+                                    Logga ut
                                 </a>
                             </li>
-                            <li><hr class="my-1"></li>
-                            <li><a href="/logout" class="hover:bg-error hover:text-error-content rounded-lg transition-colors">logga ut</a></li>
                         </ul>
                     </div>
                 </div>
