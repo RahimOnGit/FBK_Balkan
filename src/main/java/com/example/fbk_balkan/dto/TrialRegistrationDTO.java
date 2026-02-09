@@ -2,7 +2,12 @@ package com.example.fbk_balkan.dto;
 
 import com.example.fbk_balkan.entity.TrialRegistration;
 import com.example.fbk_balkan.entity.TrialStatus;
+import com.example.fbk_balkan.enums.Gender;
+import com.example.fbk_balkan.enums.ReferralSource;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,9 +25,17 @@ public class TrialRegistrationDTO {
     private Long id;
 
     @NotBlank(message = "First name is required")
+    @Size(min = 2, max = 40)
+    @Pattern(
+            regexp = "^[\\p{L} .'-]+$",
+            message = "Only letters and valid name characters allowed")
     private String firstName;
 
     @NotBlank(message = "Last name is required")
+    @Size(min = 2, max = 40)
+    @Pattern(
+            regexp = "^[\\p{L} .'-]+$",
+            message = "Only letters and valid name characters allowed")
     private String lastName;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -31,15 +44,21 @@ public class TrialRegistrationDTO {
     private LocalDate birthDate;
 
     @NotBlank(message = "Relative name is required")
+    @Size(min = 2, max = 40)
+    @Pattern(
+            regexp = "^[\\p{L} .'-]+$",
+            message = "Only letters and valid name characters allowed"
+    )
     private String relativeName;
 
     @NotBlank(message = "Relative email is required")
-    @Email(message = "email should be valid")
+    @Email(regexp = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")
+    @Size(max = 40, message = "Email cannot exceed 40 characters")
     private String relativeEmail;
 
     @NotBlank(message = "Relative number is required")
     @Pattern(
-            regexp = "^[0-9+ ]{8,15}$",
+            regexp = "^\\+?[0-9 ]{8,15}$",
             message = " Invalid phone number"
     )
     private String relativeNumber;
@@ -54,18 +73,33 @@ public class TrialRegistrationDTO {
 //    @JsonFormat(pattern = "yyyy-MM-dd")
 //    private LocalDate createdAt;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createdAt;
 
     // NEW FIELDS
-    private String gender;        // Kön
+   // private String gender;        // Kön
+    @NotNull(message = "Gender is required")
+    private Gender gender;
+
+
+    @Size(max = 40, message = "Max 40 characters")
+    @Pattern(
+            regexp = "^[\\p{L}0-9 .'-]*$",
+            message = "Invalid characters"
+    )
     private String currentClub;// Nuvarande klubb
     @Min(value = 0, message = "Antal år i klubb kan inte vara negativt")
-    @Max(value = 20, message = "Antal år i klubb kan inte vara mer än 5")
+    @Max(value = 5, message = "Antal år i klubb kan inte vara mer än 5")
     private Integer clubYears;    // Antal år i nuvarande klubb
     // Referral info
-    private String referralSource;   // Dropdown selection
+   // private String referralSource;   // Dropdown selection
+    private ReferralSource referralSource;
+
     @Size(max = 50, message = "Max 50 characters")
+    @Pattern(
+            regexp = "^[\\p{L}0-9 .,'\"!?-]*$",
+            message = "Invalid characters"
+    )
     private String referralOther;    // Only used if referralSource == "OTHER"
 
     public static TrialRegistrationDTO fromEntity(TrialRegistration entity) {
@@ -80,7 +114,7 @@ public class TrialRegistrationDTO {
                 .relativeNumber(entity.getRelativeNumber())
                 .preferredTrainingDate(entity.getPreferredTrainingDate())
                 .status(entity.getStatus())
-                .createdAt(entity.getCreatedAt())
+                .createdAt(entity.getCreatedAt().atStartOfDay())
                 .gender(entity.getGender())               // NEW
                 .currentClub(entity.getCurrentClub())    // NEW
                 .clubYears(entity.getClubYears())        // NEW
@@ -100,14 +134,16 @@ public class TrialRegistrationDTO {
         e.setRelativeNumber(this.relativeNumber);
         e.setPreferredTrainingDate(this.preferredTrainingDate);
         e.setStatus(this.status);
-        e.setCreatedAt(this.createdAt);
+        e.setCreatedAt(LocalDate.from(this.createdAt));
         e.setGender(this.gender);                 // NEW
         e.setCurrentClub(this.currentClub);       // NEW
         e.setClubYears(this.clubYears);//New
         e.setReferralSource(this.referralSource);  // NEW
+
         e.setReferralOther(
-                "OTHER".equals(this.referralSource) ? this.referralOther : null
-        );  // NEW
+                this.referralSource == ReferralSource.OTHER ? this.referralOther : null
+        );
+
         return e;
     }
 }

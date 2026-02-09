@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -43,8 +43,14 @@
         </div>
 
         <div class="card-body p-8 md:p-10">
-            <form th:action="@{/team-register}" method="post"  class="space-y-8">
-
+            <form th:action="@{/team-register}"   th:object="${team}" method="post"  class="space-y-8">
+                <!-- Global validation errors -->
+                <div th:if="${#fields.hasErrors('*')}" class="alert alert-error mb-4">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('*')}"
+                            th:text="${err}"></li>
+                    </ul>
+                </div>
                 <!-- Section 1: Basic Info -->
                 <div>
                     <h2 class="text-xl font-bold text-primary mb-6 flex items-center gap-2">
@@ -64,6 +70,7 @@
                                     </span>
                                 <input
                                         type="text"
+                                        th:field="*{name}"
                                         placeholder="t.ex. FBK Balkan F12"
                                         class="input input-bordered w-full focus:input-primary transition-all"
                                         required
@@ -97,31 +104,33 @@
                                     <span class="  px-4 flex items-center">
                                         <i class="fas fa-calendar-alt text-base-content/50"></i>
                                     </span>
-                                <select class="select select-bordered w-full focus:select-primary" required>
-                                    <option disabled selected>Välj ålder</option>
-                                    <option>P7 (2018)</option>
-                                    <option>P8 (2017)</option>
-                                    <option>P9 (2016)</option>
-                                    <option>P10 (2015)</option>
-                                    <option>P11 (2014)</option>
-                                    <option>P12 (2013)</option>
-                                    <option>P13 (2012)</option>
-                                    <option>P14 (2011)</option>
-                                    <option>P15 (2010)</option>
-                                    <option>P16 (2009)</option>
-                                    <option>P17 (2008)</option>
-                                    <option>F7 (2018)</option>
-                                    <option>F8 (2017)</option>
-                                    <option>F9 (2016)</option>
-                                    <option>F10 (2015)</option>
-                                    <option>F11 (2014)</option>
-                                    <option>F12 (2013)</option>
-                                    <option>F13 (2012)</option>
-                                    <option>F14 (2011)</option>
-                                    <option>F15 (2010)</option>
-                                    <option>F16 (2009)</option>
-                                    <option>F17 (2008)</option>
+
+                                <select th:field="*{ageGroup}" class="select select-bordered w-full" required>
+                                    <option disabled selected value="">Välj ålder</option>
+                                    <option value="P7 (2018)">P7 (2018)</option>
+                                    <option value="P8 (2017)">P8 (2017)</option>
+                                    <option value="P9 (2016)">P9 (2016)</option>
+                                    <option value="P10 (2015)">P10 (2015)</option>
+                                    <option value="P11 (2014)">P11 (2014)</option>
+                                    <option value="P12 (2013)">P12 (2013)</option>
+                                    <option value="P13 (2012)">P13 (2012)</option>
+                                    <option value="P14 (2011)">P14 (2011)</option>
+                                    <option value="P15 (2010)">P15 (2010)</option>
+                                    <option value="P16 (2009)">P16 (2009)</option>
+                                    <option value="P17 (2008)">P17 (2008)</option>
+                                    <option value="F7 (2018)">F7 (2018)</option>
+                                    <option value="F8 (2017)">F8 (2017)</option>
+                                    <option value="F9 (2016)">F9 (2016)</option>
+                                    <option value="F10 (2015)">F10 (2015)</option>
+                                    <option value="F11 (2014)">F11 (2014)</option>
+                                    <option value="F12 (2013)">F12 (2013)</option>
+                                    <option value="F13 (2012)">F13 (2012)</option>
+                                    <option value="F14 (2011)">F14 (2011)</option>
+                                    <option value="F15 (2010)">F15 (2010)</option>
+                                    <option value="F16 (2009)">F16 (2009)</option>
+                                    <option value="F17 (2008)">F17 (2008)</option>
                                 </select>
+
                             </div>
                         </div>
 
@@ -134,12 +143,14 @@
                                     <span class=" px-4 flex items-center">
                                         <i class="fas fa-venus-mars text-base-content/50"></i>
                                     </span>
-                                <select class="select select-bordered w-full focus:select-primary" required>
-                                    <option disabled selected>Välj kön</option>
-                                    <option value="Flickor">Flickor</option>
-                                    <option value="Pojkar">Pojkar</option>
-                                    <option value="Mixat">Mixat</option>
+
+                                <select th:field="*{gender}" class="select select-bordered w-full" required>
+                                    <option disabled selected value="">Välj kön</option>
+                                    <option value="MALE">Pojkar</option>
+                                    <option value="FEMALE">Flickor</option>
+                                    <option value="MIXED">Mixat</option>
                                 </select>
+
                             </div>
                         </div>
 
@@ -152,12 +163,15 @@
                                     <span class=" px-4 flex items-center">
                                         <i class="fas fa-map-marker-alt text-base-content/50"></i>
                                     </span>
+
                                 <input
                                         type="text"
+                                        th:field="*{trainingLocation}"
                                         placeholder="t.ex. Balkanplan"
                                         class="input input-bordered w-full focus:input-primary"
-                                        required
                                 />
+
+
                             </div>
                         </div>
                     </div>
@@ -182,11 +196,17 @@
                                     <span class=" px-4 flex items-center">
                                         <i class="fas fa-user text-base-content/50"></i>
                                     </span>
-                                <input
-                                        type="text"
-                                        placeholder="Namn på huvudtränare"
-                                        class="input input-bordered w-full focus:input-primary"
-                                />
+
+                                <select th:field="*{coachId}" class="select select-bordered w-full" required>
+                                    <option disabled value="">Välj huvudtränare</option>
+
+                                    <option th:each="coach : ${coaches}"
+                                            th:value="${coach.id}"
+                                            th:text="${coach.firstName}+ ${coach.lastName}"></option>
+                                </select>
+
+
+
                             </div>
                         </div>
 
@@ -226,7 +246,7 @@
                                     <span class="label-text font-bold text-base">Aktivt lag</span>
                                     <span class="text-sm text-base-content/60">Lag syns på hemsidan och kan boka aktiviteter</span>
                                 </div>
-                                <input type="checkbox" checked class="toggle toggle-primary toggle-lg" />
+                                <input type="checkbox"th:field="*{active}" checked class="toggle toggle-primary toggle-lg" />
                             </label>
                         </div>
 
