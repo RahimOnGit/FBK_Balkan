@@ -135,9 +135,7 @@ public class TrialRegistrationDTO {
         e.setCurrentClub(this.currentClub);       // NEW
         e.setClubYears(this.clubYears);//New
         e.setReferralSource(this.referralSource);  // NEW
-//        e.setReferralOther(
-//                "OTHER".equals(this.referralSource) ? this.referralOther : null
-//        );  // NEW
+
         e.setReferralOther(
                 this.referralSource == ReferralSource.OTHER ? this.referralOther : null
         );

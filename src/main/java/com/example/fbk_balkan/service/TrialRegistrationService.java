@@ -37,10 +37,7 @@ public class TrialRegistrationService {
         trialRegistration.setCurrentClub(trialRegistrationDTO.getCurrentClub()); // NEW
         trialRegistration.setClubYears(trialRegistrationDTO.getClubYears());     // NEW
         trialRegistration.setReferralSource(trialRegistrationDTO.getReferralSource());// NEW
-//        trialRegistration.setReferralOther(
-//                "OTHER".equals(trialRegistrationDTO.getReferralSource()) ?
-//                        trialRegistrationDTO.getReferralOther() : null
-//        );
+
         trialRegistration.setReferralOther(
                 trialRegistrationDTO.getReferralSource() == ReferralSource.OTHER
                         ? trialRegistrationDTO.getReferralOther()

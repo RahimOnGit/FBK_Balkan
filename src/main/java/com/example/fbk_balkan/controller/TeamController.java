@@ -38,51 +38,6 @@ public class TeamController {
         return "private-pages/team-register";
     }
 
-//
-//    @PostMapping
-//    public String registerTeam(
-//            Model model,
-//            @Valid @ModelAttribute("team") TeamCreateDto teamDTO,
-//            RedirectAttributes redirectAttributes,
-//            BindingResult bindingResult  ) {
-//
-//        if (bindingResult.hasErrors()) {
-//
-//
-//           // Flash attributes here
-//            return "redirect:/team-register/success";
-//
-//        }
-//
-//
-//        try {
-//            TeamDto savedTeam = teamService.createTeam(teamDTO);
-//
-//
-//            // Only send team name to success page
-//            redirectAttributes.addFlashAttribute("teamName", savedTeam.getName());
-//
-//            return "private-pages/team-register-success";
-//
-//        } catch (IllegalArgumentException ex) {
-//
-//            bindingResult.reject(null, ex.getMessage());
-//            model.addAttribute("coaches", coachRepository.findAll());
-//
-//            return "private-pages/team-register";
-//        }
-//
-//
-//    }
-//    // extra end point to success page implemnting to stop rsubmiting of form
-//    @GetMapping("/success")
-//    public String teamRegisterSuccess(@ModelAttribute("teamName") String teamName) {
-//        // If someone tries to access directly, redirect to form
-//        if (teamName == null || teamName.isEmpty()) {
-//            return "redirect:/team-register";
-//        }
-//        return "private-pages/team-register-success";
-//    }
 @PostMapping
 public String registerTeam(
         Model model,
