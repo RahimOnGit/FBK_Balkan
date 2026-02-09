@@ -28,7 +28,8 @@ public class TeamMapper {
         if (team.getCoach() != null) {
             CoachDto coachDto = new CoachDto();
             coachDto.setId(team.getCoach().getId());
-            coachDto.setUsername(team.getCoach().getUsername());
+            coachDto.setFirstName(team.getCoach().getFirstName());
+            coachDto.setLastName(team.getCoach().getLastName());
             coachDto.setEmail(team.getCoach().getEmail());
             dto.setCoach(coachDto);
         }

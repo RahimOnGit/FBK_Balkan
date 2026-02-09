@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrera Tränare - FBK Balkan</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-base-200">
+<!-- Navbar -->
+<header class="bg-primary">
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</header>
+
+<!-- Registration Form -->
+<div class="min-h-screen flex items-center justify-center px-4 py-20">
+    <div class="card w-full max-w-lg bg-base-100 shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title justify-center text-3xl mb-6">Registrera Tränare</h2>
+            <p class="text-sm text-gray-600 mb-4">
+                Fält markerade med <span class="text-error">*</span> är obligatoriska.
+            </p>
+
+            <!-- Success Message (if redirected with success) -->
+            <div th:if="${successMessage}" class="alert alert-success mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span th:text="${successMessage}">Tränare registrerad!</span>
+            </div>
+
+            <!-- Error Message -->
+            <div th:if="${errorMessage}" class="alert alert-error mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span th:text="${errorMessage}">Ett fel uppstod!</span>
+            </div>
+
+            <form th:action="@{/admin/register-coach}" th:object="${createCoachDto}" method="post">
+
+                <!-- First Name -->
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Förnamn <span class="text-error">*</span></span>
+                    </label>
+                    <input
+                            class="input input-bordered w-full"
+                            type="text"
+                            th:field="*{firstName}"
+                            placeholder="Ange förnamn"
+                            required
+                    />
+                    <label class="label" th:if="${#fields.hasErrors('firstName')}">
+                        <span class="label-text-alt text-error" th:errors="*{firstName}"></span>
+                    </label>
+                </div>
+
+                <!-- Last Name -->
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Efternamn <span class="text-error">*</span></span>
+                    </label>
+                    <input
+                            class="input input-bordered w-full"
+                            type="text"
+                            th:field="*{lastName}"
+                            placeholder="Ange efternamn"
+                            required
+                    />
+                    <label class="label" th:if="${#fields.hasErrors('lastName')}">
+                        <span class="label-text-alt text-error" th:errors="*{lastName}"></span>
+                    </label>
+                </div>
+
+                <!-- Email -->
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">E-postadress <span class="text-error">*</span></span>
+                    </label>
+                    <input
+                            class="input input-bordered w-full"
+                            type="email"
+                            th:field="*{email}"
+                            placeholder="trainare@fbkbalkan.se"
+                            required
+                    />
+                    <label class="label" th:if="${#fields.hasErrors('email')}">
+                        <span class="label-text-alt text-error" th:errors="*{email}"></span>
+                    </label>
+                </div>
+
+                <!-- Password -->
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Lösenord <span class="text-error">*</span></span>
+                    </label>
+                    <input
+                            class="input input-bordered w-full"
+                            type="password"
+                            th:field="*{password}"
+                            placeholder="Minst 8 tecken"
+                            minlength="8"
+                            required
+                    />
+                    <label class="label">
+                        <span class="label-text-alt text-gray-500">Tränaren kan ändra lösenordet senare</span>
+                    </label>
+                    <label class="label" th:if="${#fields.hasErrors('password')}">
+                        <span class="label-text-alt text-error" th:errors="*{password}"></span>
+                    </label>
+                </div>
+
+                <!-- Role Selection -->
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Roll <span class="text-error">*</span></span>
+                    </label>
+                    <select class="select select-bordered w-full" th:field="*{role}" required>
+                        <option value="">Välj roll</option>
+                        <option value="COACH">Tränare</option>
+                        <option value="ADMIN">Admin</option>
+                    </select>
+                    <label class="label" th:if="${#fields.hasErrors('role')}">
+                        <span class="label-text-alt text-error" th:errors="*{role}"></span>
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-control mt-6">
+                    <button type="submit" class="btn btn-primary w-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                        </svg>
+                        Registrera Tränare
+                    </button>
+                </div>
+
+                <!-- Cancel/Back Button -->
+                <div class="form-control mt-3">
+                    <a th:href="@{/admin/news}" class="btn btn-ghost w-full">Avbryt</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="mt-8">
+    <div th:replace="~{fragments/footer::footer}"></div>
+</footer>
+
+</body>
+</html>
