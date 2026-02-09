@@ -26,7 +26,7 @@
                     <label class="label">
                         <span class="label-text">Barnets förnamn <span aria-hidden="true">*</span></span>
                     </label>
-                    <input class="input input-bordered" type="text" th:field="*{firstName}" placeholder="Ange barnets förnamn" required />
+                    <input class="input input-bordered" type="text" th:field="*{firstName}" placeholder="Ange barnets förnamn" required  maxlength="40"/>
                     <p th:if="${#fields.hasErrors('firstName')}"
                        th:errors="*{firstName}"
                     > </p>
@@ -36,7 +36,7 @@
                     <label class="label">
                         <span class="label-text">Barnets efternamn <span aria-hidden="true">*</span></span>
                     </label>
-                    <input class="input input-bordered" type="text" th:field="*{lastName}" placeholder="Ange barnets efternamn" required />
+                    <input class="input input-bordered" type="text" th:field="*{lastName}" placeholder="Ange barnets efternamn" required  maxlength="40"/>
                     <p th:if="${#fields.hasErrors('lastName')}"
                        th:errors="*{lastName}"
                     > </p>
@@ -57,12 +57,24 @@
                     <label class="label">
                         <span class="label-text">Kön <span aria-hidden="true">*</span></span>
                     </label>
-                    <select class="select select-bordered" th:field="*{gender}" required>
-                        <option value="">Välj kön</option>
-                        <option value="MALE">Kille</option>
-                        <option value="FEMALE">Tjej</option>
+<!--                    <select class="select select-bordered" th:field="*{gender}" required>-->
+<!--                        <option value="">Välj kön</option>-->
+<!--                        <option value="MALE">Kille</option>-->
+<!--                        <option value="FEMALE">Tjej</option>-->
 
+<!--                    </select>-->
+                    <select th:field="*{gender}" required>
+                        <!-- EMPTY DEFAULT -->
+                        <option value="">Välj kön</option>
+
+                        <!-- ENUM VALUES -->
+                        <option th:each="g : ${availableGenders}"
+                                th:value="${g}"
+                                th:text="${g.label}">
+                        </option>
                     </select>
+
+
                     <p th:if="${#fields.hasErrors('gender')}"
                        th:errors="*{gender}">
                     </p>
@@ -71,10 +83,11 @@
                     <label class="label">
                         <span class="label-text">Nuvarande klubb</span>
                     </label>
+                    <!-- Added maxlength="40" to match DTO @Size(max=40) -->
                     <input class="input input-bordered"
                            type="text"
                            th:field="*{currentClub}"
-                           placeholder="Ange nuvarande klubb" />
+                           placeholder="Ange nuvarande klubb"  maxlength="40" />
                     <p th:if="${#fields.hasErrors('currentClub')}"
                        th:errors="*{currentClub}">
                     </p>
@@ -104,7 +117,8 @@
                     <label class="label">
                         <span class="label-text">Förälder/Vårdnadshavares namn <span aria-hidden="true">*</span></span>
                     </label>
-                    <input class="input input-bordered" type="text" th:field="*{relativeName}" placeholder="Ange förälder/vårdnadshavares namn" required />
+                    <!-- Added maxlength="40" -->
+                    <input class="input input-bordered" type="text" th:field="*{relativeName}" placeholder="Ange förälder/vårdnadshavares namn" required maxlength="40" />
                     <p th:if="${#fields.hasErrors('relativeName')}"
                        th:errors="*{relativeName}"
                     > </p>
@@ -114,7 +128,7 @@
                     <label class="label">
                         <span class="label-text">Kontakt e-postadress <span aria-hidden="true">*</span></span>
                     </label>
-                    <input class="input input-bordered" type="email" th:field="*{relativeEmail}" placeholder="Ange e-postadress" required />
+                    <input class="input input-bordered" type="email" th:field="*{relativeEmail}" placeholder="Ange e-postadress" required  maxlength="40" />
                     <p th:if="${#fields.hasErrors('relativeEmail')}"
                        th:errors="*{relativeEmail}"
                     > </p>
@@ -122,9 +136,10 @@
 
                 <div class="form-control mb-4">
                     <label class="label">
+                        <!-- Added maxlength="15" to match DTO pattern -->
                         <span class="label-text">Kontakt telefonnummer <span aria-hidden="true">*</span></span>
                     </label>
-                    <input class="input input-bordered" type="tel" th:field="*{relativeNumber}" placeholder="Ange telefonnummer" required />
+                    <input class="input input-bordered" type="tel" th:field="*{relativeNumber}" placeholder="Ange telefonnummer" required maxlength="15"/>
                     <p th:if="${#fields.hasErrors('relativeNumber')}"
                        th:errors="*{relativeNumber}">
 
@@ -136,20 +151,30 @@
                     <label class="label">
                         <span class="label-text">Vem rekommenderade dig? / Hur hittade ni oss?</span>
                     </label>
-                    <select id="referralSource"
-                            class="select select-bordered"
-                            th:field="*{referralSource}"
-                            >
+<!--                    <select id="referralSource"-->
+<!--                            class="select select-bordered"-->
+<!--                            th:field="*{referralSource}"-->
+<!--                            >-->
+<!--                        <option value="">Välj källa</option>-->
+<!--                        <option value="PLAYER">Spelare i klubben</option>-->
+<!--                        <option value="COACH">Tränare i klubben</option>-->
+<!--                        <option value="FAMILY">Familj/Vän</option>-->
+<!--                        <option value="SOCIAL_MEDIA">Sociala medier</option>-->
+<!--                        <option value="WEBSITE">Klubbens hemsida</option>-->
+<!--                        <option value="EVENT">Lokalt evenemang</option>-->
+<!--                        <option value="SCHOOL">Skola/Skolidrott</option>-->
+<!--                        <option value="OTHER">Annat</option>-->
+<!--                    </select>-->
+                    <select th:field="*{referralSource}" id="referralSource">
+
                         <option value="">Välj källa</option>
-                        <option value="PLAYER">Spelare i klubben</option>
-                        <option value="COACH">Tränare i klubben</option>
-                        <option value="FAMILY">Familj/Vän</option>
-                        <option value="SOCIAL_MEDIA">Sociala medier</option>
-                        <option value="WEBSITE">Klubbens hemsida</option>
-                        <option value="EVENT">Lokalt evenemang</option>
-                        <option value="SCHOOL">Skola/Skolidrott</option>
-                        <option value="OTHER">Annat</option>
+                        <!-- ENUM VALUES -->
+                        <option th:each="r : ${availableReferralSources}"
+                                th:value="${r}"
+                                th:text="${r.label}">
+                        </option>
                     </select>
+
                 </div>
 
                 <div class="form-control mb-4" id="referralOtherDiv" style="display: none;">
@@ -190,7 +215,7 @@
 
                 <div class="form-control mb-6">
                     <label class="label">
-                        <span class="label-text">Önskat provträningsdatum</span>
+                        <span class="label-text">Önskat provträningsdatum <span aria-hidden="true">*</span></span>
                     </label>
                     <input class="input input-bordered" type="date" th:field="*{preferredTrainingDate}" required  />
 
