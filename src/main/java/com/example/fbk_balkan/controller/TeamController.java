@@ -44,7 +44,7 @@ public String registerTeam(
         @Valid @ModelAttribute("team") TeamCreateDto teamDTO,
         BindingResult bindingResult) {
 
-    //  Handle validation errors
+    //  Handle validation error
     if (bindingResult.hasErrors()) {
         model.addAttribute("coaches", coachRepository.findAll());
         return "private-pages/team-register"; // show form with errors
