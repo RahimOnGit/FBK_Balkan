@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${isEdit ? 'Redigera Tränare' : 'Skapa Tränare'} + ' - FBK Balkan'">Tränare - FBK Balkan</title>
+
+    <!-- DaisyUI & Tailwind -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Oswald (Headers) & Inter (Body) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Oswald', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#1e3a8a',
+                            600: '#1e3a8a',
+                            700: '#1e3a8a',
+                            800: '#1e3a8a',
+                            900: '#1e3a8a',
+                        },
+                        secondary: '#475569',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        header .navbar a:hover {
+            color: #fdad3a !important;
+            transition: color 0.3s ease;
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-base-200 flex flex-col">
+
+<!-- Navbar Fragment -->
+<div th:replace="~{fragments/navbar::navbar}"></div>
+
+<!-- Main Content -->
+<main class="flex-grow container mx-auto px-4 py-6 md:py-10 max-w-2xl mt-4">
+
+    <!-- Page Header -->
+    <div class="mb-8">
+        <a href="/admin/coaches" class="inline-flex items-center text-sm font-semibold text-slate-500 hover:text-primary-600 transition-colors mb-4 group">
+            <i class="fa-solid fa-arrow-left mr-2 transform group-hover:-translate-x-1 transition-transform"></i>
+            Tillbaka till översikt
+        </a>
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <div>
+                <h1 class="text-4xl md:text-5xl font-heading font-bold text-slate-900 uppercase tracking-tight leading-tight"
+                    th:text="${isEdit ? 'Redigera Tränare' : 'Skapa Tränare'}">
+                    Skapa Tränare
+                </h1>
+                <p class="text-slate-500 mt-2 font-medium max-w-lg"
+                   th:text="${isEdit ? 'Uppdatera informationen och tryck på spara när du är klar.' : 'Fyll i fälten nedan för att lägga till en ny tränare i systemet.'}">
+                    Fyll i fälten nedan för att lägga till en ny tränare i systemet.
+                </p>
+            </div>
+
+            <!-- Status Badge (Only visible in Edit Mode) -->
+            <div th:if="${isEdit}" class="hidden md:block">
+                <div class="badge badge-lg badge-outline border-slate-300 text-slate-500 p-4 font-normal gap-2">
+                    <i class="fa-regular fa-pen-to-square"></i> Redigerar läge
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="card bg-base-100 shadow-lg border border-slate-200 rounded-3xl overflow-hidden">
+        <div class="card-body p-0">
+            <form th:object="${coach}" th:action="@{/admin/coaches/save}" method="post" class="p-6 md:p-10 space-y-8">
+
+                <input type="hidden" th:field="*{id}" />
+
+                <!-- Error Message -->
+                <div th:if="${error}" class="alert alert-error shadow-sm fade-in">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span th:text="${error}"></span>
+                </div>
+
+                <!-- Section 1: Account Info -->
+                <div class="space-y-6">
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-bold text-slate-700 text-base">E-post <span class="text-error">*</span></span>
+                        </label>
+                        <input type="email" th:field="*{email}"
+                               class="input input-bordered w-full h-12 text-base border-slate-300 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 rounded-xl transition-all placeholder:text-slate-400"
+                               placeholder="namn@exempel.se" required />
+                        <label class="label" th:if="${#fields.hasErrors('email')}">
+                            <span class="label-text-alt text-error font-semibold" th:errors="*{email}"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="divider text-slate-300 my-0"></div>
+
+                <!-- Section 2: Personal Info -->
+                <div class="space-y-6">
+                    <h3 class="font-heading font-bold text-slate-800 text-lg flex items-center gap-2">
+                        <i class="fa-regular fa-user text-primary-600"></i>
+                        Personlig information
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Förnamn -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-bold text-slate-700 text-base">Förnamn <span class="text-error">*</span></span>
+                            </label>
+                            <input type="text" th:field="*{firstName}"
+                                   class="input input-bordered w-full h-12 text-base border-slate-300 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 rounded-xl transition-all placeholder:text-slate-400"
+                                   placeholder="Förnamn" required />
+                        </div>
+
+                        <!-- Efternamn -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-bold text-slate-700 text-base">Efternamn <span class="text-error">*</span></span>
+                            </label>
+                            <input type="text" th:field="*{lastName}"
+                                   class="input input-bordered w-full h-12 text-base border-slate-300 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 rounded-xl transition-all placeholder:text-slate-400"
+                                   placeholder="Efternamn" required />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider text-slate-300 my-0"></div>
+
+                <!-- Section 3: Security & Roles -->
+                <div class="space-y-6">
+                    <h3 class="font-heading font-bold text-slate-800 text-lg flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-primary-600"></i>
+                        Säkerhet & Rättigheter
+                    </h3>
+
+                    <!-- Password Logic -->
+                    <div th:if="${!isEdit}">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-bold text-slate-700 text-base">Lösenord <span class="text-error">*</span></span>
+                            </label>
+                            <input type="password" th:field="*{password}"
+                                   class="input input-bordered w-full h-12 text-base border-slate-300 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 rounded-xl transition-all placeholder:text-slate-400"
+                                   required minlength="8" placeholder="Minst 8 tecken" />
+                            <label class="label" th:if="${#fields.hasErrors('password')}">
+                                <span class="label-text-alt text-error font-semibold" th:errors="*{password}"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div th:if="${isEdit}">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-bold text-slate-700 text-base">Nytt lösenord</span>
+                                <span class="badge badge-neutral badge-sm">Valfritt</span>
+                            </label>
+                            <input type="password" th:field="*{password}"
+                                   class="input input-bordered w-full h-12 text-base border-slate-300 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 rounded-xl transition-all placeholder:text-slate-400"
+                                   minlength="8" placeholder="Lämna tomt för att behålla nuvarande" />
+                            <label class="label">
+                                <span class="label-text-alt text-slate-400">Lämna tomt för att behålla befintligt lösenord.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Roll -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-bold text-slate-700 text-base">Roll <span class="text-error">*</span></span>
+                            </label>
+                            <select th:field="*{role}"
+                                    class="select select-bordered w-full h-12 text-base border-slate-300 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 rounded-xl transition-all bg-white" required>
+                                <option value="COACH">Tränare</option>
+                                <option value="ADMIN">Admin</option>
+                            </select>
+                        </div>
+
+                        <!-- Aktiverad Toggle -->
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-bold text-slate-700 text-base">Status</span>
+                            </label>
+                            <label class="cursor-pointer flex items-center gap-4 bg-slate-50 p-3 rounded-xl border border-slate-200 h-12">
+                                <div class="relative">
+                                    <input type="checkbox" th:field="*{enabled}" class="sr-only peer" checked />
+                                    <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                                </div>
+                                <span class="font-medium text-slate-700 text-sm">Aktiverad</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider text-slate-300 my-0"></div>
+
+                <!-- Section 4: Actions Footer -->
+                <div class="flex flex-col-reverse md:flex-row items-center justify-end gap-4 pt-4">
+                    <div class="flex w-full md:w-auto gap-3">
+                        <a href="/admin/coaches" class="flex-1 md:flex-none btn btn-md h-12 rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-50 hover:border-slate-400 bg-white font-medium shadow-sm">
+                            Avbryt
+                        </a>
+                        <button type="submit" class="flex-1 md:flex-none btn btn-primary btn-md h-12 rounded-xl bg-primary-600 hover:bg-primary-700 text-white border-none shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 font-bold gap-2 px-8">
+                            <i class="fa-regular fa-floppy-disk"></i>
+                            <span th:text="${isEdit ? 'Spara ändringar' : 'Skapa tränare'}">Skapa tränare</span>
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</main>
+
+<!-- Footer Fragment -->
+<!--<div th:replace="~{fragments/footer::footer}"></div>-->
+
+</body>
+</html>
+
+<!--///-->
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="sv" xmlns:th="http://www.thymeleaf.org" data-theme="fbkbalkan">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title th:text="${isEdit ? 'Redigera tränare - FBK Balkan' : 'Ny tränare - FBK Balkan'}"></title>-->
+<!--    <link th:href="@{/css/output.css}" rel="stylesheet">-->
+<!--</head>-->
+<!--<body class="bg-base-200 min-h-screen">-->
+
+<!--<div th:replace="~{fragments/navbar :: navbar}"></div>-->
+
+<!--<div class="container mx-auto px-4 py-10 pt-24">-->
+
+<!--    &lt;!&ndash; Header Section &ndash;&gt;-->
+<!--    <div class="max-w-lg mx-auto mb-6 text-center">-->
+<!--        <h1 class="text-3xl font-bold text-primary"-->
+<!--            th:text="${isEdit ? 'Redigera tränare' : 'Skapa ny tränare'}">-->
+<!--            Skapa ny tränare-->
+<!--        </h1>-->
+<!--        <p class="text-base-content/60 mt-1 text-sm">Fyll i formuläret nedan för att spara.</p>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Alert for Errors &ndash;&gt;-->
+<!--    <div th:if="${error}" class="max-w-lg mx-auto alert alert-error shadow-lg mb-6">-->
+<!--        <span th:text="${error}"></span>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Form Card &ndash;&gt;-->
+<!--    <form th:object="${coach}" th:action="@{/admin/coaches/save}" method="post"-->
+<!--          class="max-w-lg mx-auto bg-base-100 rounded-xl shadow-xl border border-base-300 overflow-hidden">-->
+
+<!--        <input type="hidden" th:field="*{id}" />-->
+
+<!--        <div class="p-6 md:p-8 space-y-5">-->
+
+<!--            &lt;!&ndash; Section: Account Info &ndash;&gt;-->
+<!--            <div class="space-y-4">-->
+<!--                <h3 class="text-sm font-bold text-base-content/70 uppercase tracking-wider border-b border-base-200 pb-2">Kontoinformation</h3>-->
+
+<!--                &lt;!&ndash; E-post &ndash;&gt;-->
+<!--                <div class="form-control">-->
+<!--                    <label class="label">-->
+<!--                        <span class="label-text font-semibold">E-post <span class="text-error">*</span></span>-->
+<!--                    </label>-->
+<!--                    <input type="email" th:field="*{email}" class="input input-bordered w-full" placeholder="namn@exempel.se" required />-->
+<!--                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-error text-xs mt-1 block"></span>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Section: Personal Info &ndash;&gt;-->
+<!--            <div class="space-y-4">-->
+<!--                <h3 class="text-sm font-bold text-base-content/70 uppercase tracking-wider border-b border-base-200 pb-2">Personlig information</h3>-->
+
+<!--                &lt;!&ndash; Name Grid &ndash;&gt;-->
+<!--                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">-->
+<!--                    &lt;!&ndash; Förnamn &ndash;&gt;-->
+<!--                    <div class="form-control">-->
+<!--                        <label class="label">-->
+<!--                            <span class="label-text font-semibold">Förnamn <span class="text-error">*</span></span>-->
+<!--                        </label>-->
+<!--                        <input type="text" th:field="*{firstName}" class="input input-bordered w-full" placeholder="Förnamn" required />-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; Efternamn &ndash;&gt;-->
+<!--                    <div class="form-control">-->
+<!--                        <label class="label">-->
+<!--                            <span class="label-text font-semibold">Efternamn <span class="text-error">*</span></span>-->
+<!--                        </label>-->
+<!--                        <input type="text" th:field="*{lastName}" class="input input-bordered w-full" placeholder="Efternamn" required />-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Section: Security &ndash;&gt;-->
+<!--            <div class="space-y-4">-->
+<!--                <h3 class="text-sm font-bold text-base-content/70 uppercase tracking-wider border-b border-base-200 pb-2">Säkerhet & Rättigheter</h3>-->
+
+<!--                &lt;!&ndash; Password Logic &ndash;&gt;-->
+<!--                <div th:if="${!isEdit}">-->
+<!--                    <div class="form-control">-->
+<!--                        <label class="label">-->
+<!--                            <span class="label-text font-semibold">Lösenord <span class="text-error">*</span></span>-->
+<!--                        </label>-->
+<!--                        <input type="password" th:field="*{password}" class="input input-bordered w-full" required minlength="8" placeholder="Minst 8 tecken" />-->
+<!--                        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-error text-xs mt-1 block"></span>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <div th:if="${isEdit}">-->
+<!--                    <div class="form-control">-->
+<!--                        <label class="label">-->
+<!--                            <span class="label-text font-semibold">Nytt lösenord</span>-->
+<!--                            <span class="badge badge-neutral badge-sm">Valfritt</span>-->
+<!--                        </label>-->
+<!--                        <input type="password" th:field="*{password}" class="input input-bordered w-full" minlength="8" placeholder="Lämna tomt för att behålla nuvarande" />-->
+<!--                        <label class="label">-->
+<!--                            <span class="label-text-alt text-base-content/50">Lämna tomt för att behålla befintligt.</span>-->
+<!--                        </label>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Role & Status Grid &ndash;&gt;-->
+<!--                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">-->
+<!--                    &lt;!&ndash; Roll &ndash;&gt;-->
+<!--                    <div class="form-control">-->
+<!--                        <label class="label">-->
+<!--                            <span class="label-text font-semibold">Roll <span class="text-error">*</span></span>-->
+<!--                        </label>-->
+<!--                        <select th:field="*{role}" class="select select-bordered w-full" required>-->
+<!--                            <option value="COACH">Tränare</option>-->
+<!--                            <option value="ADMIN">Admin</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; Aktiverad &ndash;&gt;-->
+<!--                    <div class="form-control">-->
+<!--                        <label class="label">-->
+<!--                            <span class="label-text font-semibold">Status</span>-->
+<!--                        </label>-->
+<!--                        <label class="label cursor-pointer justify-start gap-3 bg-base-200 rounded-lg p-3 h-[48px] items-center">-->
+<!--                            <input type="checkbox" th:field="*{enabled}" class="checkbox checkbox-primary" checked />-->
+<!--                            <span class="label-text font-medium">Aktiverad</span>-->
+<!--                        </label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Actions Footer &ndash;&gt;-->
+<!--        <div class="bg-base-200/50 px-6 py-4 flex flex-row gap-3 justify-center sm:justify-end border-t border-base-300">-->
+<!--            <a href="/admin/coaches" class="btn btn-sm btn-outline btn-neutral">-->
+<!--                Avbryt-->
+<!--            </a>-->
+<!--            <button type="submit" class="btn btn-sm btn-primary shadow-md">-->
+<!--                <span th:text="${isEdit ? 'Spara ändringar' : 'Skapa tränare'}">Skapa tränare</span>-->
+<!--            </button>-->
+<!--        </div>-->
+<!--    </form>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
