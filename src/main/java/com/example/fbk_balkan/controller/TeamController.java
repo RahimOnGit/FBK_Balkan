@@ -38,6 +38,8 @@ public class TeamController {
         return "private-pages/team-register";
     }
 
+
+
 @PostMapping
 public String registerTeam(
         Model model,

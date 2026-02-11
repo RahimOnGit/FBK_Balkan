@@ -1903,6 +1903,14 @@ input.tab:checked + .tab-content,
     --btn-color: var(--fallback-p);
   }
 
+  .btn-secondary {
+    --btn-color: var(--fallback-s);
+  }
+
+  .btn-neutral {
+    --btn-color: var(--fallback-n);
+  }
+
   .btn-error {
     --btn-color: var(--fallback-er);
   }
@@ -1966,9 +1974,29 @@ input.tab:checked + .tab-content,
     --btn-color: var(--p);
   }
 
+  .btn-secondary {
+    --btn-color: var(--s);
+  }
+
+  .btn-neutral {
+    --btn-color: var(--n);
+  }
+
   .btn-error {
     --btn-color: var(--er);
   }
+}
+
+.btn-secondary {
+  --tw-text-opacity: 1;
+  color: var(--fallback-sc,oklch(var(--sc)/var(--tw-text-opacity)));
+  outline-color: var(--fallback-s,oklch(var(--s)/1));
+}
+
+.btn-neutral {
+  --tw-text-opacity: 1;
+  color: var(--fallback-nc,oklch(var(--nc)/var(--tw-text-opacity)));
+  outline-color: var(--fallback-n,oklch(var(--n)/1));
 }
 
 .btn-error {
@@ -3826,6 +3854,10 @@ input.tab:checked + .tab-content,
   justify-content: space-between;
 }
 
+.justify-around {
+  justify-content: space-around;
+}
+
 .gap-1 {
   gap: 0.25rem;
 }
@@ -3998,6 +4030,16 @@ input.tab:checked + .tab-content,
   border-width: 2px;
 }
 
+.border-x-2 {
+  border-left-width: 2px;
+  border-right-width: 2px;
+}
+
+.border-y-2 {
+  border-top-width: 2px;
+  border-bottom-width: 2px;
+}
+
 .border-l-0 {
   border-left-width: 0px;
 }
@@ -4008,6 +4050,18 @@ input.tab:checked + .tab-content,
 
 .border-t {
   border-top-width: 1px;
+}
+
+.border-s {
+  border-inline-start-width: 1px;
+}
+
+.border-l {
+  border-left-width: 1px;
+}
+
+.border-s-2 {
+  border-inline-start-width: 2px;
 }
 
 .border-none {
@@ -4047,6 +4101,22 @@ input.tab:checked + .tab-content,
 .border-slate-300 {
   --tw-border-opacity: 1;
   border-color: rgb(203 213 225 / var(--tw-border-opacity, 1));
+}
+
+.border-x-secondary {
+  --tw-border-opacity: 1;
+  border-left-color: var(--fallback-s,oklch(var(--s)/var(--tw-border-opacity, 1)));
+  border-right-color: var(--fallback-s,oklch(var(--s)/var(--tw-border-opacity, 1)));
+}
+
+.border-l-secondary {
+  --tw-border-opacity: 1;
+  border-left-color: var(--fallback-s,oklch(var(--s)/var(--tw-border-opacity, 1)));
+}
+
+.border-r-secondary {
+  --tw-border-opacity: 1;
+  border-right-color: var(--fallback-s,oklch(var(--s)/var(--tw-border-opacity, 1)));
 }
 
 .bg-base-100 {
@@ -4145,6 +4215,28 @@ input.tab:checked + .tab-content,
 
 .bg-white\/20 {
   background-color: rgb(255 255 255 / 0.2);
+}
+
+.bg-accent {
+  --tw-bg-opacity: 1;
+  background-color: var(--fallback-a,oklch(var(--a)/var(--tw-bg-opacity, 1)));
+}
+
+.bg-neutral {
+  --tw-bg-opacity: 1;
+  background-color: var(--fallback-n,oklch(var(--n)/var(--tw-bg-opacity, 1)));
+}
+
+.bg-base-200\/10 {
+  background-color: var(--fallback-b2,oklch(var(--b2)/0.1));
+}
+
+.bg-base-200\/30 {
+  background-color: var(--fallback-b2,oklch(var(--b2)/0.3));
+}
+
+.bg-base-200\/60 {
+  background-color: var(--fallback-b2,oklch(var(--b2)/0.6));
 }
 
 .bg-opacity-10 {
@@ -4346,6 +4438,11 @@ input.tab:checked + .tab-content,
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+
+.px-5 {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
 }
 
 .pb-2 {
