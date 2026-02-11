@@ -1,0 +1,40 @@
+<div th:fragment="dashboard-content">
+    <div class="flex justify-center gap-3 items-center">
+        <a class="btn btn-secondary btn-lg text-lg font-bold uppercase wide shadow-xl hover:scale-105 transition-transform">Mina lag</a>
+        <a class="btn btn-neutral btn-lg text-lg font-bold uppercase wide shadow-xl hover:scale-105 transition-transform">Provträningar</a>
+        <a class="btn btn-neutral btn-disabled btn-lg text-lg font-bold uppercase wide shadow-xl hover:scale-105 transition-transform">Nyheter</a>
+
+    </div>
+
+</div>
+
+<!-- Teams Section -->
+<div class="mt-8" th:fragment="team-section">
+    <h2 class="text-2xl font-bold mb-4 text-center">Mina Lag</h2>
+
+    <div th:if="${teamCount == 0}" class="alert alert-info">
+        <span>Du har inga lag ännu. Skapa ditt första lag!</span>
+    </div>
+
+    <div th:if="${teamCount > 0}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
+        <div th:each="team : ${teams}" class="card  bg-base-100 border-x-2 border-secondary shadow-md">
+            <div class="card-body">
+                <h3 class="card-title" th:text="${team.name}">Team Name</h3>
+                <div class="space-y-2">
+                    <p><strong>Åldersgrupp:</strong> <span th:text="${team.ageGroup}">Age Group</span></p>
+                    <!--                                    <p><strong>Division:</strong> <span th:text="${team.division}">Division</span></p>-->
+                    <p th:if="${team.description}"><strong>Beskrivning:</strong> <span th:text="${team.description}">Description</span></p>
+                </div>
+                <div class="card-actions justify-end mt-4">
+                    <a th:href="@{/team/{id}(id=${team.id})}" class="btn btn-secondary btn-sm">Visa detaljer</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--trial registration requests-->
+<div class="" th:fragment="trial-requests">
+    <h2 class="text-2xl font-bold mb-4 text-center">Provträningar</h2>
+
+</div>

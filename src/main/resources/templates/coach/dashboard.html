@@ -14,18 +14,25 @@
 </div>
 
 <!-- Dashboard Content -->
-<div class="min-h-screen pt-32 px-4 py-12 ">
+<div class="min-h-screen pt-32 px-4 py-12">
     <div class="mt-8">
         <div class="card bg-base-100 shadow-xl p-5">
             <div class="card-body">
-                <h1 class="card-title text-3xl justify-center  mb-4">
+                <h1 class="card-title text-3xl justify-center mb-4">
                     Välkommen
                     <span th:text="${coachName}"></span>!
                 </h1>
-                <p class="text-base-content/70 text-center">
-                    Du är nu inloggad och kan hantera ditt lag, spelare, träningar och skapa nyheter</p>
 
+                <div th:replace="~{coach/content-fragment::dashboard-content}"></div>
 
+                <p class="text-base-content/70 text-center mb-6">
+                    Du är nu inloggad och kan hantera ditt lag, spelare, träningar och skapa nyheter
+                </p>
+
+                <!-- Team section container (hidden by default) -->
+                <div id="team-section-container" class="hidden">
+                    <div th:replace="~{coach/content-fragment::team-section}"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -35,5 +42,28 @@
 <div class="mt-8">
     <div th:replace="~{fragments/footer::footer}"></div>
 </div>
+
+<script>
+    // Show team section when clicking "Mina lag"
+    document.addEventListener('DOMContentLoaded', function() {
+        const minaLagBtn = document.querySelector('.btn-secondary');
+        const teamSectionContainer = document.getElementById('team-section-container');
+
+        if (minaLagBtn && teamSectionContainer) {
+            minaLagBtn.addEventListener('click', function() {
+                // Toggle visibility
+                teamSectionContainer.classList.toggle('hidden');
+
+                // Optional: Scroll to team section
+                if (!teamSectionContainer.classList.contains('hidden')) {
+                    teamSectionContainer.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>
