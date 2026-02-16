@@ -1,0 +1,671 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="sv" xmlns:th="http://www.thymeleaf.org" data-theme="fbkbalkan">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Tränare – Admin</title>-->
+<!--    <link th:href="@{/css/output.css}" rel="stylesheet">-->
+<!--    &lt;!&ndash; Optional: Adding Inter font for better readability if not included in output.css &ndash;&gt;-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">-->
+<!--    <style>-->
+<!--        body { font-family: 'Inter', sans-serif; }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body class="bg-base-200 min-h-screen">-->
+
+<!--<div th:replace="~{fragments/navbar :: navbar}"></div>-->
+
+<!--<div class="container mx-auto px-4 py-10 pt-24">-->
+
+<!--    &lt;!&ndash; Page Header &ndash;&gt;-->
+<!--    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">-->
+<!--        <div>-->
+<!--            <h1 class="text-3xl md:text-4xl font-extrabold text-base-content tracking-tight">Tränare & Admins</h1>-->
+<!--            <p class="text-base-content/60 mt-1">Hantera användare, roller och teamtilldelningar.</p>-->
+<!--        </div>-->
+<!--        <a th:href="@{/admin/coaches/create}" class="btn btn-primary btn-shadow gap-2 text-white">-->
+<!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">-->
+<!--                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />-->
+<!--            </svg>-->
+<!--            Ny Tränare-->
+<!--        </a>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Alert Messages &ndash;&gt;-->
+<!--    <div th:if="${success}" class="alert alert-success mb-6 shadow-lg border-none">-->
+<!--        <div>-->
+<!--            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">-->
+<!--                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />-->
+<!--            </svg>-->
+<!--            <span th:text="${success}"></span>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div th:if="${error}" class="alert alert-error mb-6 shadow-lg border-none">-->
+<!--        <div>-->
+<!--            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">-->
+<!--                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />-->
+<!--            </svg>-->
+<!--            <span th:text="${error}"></span>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Main Card Container &ndash;&gt;-->
+<!--    <div class="card bg-base-100 shadow-xl border border-base-200 rounded-xl overflow-hidden">-->
+<!--        <div class="card-body p-0">-->
+
+<!--            <div class="overflow-x-auto w-full">-->
+<!--                <table class="table w-full">-->
+<!--                    &lt;!&ndash; Table Header &ndash;&gt;-->
+<!--                    <thead class="bg-base-200/50 text-base-content/70 uppercase text-xs tracking-wider">-->
+<!--                    <tr>-->
+<!--                        <th class="py-4 px-6">Användare</th>-->
+<!--                        <th class="py-4 px-6">Kontakt</th>-->
+<!--                        <th class="py-4 px-6">Roll</th>-->
+<!--                        <th class="py-4 px-6 text-center">Tilldelade Lag</th>-->
+<!--                        <th class="py-4 px-6">Status</th>-->
+<!--                        <th class="py-4 px-6 text-right">Åtgärder</th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody class="divide-y divide-base-100">-->
+<!--                    &lt;!&ndash; Table Row Loop &ndash;&gt;-->
+<!--                    <tr th:each="coach : ${coaches}" class="hover:bg-base-50 transition-colors duration-100">-->
+
+<!--                        &lt;!&ndash; User Column (Name + ID) &ndash;&gt;-->
+<!--                        <td class="py-4 px-6">-->
+<!--                            <div class="flex items-center gap-3">-->
+<!--                                <div class="avatar placeholder">-->
+<!--                                    <div class="bg-primary/10 text-primary rounded-full w-10 h-10">-->
+<!--                                        <span class="text-lg font-bold" th:text="${#strings.substring(coach.fullName, 0, 1)}">T</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div>-->
+<!--                                    <div class="font-bold text-base-content" th:text="${coach.fullName}">Namn Efternamn</div>-->
+<!--                                    <div class="text-sm opacity-50" th:text="'ID: ' + ${coach.id}">ID: 123</div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </td>-->
+
+<!--                        &lt;!&ndash; Contact Column &ndash;&gt;-->
+<!--                        <td class="py-4 px-6">-->
+<!--                            <div class="flex items-center gap-2 text-base-content/80">-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />-->
+<!--                                </svg>-->
+<!--                                <span th:text="${coach.email}">email@example.com</span>-->
+<!--                            </div>-->
+<!--                        </td>-->
+
+<!--                        &lt;!&ndash; Role Column &ndash;&gt;-->
+<!--                        <td class="py-4 px-6">-->
+<!--                            <span th:switch="${coach.role}" class="badge gap-1 font-medium border-transparent">-->
+<!--                                <span th:case="'ADMIN'" class="badge badge-error badge-outline border-none bg-error/10 text-error">-->
+<!--                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">-->
+<!--                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />-->
+<!--                                    </svg>-->
+<!--                                    Admin-->
+<!--                                </span>-->
+<!--                                <span th:case="'COACH'" class="badge badge-info badge-outline border-none bg-info/10 text-info">-->
+<!--                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">-->
+<!--                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />-->
+<!--                                    </svg>-->
+<!--                                    Tränare-->
+<!--                                </span>-->
+<!--                                <span th:case="*" th:text="${coach.role}" class="badge badge-ghost"></span>-->
+<!--                            </span>-->
+<!--                        </td>-->
+
+<!--                        &lt;!&ndash; Team Count Column &ndash;&gt;-->
+<!--                        <td class="py-4 px-6 text-center">-->
+<!--                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-base-200 text-base-content font-bold text-sm" th:text="${coach.teamCount}">0</span>-->
+<!--                        </td>-->
+
+<!--                        &lt;!&ndash; Status Column &ndash;&gt;-->
+<!--&lt;!&ndash;                        <td class="py-4 px-6">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <span th:classappend="${coach.enabled} ? 'badge-success bg-success/10 text-success border-success/20' : 'badge-warning bg-warning/10 text-warning border-warning/20'" class="badge border font-medium">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <span th:if="${coach.enabled}">Aktiv</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <span th:unless="${coach.enabled}">Inaktiverad</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </span>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </td>&ndash;&gt;-->
+
+<!--                        &lt;!&ndash; Status Column &ndash;&gt;-->
+<!--                        <td class="py-4 px-6">-->
+<!--                        <span th:classappend="${coach.enabled} ? 'badge-success bg-success/10 text-white border-success/20' : 'badge-warning bg-warning/10 text-warning border-warning/20'" class="badge border font-medium">-->
+<!--                        <span th:if="${coach.enabled}" class="text-white">Aktiv</span>-->
+<!--                          <span th:unless="${coach.enabled}">Inaktiverad</span>-->
+<!--                        </span>-->
+<!--                        </td>-->
+
+
+
+<!--                        &lt;!&ndash; Actions Column &ndash;&gt;-->
+<!--                        <td class="py-4 px-6">-->
+<!--                            <div class="flex items-center justify-end gap-1">-->
+<!--                                <a th:href="@{/admin/coaches/edit/{id}(id=${coach.id})}" class="btn btn-ghost btn-sm text-info hover:bg-info/10" title="Redigera">-->
+<!--                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">-->
+<!--                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />-->
+<!--                                    </svg>-->
+<!--                                </a>-->
+<!--                                <form th:action="@{/admin/coaches/delete/{id}(id=${coach.id})}" method="post" class="inline"-->
+<!--                                      th:onsubmit="'return confirm(\'Är du säker på att du vill ta bort denna tränare?\')'">-->
+<!--                                    <button type="submit" class="btn btn-ghost btn-sm text-error hover:bg-error/10" title="Ta bort">-->
+<!--                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">-->
+<!--                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />-->
+<!--                                        </svg>-->
+<!--                                    </button>-->
+<!--                                </form>-->
+<!--                            </div>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Empty State &ndash;&gt;-->
+<!--            <div th:if="${#lists.isEmpty(coaches)}" class="flex flex-col items-center justify-center py-16 text-center px-6">-->
+<!--                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-base-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />-->
+<!--                </svg>-->
+<!--                <h3 class="font-bold text-lg text-base-content mb-1">Inga tränare hittades</h3>-->
+<!--                <p class="text-base-content/60 mb-4">Det finns inga registrerade tränare än.</p>-->
+<!--                <a th:href="@{/admin/coaches/create}" class="btn btn-primary btn-sm">Lägg till den första</a>-->
+<!--            </div>-->
+
+<!--        </div>-->
+<!--    </div>-->
+
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+<!--///-->
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Tränare & Admins – FBK Balkan</title>-->
+
+<!--    &lt;!&ndash; DaisyUI & Tailwind &ndash;&gt;-->
+<!--    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />-->
+<!--    <script src="https://cdn.tailwindcss.com"></script>-->
+
+<!--    &lt;!&ndash; Google Fonts: Oswald (Headers) & Inter (Body) &ndash;&gt;-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">-->
+
+<!--    &lt;!&ndash; FontAwesome &ndash;&gt;-->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
+
+<!--    <link th:href="@{/css/output.css}" rel="stylesheet">-->
+
+<!--    &lt;!&ndash; Tailwind Config &ndash;&gt;-->
+<!--    <script>-->
+<!--        tailwind.config = {-->
+<!--            theme: {-->
+<!--                extend: {-->
+<!--                    fontFamily: {-->
+<!--                        sans: ['Inter', 'sans-serif'],-->
+<!--                        heading: ['Oswald', 'sans-serif'],-->
+<!--                    },-->
+<!--                    colors: {-->
+<!--                        primary: {-->
+<!--                            50: '#eff6ff',-->
+<!--                            100: '#dbeafe',-->
+<!--                            500: '#1e3a8a',-->
+<!--                            600: '#1e3a8a',-->
+<!--                            700: '#1e3a8a',-->
+<!--                            800: '#1e3a8a',-->
+<!--                            900: '#1e3a8a',-->
+<!--                        },-->
+<!--                        secondary: '#475569',-->
+<!--                    }-->
+<!--                }-->
+<!--            }-->
+<!--        }-->
+<!--    </script>-->
+
+<!--    <style>-->
+<!--        header .navbar a:hover {-->
+<!--            color: #fdad3a !important;-->
+<!--            transition: color 0.3s ease;-->
+<!--        }-->
+<!--        .fade-in {-->
+<!--            animation: fadeIn 0.3s ease-in-out;-->
+<!--        }-->
+<!--        @keyframes fadeIn {-->
+<!--            from { opacity: 0; transform: translateY(5px); }-->
+<!--            to { opacity: 1; transform: translateY(0); }-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body class="min-h-screen bg-base-200 flex flex-col">-->
+
+<!--&lt;!&ndash; Navbar Fragment &ndash;&gt;-->
+<!--<div th:replace="~{fragments/navbar :: navbar}"></div>-->
+
+<!--&lt;!&ndash; Main Content &ndash;&gt;-->
+<!--<main class="flex-grow container mx-auto px-4 py-6 md:py-10 max-w-6xl mt-4">-->
+
+<!--    &lt;!&ndash; Page Header &ndash;&gt;-->
+<!--    <div class="mb-8">-->
+<!--        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">-->
+<!--            <div>-->
+<!--                <h1 class="text-4xl md:text-5xl font-heading font-bold text-slate-900 uppercase tracking-tight leading-tight">-->
+<!--                    Tränare & Admins-->
+<!--                </h1>-->
+<!--                <p class="text-slate-500 mt-2 font-medium max-w-lg">-->
+<!--                    Hantera användare, roller och teamtilldelningar.-->
+<!--                </p>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Action Button &ndash;&gt;-->
+<!--            <div class="flex-shrink-0">-->
+<!--                <a th:href="@{/admin/coaches/create}"-->
+<!--                   class="btn btn-primary btn-md h-12 rounded-xl bg-primary-600 hover:bg-primary-700 text-white border-none shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 font-bold gap-2 px-6">-->
+<!--                    <i class="fa-solid fa-plus"></i>-->
+<!--                    Ny Tränare-->
+<!--                </a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Alert Messages &ndash;&gt;-->
+<!--    <div th:if="${success}" class="alert alert-success mb-6 shadow-lg border-none fade-in">-->
+<!--        <i class="fa-solid fa-check-circle"></i>-->
+<!--        <span th:text="${success}"></span>-->
+<!--    </div>-->
+<!--    <div th:if="${error}" class="alert alert-error mb-6 shadow-lg border-none fade-in">-->
+<!--        <i class="fa-solid fa-exclamation-triangle"></i>-->
+<!--        <span th:text="${error}"></span>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Main Card Container &ndash;&gt;-->
+<!--    <div class="card bg-base-100 shadow-lg border border-slate-200 rounded-3xl overflow-hidden">-->
+<!--        <div class="card-body p-0">-->
+
+<!--            <div class="overflow-x-auto w-full">-->
+<!--                <table class="table w-full text-slate-700">-->
+<!--                    &lt;!&ndash; Table Header &ndash;&gt;-->
+<!--                    <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase text-xs tracking-wider">-->
+<!--                    <tr>-->
+<!--                        <th class="py-4 px-6 font-semibold">Användare</th>-->
+<!--                        <th class="py-4 px-6 font-semibold">Kontakt</th>-->
+<!--                        <th class="py-4 px-6 font-semibold">Roll</th>-->
+<!--                        <th class="py-4 px-6 font-semibold text-center">Lag</th>-->
+<!--                        <th class="py-4 px-6 font-semibold">Status</th>-->
+<!--                        <th class="py-4 px-6 font-semibold text-right">Åtgärder</th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody class="divide-y divide-slate-100">-->
+<!--                    &lt;!&ndash; Table Row Loop &ndash;&gt;-->
+<!--                    <tr th:each="coach : ${coaches}" class="hover:bg-slate-50/50 transition-colors duration-150 align-middle">-->
+
+<!--                        &lt;!&ndash; User Column &ndash;&gt;-->
+<!--                        <td class="py-4 px-6">-->
+<!--                            <div class="flex items-center gap-3">-->
+<!--                                <div class="avatar placeholder">-->
+<!--                                    <div class="bg-primary/10 text-primary rounded-full w-10 h-10 ring-1 ring-primary/20">-->
+<!--                                        <span class="text-lg font-bold" th:text="${#strings.substring(coach.fullName, 0, 1)}">T</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div>-->
+<!--                                    <div class="font-bold text-slate-800" th:text="${coach.fullName}">Namn Efternamn</div>-->
+<!--                                    <div class="text-xs opacity-50 font-mono" th:text="'ID: ' + ${coach.id}">ID: 123</div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </td>-->
+
+<!--                        &lt;!&ndash; Contact Column &ndash;&gt;-->
+<!--                        <td class="py-4 px-6">-->
+<!--                            <div class="flex items-center gap-2 text-slate-600 text-sm">-->
+<!--                                <i class="fa-regular fa-envelope opacity-50"></i>-->
+<!--                                <span th:text="${coach.email}">email@example.com</span>-->
+<!--                            </div>-->
+<!--                        </td>-->
+
+<!--                        &lt;!&ndash; Role Column &ndash;&gt;-->
+<!--                        <td class="py-4 px-6">-->
+<!--                            <span th:switch="${coach.role}">-->
+<!--                                &lt;!&ndash; Admin Badge &ndash;&gt;-->
+<!--                                <span th:case="'ADMIN'" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-50 text-rose-600 border border-rose-100">-->
+<!--                                    <i class="fa-solid fa-shield-halved text-[10px]"></i>-->
+<!--                                    Admin-->
+<!--                                </span>-->
+<!--                                &lt;!&ndash; Coach Badge &ndash;&gt;-->
+<!--                                <span th:case="'COACH'" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 text-blue-600 border border-blue-100">-->
+<!--                                    <i class="fa-solid fa-whistle text-[10px]"></i> &lt;!&ndash; Using whistle icon or user &ndash;&gt;-->
+<!--                                    Tränare-->
+<!--                                </span>-->
+<!--                                <span th:case="*" th:text="${coach.role}" class="badge badge-ghost text-xs"></span>-->
+<!--                            </span>-->
+<!--                        </td>-->
+
+<!--                        &lt;!&ndash; Team Count Column &ndash;&gt;-->
+<!--                        <td class="py-4 px-6 text-center">-->
+<!--                            <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 text-slate-600 font-bold text-xs" th:text="${coach.teamCount}">0</span>-->
+<!--                        </td>-->
+
+<!--                        &lt;!&ndash; Status Column &ndash;&gt;-->
+<!--                        <td class="py-4 px-6">-->
+<!--                            <span th:if="${coach.enabled}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100">-->
+<!--                                <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span></span>-->
+<!--                                Aktiv-->
+<!--                            </span>-->
+<!--                            <span th:unless="${coach.enabled}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-100">-->
+<!--                                <span class="w-2 h-2 rounded-full bg-amber-400"></span>-->
+<!--                                Inaktiverad-->
+<!--                            </span>-->
+<!--                        </td>-->
+
+<!--                        &lt;!&ndash; Actions Column &ndash;&gt;-->
+<!--                        <td class="py-4 px-6">-->
+<!--                            <div class="flex items-center justify-end gap-1">-->
+<!--                                &lt;!&ndash; Edit Button &ndash;&gt;-->
+<!--                                <a th:href="@{/admin/coaches/edit/{id}(id=${coach.id})}"-->
+<!--                                   class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-primary hover:bg-primary/10 transition-colors"-->
+<!--                                   title="Redigera">-->
+<!--                                    <i class="fa-regular fa-pen-to-square text-lg"></i>-->
+<!--                                </a>-->
+<!--                                &lt;!&ndash; Delete Button &ndash;&gt;-->
+<!--                                <form th:action="@{/admin/coaches/delete/{id}(id=${coach.id})}" method="post" class="inline"-->
+<!--                                      th:onsubmit="'return confirm(\'Är du säker på att du vill ta bort denna tränare?\')'">-->
+<!--                                    <button type="submit"-->
+<!--                                            class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-colors"-->
+<!--                                            title="Ta bort">-->
+<!--                                        <i class="fa-regular fa-trash-can text-lg"></i>-->
+<!--                                    </button>-->
+<!--                                </form>-->
+<!--                            </div>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Empty State &ndash;&gt;-->
+<!--            <div th:if="${#lists.isEmpty(coaches)}" class="flex flex-col items-center justify-center py-20 text-center px-6 bg-slate-50/50">-->
+<!--                <div class="relative w-20 h-20 mb-6">-->
+<!--                    <div class="absolute inset-0 bg-primary/5 rounded-full"></div>-->
+<!--                    <div class="absolute inset-0 flex items-center justify-center">-->
+<!--                        <i class="fa-solid fa-users-slash text-4xl text-primary/30"></i>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <h3 class="font-heading font-bold text-xl text-slate-800 mb-1">Inga tränare hittades</h3>-->
+<!--                <p class="text-slate-500 text-sm mb-6 max-w-sm">Det finns inga registrerade tränare i systemet ännu. Börja med att lägga till en ny.</p>-->
+<!--                <a th:href="@{/admin/coaches/create}"-->
+<!--                   class="btn btn-primary btn-sm rounded-xl shadow-md">-->
+<!--                    <i class="fa-solid fa-plus mr-2"></i> Lägg till den första-->
+<!--                </a>-->
+<!--            </div>-->
+
+<!--        </div>-->
+<!--    </div>-->
+
+<!--</main>-->
+
+<!--&lt;!&ndash; Footer Fragment &ndash;&gt;-->
+<!--&lt;!&ndash;<div th:replace="~{fragments/footer::footer}"></div>&ndash;&gt;-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!--////-->
+
+<!DOCTYPE html>
+<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tränare & Admins – FBK Balkan</title>
+
+    <!-- DaisyUI & Tailwind -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Oswald', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            500: '#1e3a8a',
+                            600: '#1e3a8a',
+                        },
+                        secondary: '#475569',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        header .navbar a:hover {
+            color: #fdad3a !important;
+            transition: color 0.3s ease;
+        }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body class="min-h-screen bg-base-200 flex flex-col">
+
+<!-- Navbar Fragment -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Main Content -->
+<main class="flex-grow container mx-auto px-4 py-6 md:py-10 max-w-6xl mt-4">
+
+    <!-- Page Header -->
+    <div class="mb-8">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <div>
+                <h1 class="text-4xl md:text-5xl font-heading font-bold text-slate-900 uppercase tracking-tight leading-tight">
+                    Tränare & Admins
+                </h1>
+                <p class="text-slate-500 mt-2 font-medium max-w-lg">
+                    Hantera användare, roller och teamtilldelningar.
+                </p>
+            </div>
+
+            <div class="flex-shrink-0">
+                <a th:href="@{/admin/coaches/create}"
+                   class="btn btn-primary btn-md h-12 rounded-xl bg-primary-600 hover:bg-primary-700 text-white border-none shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 font-bold gap-2 px-6">
+                    <i class="fa-solid fa-plus"></i>
+                    Ny Tränare
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Messages -->
+    <div th:if="${success}" class="alert alert-success mb-6 shadow-lg border-none fade-in">
+        <i class="fa-solid fa-check-circle"></i>
+        <span th:text="${success}"></span>
+    </div>
+    <div th:if="${error}" class="alert alert-error mb-6 shadow-lg border-none fade-in">
+        <i class="fa-solid fa-exclamation-triangle"></i>
+        <span th:text="${error}"></span>
+    </div>
+
+    <!-- Main Card Container -->
+    <div class="card bg-base-100 shadow-lg border border-slate-200 rounded-3xl overflow-hidden">
+        <div class="card-body p-0">
+
+            <div class="overflow-x-auto w-full">
+                <table class="table w-full text-slate-700">
+                    <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase text-xs tracking-wider">
+                    <tr>
+                        <th class="py-4 px-6 font-semibold">Användare</th>
+                        <th class="py-4 px-6 font-semibold">Kontakt</th>
+                        <th class="py-4 px-6 font-semibold">Roll</th>
+                        <th class="py-4 px-6 font-semibold text-center">Lag</th>
+                        <th class="py-4 px-6 font-semibold">Status</th>
+                        <th class="py-4 px-6 font-semibold text-right">Åtgärder</th>
+                    </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                    <tr th:each="coach : ${coaches}" class="hover:bg-slate-50/50 transition-colors duration-150 align-middle">
+
+                        <!-- User Column -->
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <div class="avatar placeholder">
+                                    <div class="bg-primary/10 text-primary rounded-full w-10 h-10 ring-1 ring-primary/20">
+                                        <span class="text-lg font-bold" th:text="${#strings.substring(coach.fullName, 0, 1)}">T</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-bold text-slate-800" th:text="${coach.fullName}">Namn Efternamn</div>
+                                    <div class="text-xs opacity-50 font-mono" th:text="'ID: ' + ${coach.id}">ID: 123</div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Contact Column -->
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2 text-slate-600 text-sm">
+                                <i class="fa-regular fa-envelope opacity-50"></i>
+                                <span th:text="${coach.email}">email@example.com</span>
+                            </div>
+                        </td>
+
+                        <!-- Role Column -->
+                        <td class="py-4 px-6">
+                            <span th:switch="${coach.role}">
+                                <span th:case="'ADMIN'" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-50 text-rose-600 border border-rose-100">
+                                    <i class="fa-solid fa-shield-halved text-[10px]"></i>
+                                    Admin
+                                </span>
+                                <span th:case="'COACH'" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 text-blue-600 border border-blue-100">
+                                    <i class="fa-solid fa-whistle text-[10px]"></i>
+                                    Tränare
+                                </span>
+                                <span th:case="*" th:text="${coach.role}" class="badge badge-ghost text-xs"></span>
+                            </span>
+                        </td>
+
+                        <!-- Team Count Column -->
+                        <td class="py-4 px-6 text-center">
+                            <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 text-slate-600 font-bold text-xs" th:text="${coach.teamCount}">0</span>
+                        </td>
+
+                        <!-- Status Column -->
+                        <td class="py-4 px-6">
+                            <span th:if="${coach.enabled}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100">
+                                <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span></span>
+                                Aktiv
+                            </span>
+                            <span th:unless="${coach.enabled}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-100">
+                                <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                                Inaktiverad
+                            </span>
+                        </td>
+
+                        <!-- Actions Column -->
+                        <td class="py-4 px-6">
+                            <div class="flex items-center justify-end gap-1">
+                                <!-- Edit Button -->
+                                <a th:href="@{/admin/coaches/edit/{id}(id=${coach.id})}"
+                                   class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-primary hover:bg-primary/10 transition-colors"
+                                   title="Redigera">
+                                    <i class="fa-regular fa-pen-to-square text-lg"></i>
+                                </a>
+
+                                <!-- Delete Button (Trigger for Swal) -->
+                                <button type="button"
+                                        th:attr="data-id=${coach.id}, data-name=${coach.fullName}"
+                                        onclick="confirmDelete(this)"
+                                        class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-colors"
+                                        title="Ta bort">
+                                    <i class="fa-regular fa-trash-can text-lg"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State -->
+            <div th:if="${#lists.isEmpty(coaches)}" class="flex flex-col items-center justify-center py-20 text-center px-6 bg-slate-50/50">
+                <div class="relative w-20 h-20 mb-6">
+                    <div class="absolute inset-0 bg-primary/5 rounded-full"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fa-solid fa-users-slash text-4xl text-primary/30"></i>
+                    </div>
+                </div>
+                <h3 class="font-heading font-bold text-xl text-slate-800 mb-1">Inga tränare hittades</h3>
+                <p class="text-slate-500 text-sm mb-6 max-w-sm">Det finns inga registrerade tränare i systemet ännu.</p>
+                <a th:href="@{/admin/coaches/create}" class="btn btn-primary btn-sm rounded-xl shadow-md">
+                    <i class="fa-solid fa-plus mr-2"></i> Lägg till den första
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</main>
+
+<!-- Footer Fragment -->
+<!--<div th:replace="~{fragments/footer::footer}"></div>-->
+
+<!-- Hidden Form for Deletion (Used by JS) -->
+<form id="deleteForm" method="post" style="display: none;">
+    <input type="hidden" name="_method" value="delete"/> <!-- If you use method override filter -->
+</form>
+
+<script>
+    function confirmDelete(button) {
+        const coachId = button.getAttribute('data-id');
+        const coachName = button.getAttribute('data-name');
+        const deleteUrl = `/admin/coaches/delete/${coachId}`;
+
+        Swal.fire({
+            title: 'Är du säker?',
+            html: `Du är på väg att ta bort <strong class="text-slate-800">${coachName}</strong>.<br>Denna åtgärd kan inte ångras!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#1e3a8a', // Primary color
+            cancelButtonColor: '#64748b', // Slate color
+            confirmButtonText: '<i class="fa-solid fa-trash-can mr-2"></i> Ja, ta bort!',
+            cancelButtonText: 'Avbryt',
+            customClass: {
+                popup: 'rounded-3xl font-sans',
+                confirmButton: 'btn btn-primary rounded-xl shadow-lg border-none text-white',
+                cancelButton: 'btn btn-ghost rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700'
+            },
+            showClass: {
+                popup: 'animate__animated animate__zoomIn animate__faster'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Create a form dynamically to submit the POST request
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = deleteUrl;
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
