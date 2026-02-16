@@ -1,7 +1,7 @@
 package com.example.fbk_balkan.controller;
 
 import com.example.fbk_balkan.dto.CoachResponseDto;
-import com.example.fbk_balkan.dto.CreateCoachDto;
+import com.example.fbk_balkan.dto.CoachCreateUpdateDTO;
 import com.example.fbk_balkan.entity.Coach;
 import com.example.fbk_balkan.service.CoachService;
 import jakarta.validation.Valid;
@@ -22,14 +22,14 @@ public class AdminController {
     // Show the registration form
     @GetMapping("/register-coach-form")
     public String showRegisterCoachForm(Model model) {
-        model.addAttribute("createCoachDto", new CreateCoachDto());
+        model.addAttribute("createCoachDto", new CoachCreateUpdateDTO());
         return "register-coach-form";
     }
 
     // Handle form submission
     @PostMapping("/register-coach")
     public String createCoach(
-            @Valid @ModelAttribute CreateCoachDto dto,
+            @Valid @ModelAttribute CoachCreateUpdateDTO dto,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes,
             Model model
@@ -62,7 +62,7 @@ public class AdminController {
     // API endpoint for JSON requests (if you want to keep it for Postman testing)
     @PostMapping("/register-coach-api")
     @ResponseBody
-    public CoachResponseDto createCoachApi(@RequestBody CreateCoachDto dto) {
+    public CoachResponseDto createCoachApi(@RequestBody CoachCreateUpdateDTO dto) {
         Coach coach = coachService.createCoach(dto);
 
         CoachResponseDto res = new CoachResponseDto();
