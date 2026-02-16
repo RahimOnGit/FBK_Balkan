@@ -29,6 +29,10 @@
                     Du är nu inloggad och kan hantera ditt lag, spelare, träningar och skapa nyheter
                 </p>
 
+
+                <div>
+                    <div th:replace="~{coach/content-fragment::trial-requests}"></div>
+                </div>
                 <!-- Team section container (hidden by default) -->
                 <div id="team-section-container" class="hidden">
                     <div th:replace="~{coach/content-fragment::team-section}"></div>
