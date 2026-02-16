@@ -38,8 +38,8 @@ public class SecurityConfig {
                                 .requestMatchers("/", "/css/**", "/images/**", "/login", "/login-error").permitAll()
                                 .requestMatchers("/trial-registration" , "/trial-registration-success" , "/about").permitAll()
                                 .requestMatchers("/news", "/news/**").permitAll()
-//                        change later to admin only
-                                .requestMatchers("/team-register").permitAll()
+
+                                .requestMatchers("/team-register").hasRole("ADMIN")
 //                      roles-based access control
                                 .requestMatchers("/coach/**").hasRole("COACH")
                                 .requestMatchers("/admin/news/**").hasAnyRole("SOCIAL_ADMIN", "ADMIN")
