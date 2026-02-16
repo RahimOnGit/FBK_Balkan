@@ -1,19 +1,25 @@
 package com.example.fbk_balkan.service;
 
 import com.example.fbk_balkan.dto.TrialRegistrationDTO;
+import com.example.fbk_balkan.entity.Coach;
+import com.example.fbk_balkan.entity.TrialRegistration;
 import com.example.fbk_balkan.enums.ReferralSource;
+import com.example.fbk_balkan.repository.CoachRepository;
 import com.example.fbk_balkan.repository.TrialRegistrationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class TrialRegistrationService {
 
     @Autowired
     private  TrialRegistrationRepository trialRegistrationRepository;
+    @Autowired
+    private CoachRepository coachRepository;
 
     //    create method
     public TrialRegistrationDTO create(TrialRegistrationDTO trialRegistrationDTO) {
@@ -69,6 +75,18 @@ public class TrialRegistrationService {
                 .status(trialRegistration.getStatus())
                 .createdAt(trialRegistration.getCreatedAt().atStartOfDay())
                 .build();
+
+    }
+
+    public List<TrialRegistrationDTO> fetchTrialRegistrationByCoach(Long coachId) {
+        Coach coach = coachRepository.findById(coachId).
+                orElseThrow(()-> new IllegalArgumentException("coach not found"));
+
+        return trialRegistrationRepository.findByCoachIdOrderByCreatedAtDesc(coachId)
+                .stream()
+                .map(TrialRegistrationDTO::fromEntity)
+                .toList();
+
 
     }
 

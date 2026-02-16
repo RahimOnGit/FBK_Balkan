@@ -1,9 +1,11 @@
 package com.example.fbk_balkan.controller;
 
+import com.example.fbk_balkan.dto.TrialRegistrationDTO;
 import com.example.fbk_balkan.dto.team.TeamDto;
 import com.example.fbk_balkan.entity.Coach;
 import com.example.fbk_balkan.repository.CoachRepository;
 import com.example.fbk_balkan.service.TeamService;
+import com.example.fbk_balkan.service.TrialRegistrationService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,10 +19,13 @@ import java.util.List;
 public class CoachDashboardController {
     private final CoachRepository coachRepository;
     private final TeamService teamService;
+    private final TrialRegistrationService trialService;
 
-    public CoachDashboardController(CoachRepository coachRepository, TeamService teamService) {
+    public CoachDashboardController(CoachRepository coachRepository, TeamService teamService, TrialRegistrationService trialService) {
         this.coachRepository = coachRepository;
         this.teamService = teamService;
+        this.trialService = trialService;
+
     }
 
 
@@ -41,6 +46,11 @@ public class CoachDashboardController {
             List<TeamDto> teams = teamService.getTeamsByCoachId(coach.getId());
             model.addAttribute("teams", teams);
             model.addAttribute("teamCount", teams.size());
+
+//            Fetch trials requests for this coach
+            List<TrialRegistrationDTO> trialRequests = trialService.fetchTrialRegistrationByCoach(coach.getId());
+            model.addAttribute("trialRequests", trialRequests);
+            model.addAttribute("RequestSize" , trialRequests.size());
         } else {
             model.addAttribute("coachName", "coach");
             model.addAttribute("teams", List.of());

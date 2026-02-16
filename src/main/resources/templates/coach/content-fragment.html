@@ -12,7 +12,7 @@
 <div class="mt-8" th:fragment="team-section">
     <h2 class="text-2xl font-bold mb-4 text-center">Mina Lag</h2>
 
-    <div th:if="${teamCount == 0}" class="alert alert-info">
+    <div th:if="${teamCount == 0}" class="alert">
         <span>Du har inga lag ännu. Skapa ditt första lag!</span>
     </div>
 
@@ -35,6 +35,6 @@
 
 <!--trial registration requests-->
 <div class="" th:fragment="trial-requests">
-    <h2 class="text-2xl font-bold mb-4 text-center">Provträningar</h2>
+    <h2 class="text-2xl font-bold mb-4 text-center">Provträningar <span th:text="${requestSize}">0</span></h2>
 
 </div>

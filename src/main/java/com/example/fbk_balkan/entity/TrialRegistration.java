@@ -71,6 +71,9 @@ private ReferralSource referralSource;
     @Column(name = "referral_other", length = 50)
     private String referralOther;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="coach_id" , nullable = true)
+    private Coach coach;
 
     @PrePersist
     protected void onCreate() {
