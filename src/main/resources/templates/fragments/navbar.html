@@ -165,7 +165,40 @@
                     <li><a href="/about" class="hover:text-primary transition-colors">Om Klubben</a></li>
                     <li><a href="/trial-registration" class="hover:text-primary transition-colors">Intresseanmälan</a></li>
                     <li id="mobile-logout" class="hidden"><a href="/logout" class="hover:bg-error hover:text-error-content">Logout</a></li>
+                    <!-- Mobile Våra Lag Dropdown -->
+                    <li class="dropdown">
+                        <!-- Trigger: click to toggle -->
+                        <a href="#" tabindex="0"
+                           class="flex justify-between items-center text-base-content font-bold">
+                            Våra Lag
+                            <span>▾</span>
+                        </a>
+
+                        <!-- Hidden submenu by default -->
+                        <ul class="hidden pl-4 mt-1 space-y-1">
+                            <li th:each="team : ${publicTeams}">
+                                <a th:href="@{/public-teams/{id}(id=${team.id})}"
+                                   th:text="${team.ageGroup}"
+                                   class="block px-4 py-2 hover:bg-base-200 rounded-md w-full">
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- Tiny JS to toggle submenu on click -->
+                    <script>
+                        document.querySelectorAll('.dropdown > a').forEach(trigger => {
+                            trigger.addEventListener('click', function(e) {
+                                e.preventDefault(); // prevent jumping
+                                const submenu = this.nextElementSibling;
+                                submenu.classList.toggle('hidden');
+                            });
+                        });
+                    </script>
+
+
                 </ul>
+
             </div>
         </div>
 
@@ -188,6 +221,27 @@
                         <li><a href="/contact" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-secondary transition-colors text-sm lg:text-base whitespace-nowrap">Kommande Aktiviteter</a></li>
                         <li><a href="/about" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-secondary transition-colors text-sm lg:text-base whitespace-nowrap">Om Klubben</a></li>
                         <li><a href="/contact" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-secondary transition-colors text-sm lg:text-base whitespace-nowrap">Intresseanmälan</a></li>
+
+                        <li class="dropdown relative group">
+                            <!-- Clickable trigger: text + triangle -->
+                            <button class="flex items-center text-base-100 font-bold uppercase hover:text-secondary transition-colors focus:outline-none">
+                                <span>Våra Lag</span>
+                                <span class="ml-1 text-sm opacity-0 group-hover:opacity-100 transition-opacity">▾</span>
+                            </button>
+
+                            <!-- Dropdown Menu -->
+                            <ul tabindex="0"
+                                class="dropdown-content mt-2 shadow-lg bg-base-100 border border-base-200
+               w-auto min-w-[12rem] max-w-[20rem] whitespace-nowrap p-0
+               overflow-hidden z-50 rounded-md">
+                                <li th:each="team : ${publicTeams}">
+                                    <a th:href="@{/public-teams/{id}(id=${team.id})}"
+                                       th:text="${team.ageGroup}"
+                                       class="block px-4 py-2 hover:bg-base-200 w-full">
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </nav>
             </div>

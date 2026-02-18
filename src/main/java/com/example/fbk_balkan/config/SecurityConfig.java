@@ -37,7 +37,7 @@ public class SecurityConfig {
 //                        publicly accessible URLs
                                 .requestMatchers("/", "/css/**", "/images/**", "/login", "/login-error").permitAll()
                                 .requestMatchers("/trial-registration" , "/trial-registration-success" , "/about").permitAll()
-                                .requestMatchers("/news", "/news/**").permitAll()
+                                .requestMatchers("/news", "/news/**","/public-teams/**").permitAll()
 //                        change later to admin only
                                 .requestMatchers("/team-register").permitAll()
 //                      roles-based access control
