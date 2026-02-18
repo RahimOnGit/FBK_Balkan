@@ -1,5 +1,6 @@
 package com.example.fbk_balkan.service;
 
+import com.example.fbk_balkan.dto.team.TeamListItemDTO;
 import com.example.fbk_balkan.dto.team.TeamCreateDto;
 import com.example.fbk_balkan.dto.team.TeamDto;
 import com.example.fbk_balkan.dto.team.TeamMapper;
@@ -12,7 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TeamService {
@@ -49,6 +51,55 @@ public TeamDto createTeam(TeamCreateDto teamCreateDto) {
         savedTeam.getCoach().getEmail();
 //    convert entity to DTO and return
         return teamMapper.toDto(savedTeam);
+    }
+
+    public List<TeamListItemDTO> findAllForAdminList() {
+        return teamRepository.findAll().stream()
+                .map(team -> {
+                    TeamListItemDTO dto = new TeamListItemDTO();
+                    dto.setId(team.getId());
+                    dto.setName(team.getName());
+                    dto.setAgeGroup(team.getAgeGroup());
+                    dto.setGender(team.getGender());
+                    dto.setActive(team.isActive());
+                    dto.setCoachName(
+                            team.getCoach() != null
+                                    ? team.getCoach().getFirstName() + " " + team.getCoach().getLastName()
+                                    : "—"
+                    );
+                    return dto;
+                })
+                .toList();
+    }
+
+    public List<TeamListItemDTO> findLatestTeams(int limit) {
+        return teamRepository.findAllByOrderByCreatedDateDesc()
+                .stream()
+                .limit(limit)
+                .map(team -> {
+                    TeamListItemDTO dto = new TeamListItemDTO();
+                    dto.setId(team.getId());
+                    dto.setName(team.getName());
+                    dto.setAgeGroup(team.getAgeGroup());
+//                    dto.setGender(team.getGender() != null ? team.getGender().name() : "—");
+                    dto.setGender(team.getGender() != null ? team.getGender() : null);
+                    dto.setActive(team.isActive());
+                    dto.setCoachName(team.getCoach() != null
+                            ? team.getCoach().getFirstName() + " " + team.getCoach().getLastName()
+                            : "—");
+
+                    dto.setGenderDisplay(switch (team.getGender()) {
+                        case MALE  -> "Pojkar";
+                        case FEMALE -> "Flickor";
+//                        case MIXED -> "Mixat";
+                        default    -> "—";
+                    });
+
+                    dto.setCreatedDate(team.getCreatedDate());
+
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     }
