@@ -15,9 +15,6 @@ public class FbkBalkanApplication implements CommandLineRunner {
 @Autowired
     TrialRegistrationService service;
     public void run(String... args) throws Exception {
-        // this trialRegistrationService is not autowired
-    service.fetchTrialRegistrationByCoach(1L);
-        //trialRegistrationService.fetchTrialRegistrationByCoach(1L);
 
     }
 }

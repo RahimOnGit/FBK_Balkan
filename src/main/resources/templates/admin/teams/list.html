@@ -1,0 +1,445 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Lag – FBK Balkan Admin</title>-->
+
+<!--    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />-->
+<!--    <script src="https://cdn.tailwindcss.com"></script>-->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
+<!--    <link th:href="@{/css/output.css}" rel="stylesheet">-->
+
+<!--    &lt;!&ndash; SweetAlert2 &ndash;&gt;-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>-->
+
+<!--    <script>-->
+<!--        tailwind.config = {-->
+<!--            theme: {-->
+<!--                extend: {-->
+<!--                    fontFamily: {-->
+<!--                        sans: ['Inter', 'sans-serif'],-->
+<!--                        heading: ['Oswald', 'sans-serif'],-->
+<!--                    },-->
+<!--                    colors: {-->
+<!--                        primary: { 500: '#1e3a8a', 600: '#1e3a8a' },-->
+<!--                        secondary: '#475569',-->
+<!--                    }-->
+<!--                }-->
+<!--            }-->
+<!--        }-->
+<!--    </script>-->
+
+<!--    <style>-->
+<!--        .fade-in { animation: fadeIn 0.3s ease-in-out; }-->
+<!--        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body class="min-h-screen bg-base-200 flex flex-col">-->
+
+<!--&lt;!&ndash; Navbar &ndash;&gt;-->
+<!--<div th:replace="~{fragments/navbar :: navbar}"></div>-->
+
+<!--&lt;!&ndash; Main Content &ndash;&gt;-->
+<!--<main class="flex-grow container mx-auto px-4 py-6 md:py-10 max-w-6xl mt-4">-->
+
+<!--    &lt;!&ndash; Page Header &ndash;&gt;-->
+<!--    <div class="mb-8">-->
+<!--        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">-->
+<!--            <div>-->
+<!--                <h1 class="text-4xl md:text-5xl font-heading font-bold text-slate-900 uppercase tracking-tight leading-tight">-->
+<!--                    Alla lag-->
+<!--                </h1>-->
+<!--                <p class="text-slate-500 mt-2 font-medium max-w-lg">-->
+<!--                    Hantera lag, åldersgrupper och tränartilldelningar.-->
+<!--                </p>-->
+<!--            </div>-->
+
+<!--            <div class="flex-shrink-0">-->
+<!--                <a th:href="@{/team-register}"-->
+<!--                   class="btn btn-primary btn-md h-12 rounded-xl bg-primary-600 hover:bg-primary-700 text-white border-none shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 font-bold gap-2 px-6">-->
+<!--                    <i class="fa-solid fa-plus"></i>-->
+<!--                    Skapa nytt lag-->
+<!--                </a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Alert Messages &ndash;&gt;-->
+<!--    <div th:if="${success}" class="alert alert-success mb-6 shadow-lg border-none fade-in">-->
+<!--        <i class="fa-solid fa-check-circle"></i>-->
+<!--        <span th:text="${success}"></span>-->
+<!--    </div>-->
+<!--    <div th:if="${error}" class="alert alert-error mb-6 shadow-lg border-none fade-in">-->
+<!--        <i class="fa-solid fa-exclamation-triangle"></i>-->
+<!--        <span th:text="${error}"></span>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Main Card Container &ndash;&gt;-->
+<!--    <div class="card bg-base-100 shadow-lg border border-slate-200 rounded-3xl overflow-hidden">-->
+<!--        <div class="card-body p-0">-->
+
+<!--            <div class="overflow-x-auto w-full">-->
+<!--                <table class="table w-full text-slate-700">-->
+<!--                    <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase text-xs tracking-wider">-->
+<!--                    <tr>-->
+<!--                        <th class="py-4 px-6 font-semibold">Lagnamn</th>-->
+<!--                        <th class="py-4 px-6 font-semibold">Åldersgrupp</th>-->
+<!--                        <th class="py-4 px-6 font-semibold">Kön</th>-->
+<!--                        <th class="py-4 px-6 font-semibold">Huvudtränare</th>-->
+<!--                        <th class="py-4 px-6 font-semibold text-center">Aktiv</th>-->
+<!--                        <th class="py-4 px-6 font-semibold text-right">Åtgärder</th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody class="divide-y divide-slate-100">-->
+<!--                    <tr th:each="team : ${teams}" class="hover:bg-slate-50/50 transition-colors duration-150 align-middle">-->
+
+<!--                        &lt;!&ndash; Lagnamn &ndash;&gt;-->
+<!--                        <td class="py-4 px-6">-->
+<!--                            <div class="flex items-center gap-3">-->
+<!--                                <div class="avatar placeholder">-->
+<!--                                    <div class="bg-primary/10 text-primary rounded-full w-10 h-10 ring-1 ring-primary/20 flex items-center justify-center">-->
+<!--                                        <span class="text-lg font-bold" th:text="${#strings.substring(team.name, 0, 1)}">L</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div>-->
+<!--                                    <div class="font-bold text-slate-800" th:text="${team.name}">Lag namn</div>-->
+<!--                                    <div class="text-xs opacity-50 font-mono" th:text="'ID: ' + ${team.id}">ID: 123</div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </td>-->
+
+<!--                        &lt;!&ndash; Åldersgrupp &ndash;&gt;-->
+<!--                        <td class="py-4 px-6" th:text="${team.ageGroup}">P16</td>-->
+
+<!--                        &lt;!&ndash; Kön (مع التنسيق الجميل والترجمة) &ndash;&gt;-->
+<!--                        <td class="py-4 px-6">-->
+<!--                            <span th:switch="${team.gender}">-->
+<!--                                <span th:case="'MALE'" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">-->
+<!--                                    <i class="fa-solid fa-mars"></i> Pojkar-->
+<!--                                </span>-->
+<!--                                <span th:case="'FEMALE'" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-pink-50 text-pink-700 border border-pink-200">-->
+<!--                                    <i class="fa-solid fa-venus"></i> Flickor-->
+<!--                                </span>-->
+<!--                                <span th:case="'MIXED'" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">-->
+<!--                                    <i class="fa-solid fa-venus-mars"></i> Mixat-->
+<!--                                </span>-->
+<!--                                <span th:case="*" class="badge badge-ghost text-xs">—</span>-->
+<!--                            </span>-->
+<!--                        </td>-->
+
+<!--                        &lt;!&ndash; Huvudtränare &ndash;&gt;-->
+<!--                        <td class="py-4 px-6" th:text="${team.coachName ?: '—'}">—</td>-->
+
+<!--                        &lt;!&ndash; Aktiv &ndash;&gt;-->
+<!--                        <td class="py-4 px-6 text-center">-->
+<!--                            <span th:if="${team.active}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100">-->
+<!--                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>-->
+<!--                                Aktiv-->
+<!--                            </span>-->
+<!--                            <span th:unless="${team.active}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-100">-->
+<!--                                <span class="w-2 h-2 rounded-full bg-amber-400"></span>-->
+<!--                                Inaktiv-->
+<!--                            </span>-->
+<!--                        </td>-->
+
+<!--                        &lt;!&ndash; Åtgärder &ndash;&gt;-->
+<!--                        <td class="py-4 px-6">-->
+<!--                            <div class="flex items-center justify-end gap-1">-->
+<!--                                <a th:href="@{/admin/teams/edit/{id}(id=${team.id})}"-->
+<!--                                   class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-primary hover:bg-primary/10 transition-colors"-->
+<!--                                   title="Redigera lag">-->
+<!--                                    <i class="fa-regular fa-pen-to-square text-lg"></i>-->
+<!--                                </a>-->
+
+<!--                                <button type="button"-->
+<!--                                        th:attr="data-id=${team.id}, data-name=${team.name}"-->
+<!--                                        onclick="confirmDelete(this)"-->
+<!--                                        class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-colors"-->
+<!--                                        title="Ta bort lag">-->
+<!--                                    <i class="fa-regular fa-trash-can text-lg"></i>-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Empty State &ndash;&gt;-->
+<!--            <div th:if="${#lists.isEmpty(teams)}" class="flex flex-col items-center justify-center py-20 text-center px-6 bg-slate-50/50">-->
+<!--                <div class="relative w-20 h-20 mb-6">-->
+<!--                    <div class="absolute inset-0 bg-primary/5 rounded-full"></div>-->
+<!--                    <div class="absolute inset-0 flex items-center justify-center">-->
+<!--                        <i class="fa-solid fa-users-slash text-4xl text-primary/30"></i>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <h3 class="font-heading font-bold text-xl text-slate-800 mb-1">Inga lag registrerade</h3>-->
+<!--                <p class="text-slate-500 text-sm mb-6 max-w-sm">Det finns inga lag i systemet ännu.</p>-->
+<!--                <a th:href="@{/team-register}" class="btn btn-primary btn-sm rounded-xl shadow-md">-->
+<!--                    <i class="fa-solid fa-plus mr-2"></i> Skapa nytt lag-->
+<!--                </a>-->
+<!--            </div>-->
+
+<!--        </div>-->
+<!--    </div>-->
+
+<!--</main>-->
+
+<!--&lt;!&ndash; SweetAlert Delete Confirmation &ndash;&gt;-->
+<!--<script>-->
+<!--    function confirmDelete(button) {-->
+<!--        const teamId = button.getAttribute('data-id');-->
+<!--        const teamName = button.getAttribute('data-name');-->
+<!--        const deleteUrl = `/admin/teams/delete/${teamId}`;-->
+
+<!--        Swal.fire({-->
+<!--            title: 'Är du säker?',-->
+<!--            html: `Du är på väg att ta bort laget <strong class="text-slate-800">${teamName}</strong>.<br>Denna åtgärd kan inte ångras!`,-->
+<!--            icon: 'warning',-->
+<!--            showCancelButton: true,-->
+<!--            confirmButtonColor: '#1e3a8a',-->
+<!--            cancelButtonColor: '#64748b',-->
+<!--            confirmButtonText: '<i class="fa-solid fa-trash-can mr-2"></i> Ja, ta bort!',-->
+<!--            cancelButtonText: 'Avbryt',-->
+<!--            customClass: {-->
+<!--                popup: 'rounded-3xl font-sans',-->
+<!--                confirmButton: 'btn btn-primary rounded-xl shadow-lg border-none text-white',-->
+<!--                cancelButton: 'btn btn-ghost rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700'-->
+<!--            }-->
+<!--        }).then((result) => {-->
+<!--            if (result.isConfirmed) {-->
+<!--                const form = document.createElement('form');-->
+<!--                form.method = 'POST';-->
+<!--                form.action = deleteUrl;-->
+<!--                document.body.appendChild(form);-->
+<!--                form.submit();-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!--//-->
+
+<!DOCTYPE html>
+<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lag – FBK Balkan Admin</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Oswald', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: { 500: '#1e3a8a', 600: '#1e3a8a' },
+                        secondary: '#475569',
+                    }
+                }
+            }
+        }
+    </script>
+
+<!--    <style>-->
+<!--        .fade-in { animation: fadeIn 0.3s ease-in-out; }-->
+<!--        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }-->
+<!--    </style>-->
+
+    <style>
+        header .navbar a:hover {
+            color: #fdad3a !important;
+            transition: color 0.3s ease;
+        }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+
+</head>
+<body class="min-h-screen bg-base-200 flex flex-col">
+
+<!-- Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Main Content -->
+<main class="flex-grow container mx-auto px-4 py-6 md:py-10 max-w-6xl mt-4">
+
+    <!-- Page Header -->
+    <div class="mb-8">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <div>
+                <h1 class="text-4xl md:text-5xl font-heading font-bold text-slate-900 uppercase tracking-tight leading-tight">
+                    Alla lag
+                </h1>
+                <p class="text-slate-500 mt-2 font-medium max-w-lg">
+                    Hantera lag, åldersgrupper och tränartilldelningar.
+                </p>
+            </div>
+
+            <div class="flex-shrink-0">
+                <a th:href="@{/team-register}"
+                   class="btn btn-primary btn-md h-12 rounded-xl bg-primary-600 hover:bg-primary-700 text-white border-none shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 font-bold gap-2 px-6">
+                    <i class="fa-solid fa-plus"></i>
+                    Skapa nytt lag
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Messages -->
+    <div th:if="${success}" class="alert alert-success mb-6 shadow-lg border-none fade-in">
+        <i class="fa-solid fa-check-circle"></i>
+        <span th:text="${success}"></span>
+    </div>
+    <div th:if="${error}" class="alert alert-error mb-6 shadow-lg border-none fade-in">
+        <i class="fa-solid fa-exclamation-triangle"></i>
+        <span th:text="${error}"></span>
+    </div>
+
+    <!-- Main Card Container -->
+    <div class="card bg-base-100 shadow-lg border border-slate-200 rounded-3xl overflow-hidden">
+        <div class="card-body p-0">
+
+            <div class="overflow-x-auto w-full">
+                <table class="table w-full text-slate-700">
+                    <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase text-xs tracking-wider">
+                    <tr>
+                        <th class="py-4 px-6 font-semibold">Lagnamn</th>
+                        <th class="py-4 px-6 font-semibold">Åldersgrupp</th>
+                        <!-- Kön تم حذفه هنا -->
+                        <th class="py-4 px-6 font-semibold">Huvudtränare</th>
+                        <th class="py-4 px-6 font-semibold text-center">Aktiv</th>
+                        <th class="py-4 px-6 font-semibold text-right">Åtgärder</th>
+                    </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                    <tr th:each="team : ${teams}" class="hover:bg-slate-50/50 transition-colors duration-150 align-middle">
+
+                        <!-- Lagnamn -->
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <div class="avatar placeholder">
+                                    <div class="bg-primary/10 text-primary rounded-full w-10 h-10 ring-1 ring-primary/20 flex items-center justify-center">
+                                        <span class="text-lg font-bold" th:text="${#strings.substring(team.name, 0, 1)}">L</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-bold text-slate-800" th:text="${team.name}">Lag namn</div>
+                                    <div class="text-xs opacity-50 font-mono" th:text="'ID: ' + ${team.id}">ID: 123</div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Åldersgrupp -->
+                        <td class="py-4 px-6" th:text="${team.ageGroup}">P16</td>
+
+                        <!-- Kön تم حذفه هنا تماماً -->
+
+                        <!-- Huvudtränare -->
+                        <td class="py-4 px-6" th:text="${team.coachName ?: '—'}">—</td>
+
+                        <!-- Aktiv -->
+                        <td class="py-4 px-6 text-center">
+                            <span th:if="${team.active}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                Aktiv
+                            </span>
+                            <span th:unless="${team.active}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-100">
+                                <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                                Inaktiv
+                            </span>
+                        </td>
+
+                        <!-- Åtgärder -->
+                        <td class="py-4 px-6">
+                            <div class="flex items-center justify-end gap-1">
+                                <a th:href="@{/admin/teams/edit/{id}(id=${team.id})}"
+                                   class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-primary hover:bg-primary/10 transition-colors"
+                                   title="Redigera lag">
+                                    <i class="fa-regular fa-pen-to-square text-lg"></i>
+                                </a>
+
+                                <button type="button"
+                                        th:attr="data-id=${team.id}, data-name=${team.name}"
+                                        onclick="confirmDelete(this)"
+                                        class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-colors"
+                                        title="Ta bort lag">
+                                    <i class="fa-regular fa-trash-can text-lg"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State -->
+            <div th:if="${#lists.isEmpty(teams)}" class="flex flex-col items-center justify-center py-20 text-center px-6 bg-slate-50/50">
+                <div class="relative w-20 h-20 mb-6">
+                    <div class="absolute inset-0 bg-primary/5 rounded-full"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fa-solid fa-users-slash text-4xl text-primary/30"></i>
+                    </div>
+                </div>
+                <h3 class="font-heading font-bold text-xl text-slate-800 mb-1">Inga lag registrerade</h3>
+                <p class="text-slate-500 text-sm mb-6 max-w-sm">Det finns inga lag i systemet ännu.</p>
+                <a th:href="@{/team-register}" class="btn btn-primary btn-sm rounded-xl shadow-md">
+                    <i class="fa-solid fa-plus mr-2"></i> Skapa nytt lag
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</main>
+
+<!-- SweetAlert Delete Confirmation -->
+<script>
+    function confirmDelete(button) {
+        const teamId = button.getAttribute('data-id');
+        const teamName = button.getAttribute('data-name');
+        const deleteUrl = `/admin/teams/delete/${teamId}`;
+
+        Swal.fire({
+            title: 'Är du säker?',
+            html: `Du är på väg att ta bort laget <strong class="text-slate-800">${teamName}</strong>.<br>Denna åtgärd kan inte ångras!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#1e3a8a',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: '<i class="fa-solid fa-trash-can mr-2"></i> Ja, ta bort!',
+            cancelButtonText: 'Avbryt',
+            customClass: {
+                popup: 'rounded-3xl font-sans',
+                confirmButton: 'btn btn-primary rounded-xl shadow-lg border-none text-white',
+                cancelButton: 'btn btn-ghost rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = deleteUrl;
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

@@ -18,9 +18,11 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
      * Find all teams for a specific coach
      */
     List<Team> findByCoachId(Long coachId);
+List<Team> findAllByOrderByCreatedDateDesc();
 
     /**
      * Find all teams for a specific coach by email
      */
     List<Team> findByCoachEmail(String email);
 }
+
