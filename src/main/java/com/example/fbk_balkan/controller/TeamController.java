@@ -3,6 +3,7 @@ package com.example.fbk_balkan.controller;
 import com.example.fbk_balkan.dto.CoachDto;
 import com.example.fbk_balkan.dto.team.TeamCreateDto;
 import com.example.fbk_balkan.dto.team.TeamDto;
+import com.example.fbk_balkan.entity.Role;
 import com.example.fbk_balkan.repository.CoachRepository;
 import com.example.fbk_balkan.service.TeamService;
 import jakarta.validation.Valid;
@@ -48,7 +49,10 @@ public String registerTeam(
 
     //  Handle validation errors
     if (bindingResult.hasErrors()) {
-        model.addAttribute("coaches", coachRepository.findAll());
+//        model.addAttribute("coaches", coachRepository.findAll());
+
+        //Bring in only users whose role is COACH
+        model.addAttribute("coaches", coachRepository.findByRole(Role.COACH));
         return "private-pages/team-register"; // show form with errors
     }
 

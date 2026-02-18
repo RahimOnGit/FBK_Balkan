@@ -1,11 +1,13 @@
 package com.example.fbk_balkan.controller;
 
+import com.example.fbk_balkan.dto.team.TeamListItemDTO;
 import com.example.fbk_balkan.entity.TrialRegistration;
 import com.example.fbk_balkan.entity.TrialStatus;
 import com.example.fbk_balkan.repository.CoachRepository;
 import com.example.fbk_balkan.repository.PlayerRepository;
 import com.example.fbk_balkan.repository.TeamRepository;
 import com.example.fbk_balkan.repository.TrialRegistrationRepository;
+import com.example.fbk_balkan.service.TeamService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,16 +23,19 @@ public class AdminDashboardController {
     private final PlayerRepository playerRepository;
     private final TrialRegistrationRepository trialRegistrationRepository;
     private final CoachRepository coachRepository;
+    private final TeamService teamService;
 
     public AdminDashboardController(
             TeamRepository teamRepository,
             PlayerRepository playerRepository,
             TrialRegistrationRepository trialRegistrationRepository,
-            CoachRepository coachRepository) {
+            CoachRepository coachRepository,
+            TeamService teamService) {
         this.teamRepository = teamRepository;
         this.playerRepository = playerRepository;
         this.trialRegistrationRepository = trialRegistrationRepository;
         this.coachRepository = coachRepository;
+        this.teamService = teamService;
     }
 
     @GetMapping("/admin/dashboard")
@@ -38,8 +43,6 @@ public class AdminDashboardController {
 
         long teamCount     = teamRepository.count();
         long playerCount   = playerRepository.count();
-
-
         long pendingTrials = trialRegistrationRepository.countByStatus(TrialStatus.PENDING);
 
 
@@ -48,10 +51,15 @@ public class AdminDashboardController {
         List<TrialRegistration> latestTrials = trialRegistrationRepository
                 .findTop10ByOrderByCreatedAtDesc();
 
+        List<TeamListItemDTO> latestTeams = teamService.findLatestTeams(10);
+
         model.addAttribute("teamCount",     teamCount);
         model.addAttribute("playerCount",   playerCount);
         model.addAttribute("pendingTrials", pendingTrials);
         model.addAttribute("latestTrials",  latestTrials);
+
+
+        model.addAttribute("latestTeams", latestTeams);
 
         return "admin/dashboard";
     }

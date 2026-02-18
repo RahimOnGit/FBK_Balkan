@@ -1,5 +1,6 @@
 package com.example.fbk_balkan.service;
 
+import com.example.fbk_balkan.dto.team.TeamListItemDTO;
 import com.example.fbk_balkan.dto.team.TeamCreateDto;
 import com.example.fbk_balkan.dto.team.TeamDto;
 import com.example.fbk_balkan.dto.team.TeamMapper;
@@ -45,14 +46,13 @@ public class TeamService {
         team.setCreatedDate(LocalDateTime.now());
         team.setUpdatedDate(LocalDateTime.now());
 
-        // save entity
+//    save entity
         Team savedTeam = teamRepository.save(team);
-        // access to coach while transaction is open
+        //  access to coach while transaction is open
         savedTeam.getCoach().getEmail();
-        // convert entity to DTO and return
+//    convert entity to DTO and return
         return teamMapper.toDto(savedTeam);
     }
-
     /**
      * Fetch all teams for a specific coach
      */
@@ -65,6 +65,55 @@ public class TeamService {
 
         return teams.stream()
                 .map(teamMapper::toDto)
+                .collect(Collectors.toList());
+    }
+//
+public List<TeamListItemDTO> findAllForAdminList() {
+    return teamRepository.findAll().stream()
+            .map(team -> {
+                TeamListItemDTO dto = new TeamListItemDTO();
+                dto.setId(team.getId());
+                dto.setName(team.getName());
+                dto.setAgeGroup(team.getAgeGroup());
+                dto.setGender(team.getGender());
+                dto.setActive(team.isActive());
+                dto.setCoachName(
+                        team.getCoach() != null
+                                ? team.getCoach().getFirstName() + " " + team.getCoach().getLastName()
+                                : "—"
+                );
+                return dto;
+            })
+            .toList();
+}
+
+    public List<TeamListItemDTO> findLatestTeams(int limit) {
+        return teamRepository.findAllByOrderByCreatedDateDesc()
+                .stream()
+                .limit(limit)
+                .map(team -> {
+                    TeamListItemDTO dto = new TeamListItemDTO();
+                    dto.setId(team.getId());
+                    dto.setName(team.getName());
+                    dto.setAgeGroup(team.getAgeGroup());
+//                    dto.setGender(team.getGender() != null ? team.getGender().name() : "—");
+                    dto.setGender(team.getGender() != null ? team.getGender() : null);
+                    dto.setActive(team.isActive());
+                    dto.setCoachName(team.getCoach() != null
+                            ? team.getCoach().getFirstName() + " " + team.getCoach().getLastName()
+                            : "—");
+
+                    dto.setGenderDisplay(switch (team.getGender()) {
+                        case MALE -> "Pojkar";
+                        case FEMALE -> "Flickor";
+//                        case MIXED -> "Mixat";
+                        default -> "—";
+                    });
+
+                    dto.setCreatedDate(team.getCreatedDate());
+
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 
