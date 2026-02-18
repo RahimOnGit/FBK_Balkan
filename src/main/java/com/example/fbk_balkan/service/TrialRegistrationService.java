@@ -27,21 +27,21 @@ public class TrialRegistrationService {
         String referralOther = sanitize(trialRegistrationDTO.getReferralOther());
         // Map DTO to entity
         var trialRegistration = new com.example.fbk_balkan.entity.TrialRegistration();
-        trialRegistration.setFirstName(trialRegistrationDTO.getFirstName());
-        trialRegistration.setLastName(trialRegistrationDTO.getLastName());
+        trialRegistration.setFirstName(firstName);
+        trialRegistration.setLastName(lastName);
         trialRegistration.setBirthDate(trialRegistrationDTO.getBirthDate());
-        trialRegistration.setRelativeName(trialRegistrationDTO.getRelativeName());
-        trialRegistration.setRelativeEmail(trialRegistrationDTO.getRelativeEmail());
-        trialRegistration.setRelativeNumber(trialRegistrationDTO.getRelativeNumber());
+        trialRegistration.setRelativeName(relativeName);
+        trialRegistration.setRelativeEmail(relativeEmail);
+        trialRegistration.setRelativeNumber(relativeNumber);
         trialRegistration.setPreferredTrainingDate(trialRegistrationDTO.getPreferredTrainingDate());
         trialRegistration.setGender(trialRegistrationDTO.getGender());          // NEW
-        trialRegistration.setCurrentClub(trialRegistrationDTO.getCurrentClub()); // NEW
+        trialRegistration.setCurrentClub(currentClub); // NEW
         trialRegistration.setClubYears(trialRegistrationDTO.getClubYears());     // NEW
         trialRegistration.setReferralSource(trialRegistrationDTO.getReferralSource());// NEW
 
         trialRegistration.setReferralOther(
                 trialRegistrationDTO.getReferralSource() == ReferralSource.OTHER
-                        ? trialRegistrationDTO.getReferralOther()
+                        ? referralOther // senetize
                         : null
         );
 
@@ -52,26 +52,25 @@ public class TrialRegistrationService {
         trialRegistrationRepository.save(trialRegistration);
 
         // used here  builder methode to add new fields any time easily.
+        //  Return DTO with sanitized values
         return TrialRegistrationDTO.builder()
                 .id(trialRegistration.getId())
-                .firstName(trialRegistration.getFirstName())
-                .lastName(trialRegistration.getLastName())
+                .firstName(firstName)
+                .lastName(lastName)
                 .birthDate(trialRegistration.getBirthDate())
-                .relativeName(trialRegistration.getRelativeName())
-                .relativeEmail(trialRegistration.getRelativeEmail())
-                .relativeNumber(trialRegistration.getRelativeNumber())
+                .relativeName(relativeName)
+                .relativeEmail(relativeEmail)
+                .relativeNumber(relativeNumber)
                 .preferredTrainingDate(trialRegistration.getPreferredTrainingDate())
-                .gender(trialRegistration.getGender())          // NEW
-                .currentClub(trialRegistration.getCurrentClub()) // NEW
-                .clubYears(trialRegistration.getClubYears())    // NEW
-                .referralSource(trialRegistration.getReferralSource())  // NEW
-                .referralOther(trialRegistration.getReferralOther())// NEW
+                .gender(trialRegistration.getGender())
+                .currentClub(currentClub)
+                .clubYears(trialRegistration.getClubYears())
+                .referralSource(trialRegistration.getReferralSource())
+                .referralOther(trialRegistration.getReferralOther())
                 .status(trialRegistration.getStatus())
                 .createdAt(trialRegistration.getCreatedAt().atStartOfDay())
                 .build();
-
     }
-
 
 // Sanitization helper
 private String sanitize(String value) {
