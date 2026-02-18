@@ -2,7 +2,6 @@ package com.example.fbk_balkan.service;
 
 import com.example.fbk_balkan.dto.TrialRegistrationDTO;
 import com.example.fbk_balkan.entity.Coach;
-import com.example.fbk_balkan.entity.TrialRegistration;
 import com.example.fbk_balkan.enums.ReferralSource;
 import com.example.fbk_balkan.repository.CoachRepository;
 import com.example.fbk_balkan.repository.TrialRegistrationRepository;
@@ -79,6 +78,7 @@ public class TrialRegistrationService {
     }
 
     public List<TrialRegistrationDTO> fetchTrialRegistrationByCoach(Long coachId) {
+//convert repo into service
         Coach coach = coachRepository.findById(coachId).
                 orElseThrow(()-> new IllegalArgumentException("coach not found"));
 
