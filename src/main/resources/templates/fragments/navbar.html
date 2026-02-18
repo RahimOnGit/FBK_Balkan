@@ -142,9 +142,27 @@
 <!--    </div>-->
 <!--</header>-->
 
+                <!-- Profile -->
+                <div sec:authorize="isAuthenticated()" class="dropdown dropdown-end">
+                    <label tabindex="0" class="btn btn-ghost btn-circle avatar btn-sm">
+                        <div class="w-7 rounded-full ring ring-base-100 ring-offset-1 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 class="w-4 h-4 stroke-current text-base-100"
+                                 fill="none" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                        </div>
+                    </label>
 
                                         <!--////////-->
 
+                        <div sec:authorize="hasRole('ADMIN')">
+                            <li><hr></li>
+                            <li class="menu-title text-xs text-primary">Admin Verktyg</li>
+                            <li><a href="/admin/dashboard">Admin Dashboard</a></li>
+                            <li><a href="/admin/news">Hantera Nyheter</a></li>
+                        </div>
 
 <header class="shadow-inner relative z-[100]" th:fragment="navbar"
         xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
@@ -188,6 +206,27 @@
                         <li><a href="/contact" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-secondary transition-colors text-sm lg:text-base whitespace-nowrap">Kommande Aktiviteter</a></li>
                         <li><a href="/about" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-secondary transition-colors text-sm lg:text-base whitespace-nowrap">Om Klubben</a></li>
                         <li><a href="/contact" class="text-base-100 font-virage font-extrabold italic uppercase hover:text-secondary transition-colors text-sm lg:text-base whitespace-nowrap">Intresseanmälan</a></li>
+
+                        <li class="dropdown relative group">
+                            <!-- Clickable trigger: text + triangle -->
+                            <button class="flex items-center text-base-100 font-bold uppercase hover:text-secondary transition-colors focus:outline-none">
+                                <span>Våra Lag</span>
+                                <span class="ml-1 text-sm opacity-0 group-hover:opacity-100 transition-opacity">▾</span>
+                            </button>
+
+                            <!-- Dropdown Menu -->
+                            <ul tabindex="0"
+                                class="dropdown-content mt-2 shadow-lg bg-base-100 border border-base-200
+               w-auto min-w-[12rem] max-w-[20rem] whitespace-nowrap p-0
+               overflow-hidden z-50 rounded-md">
+                                <li th:each="team : ${publicTeams}">
+                                    <a th:href="@{/public-teams/{id}(id=${team.id})}"
+                                       th:text="${team.ageGroup}"
+                                       class="block px-4 py-2 hover:bg-base-200 w-full">
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </nav>
             </div>

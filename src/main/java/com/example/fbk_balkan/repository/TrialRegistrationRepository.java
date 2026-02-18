@@ -16,4 +16,10 @@ public interface TrialRegistrationRepository extends JpaRepository<TrialRegistra
     List<TrialRegistration> findTop10ByOrderByCreatedAtDesc();
 
     List<TrialRegistration> findByStatusOrderByCreatedAtDesc(TrialStatus status);
+
+//   trials reqs for coach
+    List<TrialRegistration> findByCoachId(Long coachId);
+    List<TrialRegistration> findByCoachIdAndStatus(Long coachId , TrialStatus status);
+    List<TrialRegistration> findByCoachIdOrderByCreatedAtDesc(Long coachId);
+
 }
