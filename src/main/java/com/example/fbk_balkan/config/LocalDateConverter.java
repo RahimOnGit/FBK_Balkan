@@ -9,22 +9,6 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeParseException;
 
-//@Converter(autoApply = true)
-//public class LocalDateConverter
-//        implements AttributeConverter<LocalDate, String> {
-//
-//    @Override
-//    public String convertToDatabaseColumn(LocalDate date) {
-//        return date == null ? null : date.toString();
-//    }
-//
-//    @Override
-//    public LocalDate convertToEntityAttribute(String value) {
-//        return value == null ? null : LocalDate.parse(value);
-//    }
-//}
-
-//@Converter(autoApply = true)
 public class LocalDateConverter implements AttributeConverter<LocalDate, String> {
 
     @Override
@@ -38,10 +22,10 @@ public class LocalDateConverter implements AttributeConverter<LocalDate, String>
             return null;
         }
         try {
-            // إذا كان ISO date
+
             return LocalDate.parse(dbData);
         } catch (DateTimeParseException e) {
-            // إذا كان timestamp عددي (الحالة القديمة)
+
             try {
                 long millis = Long.parseLong(dbData);
                 return Instant.ofEpochMilli(millis)

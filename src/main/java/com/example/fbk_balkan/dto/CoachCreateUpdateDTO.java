@@ -8,7 +8,9 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class CreateCoachDto {
+public class CoachCreateUpdateDTO {
+
+    private Long id;
 
     @NotBlank(message = "E-postadress krävs")
     @Email(message = "Ogiltig e-postadress")
@@ -22,10 +24,14 @@ public class CreateCoachDto {
     @Size(min = 2, max = 50, message = "Efternamn måste vara mellan 2 och 50 tecken")
     private String lastName;
 
-    @NotBlank(message = "Lösenord krävs")
-    @Size(min = 8, message = "Lösenord måste vara minst 8 tecken")
+//    @NotBlank(message = "Lösenord krävs")
+//    @Size(min = 8, message = "Lösenord måste vara minst 8 tecken")
+//    @ConditionalOnNotEmpty
     private String password;
 
     @NotNull(message = "Roll krävs")
-    private Role role;
+//    private Role role;
+    private Role role = Role.COACH;
+
+    private boolean enabled = true;
 }
