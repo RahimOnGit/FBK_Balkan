@@ -36,8 +36,8 @@ public class SecurityConfig {
 
 //                        publicly accessible URLs
                                 .requestMatchers("/", "/css/**", "/images/**", "/login", "/login-error").permitAll()
-                                .requestMatchers("/trial-registration" , "/trial-registration-success" , "/about").permitAll()
-                                .requestMatchers("/news", "/news/**").permitAll()
+                                .requestMatchers("/trial-registration", "/about").permitAll()
+                                .requestMatchers("/news", "/news/**","/public-teams/**").permitAll()
 
                                 .requestMatchers("/team-register").hasRole("ADMIN")
 //                      roles-based access control
@@ -47,7 +47,7 @@ public class SecurityConfig {
                                 .hasRole("ADMIN")
                         // Publicly accessible URLs
                         .requestMatchers("/", "/css/**", "/images/**", "/login", "/login-error").permitAll()
-                        .requestMatchers("/trial-registration", "/trial-registration-success", "/about").permitAll()
+                        .requestMatchers("/trial-registration", "/about").permitAll()
                         .requestMatchers("/news", "/news/**").permitAll()
 
                         // Role-based access control
