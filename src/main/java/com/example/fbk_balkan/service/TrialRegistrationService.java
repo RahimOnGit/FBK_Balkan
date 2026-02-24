@@ -6,6 +6,7 @@ import com.example.fbk_balkan.enums.ReferralSource;
 import com.example.fbk_balkan.repository.CoachRepository;
 import com.example.fbk_balkan.repository.TrialRegistrationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,29 +33,50 @@ public class TrialRegistrationService {
         String referralOther = sanitize(trialRegistrationDTO.getReferralOther());
         // Map DTO to entity
         var trialRegistration = new com.example.fbk_balkan.entity.TrialRegistration();
-        trialRegistration.setFirstName(trialRegistrationDTO.getFirstName());
-        trialRegistration.setLastName(trialRegistrationDTO.getLastName());
+        trialRegistration.setFirstName(firstName);
+        trialRegistration.setLastName(lastName);
         trialRegistration.setBirthDate(trialRegistrationDTO.getBirthDate());
-        trialRegistration.setRelativeName(trialRegistrationDTO.getRelativeName());
-        trialRegistration.setRelativeEmail(trialRegistrationDTO.getRelativeEmail());
-        trialRegistration.setRelativeNumber(trialRegistrationDTO.getRelativeNumber());
+        trialRegistration.setRelativeName(relativeName);
+        trialRegistration.setRelativeEmail(relativeEmail);
+        trialRegistration.setRelativeNumber(relativeNumber);
         trialRegistration.setPreferredTrainingDate(trialRegistrationDTO.getPreferredTrainingDate());
         trialRegistration.setGender(trialRegistrationDTO.getGender());          // NEW
-        trialRegistration.setCurrentClub(trialRegistrationDTO.getCurrentClub()); // NEW
+        trialRegistration.setCurrentClub(currentClub); // NEW
         trialRegistration.setClubYears(trialRegistrationDTO.getClubYears());     // NEW
         trialRegistration.setReferralSource(trialRegistrationDTO.getReferralSource());// NEW
 
         trialRegistration.setReferralOther(
                 trialRegistrationDTO.getReferralSource() == ReferralSource.OTHER
-                        ? trialRegistrationDTO.getReferralOther()
+                        ? referralOther
                         : null
         );
 
         trialRegistration.setStatus(com.example.fbk_balkan.entity.TrialStatus.PENDING);
         trialRegistration.setCreatedAt(LocalDate.from(LocalDateTime.now()));
 
+        // Duplicate check
+        boolean exists = trialRegistrationRepository
+                .existsByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndBirthDateAndPreferredTrainingDate(
+                        firstName,
+                        lastName,
+                        trialRegistrationDTO.getBirthDate(),
+                        trialRegistrationDTO.getPreferredTrainingDate()
+                );
+
+        if (exists) {
+            throw new IllegalStateException("Barnet är redan registrerat för detta provträningstillfälle.");
+        }
+        try {
+            trialRegistrationRepository.save(trialRegistration);
+            //Handles race conditions
+        } catch (DataIntegrityViolationException ex) {
+            throw new IllegalStateException("Barnet är redan registrerat för detta provträningstillfälle.");
+        }
+
+
+
         // Save entity
-        trialRegistrationRepository.save(trialRegistration);
+        //trialRegistrationRepository.save(trialRegistration);
 
         // used here  builder methode to add new fields any time easily.
         return TrialRegistrationDTO.builder()

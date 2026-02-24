@@ -5,6 +5,7 @@ import com.example.fbk_balkan.entity.TrialStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -21,5 +22,12 @@ public interface TrialRegistrationRepository extends JpaRepository<TrialRegistra
     List<TrialRegistration> findByCoachId(Long coachId);
     List<TrialRegistration> findByCoachIdAndStatus(Long coachId , TrialStatus status);
     List<TrialRegistration> findByCoachIdOrderByCreatedAtDesc(Long coachId);
+    boolean existsByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndBirthDateAndPreferredTrainingDate(
+            String firstName,
+            String lastName,
+            LocalDate birthDate,
+            LocalDate preferredTrainingDate
+    );
+
 
 }
