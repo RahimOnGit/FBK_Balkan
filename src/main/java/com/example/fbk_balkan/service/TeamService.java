@@ -3,7 +3,7 @@ package com.example.fbk_balkan.service;
 import com.example.fbk_balkan.dto.team.TeamCreateDto;
 import com.example.fbk_balkan.dto.team.TeamDto;
 import com.example.fbk_balkan.dto.team.TeamMapper;
-import com.example.fbk_balkan.entity.Coach;
+import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.entity.Team;
 import com.example.fbk_balkan.repository.CoachRepository;
 import com.example.fbk_balkan.repository.TeamRepository;
@@ -37,7 +37,7 @@ public class TeamService {
         }
 
         // validate and fetch coach
-        Coach coach = coachRepository.findById(teamCreateDto.getCoachId())
+        User coach = coachRepository.findById(teamCreateDto.getCoachId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid coach ID"));
 
         // convert DTO to entity
@@ -58,7 +58,7 @@ public class TeamService {
      */
     @Transactional(readOnly = true)
     public List<TeamDto> getTeamsByCoachId(Long coachId) {
-        Coach coach = coachRepository.findById(coachId)
+        User coach = coachRepository.findById(coachId)
                 .orElseThrow(() -> new IllegalArgumentException("Coach not found"));
 
         List<Team> teams = teamRepository.findByCoachId(coachId);
@@ -73,7 +73,7 @@ public class TeamService {
      */
     @Transactional(readOnly = true)
     public List<TeamDto> getTeamsByCoachEmail(String email) {
-        Coach coach = coachRepository.findByEmail(email)
+        User coach = coachRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Coach not found"));
 
         return getTeamsByCoachId(coach.getId());

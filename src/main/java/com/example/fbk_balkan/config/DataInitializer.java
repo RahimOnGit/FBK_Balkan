@@ -1,7 +1,7 @@
 package com.example.fbk_balkan.config;
 
-import com.example.fbk_balkan.entity.Coach;
 import com.example.fbk_balkan.entity.Role;
+import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.repository.CoachRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -21,7 +21,7 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         // Create a default coach if none exists
         if (coachRepository.count() == 0) {
-            Coach coach = new Coach();
+            User coach = new User();
 //            coach.setUsername("coach");
             coach.setFirstName("Rahim");
             coach.setLastName("Elhaj");
@@ -36,7 +36,7 @@ public class DataInitializer implements CommandLineRunner {
 
         // Create a default social admin if none exists
         if (!coachRepository.findByEmail("social@fbkbalkan.se").isPresent()) {
-            Coach socialAdmin = new Coach();
+            User socialAdmin = new User();
 //            socialAdmin.setUsername("socialadmin");
             socialAdmin.setLastName("Khalid");
             socialAdmin.setFirstName("IB");
@@ -51,7 +51,7 @@ public class DataInitializer implements CommandLineRunner {
 
         // Create a default admin if none exists
         if (!coachRepository.findByEmail("admin@fbkbalkan.se").isPresent()) {
-            Coach admin = new Coach();
+            User admin = new User();
 //            admin.setUsername("admin");
             admin.setLastName("Semo");
             admin.setFirstName("Saif");

@@ -2,7 +2,7 @@ package com.example.fbk_balkan.service;
 
 import com.example.fbk_balkan.dto.CoachResponseDto;
 import com.example.fbk_balkan.dto.CreateCoachDto;
-import com.example.fbk_balkan.entity.Coach;
+import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.entity.Role;
 import com.example.fbk_balkan.repository.CoachRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +26,9 @@ public class CoachService {
 
 
 //  create coach
-    public Coach createCoach(CreateCoachDto dto)
+    public User createCoach(CreateCoachDto dto)
     {
-Coach coach = new Coach();
+User coach = new User();
 coach.setFirstName(dto.getFirstName());
 coach.setLastName(dto.getLastName());
 coach.setEmail(dto.getEmail());

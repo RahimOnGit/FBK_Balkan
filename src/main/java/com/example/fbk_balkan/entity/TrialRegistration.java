@@ -73,7 +73,7 @@ private ReferralSource referralSource;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="coach_id" , nullable = true)
-    private Coach coach;
+    private User coach;
 
     @PrePersist
     protected void onCreate() {

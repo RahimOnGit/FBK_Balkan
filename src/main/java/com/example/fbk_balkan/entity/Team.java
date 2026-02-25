@@ -35,7 +35,7 @@ public class Team {
     @ManyToOne
     //@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "coach_id") // Foreign key to Coach table
-    private Coach coach;
+    private User coach;
 
     //  Add @Transient getCoachId() later for API
     //  NEVER store contact details here GDPR!

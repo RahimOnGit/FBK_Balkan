@@ -1,9 +1,9 @@
 package com.example.fbk_balkan.service;
 
 import com.example.fbk_balkan.dto.TrialRegistrationDTO;
-import com.example.fbk_balkan.entity.Coach;
 import com.example.fbk_balkan.entity.Team;
 import com.example.fbk_balkan.entity.TrialRegistration;
+import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.enums.Gender;
 import com.example.fbk_balkan.enums.ReferralSource;
 import com.example.fbk_balkan.repository.CoachRepository;
@@ -78,7 +78,7 @@ public class TrialRegistrationService {
         if (!matchingTeams.isEmpty()) {
             // Take the first matching team's coach
             // (If multiple teams same year/gender exist, first active one wins)
-            Coach assignedCoach = matchingTeams.get(0).getCoach();
+            User assignedCoach = matchingTeams.get(0).getCoach();
             trialRegistration.setCoach(assignedCoach);
         }
         // If still no match → coach remains null → admin assigns later
@@ -125,8 +125,10 @@ public class TrialRegistrationService {
     private Team.Gender mapToTeamGender(Gender gender) {
         if (gender == null) return Team.Gender.MIXED;
         return switch (gender) {
-            case MALE   -> Team.Gender.MALE;
-            case FEMALE -> Team.Gender.FEMALE;
+            case MALE, ANNAT, VillEjAnge , FEMALE -> Team.Gender.MALE;
+
+            //change this if they made a female team right now there is no
+//            case FEMALE -> Team.Gender.FEMALE;
         };
     }
 

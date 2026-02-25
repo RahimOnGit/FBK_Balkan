@@ -2,7 +2,8 @@ package com.example.fbk_balkan.controller;
 
 import com.example.fbk_balkan.dto.CoachResponseDto;
 import com.example.fbk_balkan.dto.CreateCoachDto;
-import com.example.fbk_balkan.entity.Coach;
+
+import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.service.CoachService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class AdminController {
 
         try {
             // Create the coach
-            Coach coach = coachService.createCoach(dto);
+            User coach = coachService.createCoach(dto);
 
             // Add success message
             redirectAttributes.addFlashAttribute("successMessage",
@@ -63,7 +64,7 @@ public class AdminController {
     @PostMapping("/register-coach-api")
     @ResponseBody
     public CoachResponseDto createCoachApi(@RequestBody CreateCoachDto dto) {
-        Coach coach = coachService.createCoach(dto);
+        User coach = coachService.createCoach(dto);
 
         CoachResponseDto res = new CoachResponseDto();
         res.setId(coach.getId());
