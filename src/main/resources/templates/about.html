@@ -1,143 +1,269 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8">
-  <title>FBK Balkan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Om FBK Balkan | Stolthet & Gemenskap</title>
   <link th:href="@{/css/output.css}" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+  <link
+          href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+          rel="stylesheet">
+  <style>
+    .font-virage {
+      font-family: 'Roboto Condensed', sans-serif;
+    }
 
+    .hero-gradient {
+      background: linear-gradient(135deg, rgba(21, 59, 111, 0.95) 0%, rgba(21, 59, 111, 0.8) 100%);
+    }
+  </style>
 </head>
-<body>
 
-<header  class="bg-primary">
+<body class="bg-base-100 font-virage text-base-content antialiased">
+
+<header class="sticky top-0 z-[100] bg-primary shadow-lg">
   <div th:replace="~{fragments/navbar::navbar}"></div>
 </header>
 
+<main>
+  <!-- HERO SECTION -->
+  <section class="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-primary py-20">
+    <div class="absolute inset-0 opacity-20">
+      <div
+              class="absolute top-0 left-0 w-96 h-96 bg-secondary rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2">
+      </div>
+      <div
+              class="absolute bottom-0 right-0 w-96 h-96 bg-accent rounded-full blur-[120px] translate-x-1/2 translate-y-1/2">
+      </div>
+    </div>
 
-<!---->
-<section class="bg-base-100 py-16">
-  <div class="max-w-6xl mx-auto px-4 space-y-20">
-
-    <!-- HERO -->
-    <div class="text-center space-y-4">
-      <h1 class="text-4xl md:text-5xl font-bold">
-        Vem är <span class="text-primary">FBK Balkan</span>?
+    <div class="container mx-auto px-4 relative z-10 text-center">
+      <div
+              class="inline-block px-4 py-1 mb-6 border border-secondary/30 rounded-full bg-secondary/10 text-secondary text-sm font-bold tracking-widest uppercase">
+        Etablerad 1962
+      </div>
+      <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tighter italic">
+        Vem är <span class="text-secondary">FBK Balkan</span>?
       </h1>
-      <p class="text-lg text-base-content/70 max-w-3xl mx-auto">
-        FBK Balkan är en fotbollsklubb från Malmö, grundad 1962, med stark lokal förankring
-        och ett av stadens största samhällsengagemang inom barn- och ungdomsfotboll.
+      <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+        FBK Balkan är en fotbollsklubb från Malmö med stark lokal förankring och ett av stadens största
+        samhällsengagemang inom barn- och ungdomsfotboll.
       </p>
     </div>
+  </section>
 
-    <!-- QUICK FACTS -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="card bg-base-200 shadow">
-        <div class="card-body">
-          <h3 class="card-title">⚽ Sport</h3>
-          <p>Fotboll – herrlag & omfattande ungdomsverksamhet</p>
-        </div>
-      </div>
-
-      <div class="card bg-base-200 shadow">
-        <div class="card-body">
-          <h3 class="card-title">📍 Ort</h3>
-          <p>Malmö<br>Kirsebergs IP</p>
-        </div>
-      </div>
-
-      <div class="card bg-base-200 shadow">
-        <div class="card-body">
-          <h3 class="card-title">🧒 Fokus</h3>
-          <p>Utveckling, inkludering och integration</p>
-        </div>
-      </div>
-
-      <div class="card bg-base-200 shadow">
-        <div class="card-body">
-          <h3 class="card-title">🏟️ Seniorlag</h3>
-          <p>Division 2–3 nivå historiskt</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- STORY -->
-    <div class="grid md:grid-cols-2 gap-12 items-center">
-      <div class="space-y-4">
-        <h2 class="text-3xl font-bold">Mer än bara fotboll</h2>
-        <p class="text-base-content/80">
-          FBK Balkan är känd som en <strong>talangfabrik</strong> där unga spelare får chansen
-          att utvecklas – både på och utanför planen.
-        </p>
-        <p class="text-base-content/80">
-          Om du inte visste det: <strong>Zlatan Ibrahimović</strong> tog sina första steg i
-          fotbollen här – en del av klubbens stolta historia.
-        </p>
-      </div>
-
-      <div class="bg-base-200 p-8 rounded-2xl shadow space-y-3">
-        <h3 class="font-semibold text-xl">Vad utmärker klubben?</h3>
-        <ul class="list-disc list-inside space-y-2 text-base-content/80">
-          <li>En av Malmös största ungdomsverksamheter</li>
-          <li>Tydligt socialt ansvar och lokal närvaro</li>
-          <li>Stark identitet som mötesplats för olika kulturer</li>
-          <li>Vi satsar på att utveckla nästa stora talang</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- WHO IS WELCOME -->
-    <div class="bg-primary text-primary-content rounded-3xl p-10 space-y-4">
-      <h2 class="text-3xl font-bold">Vem är välkommen?</h2>
-      <p class="max-w-3xl">
-        Alla är välkomna till FBK Balkan. Man behöver inte komma från Balkanregionen –
-        namnet lever kvar sedan 1962. Alla barn och ungdomar kan träna, utvecklas och spela matcher med oss.
-      </p>
-    </div>
-
-    <!-- VALUES -->
-    <div class="space-y-10">
-      <h2 class="text-3xl font-bold text-center">Våra kärnvärden</h2>
-
+  <!-- QUICK FACTS -->
+  <section class="py-12 -mt-10 relative z-20">
+    <div class="container mx-auto px-4">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="card bg-base-200 shadow">
-          <div class="card-body text-center">
-            <h3 class="card-title justify-center">Respekt</h3>
-            <p>På och utanför planen</p>
+        <!-- Sport -->
+        <div
+                class="card bg-base-100 shadow-xl border border-base-200 hover:border-primary/30 transition-all duration-300">
+          <div class="card-body items-center text-center">
+            <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+                   stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                <path d="M2 12h20"></path>
+              </svg>
+            </div>
+            <h3 class="card-title text-primary uppercase italic text-lg tracking-wider">Sport</h3>
+            <p class="text-sm opacity-70">Fotboll – herrlag & omfattande ungdomsverksamhet</p>
           </div>
         </div>
-
-        <div class="card bg-base-200 shadow">
-          <div class="card-body text-center">
-            <h3 class="card-title justify-center">Trygghet</h3>
-            <p>Vuxna förebilder och tydliga ramar</p>
+        <!-- Ort -->
+        <div
+                class="card bg-base-100 shadow-xl border border-base-200 hover:border-primary/30 transition-all duration-300">
+          <div class="card-body items-center text-center">
+            <div class="w-12 h-12 bg-secondary/10 rounded-xl flex items-center justify-center text-secondary mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+                   stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <h3 class="card-title text-primary uppercase italic text-lg tracking-wider">Ort</h3>
+            <p class="text-sm opacity-70">Malmö<br>Kirsebergs IP</p>
           </div>
         </div>
-
-        <div class="card bg-base-200 shadow">
-          <div class="card-body text-center">
-            <h3 class="card-title justify-center">Ansvar</h3>
-            <p>Individuellt och kollektivt</p>
+        <!-- Fokus -->
+        <div
+                class="card bg-base-100 shadow-xl border border-base-200 hover:border-primary/30 transition-all duration-300">
+          <div class="card-body items-center text-center">
+            <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center text-accent mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+                   stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            </div>
+            <h3 class="card-title text-primary uppercase italic text-lg tracking-wider">Fokus</h3>
+            <p class="text-sm opacity-70">Utveckling, inkludering och integration</p>
           </div>
         </div>
-
-        <div class="card bg-base-200 shadow">
-          <div class="card-body text-center">
-            <h3 class="card-title justify-center">Utveckling</h3>
-            <p>Som spelare och människa</p>
+        <!-- Seniorlag -->
+        <div
+                class="card bg-base-100 shadow-xl border border-base-200 hover:border-primary/30 transition-all duration-300">
+          <div class="card-body items-center text-center">
+            <div class="w-12 h-12 bg-info/10 rounded-xl flex items-center justify-center text-info mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+                   stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m4 0h1m-5 4h1m4 0h1m-5 4h1m4 0h1" />
+              </svg>
+            </div>
+            <h3 class="card-title text-primary uppercase italic text-lg tracking-wider">Seniorlag</h3>
+            <p class="text-sm opacity-70">Division 2–3 nivå historiskt</p>
           </div>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- QUOTE -->
-    <div class="text-center max-w-3xl mx-auto text-lg italic text-base-content/70">
-      För många barn är Balkan Junior det första steget in i föreningslivet –
-      fokus ligger inte bara på resultat, utan på gemenskap, självkänsla och glädje.
+  <!-- THE STORY -->
+  <section class="py-24 overflow-hidden">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col lg:flex-row gap-16 items-center">
+        <div class="lg:w-1/2 space-y-8">
+          <h2 class="text-4xl md:text-5xl font-bold tracking-tighter italic uppercase text-primary">
+            Mer än bara <span class="text-secondary">fotboll</span>
+          </h2>
+          <div class="space-y-6 text-lg text-base-content/80 leading-relaxed">
+            <p>
+              FBK Balkan är känd som en <span class="font-bold text-primary">talangfabrik</span> där unga spelare får
+              chansen att utvecklas – både på och utanför planen.
+            </p>
+            <div class="p-8 bg-base-200 rounded-3xl border-l-[6px] border-secondary relative group transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   class="w-12 h-12 absolute top-4 right-4 text-primary opacity-5 group-hover:opacity-10 transition-opacity"
+                   fill="currentColor" viewBox="0 0 24 24">
+                <path
+                        d="M14.017 21L14.017 18C14.017 16.8954 14.9125 16 16.0171 16H19.0171C19.5694 16 20.0171 15.5523 20.0171 15V9C20.0171 8.44772 19.5694 8 19.0171 8H16.0171C15.4648 8 15.0171 8.44772 15.0171 9V12C15.0171 12.5523 14.5694 13 14.0171 13H12.0171V5H22.0171V15C22.0171 18.3137 19.3308 21 16.0171 21H14.0171ZM2.01709 21L2.01709 18C2.01709 16.8954 2.91252 16 4.01709 16H7.01709C7.56937 16 8.01709 15.5523 8.01709 15V9C8.01709 8.44772 7.56937 8 7.01709 8H4.01709C3.46481 8 3.01709 8.44772 3.01709 9V12C3.01709 12.5523 2.56937 13 2.01709 13H0.0170898V5H10.0171V15C10.0171 18.3137 7.33076 21 4.01709 21H2.01709Z" />
+              </svg>
+              <p class="italic text-xl">
+                Zlatan Ibrahimović tog sina första steg i fotbollen här – en del av klubbens stolta historia.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:w-1/2 w-full">
+          <div class="card bg-primary text-primary-content shadow-2xl p-8 md:p-12 rounded-[2rem]">
+            <h3 class="text-3xl font-bold mb-8 uppercase italic border-b border-white/20 pb-4">Klubbens Styrkor</h3>
+            <ul class="space-y-6">
+              <li class="flex items-start gap-4">
+                <div
+                        class="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-primary font-bold text-xs shrink-0 mt-1">
+                  1</div>
+                <span class="text-lg">En av Malmös största ungdomsverksamheter</span>
+              </li>
+              <li class="flex items-start gap-4">
+                <div
+                        class="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-primary font-bold text-xs shrink-0 mt-1">
+                  2</div>
+                <span class="text-lg">Tydligt socialt ansvar och lokal närvaro</span>
+              </li>
+              <li class="flex items-start gap-4">
+                <div
+                        class="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-primary font-bold text-xs shrink-0 mt-1">
+                  3</div>
+                <span class="text-lg">Stark identitet som mötesplats för olika kulturer</span>
+              </li>
+              <li class="flex items-start gap-4">
+                <div
+                        class="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-primary font-bold text-xs shrink-0 mt-1">
+                  4</div>
+                <span class="text-lg font-bold">Vi satsar på att utveckla nästa stora talang</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
+  </section>
 
-  </div>
-</section>
+  <!-- VALUES -->
+  <section class="py-24 bg-base-200">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-bold uppercase italic text-primary tracking-tighter">Våra Kärnvärden</h2>
+        <div class="w-24 h-1 bg-secondary mx-auto mt-4 rounded-full"></div>
+      </div>
 
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Respekt -->
+        <div
+                class="card bg-base-100 p-8 text-center hover:shadow-2xl transition-all border border-transparent hover:border-secondary">
+          <h3 class="text-5xl font-black text-secondary/20 mb-4 italic uppercase outline-text">R</h3>
+          <h4 class="text-2xl font-bold text-primary mb-3 uppercase italic">Respekt</h4>
+          <p class="opacity-70">På och utanför planen gentemot alla i vår omgivning.</p>
+        </div>
+        <!-- Trygghet -->
+        <div
+                class="card bg-base-100 p-8 text-center hover:shadow-2xl transition-all border border-transparent hover:border-secondary">
+          <h3 class="text-5xl font-black text-secondary/20 mb-4 italic uppercase outline-text">T</h3>
+          <h4 class="text-2xl font-bold text-primary mb-3 uppercase italic">Trygghet</h4>
+          <p class="opacity-70">Vuxna förebilder och tydliga ramar för ungas utveckling.</p>
+        </div>
+        <!-- Ansvar -->
+        <div
+                class="card bg-base-100 p-8 text-center hover:shadow-2xl transition-all border border-transparent hover:border-secondary">
+          <h3 class="text-5xl font-black text-secondary/20 mb-4 italic uppercase outline-text">A</h3>
+          <h4 class="text-2xl font-bold text-primary mb-3 uppercase italic">Ansvar</h4>
+          <p class="opacity-70">Individuellt och kollektivt ansvar för våra handlingar.</p>
+        </div>
+        <!-- Utveckling -->
+        <div
+                class="card bg-base-100 p-8 text-center hover:shadow-2xl transition-all border border-transparent hover:border-secondary">
+          <h3 class="text-5xl font-black text-secondary/20 mb-4 italic uppercase outline-text">U</h3>
+          <h4 class="text-2xl font-bold text-primary mb-3 uppercase italic">Utveckling</h4>
+          <p class="opacity-70">En ständig strävan att växa som både spelare och människa.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CALL TO ACTION -->
+  <section class="py-24 bg-primary text-primary-content relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M0 100 C 20 0 50 0 100 100" stroke="white" stroke-width="0.5" fill="none" />
+      </svg>
+    </div>
+    <div class="container mx-auto px-4 relative z-10 text-center max-w-4xl">
+      <h2 class="text-4xl md:text-6xl font-black italic uppercase mb-8 tracking-tighter">Välkommen till Gemenskapen
+      </h2>
+      <p class="text-xl md:text-2xl mb-12 opacity-90 leading-relaxed font-light">
+        Man behöver inte komma från Balkanregionen – namnet FBK Balkan lever kvar sedan 1962. Alla är välkomna att
+        träna och växa med oss.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="/trial-registration"
+           class="btn btn-secondary btn-lg rounded-full px-10 text-primary font-bold uppercase italic hover:scale-105 transition-transform">Intresseanmälan</a>
+        <a href="/contact"
+           class="btn btn-outline btn-lg rounded-full px-10 border-white text-white hover:bg-white hover:text-primary font-bold uppercase italic transition-all">Kontakta
+          Oss</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL QUOTE -->
+  <section class="py-20 text-center container mx-auto px-4 group">
+    <div class="max-w-3xl mx-auto border-t border-base-300 pt-12">
+      <p
+              class="text-2xl md:text-3xl font-light italic text-base-content/60 leading-relaxed group-hover:text-primary transition-colors duration-500">
+        För många barn är Balkan Junior det första steget in i föreningslivet – fokus ligger inte bara på resultat,
+        utan på <span class="text-primary font-bold">gemenskap, självkänsla och glädje.</span>
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer th:replace="~{fragments/footer::footer}"></footer>
 
 </body>
+
 </html>

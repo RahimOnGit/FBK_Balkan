@@ -1,6 +1,5 @@
 package com.example.fbk_balkan.security;
 
-import com.example.fbk_balkan.entity.Coach;
 import com.example.fbk_balkan.repository.CoachRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Coach coach = coachRepository.findByEmail(email)
+        com.example.fbk_balkan.entity.User coach = coachRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Coach not found with username: " + email));
 
         return User.builder()
@@ -34,7 +33,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .build();
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(Coach coach) {
+    private Collection<? extends GrantedAuthority> getAuthorities(com.example.fbk_balkan.entity.User coach) {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + coach.getRole()));
         return authorities;

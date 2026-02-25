@@ -1,14 +1,24 @@
+<!--
+     DASHBOARD NAV BUTTONS
+     -->
 <div th:fragment="dashboard-content">
     <div class="flex justify-center gap-3 items-center">
-        <a class="btn btn-secondary btn-lg text-lg font-bold uppercase wide shadow-xl hover:scale-105 transition-transform">Mina lag</a>
-        <a class="btn btn-neutral btn-lg text-lg font-bold uppercase wide shadow-xl hover:scale-105 transition-transform">Provträningar</a>
-        <a class="btn btn-neutral btn-disabled btn-lg text-lg font-bold uppercase wide shadow-xl hover:scale-105 transition-transform">Nyheter</a>
-
+        <a class="btn btn-secondary btn-lg text-lg font-bold uppercase wide shadow-xl hover:scale-105 transition-transform cursor-pointer">
+            Mina lag
+        </a>
+        <a class="btn btn-neutral btn-lg text-lg font-bold uppercase wide shadow-xl hover:scale-105 transition-transform cursor-pointer">
+            Provträningar
+        </a>
+        <a class="btn btn-neutral btn-disabled btn-lg text-lg font-bold uppercase wide shadow-xl hover:scale-105 transition-transform">
+            Nyheter
+        </a>
     </div>
-
 </div>
 
-<!-- Teams Section -->
+
+<!-- ==
+     TEAMS SECTION
+     ==== -->
 <div class="mt-8" th:fragment="team-section">
     <h2 class="text-2xl font-bold mb-4 text-center">Mina Lag</h2>
 
@@ -16,14 +26,16 @@
         <span>Du har inga lag ännu. Skapa ditt första lag!</span>
     </div>
 
-    <div th:if="${teamCount > 0}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
-        <div th:each="team : ${teams}" class="card  bg-base-100 border-x-2 border-secondary shadow-md">
+    <div th:if="${teamCount > 0}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div th:each="team : ${teams}" class="card bg-base-100 border-x-2 border-secondary shadow-md">
             <div class="card-body">
                 <h3 class="card-title" th:text="${team.name}">Team Name</h3>
                 <div class="space-y-2">
                     <p><strong>Åldersgrupp:</strong> <span th:text="${team.ageGroup}">Age Group</span></p>
-                    <!--                                    <p><strong>Division:</strong> <span th:text="${team.division}">Division</span></p>-->
-                    <p th:if="${team.description}"><strong>Beskrivning:</strong> <span th:text="${team.description}">Description</span></p>
+                    <p th:if="${team.description}">
+                        <strong>Beskrivning:</strong>
+                        <span th:text="${team.description}">Description</span>
+                    </p>
                 </div>
                 <div class="card-actions justify-end mt-4">
                     <a th:href="@{/team/{id}(id=${team.id})}" class="btn btn-secondary btn-sm">Visa detaljer</a>
@@ -33,8 +45,136 @@
     </div>
 </div>
 
-<!--trial registration requests-->
-<div class="" th:fragment="trial-requests">
-    <h2 class="text-2xl font-bold mb-4 text-center">Provträningar <span th:text="${requestSize}">0</span></h2>
 
+<!-- ====
+     TRIAL REGISTRATION REQUESTS SECTION
+     Shows all requests auto-assigned to this coach
+     based on birth year + gender matching at sign-up time
+     ====== -->
+<div th:fragment="trial-requests">
+
+    <!-- Header with count badge -->
+    <div class="flex items-center justify-center gap-3 mb-6">
+        <h2 class="text-2xl font-bold">Provträningsförfrågningar</h2>
+        <div class="badge badge-secondary badge-lg text-base font-bold"
+             th:text="${requestSize}">0
+        </div>
+        <!-- Pending badge — only shown if there are pending requests -->
+        <div th:if="${pendingCount > 0}"
+             class="badge badge-warning badge-lg text-base font-bold">
+            <span th:text="${pendingCount}"></span> väntar
+        </div>
+    </div>
+
+    <!-- Empty state -->
+    <div th:if="${requestSize == 0}" class="alert alert-info shadow-sm max-w-lg mx-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+             class="stroke-current shrink-0 w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span>Inga provträningsförfrågningar ännu.</span>
+    </div>
+
+    <!-- Request cards grid -->
+    <div th:if="${requestSize > 0}"
+         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <div th:each="req : ${trialRequests}"
+             class="card bg-base-100 shadow-md border border-base-300 hover:shadow-lg transition-shadow">
+            <div class="card-body p-5">
+
+                <!-- Name + Status badge -->
+                <div class="flex items-start justify-between gap-2">
+                    <h3 class="card-title text-lg"
+                        th:text="${req.firstName} + ' ' + ${req.lastName}">
+                        Barn Namn
+                    </h3>
+                    <!-- Status badge: color changes by status -->
+                    <span th:if="${req.status != null}"
+                          th:classappend="${req.status.name() == 'PENDING'} ? 'badge-warning' :
+                                          (${req.status.name() == 'APPROVED'} ? 'badge-success' :
+                                          (${req.status.name() == 'REJECTED'} ? 'badge-error' : 'badge-ghost'))"
+                          class="badge badge-sm font-semibold shrink-0"
+                          th:text="${req.status}">
+                        STATUS
+                    </span>
+                </div>
+
+                <!-- Child info -->
+                <div class="mt-2 space-y-1 text-sm text-base-content/80">
+
+                    <p>
+                        <span class="font-semibold">Född:</span>
+                        <span th:text="${req.birthDate}">2013-01-01</span>
+                    </p>
+
+                    <p>
+                        <span class="font-semibold">Kön:</span>
+                        <span th:text="${req.gender != null ? (req.gender.name() == 'MALE' ? 'Kille' : 'Tjej') : '-'}">Kille</span>
+                    </p>
+
+                    <p th:if="${req.currentClub != null and !#strings.isEmpty(req.currentClub)}">
+                        <span class="font-semibold">Nuvarande klubb:</span>
+                        <span th:text="${req.currentClub}">Klubb</span>
+                        <span th:if="${req.clubYears != null}"
+                              th:text="'(' + ${req.clubYears} + ' år)'"></span>
+                    </p>
+
+                </div>
+
+                <div class="divider my-2"></div>
+
+                <!-- Contact info -->
+                <div class="space-y-1 text-sm text-base-content/80">
+                    <p class="font-semibold text-base-content">Kontaktperson</p>
+
+                    <p>
+                        <span class="font-semibold">Namn:</span>
+                        <span th:text="${req.relativeName}">Förälder Namn</span>
+                    </p>
+
+                    <p>
+                        <span class="font-semibold">E-post:</span>
+                        <a th:href="'mailto:' + ${req.relativeEmail}"
+                           th:text="${req.relativeEmail}"
+                           class="link link-primary text-xs break-all">
+                            email@example.com
+                        </a>
+                    </p>
+
+                    <p>
+                        <span class="font-semibold">Telefon:</span>
+                        <a th:href="'tel:' + ${req.relativeNumber}"
+                           th:text="${req.relativeNumber}"
+                           class="link link-primary">
+                            0700000000
+                        </a>
+                    </p>
+                </div>
+
+                <div class="divider my-2"></div>
+
+                <!-- Trial date + registration date -->
+                <div class="space-y-1 text-sm text-base-content/80">
+                    <p>
+                        <span class="font-semibold">Önskat datum:</span>
+                        <span th:text="${req.preferredTrainingDate}">2025-01-01</span>
+                    </p>
+                    <p class="text-xs text-base-content/50">
+                        Registrerad:
+                        <span th:text="${#temporals.format(req.createdAt, 'yyyy-MM-dd')}">2025-01-01</span>
+                    </p>
+                </div>
+
+                <!-- Action buttons (approve/reject) — placeholder for future feature -->
+                <div class="card-actions justify-end mt-3">
+                    <button class="btn btn-success btn-xs">Godkänn</button>
+                    <button class="btn btn-error btn-xs">Avvisa</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
 </div>

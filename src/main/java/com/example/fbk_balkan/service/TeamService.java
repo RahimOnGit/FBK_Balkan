@@ -1,7 +1,7 @@
 package com.example.fbk_balkan.service;
 
 import com.example.fbk_balkan.dto.team.*;
-import com.example.fbk_balkan.entity.Coach;
+import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.entity.Team;
 import com.example.fbk_balkan.repository.CoachRepository;
 import com.example.fbk_balkan.repository.TeamRepository;
@@ -37,7 +37,8 @@ public TeamDto createTeam(TeamCreateDto teamCreateDto) {
         }
 
 //validate and fetch coach
-        Coach coach = coachRepository.findById(teamCreateDto.getCoachId())
+        // validate and fetch coach
+        User coach = coachRepository.findById(teamCreateDto.getCoachId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid coach ID"));
 
 //    convert DTO to entity
@@ -52,12 +53,13 @@ public TeamDto createTeam(TeamCreateDto teamCreateDto) {
 //    convert entity to DTO and return
         return teamMapper.toDto(savedTeam);
     }
+
     /**
      * Fetch all teams for a specific coach
      */
     @Transactional(readOnly = true)
     public List<TeamDto> getTeamsByCoachId(Long coachId) {
-        Coach coach = coachRepository.findById(coachId)
+        User coach = coachRepository.findById(coachId)
                 .orElseThrow(() -> new IllegalArgumentException("Coach not found"));
 
         List<Team> teams = teamRepository.findByCoachId(coachId);
@@ -118,7 +120,7 @@ public List<Team> getActiveTeams() {
      */
     @Transactional(readOnly = true)
     public List<TeamDto> getTeamsByCoachEmail(String email) {
-        Coach coach = coachRepository.findByEmail(email)
+        User coach = coachRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Coach not found"));
 
         return getTeamsByCoachId(coach.getId());
