@@ -93,8 +93,22 @@ public class TrialRegistrationController {
             model.addAttribute("duplicateError", ex.getMessage());
             return "trial-registration"; // redisplay form with duplicate message
         }
-       //PRG
+        // flash message
+        //  success redirect
         redirectAttributes.addFlashAttribute("successMessage",
-                "Tack för din registrering! Vi återkommer inom kort.");
-        return "redirect:/trial-registration";
-    }}
+                "Tack för att du registrerade ditt barn för provträning hos FBK Balkan. Vi återkommer inom kort.");
+
+        return "redirect:/trial-registration/success";
+
+
+    }
+    @GetMapping("/success")
+    public String showSuccessPage(Model model) {
+
+        if (!model.containsAttribute("successMessage")) {
+            return "redirect:/trial-registration";
+        }
+
+        return "trial-registration-success";
+    }
+}

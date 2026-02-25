@@ -11,23 +11,10 @@
 <div class="absolute top-0 left-0 z-[10] right-0 bg-primary">
     <div th:replace="~{fragments/navbar::navbar}"></div>
 </div>
-<!-- added SUCCESS MESSAGE for PRG-->
-<div th:if="${successMessage}" class="min-h-screen flex items-center justify-center px-4 py-20 mt-12">
-    <div class="card w-full max-w-lg bg-base-100 shadow-xl">
-        <div class="card-body text-center">
-            <h2 class="card-title justify-center text-3xl mb-6">Registrering lyckades!</h2>
-            <p class="mb-4" th:text="${successMessage}"></p>
-            <a href="/" class="btn btn-primary">Återvänd till startsidan</a>
-        </div>
-    </div>
-</div>
-<!--registration form-->
-<!--<div class="min-h-screen flex items-center justify-center px-4 py-20 mt-12">-->
 
-<!-- "th:unless" ensures that after submission (PRG pattern),
-    the form is hidden and replaced by the success message section.-->
-<div th:unless="${successMessage}" class="min-h-screen flex items-center justify-center px-4 py-20 mt-12">
-    <div class="card w-full max-w-lg bg-base-100 shadow-xl">
+<!--registration form-->
+<div class="min-h-screen flex items-center justify-center px-4 py-20 mt-12">
+ <div class="card w-full max-w-lg bg-base-100 shadow-xl">
         <div class="card-body">
             <h2 class="card-title justify-center text-3xl mb-6">Provträningsregistrering</h2>
             <p class="text-sm text-gray-600 mb-4">
