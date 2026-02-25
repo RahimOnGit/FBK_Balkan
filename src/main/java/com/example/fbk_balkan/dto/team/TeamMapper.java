@@ -3,7 +3,7 @@ package com.example.fbk_balkan.dto.team;
 import com.example.fbk_balkan.dto.CoachDto;
 import com.example.fbk_balkan.dto.team.TeamCreateDto;
 import com.example.fbk_balkan.dto.team.TeamDto;
-import com.example.fbk_balkan.entity.Coach;
+import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.entity.Team;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +38,7 @@ public class TeamMapper {
     }
 
     // Convert CreateDTO → Entity (for creating/updating)
-    public Team toEntity(TeamCreateDto createDto, Coach coach) {
+    public Team toEntity(TeamCreateDto createDto, User coach) {
         if (createDto == null) return null;
 
         Team team = new Team();

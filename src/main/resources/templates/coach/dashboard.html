@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coach Dashboard - FBK Balkan</title>
     <link th:href="@{/css/output.css}" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+          rel="stylesheet">
 </head>
 <body class="min-h-screen bg-base-100">
+
 <!-- Navbar -->
 <div class="absolute top-0 left-0 z-[10] right-0 bg-primary">
     <div th:replace="~{fragments/navbar::navbar}"></div>
@@ -18,25 +20,36 @@
     <div class="mt-8">
         <div class="card bg-base-100 shadow-xl p-5">
             <div class="card-body">
+
+                <!-- Welcome heading -->
                 <h1 class="card-title text-3xl justify-center mb-4">
                     Välkommen
                     <span th:text="${coachName}"></span>!
                 </h1>
 
+                <!-- Nav buttons (Mina lag / Provträningar / Nyheter) -->
                 <div th:replace="~{coach/content-fragment::dashboard-content}"></div>
 
                 <p class="text-base-content/70 text-center mb-6">
                     Du är nu inloggad och kan hantera ditt lag, spelare, träningar och skapa nyheter
                 </p>
 
-
-                <div>
+                <!-- ==========================================
+                     TRIAL REQUESTS SECTION
+                     Visible when "Provträningar" button clicked
+                     ========================================== -->
+                <div id="trial-section-container" class="hidden mt-6">
                     <div th:replace="~{coach/content-fragment::trial-requests}"></div>
                 </div>
-                <!-- Team section container (hidden by default) -->
-                <div id="team-section-container" class="hidden">
+
+                <!-- ==========================================
+                     TEAMS SECTION
+                     Visible when "Mina lag" button clicked
+                     ========================================== -->
+                <div id="team-section-container" class="hidden mt-6">
                     <div th:replace="~{coach/content-fragment::team-section}"></div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -48,23 +61,59 @@
 </div>
 
 <script>
-    // Show team section when clicking "Mina lag"
-    document.addEventListener('DOMContentLoaded', function() {
-        const minaLagBtn = document.querySelector('.btn-secondary');
-        const teamSectionContainer = document.getElementById('team-section-container');
+    document.addEventListener('DOMContentLoaded', function () {
 
-        if (minaLagBtn && teamSectionContainer) {
-            minaLagBtn.addEventListener('click', function() {
-                // Toggle visibility
-                teamSectionContainer.classList.toggle('hidden');
+        // Grab the three nav buttons by index (same order as in content-fragment)
+        const navButtons = document.querySelectorAll('.dashboard-content-area .btn, .card-body .btn');
 
-                // Optional: Scroll to team section
-                if (!teamSectionContainer.classList.contains('hidden')) {
-                    teamSectionContainer.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+        // More reliable: grab by text content
+        const allBtns = document.querySelectorAll('.btn');
+        let minaLagBtn = null;
+        let provBtn = null;
+
+        allBtns.forEach(function (btn) {
+            const text = btn.textContent.trim().toLowerCase();
+            if (text === 'mina lag') minaLagBtn = btn;
+            if (text === 'provträningar') provBtn = btn;
+        });
+
+        const teamContainer = document.getElementById('team-section-container');
+        const trialContainer = document.getElementById('trial-section-container');
+
+        // Toggle helper: shows target, hides other, toggles active style
+        function toggleSection(target, other, clickedBtn, otherBtn) {
+            const isAlreadyOpen = !target.classList.contains('hidden');
+
+            // Hide both first
+            target.classList.add('hidden');
+            other.classList.add('hidden');
+
+            // Remove active styling from both buttons
+            if (clickedBtn) clickedBtn.classList.remove('btn-secondary');
+            if (otherBtn) otherBtn.classList.remove('btn-secondary');
+            if (clickedBtn) clickedBtn.classList.add('btn-neutral');
+            if (otherBtn) otherBtn.classList.add('btn-neutral');
+
+            // If it was closed → open it; if it was open → leave closed (toggle)
+            if (!isAlreadyOpen) {
+                target.classList.remove('hidden');
+                if (clickedBtn) {
+                    clickedBtn.classList.remove('btn-neutral');
+                    clickedBtn.classList.add('btn-secondary');
                 }
+                target.scrollIntoView({behavior: 'smooth', block: 'start'});
+            }
+        }
+
+        if (minaLagBtn && teamContainer) {
+            minaLagBtn.addEventListener('click', function () {
+                toggleSection(teamContainer, trialContainer, minaLagBtn, provBtn);
+            });
+        }
+
+        if (provBtn && trialContainer) {
+            provBtn.addEventListener('click', function () {
+                toggleSection(trialContainer, teamContainer, provBtn, minaLagBtn);
             });
         }
     });
