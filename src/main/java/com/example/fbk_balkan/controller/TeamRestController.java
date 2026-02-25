@@ -1,7 +1,6 @@
 package com.example.fbk_balkan.controller;
 
 import com.example.fbk_balkan.dto.team.TeamDto;
-import com.example.fbk_balkan.entity.Coach;
 import com.example.fbk_balkan.repository.CoachRepository;
 import com.example.fbk_balkan.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,9 @@ package com.example.fbk_balkan.enums;
 
 public enum Gender {
     MALE("Kille"),
-    FEMALE("Tjej");
+    FEMALE("Tjej"),
+    ANNAT("Annat"),
+    VillEjAnge("Vill ej ange");
 
     private final String label;
 

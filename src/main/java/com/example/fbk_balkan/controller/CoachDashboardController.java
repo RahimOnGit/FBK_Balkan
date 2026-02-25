@@ -2,7 +2,8 @@ package com.example.fbk_balkan.controller;
 
 import com.example.fbk_balkan.dto.TrialRegistrationDTO;
 import com.example.fbk_balkan.dto.team.TeamDto;
-import com.example.fbk_balkan.entity.Coach;
+
+import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.repository.CoachRepository;
 import com.example.fbk_balkan.service.TeamService;
 import com.example.fbk_balkan.service.TrialRegistrationService;
@@ -36,7 +37,7 @@ public class CoachDashboardController {
                             @AuthenticationPrincipal UserDetails userDetails) {
 
         String coachEmail = userDetails.getUsername();
-        Coach coach = coachRepository.findByEmail(coachEmail).orElse(null);
+        User coach = coachRepository.findByEmail(coachEmail).orElse(null);
 
         if (coach != null) {
 
