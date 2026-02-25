@@ -2,8 +2,8 @@ package com.example.fbk_balkan.controller;
 
 import com.example.fbk_balkan.dto.TrialRegistrationDTO;
 import com.example.fbk_balkan.dto.team.TeamDto;
-import com.example.fbk_balkan.entity.Coach;
-import com.example.fbk_balkan.repository.CoachRepository;
+import com.example.fbk_balkan.entity.User;
+import com.example.fbk_balkan.repository.UserRepository;
 import com.example.fbk_balkan.service.TeamService;
 import com.example.fbk_balkan.service.TrialRegistrationService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,11 +17,11 @@ import java.util.List;
 
 @Controller
 public class CoachDashboardController {
-    private final CoachRepository coachRepository;
+    private final UserRepository coachRepository;
     private final TeamService teamService;
     private final TrialRegistrationService trialService;
 
-    public CoachDashboardController(CoachRepository coachRepository, TeamService teamService, TrialRegistrationService trialService) {
+    public CoachDashboardController(UserRepository coachRepository, TeamService teamService, TrialRegistrationService trialService) {
         this.coachRepository = coachRepository;
         this.teamService = teamService;
         this.trialService = trialService;
@@ -36,7 +36,7 @@ public class CoachDashboardController {
 
         // Get coach details from userDetails and add to model
         String coachEmail = userDetails.getUsername();
-        Coach coach = coachRepository.findByEmail(coachEmail).orElse(null);
+        User coach = coachRepository.findByEmail(coachEmail).orElse(null);
 
         if (coach != null) {
             String coachName = coach.getFirstName() + " " + coach.getLastName();

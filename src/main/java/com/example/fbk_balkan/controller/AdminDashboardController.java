@@ -3,7 +3,7 @@ package com.example.fbk_balkan.controller;
 import com.example.fbk_balkan.dto.team.TeamListItemDTO;
 import com.example.fbk_balkan.entity.TrialRegistration;
 import com.example.fbk_balkan.entity.TrialStatus;
-import com.example.fbk_balkan.repository.CoachRepository;
+import com.example.fbk_balkan.repository.UserRepository;
 import com.example.fbk_balkan.repository.PlayerRepository;
 import com.example.fbk_balkan.repository.TeamRepository;
 import com.example.fbk_balkan.repository.TrialRegistrationRepository;
@@ -22,14 +22,14 @@ public class AdminDashboardController {
     private final TeamRepository teamRepository;
     private final PlayerRepository playerRepository;
     private final TrialRegistrationRepository trialRegistrationRepository;
-    private final CoachRepository coachRepository;
+    private final UserRepository coachRepository;
     private final TeamService teamService;
 
     public AdminDashboardController(
             TeamRepository teamRepository,
             PlayerRepository playerRepository,
             TrialRegistrationRepository trialRegistrationRepository,
-            CoachRepository coachRepository,
+            UserRepository coachRepository,
             TeamService teamService) {
         this.teamRepository = teamRepository;
         this.playerRepository = playerRepository;

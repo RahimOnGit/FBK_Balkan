@@ -4,7 +4,7 @@ import com.example.fbk_balkan.entity.Role;
 import lombok.Data;
 
 @Data
-public class CoachResponseDto {
+public class UserResponseDto {
 private Long  id;
     private String email;
     private String firstName;

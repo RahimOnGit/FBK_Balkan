@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${isEdit ? 'Redigera lag' : 'Skapa nytt lag'}">Redigera lag</title>
+  <link th:href="@{/css/output.css}" rel="stylesheet">
+</head>
+<body class="bg-base-200 min-h-screen">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container mx-auto py-10 max-w-3xl">
+  <h1 class="text-4xl font-bold mb-8 text-center" th:text="${isEdit ? 'Redigera lag' : 'Skapa nytt lag'}"></h1>
+
+  <div th:if="${error}" class="alert alert-error mb-6">
+    <span th:text="${error}"></span>
+  </div>
+
+  <form th:object="${team}" th:action="@{/admin/teams/save}" method="post" class="space-y-6 bg-base-100 p-8 rounded-xl shadow-lg">
+
+    <input type="hidden" th:field="*{id}" />
+
+    <!-- Lagnamn -->
+    <div>
+      <label class="label">Lagnamn *</label>
+      <input type="text" th:field="*{name}" class="input input-bordered w-full" required/>
+    </div>
+
+    <!-- Åldersgrupp -->
+    <div>
+      <label class="label">Åldersgrupp *</label>
+      <input type="text" th:field="*{ageGroup}" class="input input-bordered w-full" required placeholder="Exempel: P12"/>
+    </div>
+
+    <!-- Sex -->
+    <div>
+      <label class="label">Kön *</label>
+      <select th:field="*{gender}" class="select select-bordered w-full" required>
+        <option value="MALE">Kille</option>
+        <option value="FEMALE">Tjej</option>
+         <option value="MIXED">Annat</option>
+        <option value="default">Vill ej ange</option>
+
+      </select>
+    </div>
+
+    <!-- Utbildningsplats -->
+    <div>
+      <label class="label">Träningsplats</label>
+      <input type="text" th:field="*{trainingLocation}" class="input input-bordered w-full"/>
+    </div>
+
+    <!-- Beskrivning -->
+    <div>
+      <label class="label">Lagbeskrivning</label>
+      <textarea th:field="*{description}" class="textarea textarea-bordered w-full" rows="4"></textarea>
+    </div>
+
+    <!-- Huvudtränare -->
+    <div>
+      <label class="label">Huvudtränare *</label>
+      <select th:field="*{coachId}" class="select select-bordered w-full" required>
+        <option value="">Välj tränare</option>
+        <option th:each="coach : ${coaches}"
+                th:value="${coach.id}"
+                th:text="${coach.firstName} + ' ' + ${coach.lastName}">
+        </option>
+      </select>
+    </div>
+
+    <!-- Lagstatus -->
+    <div class="form-control">
+      <label class="label cursor-pointer justify-start gap-3">
+        <input type="checkbox" th:field="*{active}" class="checkbox checkbox-primary"/>
+        <span class="label-text">Lag aktivt (visas på webbplatsen)</span>
+      </label>
+    </div>
+
+    <!-- Knappar -->
+    <div class="flex justify-end gap-4 pt-6">
+      <a th:href="@{/admin/teams}" class="btn btn-outline">Avbryt</a>
+      <button type="submit" class="btn btn-primary">
+        <span th:text="${isEdit ? 'Spara ändringar' : 'Skapa lag'}"></span>
+      </button>
+    </div>
+  </form>
+</div>
+
+</body>
+</html>

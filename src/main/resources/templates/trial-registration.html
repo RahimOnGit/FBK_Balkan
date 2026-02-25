@@ -1,212 +1,439 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Provträningsregistrering - FBK Balkan</title>-->
+<!--    <link th:href="@{/css/output.css}" rel="stylesheet">-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">-->
+<!--</head>-->
+<!--<body class="min-h-screen bg-base-200">-->
+<!--&lt;!&ndash; Navbar &ndash;&gt;-->
+<!--<div class="absolute top-0 left-0 z-[10] right-0 bg-primary">-->
+<!--    <div th:replace="~{fragments/navbar::navbar}"></div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash;registration form&ndash;&gt;-->
+<!--<div class="min-h-screen flex items-center justify-center px-4 py-20 mt-12">-->
+<!--    <div class="card w-full max-w-lg bg-base-100 shadow-xl">-->
+<!--        <div class="card-body">-->
+<!--            <h2 class="card-title justify-center text-3xl mb-6">Provträningsregistrering</h2>-->
+<!--            <p class="text-sm text-gray-600 mb-4">-->
+<!--                Fält markerade med <span aria-hidden="true">*</span> är obligatoriska.-->
+<!--            </p>-->
+
+<!--            <form th:action="@{/trial-registration}" th:object="${trialRegistrationDTO}" method="post">-->
+<!--                <div class="form-control mb-4">-->
+<!--                    <label class="label">-->
+<!--                        <span class="label-text">Barnets förnamn <span aria-hidden="true">*</span></span>-->
+<!--                    </label>-->
+<!--                    <input class="input input-bordered" type="text" th:field="*{firstName}" placeholder="Ange barnets förnamn" required  maxlength="40"/>-->
+<!--                    <p th:if="${#fields.hasErrors('firstName')}"-->
+<!--                       th:errors="*{firstName}"-->
+<!--                    > </p>-->
+<!--                </div>-->
+
+<!--                <div class="form-control mb-4">-->
+<!--                    <label class="label">-->
+<!--                        <span class="label-text">Barnets efternamn <span aria-hidden="true">*</span></span>-->
+<!--                    </label>-->
+<!--                    <input class="input input-bordered" type="text" th:field="*{lastName}" placeholder="Ange barnets efternamn" required  maxlength="40"/>-->
+<!--                    <p th:if="${#fields.hasErrors('lastName')}"-->
+<!--                       th:errors="*{lastName}"-->
+<!--                    > </p>-->
+<!--                </div>-->
+
+<!--                  <div class="form-control mb-4">-->
+<!--                    <label class="label">-->
+<!--                        <span class="label-text">Födelsedatum <span aria-hidden="true">*</span></span>-->
+<!--                    </label>-->
+<!--                    <input class="input input-bordered"-->
+<!--                           type="date"-->
+<!--                           th:field="*{birthDate}"-->
+<!--                           th:attr="min=${minBirthDate}, max=${maxBirthDate}"-->
+<!--                           required />-->
+<!--                    <p th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></p>-->
+<!--                </div>-->
+<!--                <div class="form-control mb-4">-->
+<!--                    <label class="label">-->
+<!--                        <span class="label-text">Kön <span aria-hidden="true">*</span></span>-->
+<!--                    </label>-->
+
+<!--                    <select th:field="*{gender}" required>-->
+<!--                        &lt;!&ndash; EMPTY DEFAULT &ndash;&gt;-->
+<!--                        <option value="">Välj kön</option>-->
+
+<!--                        &lt;!&ndash; ENUM VALUES &ndash;&gt;-->
+<!--                        <option th:each="g : ${availableGenders}"-->
+<!--                                th:value="${g}"-->
+<!--                                th:text="${g.label}">-->
+<!--                        </option>-->
+<!--                    </select>-->
+
+
+<!--                    <p th:if="${#fields.hasErrors('gender')}"-->
+<!--                       th:errors="*{gender}">-->
+<!--                    </p>-->
+<!--                </div>-->
+<!--                <div class="form-control mb-4">-->
+<!--                    <label class="label">-->
+<!--                        <span class="label-text">Nuvarande klubb</span>-->
+<!--                    </label>-->
+<!--                    &lt;!&ndash; Added maxlength="40" to match DTO @Size(max=40) &ndash;&gt;-->
+<!--                    <input class="input input-bordered"-->
+<!--                           type="text"-->
+<!--                           th:field="*{currentClub}"-->
+<!--                           placeholder="Ange nuvarande klubb"  maxlength="40" />-->
+<!--                    <p th:if="${#fields.hasErrors('currentClub')}"-->
+<!--                       th:errors="*{currentClub}">-->
+<!--                    </p>-->
+<!--                </div>-->
+
+<!--                <div class="form-control mb-4">-->
+<!--                    <label class="label">-->
+<!--                        <span class="label-text">Antal år i klubb</span>-->
+<!--                    </label>-->
+<!--                    <input class="input input-bordered"-->
+<!--                           type="number"-->
+<!--                           min="0"-->
+<!--                           max="5"-->
+<!--                           th:field="*{clubYears}"-->
+<!--                           placeholder="Antal år" />-->
+<!--                    <p th:if="${#fields.hasErrors('clubYears')}"-->
+<!--                       th:errors="*{clubYears}">-->
+<!--                    </p>-->
+<!--                </div>-->
+
+
+
+
+
+
+<!--                <div class="form-control mb-4">-->
+<!--                    <label class="label">-->
+<!--                        <span class="label-text">Förälder/Vårdnadshavares namn <span aria-hidden="true">*</span></span>-->
+<!--                    </label>-->
+<!--                    &lt;!&ndash; Added maxlength="40" &ndash;&gt;-->
+<!--                    <input class="input input-bordered" type="text" th:field="*{relativeName}" placeholder="Ange förälder/vårdnadshavares namn" required maxlength="40" />-->
+<!--                    <p th:if="${#fields.hasErrors('relativeName')}"-->
+<!--                       th:errors="*{relativeName}"-->
+<!--                    > </p>-->
+<!--                </div>-->
+
+<!--                <div class="form-control mb-4">-->
+<!--                    <label class="label">-->
+<!--                        <span class="label-text">Kontakt e-postadress <span aria-hidden="true">*</span></span>-->
+<!--                    </label>-->
+<!--                    <input class="input input-bordered" type="email" th:field="*{relativeEmail}" placeholder="Ange e-postadress" required  maxlength="40" />-->
+<!--                    <p th:if="${#fields.hasErrors('relativeEmail')}"-->
+<!--                       th:errors="*{relativeEmail}"-->
+<!--                    > </p>-->
+<!--                </div>-->
+
+<!--                <div class="form-control mb-4">-->
+<!--                    <label class="label">-->
+<!--                        &lt;!&ndash; Added maxlength="15" to match DTO pattern &ndash;&gt;-->
+<!--                        <span class="label-text">Kontakt telefonnummer <span aria-hidden="true">*</span></span>-->
+<!--                    </label>-->
+<!--                    <input class="input input-bordered" type="tel" th:field="*{relativeNumber}" placeholder="Ange telefonnummer" required maxlength="15"/>-->
+<!--                    <p th:if="${#fields.hasErrors('relativeNumber')}"-->
+<!--                       th:errors="*{relativeNumber}">-->
+
+<!--                    </p>-->
+<!--                </div>-->
+
+
+<!--                <div class="form-control mb-4">-->
+<!--                    <label class="label">-->
+<!--                        <span class="label-text">Vem rekommenderade dig? / Hur hittade ni oss?</span>-->
+<!--                    </label>-->
+
+<!--                    <select th:field="*{referralSource}" id="referralSource">-->
+
+<!--                        <option value="">Välj källa</option>-->
+<!--                        &lt;!&ndash; ENUM VALUES &ndash;&gt;-->
+<!--                        <option th:each="r : ${availableReferralSources}"-->
+<!--                                th:value="${r}"-->
+<!--                                th:text="${r.label}">-->
+<!--                        </option>-->
+<!--                    </select>-->
+
+<!--                </div>-->
+
+<!--                <div class="form-control mb-4" id="referralOtherDiv" style="display: none;">-->
+<!--                    <label class="label">-->
+<!--                        <span class="label-text">Annat (max 50 tecken)</span>-->
+<!--                    </label>-->
+<!--                    <input id="referralOtherInput"-->
+<!--                           class="input input-bordered"-->
+<!--                           type="text"-->
+<!--                           th:field="*{referralOther}"-->
+<!--                           maxlength="50"-->
+<!--                           placeholder="Ange annan källa (valfritt)">-->
+<!--                </div>-->
+
+<!--                <p class="text-error"-->
+<!--                   th:if="${#fields.hasErrors('referralOther')}"-->
+<!--                   th:errors="*{referralOther}">-->
+<!--                </p>-->
+
+<!--                <script>-->
+<!--                    const referralSelect = document.getElementById('referralSource');-->
+<!--                    const referralOtherDiv = document.getElementById('referralOtherDiv');-->
+
+<!--                    // Show textbox if "OTHER" was previously selected (when form reloads)-->
+<!--                    if (referralSelect.value === 'OTHER') {-->
+<!--                        referralOtherDiv.style.display = 'block';-->
+<!--                    }-->
+
+<!--                    referralSelect.addEventListener('change', function() {-->
+<!--                        if (this.value === 'OTHER') {-->
+<!--                            referralOtherDiv.style.display = 'block';-->
+<!--                        } else {-->
+<!--                            referralOtherDiv.style.display = 'none';-->
+<!--                            referralOtherDiv.querySelector('input').value = ''; // clear input-->
+<!--                        }-->
+<!--                    });-->
+<!--                </script>-->
+
+<!--                <div class="form-control mb-6">-->
+<!--                    <label class="label">-->
+<!--                        <span class="label-text">Önskat provträningsdatum <span aria-hidden="true">*</span></span>-->
+<!--                    </label>-->
+<!--                    <input class="input input-bordered" type="date" th:field="*{preferredTrainingDate}" required  />-->
+
+<!--                </div>-->
+
+
+<!--                <div class="form-control">-->
+<!--                    <button type="submit" class="btn btn-primary w-full">Registrera för provträning</button>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Footer &ndash;&gt;-->
+<!--<div class="mt-8">-->
+<!--    <div th:replace="~{fragments/footer::footer}"></div>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!---->
+
 <!DOCTYPE html>
-<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras-spring-security">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Provträningsregistrering - FBK Balkan</title>
     <link th:href="@{/css/output.css}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
 </head>
 <body class="min-h-screen bg-base-200">
+
 <!-- Navbar -->
 <div class="absolute top-0 left-0 z-[10] right-0 bg-primary">
     <div th:replace="~{fragments/navbar::navbar}"></div>
 </div>
 
-<!--registration form-->
+<!-- Main content -->
 <div class="min-h-screen flex items-center justify-center px-4 py-20 mt-12">
     <div class="card w-full max-w-lg bg-base-100 shadow-xl">
         <div class="card-body">
+
             <h2 class="card-title justify-center text-3xl mb-6">Provträningsregistrering</h2>
-            <p class="text-sm text-gray-600 mb-4">
+
+            <p class="text-sm text-gray-600 mb-6">
                 Fält markerade med <span aria-hidden="true">*</span> är obligatoriska.
             </p>
 
             <form th:action="@{/trial-registration}" th:object="${trialRegistrationDTO}" method="post">
+
+                <!-- ──────────────────────────────────────────────── -->
+                <!--  رسائل عامة (داخل الـ form فقط – مهم جدًا)       -->
+                <!-- ──────────────────────────────────────────────── -->
+
+                <div th:if="${#fields.hasErrors('*')}" class="alert alert-error shadow-lg mb-6">
+                    <span class="font-bold">Vänligen korrigera följande fel:</span>
+                    <ul class="list-disc list-inside mt-2">
+                        <li th:each="err : ${#fields.errors('*')}" th:text="${err.defaultMessage}"></li>
+                    </ul>
+                </div>
+
+                <div th:if="${successMessage}" class="alert alert-success shadow-lg mb-6">
+                    <span th:text="${successMessage}"></span>
+                </div>
+
+                <div th:if="${errorMessage}" class="alert alert-error shadow-lg mb-6">
+                    <span th:text="${errorMessage}"></span>
+                </div>
+
+                <!-- ──────────────────────────────────────────────── -->
+                <!--                   الحقول                            -->
+                <!-- ──────────────────────────────────────────────── -->
+
                 <div class="form-control mb-4">
                     <label class="label">
                         <span class="label-text">Barnets förnamn <span aria-hidden="true">*</span></span>
                     </label>
-                    <input class="input input-bordered" type="text" th:field="*{firstName}" placeholder="Ange barnets förnamn" required  maxlength="40"/>
-                    <p th:if="${#fields.hasErrors('firstName')}"
-                       th:errors="*{firstName}"
-                    > </p>
+                    <input class="input input-bordered w-full"
+                           type="text"
+                           th:field="*{firstName}"
+                           placeholder="Ange barnets förnamn"
+                           required
+                           maxlength="40"/>
+                    <p class="text-error text-sm mt-1" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
                 </div>
 
                 <div class="form-control mb-4">
                     <label class="label">
                         <span class="label-text">Barnets efternamn <span aria-hidden="true">*</span></span>
                     </label>
-                    <input class="input input-bordered" type="text" th:field="*{lastName}" placeholder="Ange barnets efternamn" required  maxlength="40"/>
-                    <p th:if="${#fields.hasErrors('lastName')}"
-                       th:errors="*{lastName}"
-                    > </p>
+                    <input class="input input-bordered w-full"
+                           type="text"
+                           th:field="*{lastName}"
+                           placeholder="Ange barnets efternamn"
+                           required
+                           maxlength="40"/>
+                    <p class="text-error text-sm mt-1" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></p>
                 </div>
 
-                  <div class="form-control mb-4">
+                <div class="form-control mb-4">
                     <label class="label">
                         <span class="label-text">Födelsedatum <span aria-hidden="true">*</span></span>
                     </label>
-                    <input class="input input-bordered"
+                    <input class="input input-bordered w-full"
                            type="date"
                            th:field="*{birthDate}"
-                           th:attr="min=${minBirthDate}, max=${maxBirthDate}"
+                           th:min="${minBirthDate}"
+                           th:max="${maxBirthDate}"
                            required />
-                    <p th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></p>
+                    <p class="text-error text-sm mt-1" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></p>
                 </div>
+
                 <div class="form-control mb-4">
                     <label class="label">
                         <span class="label-text">Kön <span aria-hidden="true">*</span></span>
                     </label>
-
-                    <select th:field="*{gender}" required>
-                        <!-- EMPTY DEFAULT -->
+                    <select th:field="*{gender}" class="select select-bordered w-full" required>
                         <option value="">Välj kön</option>
-
-                        <!-- ENUM VALUES -->
                         <option th:each="g : ${availableGenders}"
                                 th:value="${g}"
-                                th:text="${g.label}">
-                        </option>
+                                th:text="${g.label}"></option>
                     </select>
-
-
-                    <p th:if="${#fields.hasErrors('gender')}"
-                       th:errors="*{gender}">
-                    </p>
+                    <p class="text-error text-sm mt-1" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></p>
                 </div>
+
                 <div class="form-control mb-4">
                     <label class="label">
                         <span class="label-text">Nuvarande klubb</span>
                     </label>
-                    <!-- Added maxlength="40" to match DTO @Size(max=40) -->
-                    <input class="input input-bordered"
+                    <input class="input input-bordered w-full"
                            type="text"
                            th:field="*{currentClub}"
-                           placeholder="Ange nuvarande klubb"  maxlength="40" />
-                    <p th:if="${#fields.hasErrors('currentClub')}"
-                       th:errors="*{currentClub}">
-                    </p>
+                           placeholder="Ange nuvarande klubb"
+                           maxlength="40" />
+                    <p class="text-error text-sm mt-1" th:if="${#fields.hasErrors('currentClub')}" th:errors="*{currentClub}"></p>
                 </div>
 
                 <div class="form-control mb-4">
                     <label class="label">
                         <span class="label-text">Antal år i klubb</span>
                     </label>
-                    <input class="input input-bordered"
+                    <input class="input input-bordered w-full"
                            type="number"
                            min="0"
                            max="5"
                            th:field="*{clubYears}"
                            placeholder="Antal år" />
-                    <p th:if="${#fields.hasErrors('clubYears')}"
-                       th:errors="*{clubYears}">
-                    </p>
+                    <p class="text-error text-sm mt-1" th:if="${#fields.hasErrors('clubYears')}" th:errors="*{clubYears}"></p>
                 </div>
-
-
-
-
-
 
                 <div class="form-control mb-4">
                     <label class="label">
                         <span class="label-text">Förälder/Vårdnadshavares namn <span aria-hidden="true">*</span></span>
                     </label>
-                    <!-- Added maxlength="40" -->
-                    <input class="input input-bordered" type="text" th:field="*{relativeName}" placeholder="Ange förälder/vårdnadshavares namn" required maxlength="40" />
-                    <p th:if="${#fields.hasErrors('relativeName')}"
-                       th:errors="*{relativeName}"
-                    > </p>
+                    <input class="input input-bordered w-full"
+                           type="text"
+                           th:field="*{relativeName}"
+                           placeholder="Ange förälder/vårdnadshavares namn"
+                           required
+                           maxlength="40"/>
+                    <p class="text-error text-sm mt-1" th:if="${#fields.hasErrors('relativeName')}" th:errors="*{relativeName}"></p>
                 </div>
 
                 <div class="form-control mb-4">
                     <label class="label">
                         <span class="label-text">Kontakt e-postadress <span aria-hidden="true">*</span></span>
                     </label>
-                    <input class="input input-bordered" type="email" th:field="*{relativeEmail}" placeholder="Ange e-postadress" required  maxlength="40" />
-                    <p th:if="${#fields.hasErrors('relativeEmail')}"
-                       th:errors="*{relativeEmail}"
-                    > </p>
+                    <input class="input input-bordered w-full"
+                           type="email"
+                           th:field="*{relativeEmail}"
+                           placeholder="Ange e-postadress"
+                           required
+                           maxlength="40"/>
+                    <p class="text-error text-sm mt-1" th:if="${#fields.hasErrors('relativeEmail')}" th:errors="*{relativeEmail}"></p>
                 </div>
 
                 <div class="form-control mb-4">
                     <label class="label">
-                        <!-- Added maxlength="15" to match DTO pattern -->
                         <span class="label-text">Kontakt telefonnummer <span aria-hidden="true">*</span></span>
                     </label>
-                    <input class="input input-bordered" type="tel" th:field="*{relativeNumber}" placeholder="Ange telefonnummer" required maxlength="15"/>
-                    <p th:if="${#fields.hasErrors('relativeNumber')}"
-                       th:errors="*{relativeNumber}">
-
-                    </p>
+                    <input class="input input-bordered w-full"
+                           type="tel"
+                           th:field="*{relativeNumber}"
+                           placeholder="Ange telefonnummer"
+                           required
+                           maxlength="15"/>
+                    <p class="text-error text-sm mt-1" th:if="${#fields.hasErrors('relativeNumber')}" th:errors="*{relativeNumber}"></p>
                 </div>
-
 
                 <div class="form-control mb-4">
                     <label class="label">
                         <span class="label-text">Vem rekommenderade dig? / Hur hittade ni oss?</span>
                     </label>
-
-                    <select th:field="*{referralSource}" id="referralSource">
-
+                    <select th:field="*{referralSource}" id="referralSource" class="select select-bordered w-full">
                         <option value="">Välj källa</option>
-                        <!-- ENUM VALUES -->
                         <option th:each="r : ${availableReferralSources}"
                                 th:value="${r}"
-                                th:text="${r.label}">
-                        </option>
+                                th:text="${r.label}"></option>
                     </select>
-
                 </div>
 
-                <div class="form-control mb-4" id="referralOtherDiv" style="display: none;">
+                <div class="form-control mb-4"
+                     id="referralOtherDiv"
+                     th:style="${#strings.equals(trialRegistrationDTO?.referralSource?.name(), 'OTHER') ? 'display:block' : 'display:none'}">
                     <label class="label">
                         <span class="label-text">Annat (max 50 tecken)</span>
                     </label>
-                    <input id="referralOtherInput"
-                           class="input input-bordered"
+                    <input class="input input-bordered w-full"
                            type="text"
                            th:field="*{referralOther}"
                            maxlength="50"
-                           placeholder="Ange annan källa (valfritt)">
+                           placeholder="Ange annan källa (valfritt)"/>
+                    <p class="text-error text-sm mt-1" th:if="${#fields.hasErrors('referralOther')}" th:errors="*{referralOther}"></p>
                 </div>
-
-                <p class="text-error"
-                   th:if="${#fields.hasErrors('referralOther')}"
-                   th:errors="*{referralOther}">
-                </p>
-
-                <script>
-                    const referralSelect = document.getElementById('referralSource');
-                    const referralOtherDiv = document.getElementById('referralOtherDiv');
-
-                    // Show textbox if "OTHER" was previously selected (when form reloads)
-                    if (referralSelect.value === 'OTHER') {
-                        referralOtherDiv.style.display = 'block';
-                    }
-
-                    referralSelect.addEventListener('change', function() {
-                        if (this.value === 'OTHER') {
-                            referralOtherDiv.style.display = 'block';
-                        } else {
-                            referralOtherDiv.style.display = 'none';
-                            referralOtherDiv.querySelector('input').value = ''; // clear input
-                        }
-                    });
-                </script>
 
                 <div class="form-control mb-6">
                     <label class="label">
                         <span class="label-text">Önskat provträningsdatum <span aria-hidden="true">*</span></span>
                     </label>
-                    <input class="input input-bordered" type="date" th:field="*{preferredTrainingDate}" required  />
-
+                    <input class="input input-bordered w-full"
+                           type="date"
+                           th:field="*{preferredTrainingDate}"
+                           required />
+                    <p class="text-error text-sm mt-1" th:if="${#fields.hasErrors('preferredTrainingDate')}" th:errors="*{preferredTrainingDate}"></p>
                 </div>
 
-
-                <div class="form-control">
-                    <button type="submit" class="btn btn-primary w-full">Registrera för provträning</button>
+                <!-- زر الإرسال -->
+                <div class="form-control mt-8">
+                    <button type="submit" class="btn btn-primary w-full">
+                        Registrera för provträning
+                    </button>
                 </div>
+
             </form>
         </div>
     </div>
@@ -216,6 +443,29 @@
 <div class="mt-8">
     <div th:replace="~{fragments/footer::footer}"></div>
 </div>
+
+<!-- JavaScript للتحكم في حقل "Annat" -->
+<script>
+    const referralSelect = document.getElementById('referralSource');
+    const referralOtherDiv = document.getElementById('referralOtherDiv');
+
+    function toggleOtherField() {
+        if (referralSelect.value === 'OTHER') {
+            referralOtherDiv.style.display = 'block';
+        } else {
+            referralOtherDiv.style.display = 'none';
+        }
+    }
+
+    // تنفيذ عند التحميل (مهم عند إعادة عرض الصفحة بعد خطأ)
+    toggleOtherField();
+
+    // تنفيذ عند التغيير
+    referralSelect.addEventListener('change', toggleOtherField);
+</script>
+
+</body>
+</html>
 
 </body>
 </html>

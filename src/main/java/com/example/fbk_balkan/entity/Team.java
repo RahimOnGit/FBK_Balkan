@@ -49,7 +49,7 @@ public class Team {
     // ────────────────────────────────────────────────
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coach_id")
-    private Coach coach;
+    private User coach;
 
     // Audit
     @CreatedDate

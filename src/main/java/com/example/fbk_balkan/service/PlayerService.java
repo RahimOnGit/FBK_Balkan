@@ -2,7 +2,6 @@ package com.example.fbk_balkan.service;
 
 import com.example.fbk_balkan.dto.PlayerDTO;
 import com.example.fbk_balkan.entity.Player;
-import com.example.fbk_balkan.repository.CoachRepository;
 import com.example.fbk_balkan.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

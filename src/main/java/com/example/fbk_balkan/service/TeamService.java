@@ -1,9 +1,9 @@
 package com.example.fbk_balkan.service;
 
 import com.example.fbk_balkan.dto.team.*;
-import com.example.fbk_balkan.entity.Coach;
+import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.entity.Team;
-import com.example.fbk_balkan.repository.CoachRepository;
+import com.example.fbk_balkan.repository.UserRepository;
 import com.example.fbk_balkan.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,13 +16,18 @@ import java.util.stream.Collectors;
 
 @Service
 public class TeamService {
-@Autowired
-private TeamRepository teamRepository;
-
-@Autowired
-private TeamMapper teamMapper;
     @Autowired
-    private CoachRepository coachRepository;
+    private TeamRepository teamRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private TeamMapper teamMapper;
+
+//    @Autowired
+//    private UserRepository coachRepository;
+
     @Autowired
     private PublicTeamMapper publicTeamMapper;
 
@@ -37,7 +42,7 @@ public TeamDto createTeam(TeamCreateDto teamCreateDto) {
         }
 
 //validate and fetch coach
-        Coach coach = coachRepository.findById(teamCreateDto.getCoachId())
+        User coach = userRepository.findById(teamCreateDto.getCoachId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid coach ID"));
 
 //    convert DTO to entity
@@ -57,7 +62,7 @@ public TeamDto createTeam(TeamCreateDto teamCreateDto) {
      */
     @Transactional(readOnly = true)
     public List<TeamDto> getTeamsByCoachId(Long coachId) {
-        Coach coach = coachRepository.findById(coachId)
+        User coach = userRepository.findById(coachId)
                 .orElseThrow(() -> new IllegalArgumentException("Coach not found"));
 
         List<Team> teams = teamRepository.findByCoachId(coachId);
@@ -118,7 +123,7 @@ public List<Team> getActiveTeams() {
      */
     @Transactional(readOnly = true)
     public List<TeamDto> getTeamsByCoachEmail(String email) {
-        Coach coach = coachRepository.findByEmail(email)
+        User coach = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Coach not found"));
 
         return getTeamsByCoachId(coach.getId());
@@ -141,16 +146,51 @@ public List<Team> getActiveTeams() {
                             : "—");
 
                     dto.setGenderDisplay(switch (team.getGender()) {
-                        case MALE -> "Pojkar";
-                        case FEMALE -> "Flickor";
-//                        case MIXED -> "Mixat";
-                        default -> "—";
+                        case MALE -> "Kille";
+                        case FEMALE -> "Tjej";
+                        case MIXED -> "Annat";
+                        default -> "Vill ej ange";
                     });
                     dto.setCreatedDate(team.getCreatedDate());
 
                     return dto;
                 })
                 .collect(Collectors.toList());
+    }
+
+
+    public Team getTeamById(Long id) {
+        return teamRepository.findById(id).orElse(null);
+    }
+
+    @Transactional
+    public void updateTeam(Long id, TeamCreateDto dto) {
+        Team team = teamRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Laget är inte närvarande."));
+
+        User coach = userRepository.findById(dto.getCoachId())
+                .orElseThrow(() -> new IllegalArgumentException("Tränaren är inte närvarande."));
+
+        // Uppdatera fält
+        team.setName(dto.getName());
+        team.setAgeGroup(dto.getAgeGroup());
+        team.setGender(Team.Gender.valueOf(dto.getGender()));
+        team.setTrainingLocation(dto.getTrainingLocation());
+        team.setDescription(dto.getDescription());
+        team.setActive(dto.isActive());
+        team.setCoach(coach);
+
+        teamRepository.save(team);
+    }
+
+    @Transactional
+    public void deleteTeam(Long id) {
+        Team team = teamRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Laget är inte närvarande."));
+
+
+
+        teamRepository.delete(team);
     }
 
 }

@@ -7,10 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.NumberFormat;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -73,7 +71,7 @@ private ReferralSource referralSource;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="coach_id" , nullable = true)
-    private Coach coach;
+    private User coach;
 
     @PrePersist
     protected void onCreate() {
