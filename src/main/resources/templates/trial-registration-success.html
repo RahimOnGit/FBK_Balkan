@@ -1,34 +1,94 @@
-<!DOCTYPE html >
-<html lang="en" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
+<!--<!DOCTYPE html >-->
+<!--<html lang="en" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <title>Title</title>-->
+<!--  <link th:href="@{/css/output.css}" rel="stylesheet">-->
+<!--  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">-->
+<!--</head>-->
+<!--<body class="min-h-screen bg-base-200">-->
+<!--&lt;!&ndash; Navbar &ndash;&gt;-->
+<!--<div class="absolute top-0 left-0 z-[10] right-0 bg-primary">-->
+<!--  <div th:replace="~{fragments/navbar::navbar}"></div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash;Success Message in Swedish&ndash;&gt;-->
+<!--<div class="min-h-screen flex items-center justify-center px-4 py-20">-->
+<!--  <div class="card w-full max-w-lg bg-base-100 shadow-xl">-->
+<!--    <div class="card-body text-center">-->
+<!--      <h2 class="card-title-->
+<!--    justify-center text-3xl mb-6">Registrering lyckades!</h2>-->
+<!--      <p class="mb-4">-->
+<!--        Tack för att du registrerade ditt barn för provträning hos FBK Balkan. Vi har tagit emot dina uppgifter och återkommer till dig inom kort.-->
+<!--      </p>-->
+<!--      <a href="/" class="btn btn-primary">Återvänd till startsidan</a>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Footer &ndash;&gt;-->
+<!--<div class="mt-8">-->
+<!--  <div th:replace="~{fragments/footer::footer}"></div>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
+
+<!--////-->
+
+<!DOCTYPE html>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tack för din anmälan! - FBK Balkan</title>
   <link th:href="@{/css/output.css}" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
 </head>
-<body class="min-h-screen bg-base-200">
-<!-- Navbar -->
-<div class="absolute top-0 left-0 z-[10] right-0 bg-primary">
-  <div th:replace="~{fragments/navbar::navbar}"></div>
-</div>
+<body class="min-h-screen bg-base-200 flex flex-col">
 
-<!--Success Message in Swedish-->
-<div class="min-h-screen flex items-center justify-center px-4 py-20">
-  <div class="card w-full max-w-lg bg-base-100 shadow-xl">
-    <div class="card-body text-center">
-      <h2 class="card-title
-    justify-center text-3xl mb-6">Registrering lyckades!</h2>
-      <p class="mb-4">
-        Tack för att du registrerade ditt barn för provträning hos FBK Balkan. Vi har tagit emot dina uppgifter och återkommer till dig inom kort.
+<!-- Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Main Content -->
+<div class="flex-grow flex items-center justify-center px-4 py-12">
+  <div class="card bg-base-100 shadow-2xl max-w-2xl w-full text-center p-10">
+    <div class="mb-8">
+      <div class="w-24 h-24 mx-auto bg-success rounded-full flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+    </div>
+
+    <h1 class="text-4xl font-bold text-success mb-6">Tack för din provträningsanmälan!</h1>
+
+    <div class="prose max-w-none mb-8">
+      <p class="text-xl">
+        Din anmälan har registrerats framgångsrikt.
       </p>
-      <a href="/" class="btn btn-primary">Återvänd till startsidan</a>
+      <p class="text-lg mt-4">
+        Vi kommer att kontakta dig snarast möjligt via e-post eller telefon
+        för att boka in ett provträningsdatum som passar er.
+      </p>
+    </div>
+
+    <!-- عرض رسالة flash إضافية إذا أردت -->
+    <div th:if="${successMessage}" class="alert alert-success shadow-lg mb-8">
+      <span th:text="${successMessage}"></span>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a th:href="@{/}" class="btn btn-outline btn-lg">
+        ← Tillbaka till startsidan
+      </a>
+      <a th:href="@{/trial-registration}" class="btn btn-primary btn-lg">
+        Anmäl en annan spelare →
+      </a>
     </div>
   </div>
 </div>
 
 <!-- Footer -->
-<div class="mt-8">
-  <div th:replace="~{fragments/footer::footer}"></div>
-</div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+
 </body>
 </html>

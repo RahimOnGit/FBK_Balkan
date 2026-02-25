@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.List;
 
 import java.time.LocalDate;
@@ -26,75 +28,80 @@ public class TrialRegistrationController {
     @Autowired
     private TrialRegistrationService trialRegistrationService;
 
+    private static final LocalDate CURRENT_YEAR = LocalDate.now();
+    private static final LocalDate MIN_BIRTH_DATE = CURRENT_YEAR.minusYears(18); // Exempel: Från 18 år sedan och tillbaka
+    private static final LocalDate MAX_BIRTH_DATE = CURRENT_YEAR.minusYears(5);  // Exempel: Upp till 5 år
+
     @GetMapping
     public String showTrialRegistrationForm(Model model) {
         model.addAttribute("trialRegistrationDTO", new TrialRegistrationDTO());
         model.addAttribute("availableGenders", Gender.values());
         model.addAttribute("availableReferralSources", ReferralSource.values());
 
-        // Example of available trials
-        model.addAttribute("availableTrials", List.of(
-                LocalDate.now().plusDays(3),
-                LocalDate.now().plusDays(5)
-        ));
+        model.addAttribute("minBirthDate", MIN_BIRTH_DATE);
+        model.addAttribute("maxBirthDate", MAX_BIRTH_DATE);
 
-        // Birth year range configuration
-        int currentYear = LocalDate.now().getYear();  //2007 -> 2021
-        int yearsBack = 6; // <-- change this to any number of years you want
 
-        // Minimum and maximum birth dates
-        LocalDate minBirthDate = LocalDate.of(currentYear - yearsBack + 1, 1, 1); // Jan 1 of earliest year
-        LocalDate maxBirthDate = LocalDate.of(currentYear, 12, 31);               // Dec 31 current year
-
-        // Add to model
-        model.addAttribute("minBirthDate", minBirthDate);
-        model.addAttribute("maxBirthDate", maxBirthDate);
 
         return "trial-registration";
 
     }
 
-@PostMapping
-public String createTrialRegistration(
-        @Valid
-        @ModelAttribute("trialRegistrationDTO") TrialRegistrationDTO trialRegistrationDTO,
-        BindingResult bindingResult,
-        Model model) {
+    @PostMapping
+    public String createTrialRegistration(
+            @Valid @ModelAttribute("trialRegistrationDTO") TrialRegistrationDTO dto,
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
-    // NEW: Handle referralOther dynamically
-    // If referralSource is NOT OTHER, clear referralOther
-    // This ensures database does not store irrelevant text
-    // =========================
-    if (trialRegistrationDTO.getReferralSource() != null &&
-            trialRegistrationDTO.getReferralSource() != ReferralSource.OTHER) {
-        trialRegistrationDTO.setReferralOther(null);
+        System.out.println("===== POST /trial-registration Åtkomst =====");
+
+        if (bindingResult.hasErrors()) {
+            System.out.println("Verifieringsfel: " + bindingResult.getErrorCount());
+
+            // ← Fyll på listor och datum om det finns ett fel
+            model.addAttribute("availableGenders", Gender.values());
+            model.addAttribute("availableReferralSources", ReferralSource.values());
+            model.addAttribute("minBirthDate", MIN_BIRTH_DATE);
+            model.addAttribute("maxBirthDate", MAX_BIRTH_DATE);
+
+            // Viktigt: Skicka in den angivna informationen igen så att den inte raderas
+            model.addAttribute("trialRegistrationDTO", dto);
+
+            return "trial-registration";
+        }
+
+        try {
+            trialRegistrationService.create(dto);
+
+            redirectAttributes.addFlashAttribute("successMessage",
+                    "Registreringen lyckades! Vi kontaktar dig snart.");
+
+//            return "redirect:/trial-registration-success";
+
+            return "redirect:/trial-registration-success";
+        } catch (Exception e) {
+            System.err.println("Fel vid sparning: " + e.getMessage());
+            e.printStackTrace();
+
+            model.addAttribute("errorMessage", "Ett fel uppstod under inspelningen: " + e.getMessage());
+            model.addAttribute("availableGenders", Gender.values());
+            model.addAttribute("availableReferralSources", ReferralSource.values());
+            model.addAttribute("minBirthDate", MIN_BIRTH_DATE);
+            model.addAttribute("maxBirthDate", MAX_BIRTH_DATE);
+            model.addAttribute("trialRegistrationDTO", dto);
+
+            redirectAttributes.addFlashAttribute("errorMessage", "Något gick fel. Försök igen.");
+//            return "trial-registration";
+            return "redirect:/trial-registration";
+        }
+
+
     }
 
-    // =========================
-    // NEW: Trim referralOther input if present
-    // Optional cleanup to remove accidental whitespace
-    // =========================
-    if (trialRegistrationDTO.getReferralOther() != null) {
-        trialRegistrationDTO.setReferralOther(trialRegistrationDTO.getReferralOther().trim());
+    @GetMapping("/success")
+    public String showSuccessPage() {
+        return "trial-registration-success";
     }
-
-    if (bindingResult.hasErrors()) {
-        // NEW: Re-add enum values to model for dropdowns
-        // This ensures the dropdowns keep all options after form reload
-        model.addAttribute("availableGenders", Gender.values());
-        model.addAttribute("availableReferralSources", ReferralSource.values());
-        return "trial-registration"; // redisplay form with errors
-    }
-
-
-    trialRegistrationService.create(trialRegistrationDTO);
-
-    // =========================
-    // SUCCESS MESSAGE
-    // =========================
-    model.addAttribute("successMessage", "Registration successful!");
-    return "trial-registration-success"; // redirect to success page
-}
-
 
 }

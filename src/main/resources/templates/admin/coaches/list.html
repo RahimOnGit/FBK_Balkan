@@ -107,19 +107,19 @@
                     </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                    <tr th:each="coach : ${coaches}" class="hover:bg-slate-50/50 transition-colors duration-150 align-middle">
+                    <tr th:each="user : ${users}" class="hover:bg-slate-50/50 transition-colors duration-150 align-middle">
 
                         <!-- User Column -->
                         <td class="py-4 px-6">
                             <div class="flex items-center gap-3">
                                 <div class="avatar placeholder">
                                     <div class="bg-primary/10 text-primary rounded-full w-10 h-10 ring-1 ring-primary/20">
-                                        <span class="text-lg font-bold" th:text="${#strings.substring(coach.fullName, 0, 1)}">T</span>
+                                        <span class="text-lg font-bold" th:text="${#strings.substring(user.fullName, 0, 1)}">T</span>
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="font-bold text-slate-800" th:text="${coach.fullName}">Namn Efternamn</div>
-                                    <div class="text-xs opacity-50 font-mono" th:text="'ID: ' + ${coach.id}">ID: 123</div>
+                                    <div class="font-bold text-slate-800" th:text="${user.fullName}">Namn Efternamn</div>
+                                    <div class="text-xs opacity-50 font-mono" th:text="'ID: ' + ${user.id}">ID: 123</div>
                                 </div>
                             </div>
                         </td>
@@ -128,13 +128,13 @@
                         <td class="py-4 px-6">
                             <div class="flex items-center gap-2 text-slate-600 text-sm">
                                 <i class="fa-regular fa-envelope opacity-50"></i>
-                                <span th:text="${coach.email}">email@example.com</span>
+                                <span th:text="${user.email}">email@example.com</span>
                             </div>
                         </td>
 
                         <!-- Role Column -->
                         <td class="py-4 px-6">
-                            <span th:switch="${coach.role}">
+                            <span th:switch="${user.role}">
                                 <span th:case="'ADMIN'" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-50 text-rose-600 border border-rose-100">
                                     <i class="fa-solid fa-shield-halved text-[10px]"></i>
                                     Admin
@@ -143,22 +143,22 @@
                                     <i class="fa-solid fa-whistle text-[10px]"></i>
                                     Tränare
                                 </span>
-                                <span th:case="*" th:text="${coach.role}" class="badge badge-ghost text-xs"></span>
+                                <span th:case="*" th:text="${user.role}" class="badge badge-ghost text-xs"></span>
                             </span>
                         </td>
 
                         <!-- Team Count Column -->
                         <td class="py-4 px-6 text-center">
-                            <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 text-slate-600 font-bold text-xs" th:text="${coach.teamCount}">0</span>
+                            <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 text-slate-600 font-bold text-xs" th:text="${user.teamCount}">0</span>
                         </td>
 
                         <!-- Status Column -->
                         <td class="py-4 px-6">
-                            <span th:if="${coach.enabled}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100">
+                            <span th:if="${user.enabled}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100">
                                 <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span></span>
                                 Aktiv
                             </span>
-                            <span th:unless="${coach.enabled}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-100">
+                            <span th:unless="${user.enabled}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-100">
                                 <span class="w-2 h-2 rounded-full bg-amber-400"></span>
                                 Inaktiverad
                             </span>
@@ -168,7 +168,7 @@
                         <td class="py-4 px-6">
                             <div class="flex items-center justify-end gap-1">
                                 <!-- Edit Button -->
-                                <a th:href="@{/admin/coaches/edit/{id}(id=${coach.id})}"
+                                <a th:href="@{/admin/coaches/edit/{id}(id=${user.id})}"
                                    class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-primary hover:bg-primary/10 transition-colors"
                                    title="Redigera">
                                     <i class="fa-regular fa-pen-to-square text-lg"></i>
@@ -176,7 +176,7 @@
 
                                 <!-- Delete Button (Trigger for Swal) -->
                                 <button type="button"
-                                        th:attr="data-id=${coach.id}, data-name=${coach.fullName}"
+                                        th:attr="data-id=${user.id}, data-name=${user.fullName}"
                                         onclick="confirmDelete(this)"
                                         class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-colors"
                                         title="Ta bort">
@@ -190,7 +190,7 @@
             </div>
 
             <!-- Empty State -->
-            <div th:if="${#lists.isEmpty(coaches)}" class="flex flex-col items-center justify-center py-20 text-center px-6 bg-slate-50/50">
+            <div th:if="${#lists.isEmpty(users)}" class="flex flex-col items-center justify-center py-20 text-center px-6 bg-slate-50/50">
                 <div class="relative w-20 h-20 mb-6">
                     <div class="absolute inset-0 bg-primary/5 rounded-full"></div>
                     <div class="absolute inset-0 flex items-center justify-center">
@@ -219,13 +219,13 @@
 
 <script>
     function confirmDelete(button) {
-        const coachId = button.getAttribute('data-id');
-        const coachName = button.getAttribute('data-name');
-        const deleteUrl = `/admin/coaches/delete/${coachId}`;
+        const userId = button.getAttribute('data-id');
+        const userName = button.getAttribute('data-name');
+        const deleteUrl = `/admin/coaches/delete/${userId}`;
 
         Swal.fire({
             title: 'Är du säker?',
-            html: `Du är på väg att ta bort <strong class="text-slate-800">${coachName}</strong>.<br>Denna åtgärd kan inte ångras!`,
+            html: `Du är på väg att ta bort <strong class="text-slate-800">${userName}</strong>.<br>Denna åtgärd kan inte ångras!`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#1e3a8a', // Primary color

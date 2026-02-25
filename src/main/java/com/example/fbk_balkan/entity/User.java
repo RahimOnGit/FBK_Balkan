@@ -1,34 +1,33 @@
 package com.example.fbk_balkan.entity;
 
-import com.example.fbk_balkan.entity.Role;
-import com.example.fbk_balkan.entity.Team;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Entity
-@Table(name = "coaches")
+@Table(name = "users")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Coach {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
-    @Column(nullable = false)
     private String firstName;
 
     @NotBlank
-    @Column(nullable = false)
     private String lastName;
 
     @Column(unique = true, nullable = false)
@@ -42,15 +41,14 @@ public class Coach {
     @Column(nullable = false)
     private Role role;
 
+    @Builder.Default
     private boolean enabled = true;
 
-    // ────────────────────────────────────────────────
-    // Bidirektionell relation – en coach kan ha många lag
-    // ────────────────────────────────────────────────
+    @Builder.Default
     @OneToMany(mappedBy = "coach", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Team> teams = new ArrayList<>();
+    private List<Team> teams = new ArrayList<>();   // ← fortfarande coach i Team-tabellen
 
-    // Hjälpmetod för att hålla relationen synkroniserad
+    // hjälpfunktioner (samma som tidigare)
     public void addTeam(Team team) {
         teams.add(team);
         team.setCoach(this);
@@ -59,5 +57,9 @@ public class Coach {
     public void removeTeam(Team team) {
         teams.remove(team);
         team.setCoach(null);
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 }

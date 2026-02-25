@@ -1,8 +1,7 @@
 package com.example.fbk_balkan.controller;
 
 import com.example.fbk_balkan.dto.team.TeamDto;
-import com.example.fbk_balkan.entity.Coach;
-import com.example.fbk_balkan.repository.CoachRepository;
+import com.example.fbk_balkan.repository.UserRepository;
 import com.example.fbk_balkan.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,7 @@ public class TeamRestController {
     private TeamService teamService;
 
     @Autowired
-    private CoachRepository coachRepository;
+    private UserRepository coachRepository;
 
     /**
      * Get all teams for the authenticated coach
