@@ -10,6 +10,7 @@ import com.example.fbk_balkan.repository.CoachRepository;
 import com.example.fbk_balkan.repository.TeamRepository;
 import com.example.fbk_balkan.repository.TrialRegistrationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -33,38 +34,54 @@ public class TrialRegistrationService {
     //          a coach based on the child's birth year + gender
     // ====
     public TrialRegistrationDTO create(TrialRegistrationDTO trialRegistrationDTO) {
-
-        // --- Map DTO → Entity ---
-        TrialRegistration trialRegistration = new TrialRegistration();
-        trialRegistration.setFirstName(sanitize(trialRegistrationDTO.getFirstName()));
-        trialRegistration.setLastName(sanitize(trialRegistrationDTO.getLastName()));
+        // Sanitize all string fields
+        String firstName = sanitize(trialRegistrationDTO.getFirstName());
+        String lastName = sanitize(trialRegistrationDTO.getLastName());
+        String relativeName = sanitize(trialRegistrationDTO.getRelativeName());
+        String relativeEmail = sanitize(trialRegistrationDTO.getRelativeEmail());
+        String relativeNumber = sanitize(trialRegistrationDTO.getRelativeNumber());
+        String currentClub = sanitize(trialRegistrationDTO.getCurrentClub());
+        String referralOther = sanitize(trialRegistrationDTO.getReferralOther());
+        // Map DTO to entity
+        var trialRegistration = new com.example.fbk_balkan.entity.TrialRegistration();
+        trialRegistration.setFirstName(firstName);
+        trialRegistration.setLastName(lastName);
         trialRegistration.setBirthDate(trialRegistrationDTO.getBirthDate());
-        trialRegistration.setRelativeName(sanitize(trialRegistrationDTO.getRelativeName()));
-        trialRegistration.setRelativeEmail(sanitize(trialRegistrationDTO.getRelativeEmail()));
-        trialRegistration.setRelativeNumber(sanitize(trialRegistrationDTO.getRelativeNumber()));
+        trialRegistration.setRelativeName(relativeName);
+        trialRegistration.setRelativeEmail(relativeEmail);
+        trialRegistration.setRelativeNumber(relativeNumber);
         trialRegistration.setPreferredTrainingDate(trialRegistrationDTO.getPreferredTrainingDate());
-        trialRegistration.setGender(trialRegistrationDTO.getGender());
-        trialRegistration.setCurrentClub(sanitize(trialRegistrationDTO.getCurrentClub()));
-        trialRegistration.setClubYears(trialRegistrationDTO.getClubYears());
-        trialRegistration.setReferralSource(trialRegistrationDTO.getReferralSource());
+        trialRegistration.setGender(trialRegistrationDTO.getGender());          // NEW
+        trialRegistration.setCurrentClub(currentClub); // NEW
+        trialRegistration.setClubYears(trialRegistrationDTO.getClubYears());     // NEW
+        trialRegistration.setReferralSource(trialRegistrationDTO.getReferralSource());// NEW
+
         trialRegistration.setReferralOther(
                 trialRegistrationDTO.getReferralSource() == ReferralSource.OTHER
-                        ? sanitize(trialRegistrationDTO.getReferralOther())
+                        ? referralOther
                         : null
         );
+
         trialRegistration.setStatus(com.example.fbk_balkan.entity.TrialStatus.PENDING);
-        trialRegistration.setCreatedAt(LocalDate.now());
+        trialRegistration.setCreatedAt(LocalDate.from(LocalDateTime.now()));
+        // Duplicate check
+        boolean exists = trialRegistrationRepository
+                .existsByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndBirthDateAndPreferredTrainingDate(
+                        firstName,
+                        lastName,
+                        trialRegistrationDTO.getBirthDate(),
+                        trialRegistrationDTO.getPreferredTrainingDate()
+                );
 
-
-        // AUTO-ASSIGN COACH
-        // Strategy:
-        //   1. Extract birth year from the child's birthDate
-        //   2. Map the child's gender (enums.Gender) to Team.Gender
-        //   3. Search for an active team whose ageGroup contains that
-        //      birth year (e.g. "P7 (2018)" contains "2018") and
-        //      whose gender matches
-        //   4. If found → assign that team's coach to the registration
-        //   5. If not found → coach stays null (admin assigns manually)
+        if (exists) {
+            throw new IllegalStateException("Barnet är redan registrerat för detta provträningstillfälle.");
+        }
+        try {
+            trialRegistrationRepository.save(trialRegistration);
+            //Handles race conditions
+        } catch (DataIntegrityViolationException ex) {
+            throw new IllegalStateException("Barnet är redan registrerat för detta provträningstillfälle.");
+        }
         String birthYear = String.valueOf(trialRegistrationDTO.getBirthDate().getYear());
         Team.Gender teamGender = mapToTeamGender(trialRegistrationDTO.getGender());
 
@@ -83,10 +100,10 @@ public class TrialRegistrationService {
         }
         // If still no match → coach remains null → admin assigns later
 
-        // --- Save ---
+        // Save entity
         trialRegistrationRepository.save(trialRegistration);
 
-        // --- Build and return DTO ---
+        // used here  builder methode to add new fields any time easily.
         return TrialRegistrationDTO.builder()
                 .id(trialRegistration.getId())
                 .firstName(trialRegistration.getFirstName())
@@ -96,15 +113,16 @@ public class TrialRegistrationService {
                 .relativeEmail(trialRegistration.getRelativeEmail())
                 .relativeNumber(trialRegistration.getRelativeNumber())
                 .preferredTrainingDate(trialRegistration.getPreferredTrainingDate())
-                .gender(trialRegistration.getGender())
-                .currentClub(trialRegistration.getCurrentClub())
-                .clubYears(trialRegistration.getClubYears())
-                .referralSource(trialRegistration.getReferralSource())
-                .referralOther(trialRegistration.getReferralOther())
+                .gender(trialRegistration.getGender())          // NEW
+                .currentClub(trialRegistration.getCurrentClub()) // NEW
+                .clubYears(trialRegistration.getClubYears())    // NEW
+                .referralSource(trialRegistration.getReferralSource())  // NEW
+                .referralOther(trialRegistration.getReferralOther())// NEW
                 .status(trialRegistration.getStatus())
                 .createdAt(trialRegistration.getCreatedAt().atStartOfDay())
                 .coachId(trialRegistration.getCoach() != null ? trialRegistration.getCoach().getId() : null)
                 .build();
+
     }
 
     // ==
@@ -125,16 +143,17 @@ public class TrialRegistrationService {
     private Team.Gender mapToTeamGender(Gender gender) {
         if (gender == null) return Team.Gender.MIXED;
         return switch (gender) {
-            case MALE, ANNAT, VillEjAnge , FEMALE -> Team.Gender.MALE;
+            case MALE, ANNAT, VillEjAnge, FEMALE -> Team.Gender.MALE;
 
             //change this if they made a female team right now there is no
 //            case FEMALE -> Team.Gender.FEMALE;
         };
     }
 
-    // HELPER — removes HTML tags and trims whitespace
-    private String sanitize(String value) {
-        if (value == null) return null;
-        return value.trim().replaceAll("<.*?>", "");
-    }
-}
+
+
+// Sanitization helper
+private String sanitize(String value) {
+    if (value == null) return null;
+    return value.trim().replaceAll("<.*?>", ""); // remove HTML tags
+}}
