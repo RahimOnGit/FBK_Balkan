@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class CoachCreateUpdateDTO {
+public class UserCreateUpdateDto {
 
     private Long id;
 

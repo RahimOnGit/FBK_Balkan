@@ -6,7 +6,7 @@ import com.example.fbk_balkan.entity.TrialRegistration;
 import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.enums.Gender;
 import com.example.fbk_balkan.enums.ReferralSource;
-import com.example.fbk_balkan.repository.CoachRepository;
+import com.example.fbk_balkan.repository.UserRepository;
 import com.example.fbk_balkan.repository.TeamRepository;
 import com.example.fbk_balkan.repository.TrialRegistrationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class TrialRegistrationService {
     private TrialRegistrationRepository trialRegistrationRepository;
 
     @Autowired
-    private CoachRepository coachRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private TeamRepository teamRepository;
@@ -130,7 +130,7 @@ public class TrialRegistrationService {
     //         ordered newest first
     // ===
     public List<TrialRegistrationDTO> fetchTrialRegistrationByCoach(Long coachId) {
-        coachRepository.findById(coachId)
+        userRepository.findById(coachId)
                 .orElseThrow(() -> new IllegalArgumentException("Coach not found with id: " + coachId));
 
         return trialRegistrationRepository.findByCoachIdOrderByCreatedAtDesc(coachId)
