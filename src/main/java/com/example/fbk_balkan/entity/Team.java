@@ -12,8 +12,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "teams") //
-@EntityListeners(AuditingEntityListener.class) // Enables auto-timestamps
+@Table(name = "teams")
+@EntityListeners(AuditingEntityListener.class)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,22 +35,23 @@ public class Team {
     @Column(nullable = false, length = 10)
     private Gender gender;
 
-    @ManyToOne
-    //@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "coach_id") // Foreign key to Coach table
-    private User coach;
-
-    //  Add @Transient getCoachId() later for API
-    //  NEVER store contact details here GDPR!
-
-    @Column(nullable = false)
-    private boolean active = true; // Default active
     @Column(length = 150)
     private String trainingLocation;
-    @Column(columnDefinition = "TEXT")
-    private String description; // till exampl "Tränar  18:00, nybörjare välkomna!"
 
-    //  AUDITING FIELDS
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @Column(nullable = false)
+    private boolean active = true;
+
+    // ────────────────────────────────────────────────
+    // Koppling till coach
+    // ────────────────────────────────────────────────
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "coach_id")
+    private User coach;
+
+    // Audit
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdDate;
@@ -58,10 +59,7 @@ public class Team {
     @LastModifiedDate
     private LocalDateTime updatedDate;
 
-    // INNER ENUM
     public enum Gender {
-        MALE,    // "Pojkar" in Swedish UI
-        FEMALE,  // "Flickor"
-        MIXED    // "Mixad"
+        MALE, FEMALE, MIXED
     }
 }

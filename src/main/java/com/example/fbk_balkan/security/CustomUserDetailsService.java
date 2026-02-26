@@ -1,41 +1,41 @@
 package com.example.fbk_balkan.security;
 
-import com.example.fbk_balkan.repository.CoachRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.fbk_balkan.entity.User;
+import com.example.fbk_balkan.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private CoachRepository coachRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        com.example.fbk_balkan.entity.User coach = coachRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Coach not found with username: " + email));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
 
-        return User.builder()
-                .username(coach.getEmail())
-                .password(coach.getPassword())
-                .authorities(getAuthorities(coach))
-                .disabled(!coach.isEnabled())
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getEmail())
+                .password(user.getPassword())
+                .authorities(getAuthorities(user))
+                .accountExpired(false)
+                .accountLocked(false)
+                .credentialsExpired(false)
+                .disabled(!user.isEnabled())
                 .build();
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(com.example.fbk_balkan.entity.User coach) {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + coach.getRole()));
-        return authorities;
+    private Collection<? extends GrantedAuthority> getAuthorities(User user) {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
     }
 }
