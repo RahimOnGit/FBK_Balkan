@@ -14,13 +14,12 @@
 
 <!--registration form-->
 <div class="min-h-screen flex items-center justify-center px-4 py-20 mt-12">
-    <div class="card w-full max-w-lg bg-base-100 shadow-xl">
+ <div class="card w-full max-w-lg bg-base-100 shadow-xl">
         <div class="card-body">
             <h2 class="card-title justify-center text-3xl mb-6">Provträningsregistrering</h2>
             <p class="text-sm text-gray-600 mb-4">
                 Fält markerade med <span aria-hidden="true">*</span> är obligatoriska.
             </p>
-
             <form th:action="@{/trial-registration}" th:object="${trialRegistrationDTO}" method="post">
                 <div class="form-control mb-4">
                     <label class="label">
@@ -205,6 +204,8 @@
 
 
                 <div class="form-control">
+                    <!-- Duplicate registration error message -->
+                    <p class="text-error mb-4" th:if="${duplicateError}" th:text="${duplicateError}"></p>
                     <button type="submit" class="btn btn-primary w-full">Registrera för provträning</button>
                 </div>
             </form>
