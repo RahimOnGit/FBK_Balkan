@@ -39,19 +39,16 @@ public class SecurityConfig {
                                 .requestMatchers("/trial-registration", "/trial-registration/success","/about").permitAll()
                                 .requestMatchers("/news", "/news/**","/public-teams/**").permitAll()
 
-                                .requestMatchers("/team-register").hasRole("ADMIN")
+
 //                      roles-based access control
                                 .requestMatchers("/coach/**").hasRole("COACH")
                                 .requestMatchers("/admin/news/**").hasAnyRole("SOCIAL_ADMIN", "ADMIN")
                                 .requestMatchers("/admin/dashboard", "/admin/teams", "/admin/age-groups", "/admin/coaches", "/admin/trials")
                                 .hasRole("ADMIN")
-                        // Publicly accessible URLs
-                        .requestMatchers("/", "/css/**", "/images/**", "/login", "/login-error").permitAll()
-                        .requestMatchers("/trial-registration", "/about").permitAll()
-                        .requestMatchers("/news", "/news/**").permitAll()
+                                .requestMatchers("/team-register").hasRole("ADMIN")
+
 
                         // Role-based access control
-                        .requestMatchers("/coach/**").hasRole("COACH")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
 
                         // Authentication for all other requests

@@ -81,9 +81,11 @@ public class TrialRegistrationDTO {
     @Max(value = 5, message = "Antal år i klubb kan inte vara mer än 5")
     private Integer clubYears;
 
+
     private ReferralSource referralSource;
 
     @Size(max = 50, message = "Max 50 characters")
+
     @Pattern(
             regexp = "^[\\p{L}0-9 .,'\"!?-]*$",
             message = "Invalid characters")
