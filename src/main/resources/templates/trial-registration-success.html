@@ -1,94 +1,135 @@
-<!--<!DOCTYPE html >-->
-<!--<html lang="en" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">-->
+<!--<!DOCTYPE html>-->
+<!--<html lang="sv" xmlns:th="http://www.thymeleaf.org">-->
 <!--<head>-->
 <!--  <meta charset="UTF-8">-->
-<!--  <title>Title</title>-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  <title>Tack för din anmälan! - FBK Balkan</title>-->
 <!--  <link th:href="@{/css/output.css}" rel="stylesheet">-->
-<!--  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">-->
 <!--</head>-->
-<!--<body class="min-h-screen bg-base-200">-->
-<!--&lt;!&ndash; Navbar &ndash;&gt;-->
-<!--<div class="absolute top-0 left-0 z-[10] right-0 bg-primary">-->
-<!--  <div th:replace="~{fragments/navbar::navbar}"></div>-->
-<!--</div>-->
+<!--<body class="min-h-screen bg-base-200 flex flex-col">-->
 
-<!--&lt;!&ndash;Success Message in Swedish&ndash;&gt;-->
-<!--<div class="min-h-screen flex items-center justify-center px-4 py-20">-->
-<!--  <div class="card w-full max-w-lg bg-base-100 shadow-xl">-->
-<!--    <div class="card-body text-center">-->
-<!--      <h2 class="card-title-->
-<!--    justify-center text-3xl mb-6">Registrering lyckades!</h2>-->
-<!--      <p class="mb-4">-->
-<!--        Tack för att du registrerade ditt barn för provträning hos FBK Balkan. Vi har tagit emot dina uppgifter och återkommer till dig inom kort.-->
+<!--&lt;!&ndash; Navbar &ndash;&gt;-->
+<!--<div th:replace="~{fragments/navbar :: navbar}"></div>-->
+
+<!--&lt;!&ndash; Main Content &ndash;&gt;-->
+<!--<div class="flex-grow flex items-center justify-center px-4 py-12">-->
+<!--  <div class="card bg-base-100 shadow-2xl max-w-2xl w-full text-center p-10">-->
+<!--    <div class="mb-8">-->
+<!--      <div class="w-24 h-24 mx-auto bg-success rounded-full flex items-center justify-center">-->
+<!--        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />-->
+<!--        </svg>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <h1 class="text-4xl font-bold text-success mb-6">Tack för din provträningsanmälan!</h1>-->
+
+<!--    <div class="prose max-w-none mb-8">-->
+<!--      <p class="text-xl">-->
+<!--        Din anmälan har registrerats framgångsrikt.-->
 <!--      </p>-->
-<!--      <a href="/" class="btn btn-primary">Återvänd till startsidan</a>-->
+<!--      <p class="text-lg mt-4">-->
+<!--        Vi kommer att kontakta dig snarast möjligt via e-post eller telefon-->
+<!--        för att boka in ett provträningsdatum som passar er.-->
+<!--      </p>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; عرض رسالة flash إضافية إذا أردت &ndash;&gt;-->
+<!--    <div th:if="${successMessage}" class="alert alert-success shadow-lg mb-8">-->
+<!--      <span th:text="${successMessage}"></span>-->
+<!--    </div>-->
+
+<!--    <div class="flex flex-col sm:flex-row gap-4 justify-center">-->
+<!--      <a th:href="@{/}" class="btn btn-outline btn-lg">-->
+<!--        ← Tillbaka till startsidan-->
+<!--      </a>-->
+<!--      <a th:href="@{/trial-registration}" class="btn btn-primary btn-lg">-->
+<!--        Anmäl en annan spelare →-->
+<!--      </a>-->
 <!--    </div>-->
 <!--  </div>-->
 <!--</div>-->
 
 <!--&lt;!&ndash; Footer &ndash;&gt;-->
-<!--<div class="mt-8">-->
-<!--  <div th:replace="~{fragments/footer::footer}"></div>-->
-<!--</div>-->
+<!--<div th:replace="~{fragments/footer :: footer}"></div>-->
+
 <!--</body>-->
 <!--</html>-->
 
-<!--////-->
+<!--/////-->
 
 <!DOCTYPE html>
-<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tack för din anmälan! - FBK Balkan</title>
   <link th:href="@{/css/output.css}" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+  <style>
+    /* Consistent card styling with the registration form */
+    .success-icon-container {
+      animation: pop-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    @keyframes pop-in {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
 </head>
 <body class="min-h-screen bg-base-200 flex flex-col">
 
 <!-- Navbar -->
-<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="sticky top-0 left-0 z-[10] right-0 bg-primary text-primary-content shadow-md">
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
+</div>
 
 <!-- Main Content -->
-<div class="flex-grow flex items-center justify-center px-4 py-12">
-  <div class="card bg-base-100 shadow-2xl max-w-2xl w-full text-center p-10">
-    <div class="mb-8">
-      <div class="w-24 h-24 mx-auto bg-success rounded-full flex items-center justify-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+<div class="flex-grow flex items-center justify-center px-4 py-16">
+  <!-- Changed max-w-2xl to max-w-lg to match the registration form width -->
+  <div class="card w-full max-w-lg bg-base-100 shadow-xl rounded-xl overflow-hidden">
+
+    <!-- Card Header -->
+    <div class="bg-success text-success-content p-6 text-center">
+      <div class="success-icon-container inline-block p-3 bg-success-content/20 rounded-full mb-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
         </svg>
       </div>
+      <h1 class="text-2xl font-bold tracking-wide">Registrering lyckades</h1>
     </div>
 
-    <h1 class="text-4xl font-bold text-success mb-6">Tack för din provträningsanmälan!</h1>
+    <div class="card-body p-6 text-center">
+      <h2 class="text-xl font-semibold text-base-content mb-2">Tack för din provträningsanmälan!</h2>
 
-    <div class="prose max-w-none mb-8">
-      <p class="text-xl">
-        Din anmälan har registrerats framgångsrikt.
+      <p class="text-base-content/70 mb-6">
+        Din anmälan har registrerats framgångsrikt. Vi kommer att kontakta dig snarast möjligt via e-post eller telefon för att boka in ett provträningsdatum.
       </p>
-      <p class="text-lg mt-4">
-        Vi kommer att kontakta dig snarast möjligt via e-post eller telefon
-        för att boka in ett provträningsdatum som passar er.
-      </p>
-    </div>
 
-    <!-- عرض رسالة flash إضافية إذا أردت -->
-    <div th:if="${successMessage}" class="alert alert-success shadow-lg mb-8">
-      <span th:text="${successMessage}"></span>
-    </div>
+      <!-- Flash Message -->
+      <div th:if="${successMessage}" class="alert alert-success shadow-inner mb-6 text-left">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span th:text="${successMessage}"></span>
+      </div>
 
-    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-      <a th:href="@{/}" class="btn btn-outline btn-lg">
-        ← Tillbaka till startsidan
-      </a>
-      <a th:href="@{/trial-registration}" class="btn btn-primary btn-lg">
-        Anmäl en annan spelare →
-      </a>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center mt-4">
+        <a th:href="@{/}" class="btn btn-outline flex-1 gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+          Startsida
+        </a>
+        <a th:href="@{/trial-registration}" class="btn btn-primary flex-1 gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
+          Ny anmälan
+        </a>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- Footer -->
-<div th:replace="~{fragments/footer :: footer}"></div>
+<footer class="mt-auto">
+  <div th:replace="~{fragments/footer :: footer}"></div>
+</footer>
 
 </body>
 </html>
