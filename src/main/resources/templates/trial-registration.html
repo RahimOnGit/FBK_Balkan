@@ -231,3 +231,243 @@
 
 </body>
 </html>
+
+<!--///-->
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Provträningsregistrering - FBK Balkan</title>-->
+<!--    <link th:href="@{/css/output.css}" rel="stylesheet">-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">-->
+<!--    <style>-->
+<!--        /* Custom styling for sectioning and visual polish */-->
+<!--        .form-section {-->
+<!--            border-bottom: 1px solid oklch(var(&#45;&#45;b2));-->
+<!--            padding-bottom: 1.25rem;-->
+<!--            margin-bottom: 1.25rem;-->
+<!--        }-->
+<!--        .form-section:last-of-type {-->
+<!--            border-bottom: none;-->
+<!--            margin-bottom: 0;-->
+<!--        }-->
+<!--        .section-title {-->
+<!--            font-size: 1rem;-->
+<!--            font-weight: 700;-->
+<!--            color: oklch(var(&#45;&#45;p));-->
+<!--            margin-bottom: 0.75rem;-->
+<!--            display: flex;-->
+<!--            align-items: center;-->
+<!--            gap: 0.5rem;-->
+<!--            text-transform: uppercase;-->
+<!--            letter-spacing: 0.05em;-->
+<!--        }-->
+<!--        .label-text {-->
+<!--            font-weight: 500;-->
+<!--        }-->
+<!--        /* Ensure consistent height for error message containers */-->
+<!--        .error-slot {-->
+<!--            min-height: 1.25rem;-->
+<!--            display: block;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body class="min-h-screen bg-base-200 flex flex-col">-->
+
+<!--&lt;!&ndash; Navbar &ndash;&gt;-->
+<!--<div class="sticky top-0 left-0 z-[10] right-0 bg-primary text-primary-content shadow-md">-->
+<!--    <div th:replace="~{fragments/navbar::navbar}"></div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Main Content &ndash;&gt;-->
+<!--&lt;!&ndash; Added py-16 for vertical spacing and kept max-w-lg for moderate width &ndash;&gt;-->
+<!--<div class="flex-grow flex items-center justify-center px-4 py-16">-->
+<!--    <div class="card w-full max-w-lg bg-base-100 shadow-xl rounded-xl overflow-hidden">-->
+
+<!--        &lt;!&ndash; Card Header &ndash;&gt;-->
+<!--        <div class="bg-primary text-primary-content p-5 text-center">-->
+<!--            <h1 class="text-2xl font-bold tracking-wide">Provträningsregistrering</h1>-->
+<!--            <p class="text-primary-content/80 mt-1 text-sm">FBK Balkan</p>-->
+<!--        </div>-->
+
+<!--        <div class="card-body p-6">-->
+<!--            <p class="text-xs text-base-content/70 mb-4 text-center">-->
+<!--                Fält markerade med <span class="text-error font-bold">*</span> är obligatoriska.-->
+<!--            </p>-->
+
+<!--            <form th:action="@{/trial-registration}" th:object="${trialRegistrationDTO}" method="post" class="space-y-4">-->
+
+<!--                &lt;!&ndash; SECTION 1: CHILD INFORMATION &ndash;&gt;-->
+<!--                <div class="form-section">-->
+<!--                    <div class="section-title">-->
+<!--                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>-->
+<!--                        Barnets uppgifter-->
+<!--                    </div>-->
+
+<!--                    <div class="form-control">-->
+<!--                        <label class="label py-1">-->
+<!--                            <span class="label-text">Förnamn <span class="text-error">*</span></span>-->
+<!--                        </label>-->
+<!--                        <input class="input input-bordered input-sm w-full" type="text" th:field="*{firstName}" placeholder="Ange förnamn" required maxlength="40"/>-->
+<!--                        <span class="text-error text-xs error-slot" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>-->
+<!--                    </div>-->
+
+<!--                    <div class="form-control mt-2">-->
+<!--                        <label class="label py-1">-->
+<!--                            <span class="label-text">Efternamn <span class="text-error">*</span></span>-->
+<!--                        </label>-->
+<!--                        <input class="input input-bordered input-sm w-full" type="text" th:field="*{lastName}" placeholder="Ange efternamn" required maxlength="40"/>-->
+<!--                        <span class="text-error text-xs error-slot" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>-->
+<!--                    </div>-->
+
+<!--                    <div class="grid grid-cols-2 gap-3 mt-2">-->
+<!--                        <div class="form-control">-->
+<!--                            <label class="label py-1">-->
+<!--                                <span class="label-text">Födelsedatum <span class="text-error">*</span></span>-->
+<!--                            </label>-->
+<!--                            <input class="input input-bordered input-sm w-full" type="date" th:field="*{birthDate}" th:attr="min=${minBirthDate}, max=${maxBirthDate}" required />-->
+<!--                            <span class="text-error text-xs error-slot" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></span>-->
+<!--                        </div>-->
+
+<!--                        <div class="form-control">-->
+<!--                            <label class="label py-1">-->
+<!--                                <span class="label-text">Kön <span class="text-error">*</span></span>-->
+<!--                            </label>-->
+<!--                            <select th:field="*{gender}" class="select select-bordered select-sm w-full" required>-->
+<!--                                <option value="">Välj</option>-->
+<!--                                <option th:each="g : ${availableGenders}" th:value="${g}" th:text="${g.label}"></option>-->
+<!--                            </select>-->
+<!--                            <span class="text-error text-xs error-slot" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; SECTION 2: FOOTBALL EXPERIENCE &ndash;&gt;-->
+<!--                <div class="form-section">-->
+<!--                    <div class="section-title">-->
+<!--                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>-->
+<!--                        Fotbollserfarenhet-->
+<!--                    </div>-->
+
+<!--                    <div class="grid grid-cols-2 gap-3">-->
+<!--                        <div class="form-control">-->
+<!--                            <label class="label py-1">-->
+<!--                                <span class="label-text">Nuvarande klubb</span>-->
+<!--                            </label>-->
+<!--                            <input class="input input-bordered input-sm w-full" type="text" th:field="*{currentClub}" placeholder="Klubb" maxlength="40" />-->
+<!--                        </div>-->
+
+<!--                        <div class="form-control">-->
+<!--                            <label class="label py-1">-->
+<!--                                <span class="label-text">Antal år</span>-->
+<!--                            </label>-->
+<!--                            <input class="input input-bordered input-sm w-full" type="number" min="0" max="5" th:field="*{clubYears}" placeholder="År" />-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; SECTION 3: GUARDIAN INFORMATION &ndash;&gt;-->
+<!--                <div class="form-section">-->
+<!--                    <div class="section-title">-->
+<!--                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>-->
+<!--                        Vårdnadshavare-->
+<!--                    </div>-->
+
+<!--                    <div class="form-control">-->
+<!--                        <label class="label py-1">-->
+<!--                            <span class="label-text">Namn <span class="text-error">*</span></span>-->
+<!--                        </label>-->
+<!--                        <input class="input input-bordered input-sm w-full" type="text" th:field="*{relativeName}" placeholder="För- och efternamn" required maxlength="40" />-->
+<!--                        <span class="text-error text-xs error-slot" th:if="${#fields.hasErrors('relativeName')}" th:errors="*{relativeName}"></span>-->
+<!--                    </div>-->
+
+<!--                    <div class="form-control mt-2">-->
+<!--                        <label class="label py-1">-->
+<!--                            <span class="label-text">E-postadress <span class="text-error">*</span></span>-->
+<!--                        </label>-->
+<!--                        <input class="input input-bordered input-sm w-full" type="email" th:field="*{relativeEmail}" placeholder="namn@exempel.se" required maxlength="40" />-->
+<!--                        <span class="text-error text-xs error-slot" th:if="${#fields.hasErrors('relativeEmail')}" th:errors="*{relativeEmail}"></span>-->
+<!--                    </div>-->
+
+<!--                    <div class="form-control mt-2">-->
+<!--                        <label class="label py-1">-->
+<!--                            <span class="label-text">Telefonnummer <span class="text-error">*</span></span>-->
+<!--                        </label>-->
+<!--                        <input class="input input-bordered input-sm w-full" type="tel" th:field="*{relativeNumber}" placeholder="07X-XXX XX XX" required maxlength="15"/>-->
+<!--                        <span class="text-error text-xs error-slot" th:if="${#fields.hasErrors('relativeNumber')}" th:errors="*{relativeNumber}"></span>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; SECTION 4: ADDITIONAL INFO &ndash;&gt;-->
+<!--                <div class="form-section">-->
+<!--                    <div class="form-control">-->
+<!--                        <label class="label py-1">-->
+<!--                            <span class="label-text">Hur hittade ni oss? <span class="text-error">*</span></span>-->
+<!--                        </label>-->
+<!--                        <select th:field="*{referralSource}" id="referralSource" class="select select-bordered select-sm w-full" required>-->
+<!--                            <option value="">Välj källa</option>-->
+<!--                            <option th:each="r : ${availableReferralSources}" th:value="${r}" th:text="${r.label}"></option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+
+<!--                    <div class="form-control mt-2" id="referralOtherDiv" style="display: none;">-->
+<!--                        <label class="label py-1">-->
+<!--                            <span class="label-text">Ange annan källa</span>-->
+<!--                        </label>-->
+<!--                        <input id="referralOtherInput" class="input input-bordered input-sm w-full" type="text" th:field="*{referralOther}" maxlength="50" placeholder="Beskriv här">-->
+<!--                    </div>-->
+
+<!--                    <div class="form-control mt-2">-->
+<!--                        <label class="label py-1">-->
+<!--                            <span class="label-text">Önskat provträningsdatum <span class="text-error">*</span></span>-->
+<!--                        </label>-->
+<!--                        <input class="input input-bordered input-sm w-full" type="date" th:field="*{preferredTrainingDate}" required />-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Submission Area &ndash;&gt;-->
+<!--                <div class="form-control mt-6">-->
+<!--                    &lt;!&ndash; Duplicate error Alert &ndash;&gt;-->
+<!--                    <div th:if="${duplicateError}" class="alert alert-error mb-4 py-2 text-sm shadow-inner">-->
+<!--                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>-->
+<!--                        <span th:text="${duplicateError}"></span>-->
+<!--                    </div>-->
+
+<!--                    <button type="submit" class="btn btn-primary w-full font-bold tracking-wide shadow-md hover:shadow-lg transition-all">-->
+<!--                        Skicka registrering-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Footer &ndash;&gt;-->
+<!--<footer class="mt-auto">-->
+<!--    <div th:replace="~{fragments/footer::footer}"></div>-->
+<!--</footer>-->
+
+<!--<script>-->
+<!--    document.addEventListener('DOMContentLoaded', function() {-->
+<!--        const referralSelect = document.getElementById('referralSource');-->
+<!--        const referralOtherDiv = document.getElementById('referralOtherDiv');-->
+<!--        const referralOtherInput = document.getElementById('referralOtherInput');-->
+
+<!--        function toggleOtherField() {-->
+<!--            if (referralSelect.value === 'OTHER') {-->
+<!--                referralOtherDiv.style.display = 'block';-->
+<!--            } else {-->
+<!--                referralOtherDiv.style.display = 'none';-->
+<!--                referralOtherInput.value = '';-->
+<!--            }-->
+<!--        }-->
+
+<!--        toggleOtherField(); // Run on load-->
+<!--        referralSelect.addEventListener('change', toggleOtherField);-->
+<!--    });-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->

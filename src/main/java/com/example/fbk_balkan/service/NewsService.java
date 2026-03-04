@@ -29,20 +29,27 @@ public class NewsService {
     }
 
     @Transactional
-    public News createNews(NewsDTO newsDTO, String authorUsername) {
+    public News createNews(NewsDTO newsDTO, String authorUsername, boolean canPublish) {
         News news = new News();
         news.setTitle(newsDTO.getTitle());
         news.setContent(newsDTO.getContent());
         news.setImageUrl(newsDTO.getImageUrl());
         news.setExternalImageUrl(validateExternalImageUrl(newsDTO.getExternalImageUrl()));
         news.setLinkUrl(newsDTO.getLinkUrl());
-        news.setPublished(newsDTO.isPublished());
+
+        // Only allow publishing if the user has the right permissions
+        if (canPublish) {
+            news.setPublished(newsDTO.isPublished());
+        } else {
+            news.setPublished(false);
+        }
+
         news.setAuthorUsername(authorUsername);
         return newsRepository.save(news);
     }
 
     @Transactional
-    public News updateNews(Long id, NewsDTO newsDTO) {
+    public News updateNews(Long id, NewsDTO newsDTO, boolean canPublish) {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Nyhet hittades inte"));
         news.setTitle(newsDTO.getTitle());
@@ -50,7 +57,18 @@ public class NewsService {
         news.setImageUrl(newsDTO.getImageUrl());
         news.setExternalImageUrl(validateExternalImageUrl(newsDTO.getExternalImageUrl()));
         news.setLinkUrl(newsDTO.getLinkUrl());
-        news.setPublished(newsDTO.isPublished());
+
+        // Only allow updating published status if the user has the right permissions
+        if (canPublish) {
+            news.setPublished(newsDTO.isPublished());
+        } else {
+            // If they can't publish, and they edit a news, we might want to keep it unpublished
+            // or just not allow them to change the published status.
+            // Given the requirement "All news created by these roles should be saved as unpublished",
+            // we'll force it to false if they are not Admin.
+            news.setPublished(false);
+        }
+
         return newsRepository.save(news);
     }
 
