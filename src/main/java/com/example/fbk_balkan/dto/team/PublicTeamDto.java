@@ -8,6 +8,7 @@ public class PublicTeamDto {
     private String name;
     private String ageGroup;
     private String gender;
+    private String description;
 
     private String coachName;       // First + Last
     private String trainingLocation;
