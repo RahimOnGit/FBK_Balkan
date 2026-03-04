@@ -14,7 +14,7 @@ public class PublicTeamMapper {
         dto.setName(team.getName() != null ? team.getName() : "Okänt lag");
         dto.setAgeGroup(team.getAgeGroup() != null ? team.getAgeGroup() : "Okänd åldersgrupp");
         dto.setGender(team.getGender() != null ? team.getGender().name() : "Okänt");
-
+dto.setDescription(team.getDescription()!=null? team.getDescription(): "Okänt beskrivning");
         // Coach name: first initial + last name
         if (team.getCoach() != null) {
             String firstInitial = team.getCoach().getFirstName() != null && !team.getCoach().getFirstName().isEmpty()
