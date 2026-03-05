@@ -41,7 +41,7 @@ public class SecurityConfig {
 
 
 //                      roles-based access control
-                                .requestMatchers("/coach/**").hasRole("COACH")
+                                .requestMatchers("/coach/**").hasAnyRole("COACH", "ADMIN")
                                 .requestMatchers("/socialadmin/**").hasRole("SOCIAL_ADMIN")
                                 .requestMatchers("/admin/news/**").hasAnyRole("SOCIAL_ADMIN", "ADMIN")
                                 .requestMatchers("/admin/dashboard", "/admin/teams", "/admin/age-groups", "/admin/coaches", "/admin/trials")
@@ -49,11 +49,11 @@ public class SecurityConfig {
                                 .requestMatchers("/team-register").hasRole("ADMIN")
 
 
-                        // Role-based access control
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                                // Role-based access control
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
 
-                        // Authentication for all other requests
-                        .anyRequest().authenticated()
+                                // Authentication for all other requests
+                                .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")

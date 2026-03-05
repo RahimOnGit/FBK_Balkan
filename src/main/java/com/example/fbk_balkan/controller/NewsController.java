@@ -21,7 +21,7 @@ import java.util.List;
 public class NewsController {
 
     @GetMapping("/coach/news/create")
-    @PreAuthorize("hasRole('COACH')")
+    @PreAuthorize("hasAnyRole('COACH', 'ADMIN')")
     public String showCoachCreateForm(Model model) {
         model.addAttribute("newsDTO", new NewsDTO());
         model.addAttribute("isEdit", false);
@@ -59,7 +59,7 @@ public class NewsController {
     }
 
     @PostMapping("/coach/news/create")
-    @PreAuthorize("hasRole('COACH')")
+    @PreAuthorize("hasAnyRole('COACH', 'ADMIN')")
     public String createCoachNews(@Valid @ModelAttribute NewsDTO newsDTO,
                                   BindingResult result,
                                   @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,

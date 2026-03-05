@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--<html lang="sv" data-theme="winter" xmlns:th="http://www.thymeleaf.org">-->
-<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">
+<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -116,7 +116,7 @@
     <!-- Form Container -->
     <div class="card bg-base-100 shadow-lg border border-slate-200 rounded-3xl overflow-hidden">
         <div class="card-body p-0">
-            <form th:action="${isEdit ? '/admin/news/edit/' + newsId : '/admin/news/create'}"
+            <form th:action="${isEdit ? '/coach/news/edit/' + newsId : '/coach/news/create'}"
                   method="post"
                   th:object="${newsDTO}"
                   enctype="multipart/form-data"
