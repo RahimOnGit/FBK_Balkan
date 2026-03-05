@@ -20,6 +20,14 @@ import java.util.List;
 @Controller
 public class NewsController {
 
+    @GetMapping("/coach/news/create")
+    @PreAuthorize("hasAnyRole('COACH', 'ADMIN')")
+    public String showCoachCreateForm(Model model) {
+        model.addAttribute("newsDTO", new NewsDTO());
+        model.addAttribute("isEdit", false);
+        return "coach/news/form";
+    }
+
     @Autowired
     private NewsService newsService;
 
@@ -34,18 +42,47 @@ public class NewsController {
     }
 
     @GetMapping("/news/{id}")
-    public String viewNews(@PathVariable Long id, Model model) {
+    public String viewNews(@PathVariable Long id, Model model, Authentication authentication) {
         News news = newsService.getNewsById(id)
                 .orElseThrow(() -> new RuntimeException("Nyhet hittades inte"));
-        if (!news.isPublished()) {
+
+        boolean canViewUnpublished = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN") ||
+                        a.getAuthority().equals("ROLE_COACH") ||
+                        a.getAuthority().equals("ROLE_SOCIAL_ADMIN"));
+
+        if (!news.isPublished() && !canViewUnpublished) {
             throw new RuntimeException("Nyhet är inte publicerad");
         }
         model.addAttribute("news", news);
         return "news/view";
     }
 
+    @PostMapping("/coach/news/create")
+    @PreAuthorize("hasAnyRole('COACH', 'ADMIN')")
+    public String createCoachNews(@Valid @ModelAttribute NewsDTO newsDTO,
+                                  BindingResult result,
+                                  @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
+                                  Authentication authentication,
+                                  RedirectAttributes redirectAttributes,
+                                  Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("isEdit", false);
+            return "coach/news/form";
+        }
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String imageUrl = fileStorageService.storeFile(imageFile);
+            newsDTO.setImageUrl(imageUrl);
+            newsDTO.setExternalImageUrl(null);
+        }
+
+        newsService.createNews(newsDTO, authentication.getName(), false);
+        redirectAttributes.addFlashAttribute("successMessage", "Nyhet skapad och väntar på granskning!");
+        return "redirect:/coach/dashboard";
+    }
+
     @GetMapping("/admin/news")
-    @PreAuthorize("hasAnyRole('SOCIAL_ADMIN', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('SOCIAL_ADMIN', 'ADMIN', 'COACH')")
     public String adminNewsList(Model model) {
         List<News> newsList = newsService.getAllNews();
         model.addAttribute("newsList", newsList);
@@ -53,7 +90,7 @@ public class NewsController {
     }
 
     @GetMapping("/admin/news/create")
-    @PreAuthorize("hasAnyRole('SOCIAL_ADMIN', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('SOCIAL_ADMIN', 'ADMIN', 'COACH')")
     public String showCreateForm(Model model) {
         model.addAttribute("newsDTO", new NewsDTO());
         model.addAttribute("isEdit", false);
@@ -61,7 +98,7 @@ public class NewsController {
     }
 
     @PostMapping("/admin/news/create")
-    @PreAuthorize("hasAnyRole('SOCIAL_ADMIN', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('SOCIAL_ADMIN', 'ADMIN', 'COACH')")
     public String createNews(@Valid @ModelAttribute NewsDTO newsDTO,
                              BindingResult result,
                              @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
@@ -77,13 +114,17 @@ public class NewsController {
             newsDTO.setImageUrl(imageUrl);
             newsDTO.setExternalImageUrl(null);
         }
-        newsService.createNews(newsDTO, authentication.getName());
-        redirectAttributes.addFlashAttribute("successMessage", "Nyhet skapad!");
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        newsService.createNews(newsDTO, authentication.getName(), isAdmin);
+        redirectAttributes.addFlashAttribute("successMessage", isAdmin ? "Nyhet skapad!" : "Nyhet skapad och väntar på granskning!");
         return "redirect:/admin/news";
     }
 
     @GetMapping("/admin/news/edit/{id}")
-    @PreAuthorize("hasAnyRole('SOCIAL_ADMIN', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('SOCIAL_ADMIN', 'ADMIN', 'COACH')")
     public String showEditForm(@PathVariable Long id, Model model) {
         News news = newsService.getNewsById(id)
                 .orElseThrow(() -> new RuntimeException("Nyhet hittades inte"));
@@ -101,37 +142,15 @@ public class NewsController {
         return "news/form";
     }
 
-//    @PostMapping("/admin/news/edit/{id}")
-//    @PreAuthorize("hasAnyRole('SOCIAL_ADMIN', 'ADMIN')")
-//    public String updateNews(@PathVariable Long id,
-//                             @Valid @ModelAttribute NewsDTO newsDTO,
-//                             BindingResult result,
-//                             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
-//                             RedirectAttributes redirectAttributes,
-//                             Model model) {
-//        if (result.hasErrors()) {
-//            model.addAttribute("isEdit", true);
-//            model.addAttribute("newsId", id);
-//            return "news/form";
-//        }
-//        if (imageFile != null && !imageFile.isEmpty()) {
-//            String imageUrl = fileStorageService.storeFile(imageFile);
-//            newsDTO.setImageUrl(imageUrl);
-//            newsDTO.setExternalImageUrl(null);
-//        }
-//        newsService.updateNews(id, newsDTO);
-//        redirectAttributes.addFlashAttribute("successMessage", "Nyhet uppdaterad!");
-//        return "redirect:/admin/news";
-//    }
-
     @PostMapping("/admin/news/edit/{id}")
-    @PreAuthorize("hasAnyRole('SOCIAL_ADMIN', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('SOCIAL_ADMIN', 'ADMIN', 'COACH')")
     public String updateNews(
             @PathVariable Long id,
             @Valid @ModelAttribute NewsDTO newsDTO,
             BindingResult result,
             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
             @RequestParam(value = "deleteImage", required = false, defaultValue = "false") String deleteImageFlag,
+            Authentication authentication,
             RedirectAttributes redirectAttributes,
             Model model
     ) {
@@ -184,16 +203,19 @@ public class NewsController {
             newsDTO.setImageUrl(oldImageUrl);
         }
 
-        // 6. Update the news in DB
-        newsService.updateNews(id, newsDTO);
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
-        redirectAttributes.addFlashAttribute("successMessage", "Nyhet uppdaterad!");
+        // 6. Update the news in DB
+        newsService.updateNews(id, newsDTO, isAdmin);
+
+        redirectAttributes.addFlashAttribute("successMessage", isAdmin ? "Nyhet uppdaterad!" : "Nyhet uppdaterad och väntar på granskning!");
         return "redirect:/admin/news";
     }
 
 
     @PostMapping("/admin/news/delete/{id}")
-    @PreAuthorize("hasAnyRole('SOCIAL_ADMIN', 'ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteNews(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         newsService.deleteNews(id);
         redirectAttributes.addFlashAttribute("successMessage", "Nyhet borttagen!");
@@ -201,7 +223,7 @@ public class NewsController {
     }
 
     @PostMapping("/admin/news/toggle/{id}")
-    @PreAuthorize("hasAnyRole('SOCIAL_ADMIN', 'ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public String togglePublished(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         newsService.togglePublished(id);
         redirectAttributes.addFlashAttribute("successMessage", "Publiceringsstatus ändrad!");
@@ -209,7 +231,7 @@ public class NewsController {
     }
 
     @PostMapping("/admin/news/delete-image/{id}")
-    @PreAuthorize("hasAnyRole('SOCIAL_ADMIN', 'ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteImage(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         String oldImageUrl = newsService.clearNewsImage(id);
         if (oldImageUrl != null) {
