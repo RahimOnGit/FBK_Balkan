@@ -43,7 +43,7 @@ public class News {
     }
 
     @Column(nullable = false)
-    private boolean published = true;
+    private boolean published = false;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

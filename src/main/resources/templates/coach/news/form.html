@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--<html lang="sv" data-theme="winter" xmlns:th="http://www.thymeleaf.org">-->
-<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">
+<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -88,7 +88,7 @@
 
     <!-- Page Header -->
     <div class="mb-8">
-        <a href="/admin/news" class="inline-flex items-center text-sm font-semibold text-slate-500 hover:text-primary-600 transition-colors mb-4 group">
+        <a href="/coach/dashboard" class="inline-flex items-center text-sm font-semibold text-slate-500 hover:text-primary-600 transition-colors mb-4 group">
             <i class="fa-solid fa-arrow-left mr-2 transform group-hover:-translate-x-1 transition-transform"></i>
             Tillbaka till översikt
         </a>
@@ -116,7 +116,7 @@
     <!-- Form Container -->
     <div class="card bg-base-100 shadow-lg border border-slate-200 rounded-3xl overflow-hidden">
         <div class="card-body p-0">
-            <form th:action="${isEdit ? '/admin/news/edit/' + newsId : '/admin/news/create'}"
+            <form th:action="${isEdit ? '/coach/news/edit/' + newsId : '/coach/news/create'}"
                   method="post"
                   th:object="${newsDTO}"
                   enctype="multipart/form-data"
@@ -349,7 +349,7 @@
 
                         <!-- Right: Buttons -->
                         <div class="flex w-full md:w-auto gap-3">
-                            <a href="/admin/news" class="flex-1 md:flex-none btn btn-md h-12 rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-50 hover:border-slate-400 bg-white font-medium">
+                            <a href="/coach/dashboard" class="flex-1 md:flex-none btn btn-md h-12 rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-50 hover:border-slate-400 bg-white font-medium">
                                 Avbryt
                             </a>
                             <button type="submit" class="flex-1 md:flex-none btn btn-primary btn-md h-12 rounded-xl bg-primary-600 hover:bg-primary-700 text-white border-none shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 font-bold gap-2 px-8">
