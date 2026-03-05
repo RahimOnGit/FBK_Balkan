@@ -1,12 +1,92 @@
 <!DOCTYPE html>
 <html lang="sv" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8" />
-    <title th:text="'Välkommen till ' + ${team.name}">Välkommen</title>
-</head>
-<body class="p-8">
-<h1 class="text-3xl font-bold" th:text="'Välkommen till ' + ${team.name}">Välkommen till Laget!</h1>
 
-<p>Här kommer information om laget att visas snart.</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'FBK Balkan | ' + ${team.name}">Team</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        .font-balkan { font-family: 'Roboto Condensed', sans-serif; }
+        .letter-spacing-tight { letter-spacing: -0.04em; }
+        .border-subtle { border-color: rgba(0,0,0,0.06); }
+    </style>
+</head>
+
+<body class="bg-white font-balkan text-neutral-900 antialiased">
+
+<header class="sticky top-0 z-[100] bg-primary">
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</header>
+
+<main>
+    <section class="bg-primary text-white pt-24 pb-16">
+        <div class="container mx-auto px-8">
+            <div class="flex flex-col gap-2">
+                <span class="text-secondary font-bold uppercase tracking-[0.3em] text-xs" th:text="${team.ageGroup}">P09</span>
+                <h1 class="text-7xl md:text-9xl font-bold uppercase italic letter-spacing-tight leading-[0.85]" th:text="${team.name}">
+                    LAGNAMN
+                </h1>
+            </div>
+        </div>
+    </section>
+
+    <section class="border-b border-subtle">
+        <div class="container mx-auto px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 py-10 gap-12">
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest text-neutral-400 mb-2">Huvudtränare</p>
+                    <p class="text-2xl font-bold uppercase italic" th:text="${team.getCoachName()}">Coach Name</p>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest text-neutral-400 mb-2">Hemmaarena</p>
+                    <p class="text-2xl font-bold uppercase italic" th:text="${team.trainingLocation}">Kirsebergs IP</p>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest text-neutral-400 mb-2">Klubb</p>
+                    <p class="text-2xl font-bold uppercase italic">FBK Balkan</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24">
+        <div class="container mx-auto px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+
+                <div class="lg:col-span-8">
+                    <h2 class="text-sm font-bold uppercase tracking-widest text-secondary mb-8">Om Truppen</h2>
+                    <div class="text-2xl md:text-3xl leading-snug text-neutral-800 font-light italic">
+                        <p th:text="${#strings.isEmpty(team.getDescription()) ?
+              'Som en del av Malmös mest anrika talangfabrik strävar vi efter att utveckla varje individ både som fotbollsspelare och som lagkamrat. Vår verksamhet präglas av hög intensitet, vinnarkultur och en stark gemenskap på Kirsebergs IP.'
+              : team.description}">
+                            Default description if DB is empty.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-4">
+                    <div class="sticky top-32 bg-neutral-50 p-10 border border-subtle">
+                        <h3 class="text-xl font-bold uppercase italic mb-4">Gör som Zlatan</h3>
+                        <p class="text-neutral-500 text-sm mb-8 leading-relaxed">
+                            Vår klubb är känd som en talangfabrik där unga spelare får chansen att utvecklas.
+                            Är du redo för nästa steg?
+                        </p>
+                        <a href="/trial-registration" class="block w-full text-center bg-primary text-white font-bold py-5 uppercase tracking-widest text-sm hover:bg-neutral-800 transition-all">
+                            Ansök om provspel
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer::footer}"></footer>
+
 </body>
 </html>
