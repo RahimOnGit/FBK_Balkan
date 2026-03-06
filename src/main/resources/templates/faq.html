@@ -1,0 +1,197 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="sv">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>FAQ</title>-->
+<!--    <link th:href="@{/css/output.css}" rel="stylesheet">-->
+<!--    <style>-->
+<!--        /* Optional extra styling for full-width list-style FAQ */-->
+<!--        .faq-item { border-bottom: 1px solid #e5e7eb; padding: 1rem 0; }-->
+<!--        .faq-question { cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 1.125rem; }-->
+<!--        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; margin-top: 0.5rem; color: rgba(0,0,0,0.75); }-->
+<!--        .faq-icon { transition: transform 0.3s ease; }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body class="bg-base-100">-->
+
+<!--<section class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl pt-14 sm:pt-18 pb-14">-->
+<!--    &lt;!&ndash; Title &ndash;&gt;-->
+<!--    <div class="text-center mb-12">-->
+<!--        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold italic uppercase text-primary">-->
+<!--            <span class="text-secondary">FAQ</span>-->
+<!--        </h2>-->
+<!--        <div class="w-20 h-1 bg-secondary mx-auto mt-4 rounded-full"></div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; FAQ items &ndash;&gt;-->
+<!--    <div class="flex flex-col gap-4">-->
+<!--        &lt;!&ndash; ITEM 1 &ndash;&gt;-->
+<!--        <div class="faq-item">-->
+<!--            <button class="faq-question w-full text-left flex justify-between items-center">-->
+<!--                <span>Hur anmäler jag mitt barn?</span>-->
+<!--                <svg class="faq-icon w-5 h-5 text-secondary" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">-->
+<!--                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />-->
+<!--                </svg>-->
+<!--            </button>-->
+<!--            <div class="faq-answer">-->
+<!--                Du gör en intresseanmälan via knappen "Registrera ditt barn" på startsidan. Vi kontaktar dig med mer information.-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; ITEM 2 &ndash;&gt;-->
+<!--        <div class="faq-item">-->
+<!--            <button class="faq-question w-full text-left flex justify-between items-center">-->
+<!--                <span>Har ni olika nivåer på träningar?</span>-->
+<!--                <svg class="faq-icon w-5 h-5 text-secondary" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">-->
+<!--                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />-->
+<!--                </svg>-->
+<!--            </button>-->
+<!--            <div class="faq-answer">-->
+<!--                Provträning är till för att kunna tycka och känna. Vi välkomnar alla barn och ungdomar till att provträna med oss.-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; ITEM 3 &ndash;&gt;-->
+<!--        <div class="faq-item">-->
+<!--            <button class="faq-question w-full text-left flex justify-between items-center">-->
+<!--                <span>Var tränar FBK Balkan och vilka tider?</span>-->
+<!--                <svg class="faq-icon w-5 h-5 text-secondary" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">-->
+<!--                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />-->
+<!--                </svg>-->
+<!--            </button>-->
+<!--            <div class="faq-answer">-->
+<!--                Vi tränar på Kirsebergs IP, Östra Fäladsgatan 60.-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; ITEM 4 &ndash;&gt;-->
+<!--        <div class="faq-item">-->
+<!--            <button class="faq-question w-full text-left flex justify-between items-center">-->
+<!--                <span>Vad kostar det att träna med er?</span>-->
+<!--                <svg class="faq-icon w-5 h-5 text-secondary" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">-->
+<!--                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />-->
+<!--                </svg>-->
+<!--            </button>-->
+<!--            <div class="faq-answer">-->
+<!--                Det är gratis att provträna med oss i 14 dagar. Ansök via hemsidan, alla är välkomna.-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; ITEM 5 &ndash;&gt;-->
+<!--        <div class="faq-item">-->
+<!--            <button class="faq-question w-full text-left flex justify-between items-center">-->
+<!--                <span>Vilka tränar mitt barn och ungdomar?</span>-->
+<!--                <svg class="faq-icon w-5 h-5 text-secondary" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">-->
+<!--                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />-->
+<!--                </svg>-->
+<!--            </button>-->
+<!--            <div class="faq-answer">-->
+<!--                Alla tränare har utbildning via Svenska Fotbolls Förbundet (minst SvFF D) och är godkända för arbete med barn.-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; ITEM 6 &ndash;&gt;-->
+<!--        <div class="faq-item">-->
+<!--            <button class="faq-question w-full text-left flex justify-between items-center">-->
+<!--                <span>Kan jag byta tid för träning om jag inte kan närvara?</span>-->
+<!--                <svg class="faq-icon w-5 h-5 text-secondary" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">-->
+<!--                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />-->
+<!--                </svg>-->
+<!--            </button>-->
+<!--            <div class="faq-answer">-->
+<!--                Kontakta oss via e-post eller telefon för att se om vi kan erbjuda en alternativ träningstid.-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; ITEM 7 &ndash;&gt;-->
+<!--        <div class="faq-item">-->
+<!--            <button class="faq-question w-full text-left flex justify-between items-center">-->
+<!--                <span>Vilken utrustning behöver mitt barn?</span>-->
+<!--                <svg class="faq-icon w-5 h-5 text-secondary" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">-->
+<!--                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />-->
+<!--                </svg>-->
+<!--            </button>-->
+<!--            <div class="faq-answer">-->
+<!--                Inga speciella saker behövs till provträning, men bra skor och vattenflaska rekommenderas.-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; ITEM 8 &ndash;&gt;-->
+<!--        <div class="faq-item">-->
+<!--            <button class="faq-question w-full text-left flex justify-between items-center">-->
+<!--                <span>Hur länge pågår en träning?</span>-->
+<!--                <svg class="faq-icon w-5 h-5 text-secondary" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">-->
+<!--                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />-->
+<!--                </svg>-->
+<!--            </button>-->
+<!--            <div class="faq-answer">-->
+<!--                Vanligtvis 60–90 minuter beroende på ålder och nivå.-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; ITEM 9 &ndash;&gt;-->
+<!--        <div class="faq-item">-->
+<!--            <button class="faq-question w-full text-left flex justify-between items-center">-->
+<!--                <span>Vad händer om mitt barn blir sjuk?</span>-->
+<!--                <svg class="faq-icon w-5 h-5 text-secondary" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">-->
+<!--                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />-->
+<!--                </svg>-->
+<!--            </button>-->
+<!--            <div class="faq-answer">-->
+<!--                Sjukdom är inget problem — meddela tränaren i förväg så vi kan planera träningen.-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; ITEM 10 &ndash;&gt;-->
+<!--        <div class="faq-item">-->
+<!--            <button class="faq-question w-full text-left flex justify-between items-center">-->
+<!--                <span>Kan jag prova träna innan jag anmäler mig?</span>-->
+<!--                <svg class="faq-icon w-5 h-5 text-secondary" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">-->
+<!--                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />-->
+<!--                </svg>-->
+<!--            </button>-->
+<!--            <div class="faq-answer">-->
+<!--                Ja! Alla barn och ungdomar är välkomna att provträna innan anmälan.-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+
+<!--<script>-->
+<!--    document.addEventListener("DOMContentLoaded", function () {-->
+<!--        const items = document.querySelectorAll(".faq-item");-->
+<!--        items.forEach(item => {-->
+<!--            const button = item.querySelector(".faq-question");-->
+<!--            const answer = item.querySelector(".faq-answer");-->
+<!--            const icon = item.querySelector(".faq-icon");-->
+
+<!--            answer.style.maxHeight = "0px";-->
+<!--            icon.style.transform = "rotate(0deg)";-->
+
+<!--            button.addEventListener("click", function () {-->
+<!--                const isOpen = answer.style.maxHeight !== "0px";-->
+
+<!--                // Close all-->
+<!--                items.forEach(i => {-->
+<!--                    i.querySelector(".faq-answer").style.maxHeight = "0px";-->
+<!--                    i.querySelector(".faq-icon").style.transform = "rotate(0deg)";-->
+<!--                });-->
+
+<!--                // Open clicked-->
+<!--                if (!isOpen) {-->
+<!--                    answer.style.maxHeight = answer.scrollHeight + "px";-->
+<!--                    icon.style.transform = "rotate(180deg)";-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+
+<!--&lt;!&ndash; Footer &ndash;&gt;-->
+<!--<div class="mt-8">-->
+<!--    <div th:replace="~{fragments/footer::footer}"></div>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
