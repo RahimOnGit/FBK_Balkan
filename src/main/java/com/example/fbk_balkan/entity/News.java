@@ -54,6 +54,9 @@ public class News {
     @Column(name = "author_username")
     private String authorUsername;
 
+    @Column(name = "author_full_name")
+    private String authorFullName;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

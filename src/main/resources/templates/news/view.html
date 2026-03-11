@@ -29,7 +29,8 @@
                 <h1 class="text-2xl md:text-4xl font-bold font-virage text-primary mb-4" th:text="${news.title}">Titel</h1>
                 <div class="flex flex-wrap gap-4 text-sm text-gray-500 mb-6">
                     <span th:text="'Publicerad: ' + ${#temporals.format(news.createdAt, 'yyyy-MM-dd HH:mm')}">Datum</span>
-                    <span th:if="${news.authorUsername}" th:text="'Av: ' + ${news.authorUsername}">Författare</span>
+                    <span th:if="${news.authorFullName}" th:text="'Av: ' + ${news.authorFullName}">Författare</span>
+                    <span th:if="${!news.authorFullName and news.authorUsername}" th:text="'Av: ' + ${news.authorUsername}">Författare</span>
                 </div>
                 <div class="prose max-w-none">
                     <p th:text="${news.content}" class="whitespace-pre-wrap">Innehåll</p>
