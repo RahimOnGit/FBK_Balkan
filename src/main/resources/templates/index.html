@@ -5,9 +5,11 @@
 </style>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
     <title>
         FBK Balkan</title>
+
+    <a href="https://fbkbalkan.se">Best Football Club</a>
 
     <!--  <link th:href="@{/css/input.css}" rel="stylesheet">-->
     <link th:href="@{/css/output.css}" rel="stylesheet">
@@ -25,13 +27,9 @@
 
     </style>
 </head>
-<body class="min-h-screen  bg-base-200 transparent-navbar">
+<body class="min-h-screen ">
 
-<!--navbar-->
-<!--orignal class-->
-<!--<div class="absolute top-0 left-0 z-[10] right-0 ">-->
 
-<!--modified commented out "orignal class" above -->
 <div class="absolute top-0 left-0 z-[9999] right-0">
 
     <div th:replace="~{fragments/navbar::navbar}"></div>
@@ -39,24 +37,29 @@
 
 
 <!--hero-->
-<div class=" hero min-h-screen bg-cover  bg-center mb-10 " style="background-image: url('/images/hero-image.png');">
-    <div class="hero-overlay bg-opacity-60"> </div>
-    <div class="hero-content text-left text-white relative z-10 w-full max-w-7xl px-8">
-        <div class="flex flex-col lg:flex-row lg:justify-between w-full gap-8">
-            <div class="lg:w-1/2">
-                <!--                <h1 class="text-5xl lg:text-7xl text-secondary font-bold mb-5 font-virage italic">Teknik</h1>-->
-                <!--                <h1 class="text-5xl lg:text-7xl font-bold mb-5 font-virage">före långa bollar</h1>-->
-                <!--                <a href="/trial-registration" class="btn btn-wide rounded-full font-virage text-xl lg:text-2xl mt-8 bg-opacity-10 text-base-100 hover:text-primary hover:bg-base-100">Registrera ditt barn</a>-->
-                <h1 class="text-7xl text-secondary font-bold mb-5 font-virage italic">Teknik</h1>
-                <h1 class="text-7xl  font-bold mb-5 font-virage">före långa bollar</h1>
-                <a href="/trial-registration" class="btn btn-wide rounded-full font-virage text-2xl mt-8 bg-opacity-10 text-base-100 hover:text-primary hover:bg-base-100 " >Registrera ditt barn</a>
+<div class="hero h-[85vh]  relative  overflow-hidden">
+    <!-- blurred background image -->
+    <div class="absolute inset-0  bg-cover bg-center"
+         th:style="${latestNews != null and latestNews.imageUrl != null} ? 'background-image: url(' + ${latestNews.imageUrl} + ')' : (${latestNews != null and latestNews.externalImageUrl != null} ? 'background-image: url(' + ${latestNews.externalImageUrl} + ')' : 'background-image: url(/images/hero-image.png)')"
+         style="filter: blur(10px); transform: scale(1.05);">
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-b from-neutral/30 via-neutral/40 to-primary"></div>
+    <!--dark overlay-->
+    <div class="absolute inset-0 "></div>
 
+    <div class="hero-content text-left text-white relative z-10 w-full max-w-7xl px-8">
+        <div class="flex flex-col lg:flex-row lg:justify-between w-full">
+            <div class="lg:w-1/2">
+                <h1 class="text-5xl lg:text-7xl text-secondary font-bold mb-5 font-virage italic">Teknik</h1>
+                <h1 class="text-5xl lg:text-7xl font-bold mb-5 font-virage">Före långa bollar</h1>
+                <a href="/trial-registration" class="btn btn-wide rounded-full font-virage text-xl lg:text-2xl mt-8 bg-opacity-10 text-base-100 hover:text-primary hover:bg-base-100">Registrera ditt barn</a>
+                <!--              -->
                 <div th:if="${latestNews != null}" class="mt-10">
                     <!--                    <a href="/news" class="text-2xl font-bold mb-4 text-secondary hover:underline">Visa alla nyheter</a>-->
 
                     <a th:href="@{/news/{id}(id=${latestNews.id})}"
-                       class="block bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-all mt-4">
-                        <h4 th:text="${latestNews.title}" class="font-semibold text-lg text-white"></h4>
+                       class="block   rounded-lg p-4 hover:bg-white/20 transition-all mt-4">
+                        <h4 th:text="${latestNews.title}" class="font-bold font-virage italic text-3xl text-white"></h4>
                         <p th:text="${#temporals.format(latestNews.createdAt, 'dd MMM yyyy')}" class="text-sm text-gray-300 mt-1"></p>
                     </a>
                 </div>
@@ -69,14 +72,14 @@
 </div>
 
 
-<div th:replace="~{fragments/banner/banner::banner}" class="mb-16">
+<div th:replace="~{fragments/banner/banner::banner}" class="">
 
 </div>
 
 
 
 <!-- latest video embed -->
-<div class="FBK-Balkan-youtube-embed flex justify-center  mx-auto px-8 mb-16 h-screen mt-16 " >
+<div class="FBK-Balkan-youtube-embed flex justify-center  mx-auto px-8  h-screen mt-16 " >
     <iframe class="latestVideoEmbed w-full  rounded-lg"
             cid="UCAcquTaKhJu0resneu7e2_w"
             frameborder="0"

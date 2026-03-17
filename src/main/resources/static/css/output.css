@@ -1268,15 +1268,6 @@ html {
   grid-row-start: 1;
 }
 
-.hero-overlay {
-  grid-column-start: 1;
-  grid-row-start: 1;
-  height: 100%;
-  width: 100%;
-  background-color: var(--fallback-n,oklch(var(--n)/var(--tw-bg-opacity)));
-  --tw-bg-opacity: 0.5;
-}
-
 .hero-content {
   z-index: 0;
   display: flex;
@@ -1310,6 +1301,12 @@ html {
   margin-top: -1rem;
   margin-bottom: -1rem;
   margin-inline-end: -1rem;
+}
+
+.input-sm[type="number"]::-webkit-inner-spin-button {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-inline-end: -0px;
 }
 
 .join {
@@ -3021,6 +3018,14 @@ input.tab:checked + .tab-content,
   padding: 0px;
 }
 
+.input-sm {
+  height: 2rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 2rem;
+}
+
 .join.join-vertical {
   flex-direction: column;
 }
@@ -3059,6 +3064,20 @@ input.tab:checked + .tab-content,
   border-start-start-radius: 0;
   border-end-end-radius: inherit;
   border-start-end-radius: inherit;
+}
+
+.select-sm {
+  height: 2rem;
+  min-height: 2rem;
+  padding-left: 0.75rem;
+  padding-right: 2rem;
+  font-size: 0.875rem;
+  line-height: 2rem;
+}
+
+[dir="rtl"] .select-sm {
+  padding-left: 2rem;
+  padding-right: 0.75rem;
 }
 
 .tabs-md :where(.tab) {
@@ -3500,6 +3519,10 @@ input.tab:checked + .tab-content,
   margin-bottom: 2rem;
 }
 
+.ml-1 {
+  margin-left: 0.25rem;
+}
+
 .mr-2 {
   margin-right: 0.5rem;
 }
@@ -3542,10 +3565,6 @@ input.tab:checked + .tab-content,
 
 .mt-auto {
   margin-top: auto;
-}
-
-.ml-2 {
-  margin-left: 0.5rem;
 }
 
 .line-clamp-2 {
@@ -3672,6 +3691,10 @@ input.tab:checked + .tab-content,
 
 .h-\[500px\] {
   height: 500px;
+}
+
+.h-\[85vh\] {
+  height: 85vh;
 }
 
 .h-full {
@@ -3908,6 +3931,10 @@ input.tab:checked + .tab-content,
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .flex-col {
   flex-direction: column;
 }
@@ -4002,12 +4029,6 @@ input.tab:checked + .tab-content,
   margin-bottom: calc(2.5rem * var(--tw-space-y-reverse));
 }
 
-.space-y-2 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0;
-  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
-}
-
 .space-y-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
@@ -4024,6 +4045,12 @@ input.tab:checked + .tab-content,
   --tw-space-y-reverse: 0;
   margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(2rem * var(--tw-space-y-reverse));
+}
+
+.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
 }
 
 .divide-y > :not([hidden]) ~ :not([hidden]) {
@@ -4388,6 +4415,10 @@ input.tab:checked + .tab-content,
   background-color: var(--fallback-su,oklch(var(--su)/var(--tw-bg-opacity, 1)));
 }
 
+.bg-success-content\/20 {
+  background-color: var(--fallback-suc,oklch(var(--suc)/0.2));
+}
+
 .bg-transparent {
   background-color: transparent;
 }
@@ -4395,10 +4426,6 @@ input.tab:checked + .tab-content,
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
-}
-
-.bg-white\/10 {
-  background-color: rgb(255 255 255 / 0.1);
 }
 
 .bg-white\/20 {
@@ -4413,8 +4440,8 @@ input.tab:checked + .tab-content,
   --tw-bg-opacity: 0.1;
 }
 
-.bg-opacity-60 {
-  --tw-bg-opacity: 0.6;
+.bg-gradient-to-b {
+  background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
 }
 
 .bg-gradient-to-br {
@@ -4425,9 +4452,9 @@ input.tab:checked + .tab-content,
   background-image: linear-gradient(to right, var(--tw-gradient-stops));
 }
 
-.from-\[\#0f2b5e\] {
-  --tw-gradient-from: #0f2b5e var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(15 43 94 / 0) var(--tw-gradient-to-position);
+.from-neutral\/30 {
+  --tw-gradient-from: var(--fallback-n,oklch(var(--n)/0.3)) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
@@ -4459,12 +4486,21 @@ input.tab:checked + .tab-content,
   --tw-gradient-stops: var(--tw-gradient-from), var(--fallback-b1,oklch(var(--b1)/1)) var(--tw-gradient-via-position), var(--tw-gradient-to);
 }
 
+.via-neutral\/40 {
+  --tw-gradient-to: rgb(255 255 255 / 0)  var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--fallback-n,oklch(var(--n)/0.4)) var(--tw-gradient-via-position), var(--tw-gradient-to);
+}
+
 .to-\[\#1e4a8a\] {
   --tw-gradient-to: #1e4a8a var(--tw-gradient-to-position);
 }
 
 .to-accent\/20 {
   --tw-gradient-to: var(--fallback-a,oklch(var(--a)/0.2)) var(--tw-gradient-to-position);
+}
+
+.to-primary {
+  --tw-gradient-to: var(--fallback-p,oklch(var(--p)/1)) var(--tw-gradient-to-position);
 }
 
 .to-secondary {
@@ -4587,6 +4623,11 @@ input.tab:checked + .tab-content,
   padding-bottom: 3rem;
 }
 
+.py-16 {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
 .py-2 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -4632,6 +4673,10 @@ input.tab:checked + .tab-content,
   padding-bottom: 2rem;
 }
 
+.pb-14 {
+  padding-bottom: 3.5rem;
+}
+
 .pb-16 {
   padding-bottom: 4rem;
 }
@@ -4662,6 +4707,10 @@ input.tab:checked + .tab-content,
 
 .pt-12 {
   padding-top: 3rem;
+}
+
+.pt-14 {
+  padding-top: 3.5rem;
 }
 
 .pt-2 {
@@ -4956,6 +5005,10 @@ input.tab:checked + .tab-content,
   color: var(--fallback-pc,oklch(var(--pc)/var(--tw-text-opacity, 1)));
 }
 
+.text-primary-content\/80 {
+  color: var(--fallback-pc,oklch(var(--pc)/0.8));
+}
+
 .text-primary\/20 {
   color: var(--fallback-p,oklch(var(--p)/0.2));
 }
@@ -5036,6 +5089,11 @@ input.tab:checked + .tab-content,
 .text-success {
   --tw-text-opacity: 1;
   color: var(--fallback-su,oklch(var(--su)/var(--tw-text-opacity, 1)));
+}
+
+.text-success-content {
+  --tw-text-opacity: 1;
+  color: var(--fallback-suc,oklch(var(--suc)/var(--tw-text-opacity, 1)));
 }
 
 .text-white {
@@ -5132,6 +5190,12 @@ input.tab:checked + .tab-content,
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
+.shadow-inner {
+  --tw-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: inset 0 2px 4px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
 .shadow-lg {
   --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
@@ -5192,11 +5256,6 @@ input.tab:checked + .tab-content,
 
 .backdrop-blur-md {
   --tw-backdrop-blur: blur(12px);
-  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
-}
-
-.backdrop-blur-sm {
-  --tw-backdrop-blur: blur(4px);
   backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
 }
 
@@ -5672,8 +5731,21 @@ input.tab:checked + .tab-content,
 }
 
 @media (min-width: 640px) {
+  .sm\:mx-6 {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+  }
+
   .sm\:block {
     display: block;
+  }
+
+  .sm\:h-6 {
+    height: 1.5rem;
+  }
+
+  .sm\:w-6 {
+    width: 1.5rem;
   }
 
   .sm\:grid-cols-2 {
@@ -5682,6 +5754,33 @@ input.tab:checked + .tab-content,
 
   .sm\:flex-row {
     flex-direction: row;
+  }
+
+  .sm\:p-6 {
+    padding: 1.5rem;
+  }
+
+  .sm\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .sm\:pb-6 {
+    padding-bottom: 1.5rem;
+  }
+
+  .sm\:text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+
+  .sm\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .sm\:text-base-content\/80 {
+    color: var(--fallback-bc,oklch(var(--bc)/0.8));
   }
 }
 
@@ -5867,6 +5966,11 @@ input.tab:checked + .tab-content,
   .lg\:px-12 {
     padding-left: 3rem;
     padding-right: 3rem;
+  }
+
+  .lg\:px-8 {
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 
   .lg\:py-4 {

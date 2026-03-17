@@ -47,4 +47,5 @@ boolean existsByNameAndAgeGroup(String name, String ageGroup);
     List<Team> findActiveTeamsByBirthYear(@Param("birthYear") String birthYear);
 
 
+    boolean existsByName(String name);
 }

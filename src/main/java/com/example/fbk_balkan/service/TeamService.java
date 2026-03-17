@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,10 +26,7 @@ public class TeamService {
 
     @Autowired
     private TeamMapper teamMapper;
-
-//    @Autowired
 //    private UserRepository coachRepository;
-
     @Autowired
     private PublicTeamMapper publicTeamMapper;
 
@@ -99,18 +98,33 @@ public List<Team> getActiveTeams() {
     public List<PublicTeamDto> getSortedPublicTeams() {
         return getActiveTeams().stream()
                 .map(publicTeamMapper::toDto)
-                .sorted(Comparator.comparingInt((PublicTeamDto team) -> {
-            try {
-                String yearStr = team.getAgeGroup()
-                        .replaceAll(".*\\((\\d{4})\\)", "$1");
-                return Integer.parseInt(yearStr);
-            } catch (Exception e) {
-                return 0;
-            }
-        }).reversed())
-
+                .sorted(Comparator.comparingInt(this::sortKey))
                 .toList();
+    }
 
+    private int sortKey(PublicTeamDto team) {
+        String ag = team.getAgeGroup();
+        if (ag == null) return 9999;
+
+        // U19, U17 etc → first (lowest key)
+        if (ag.startsWith("U")) {
+            Matcher m = Pattern.compile("U(\\d+)").matcher(ag);
+            if (m.find()) return 1000 - Integer.parseInt(m.group(1)); // U19=981, U17=983
+        }
+
+        // "Pojkar 2010" or "Flickor 2012" → extract year
+        Matcher yearMatcher = Pattern.compile("(\\d{4})").matcher(ag);
+        if (yearMatcher.find()) {
+            return Integer.parseInt(yearMatcher.group(1)); // 2010, 2011, 2012...
+        }
+
+        // "Pojkar 2014/2015" → use first year
+        Matcher rangeMatcher = Pattern.compile("(\\d{4})/(\\d{4})").matcher(ag);
+        if (rangeMatcher.find()) {
+            return Integer.parseInt(rangeMatcher.group(1));
+        }
+
+        return 9999;
     }
     public Team getActiveTeamById(Long id) {
         return teamRepository.findByIdAndActiveTrue(id).orElse(null);
