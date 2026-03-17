@@ -36,6 +36,8 @@ public class SecurityConfig {
 
 //                        publicly accessible URLs
                                 .requestMatchers("/", "/css/**", "/images/**", "/login", "/login-error").permitAll()
+                                .requestMatchers("/trial-registration", "/trial-registration/success","/about").permitAll()
+                                .requestMatchers("/kontakt").permitAll()
                                 .requestMatchers("/trial-registration", "/trial-registration/success","/about","/faq").permitAll()
                                 .requestMatchers("/news", "/news/**","/public-teams/**").permitAll()
 

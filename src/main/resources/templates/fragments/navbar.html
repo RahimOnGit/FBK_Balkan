@@ -34,10 +34,12 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             transform: translateX(-50%);
         }
+
         .nav-link:hover {
             color: #F5B301;
             transform: translateY(-1px);
         }
+
         .nav-link:hover::after {
             width: 100%;
         }
@@ -62,9 +64,15 @@
         .teams-group:hover .teams-trigger {
             color: #F5B301;
         }
+
+        .teams-group:hover .teams-trigger::after {
+            width: 100%;
+        }
+
         .chevron-icon {
             transition: transform 0.3s ease;
         }
+
         .teams-group:hover .chevron-icon {
             transform: rotate(180deg);
         }
@@ -80,11 +88,14 @@
             z-index: 200;
             padding-top: 15px;
         }
+
         .teams-group:hover .teams-dropdown {
             opacity: 1;
             visibility: visible;
+            pointer-events: auto;
             transform: translateX(-50%) translateY(0);
         }
+
         .teams-dropdown-inner {
             background: #153B6F;
             border: 1px solid rgba(245, 179, 1, 0.4);
@@ -118,11 +129,13 @@
             position: relative;
             z-index: 10;
         }
+
         .team-item a:hover {
             background: rgba(245, 179, 1, 0.15);
             color: #F5B301;
         }
-        /* Modern CTA Buttons */
+
+        /* Login button */
         .login-btn {
             display: flex;
             align-items: center;
@@ -139,6 +152,7 @@
             box-shadow: 0 4px 15px rgba(245, 179, 1, 0.3);
             text-decoration: none;
         }
+
         .login-btn:hover {
             transform: translateY(-2px);
             background: #153B6F;
@@ -160,6 +174,19 @@
             transition: all 0.3s ease;
             color: white;
         }
+
+        .avatar-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 1px;
+            right: 1px;
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            border: 2px solid rgba(0,0,0,0.6);
+        }
+
         .avatar-btn:hover {
             border-color: #F5B301;
             background: rgba(245, 179, 1, 0.1);
@@ -180,9 +207,11 @@
             flex-direction: column;
             box-shadow: -15px 0 40px rgba(0, 0, 0, 0.6);
         }
+
         .mobile-panel.open {
             transform: translateX(0);
         }
+
         .mobile-overlay {
             position: fixed;
             inset: 0;
@@ -193,10 +222,45 @@
             visibility: hidden;
             transition: all 0.3s ease;
         }
+
         .mobile-overlay.open {
             opacity: 1;
             visibility: visible;
         }
+
+        .mobile-panel-header {
+            padding: 1.2rem 1.4rem;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .mobile-close-btn {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: rgba(255,255,255,0.6);
+            transition: all 0.15s;
+        }
+
+        .mobile-close-btn:hover {
+            background: rgba(249,115,22,0.15);
+            border-color: #f97316;
+            color: #f97316;
+        }
+
+        .mobile-nav {
+            flex: 1;
+            padding: 1rem;
+        }
+
         .mobile-nav-link {
             display: flex;
             align-items: center;
@@ -204,12 +268,17 @@
             padding: 1.2rem 1.8rem;
             color: rgba(255, 255, 255, 0.85);
             font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.8);
             text-decoration: none;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.2s;
         }
+
         .mobile-nav-link:hover {
             background: rgba(245, 179, 1, 0.1);
             color: #F5B301;
@@ -222,6 +291,21 @@
             font-weight: 800;
             letter-spacing: 0.2em;
             text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            font-weight: 700;
+            padding: 1rem 1rem 0.4rem;
+        }
+
+        .mobile-team-link {
+            display: block;
+            padding: 0.6rem 1rem;
+            border-radius: 10px;
+            font-family: 'Barlow', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.65);
+            text-decoration: none;
+            transition: background 0.15s, color 0.15s;
         }
         .hamburger-btn {
             display: flex;
@@ -284,6 +368,26 @@
                 </svg>
                 Intresseanmälan
             </a>
+            <a href="/kontakt" class="mobile-nav-link">
+                <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                Kontakta oss
+            </a>
+
+            <div class="mobile-divider"></div>
+            <div class="mobile-section-label">Våra Lag</div>
+
+            <li th:each="team : ${publicTeams}" style="list-style:none;">
+                <a th:href="@{/public-teams/{id}(id=${team.id})}" th:text="${team.ageGroup}" class="mobile-team-link"></a>
+            </li>
+
+            <!-- Authenticated: profile section in mobile -->
+            <div sec:authorize="isAuthenticated()" style="margin-top: auto;">
+                <div class="mobile-divider"></div>
+
+                <!-- User identity card -->
+                <div style="margin: 0.5rem 0; padding: 0.9rem 1rem; background: rgba(249,115,22,0.07); border: 1px solid rgba(249,115,22,0.15); border-radius: 12px;">
+                    <div style="font-family:'Barlow Condensed',sans-serif; font-size:0.62rem; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.35); font-weight:700;">Inloggad som</div>
+                    <div style="font-family:'Barlow Condensed',sans-serif; font-size:1rem; font-weight:700; color:#f97316; margin-top:0.15rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" sec:authentication="principal.username">Username</div>
             <div class="mobile-section-title font-virage italic">Våra Lag</div>
             <div class="px-3 pb-8">
                 <a th:each="team : ${publicTeams}" th:href="@{/public-teams/{id}(id=${team.id})}"
@@ -353,6 +457,34 @@
                     </div>
                 </div>
             </div>
+
+        <!-- Desktop navigation -->
+        <nav style="display: none;" class="desktop-nav">
+            <ul style="display: flex; align-items: center; gap: 2.2rem; list-style: none; margin: 0; padding: 0;">
+                <li><a href="/news" class="nav-link">Nyheter</a></li>
+                <li><a href="/about" class="nav-link">Om Klubben</a></li>
+                <li><a href="/trial-registration" class="nav-link">Intresseanmälan</a></li>
+                <li><a href="/kontakt" class="nav-link">Kontakta oss</a></li>
+
+                <!-- Teams dropdown -->
+                <li class="teams-group" style="position: relative;">
+                    <button class="teams-trigger">
+                        Våra Lag
+                        <svg class="chevron-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div class="teams-dropdown">
+                        <div class="teams-dropdown-inner" style="position:relative;">
+                            <ul style="list-style:none; margin:0; padding:0;">
+                                <li class="team-item" th:each="team : ${publicTeams}">
+                                    <a th:href="@{/public-teams/{id}(id=${team.id})}" th:text="${team.ageGroup}"></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
         </nav>
         <!-- Right Side Actions -->
         <div class="flex items-center gap-5">
@@ -482,6 +614,7 @@
             // Prevent scroll when open
             document.body.style.overflow = isOpen ? 'hidden' : '';
         }
+
         function closeMobileMenu() {
             const panel = document.getElementById('mobilePanel');
             const overlay = document.getElementById('mobileOverlay');
@@ -496,4 +629,5 @@
             if (window.innerWidth >= 1024) closeMobileMenu();
         });
     </script>
+
 </header>

@@ -1,382 +1,18 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org"-->
-<!--      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">-->
-<!--<head>-->
-<!--  <meta charset="UTF-8">-->
-<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--  <title>Hantera Nyheter - FBK Balkan</title>-->
-<!--  <link th:href="@{/css/output.css}" rel="stylesheet">-->
-<!--  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">-->
-<!--</head>-->
-<!--<body class="min-h-screen bg-base-200">-->
-
-<!--<div th:replace="~{fragments/navbar::navbar}"></div>-->
-
-
-<!--<div class="container mx-auto px-4 py-8 pt-24">-->
-<!--  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">-->
-<!--    <h1 class="text-2xl md:text-3xl font-bold font-virage text-primary">Hantera Nyheter</h1>-->
-<!--    <a href="/admin/news/create" class="btn btn-primary">-->
-<!--      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
-<!--        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />-->
-<!--      </svg>-->
-<!--      Skapa Nyhet-->
-<!--    </a>-->
-<!--  </div>-->
-
-<!--  <div th:if="${successMessage}" class="alert alert-success mb-4">-->
-<!--    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">-->
-<!--      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />-->
-<!--    </svg>-->
-<!--    <span th:text="${successMessage}">Meddelande</span>-->
-<!--  </div>-->
-
-<!--  <div th:if="${#lists.isEmpty(newsList)}" class="text-center py-12">-->
-<!--    <p class="text-lg text-gray-600">Inga nyheter skapade ännu.</p>-->
-<!--    <a href="/admin/news/create" class="btn btn-primary mt-4">Skapa din första nyhet</a>-->
-<!--  </div>-->
-
-<!--  <div class="overflow-x-auto" th:unless="${#lists.isEmpty(newsList)}">-->
-<!--    <table class="table table-zebra w-full bg-base-100 shadow-lg rounded-lg hidden md:table">-->
-<!--      <thead>-->
-<!--      <tr>-->
-<!--        <th>Titel</th>-->
-<!--        <th>Skapad</th>-->
-<!--        <th>Status</th>-->
-<!--        <th>Åtgärder</th>-->
-<!--      </tr>-->
-<!--      </thead>-->
-<!--      <tbody>-->
-<!--      <tr th:each="news : ${newsList}">-->
-<!--        <td>-->
-<!--          <div class="font-bold" th:text="${news.title}">Titel</div>-->
-<!--          <div class="text-sm text-gray-500" th:text="${news.authorUsername}">Författare</div>-->
-<!--        </td>-->
-<!--        <td th:text="${#temporals.format(news.createdAt, 'yyyy-MM-dd HH:mm')}">Datum</td>-->
-<!--        <td>-->
-<!--          <span th:if="${news.published}" class="badge badge-success">Publicerad</span>-->
-<!--          <span th:unless="${news.published}" class="badge badge-warning">Opublicerad</span>-->
-<!--        </td>-->
-<!--        <td>-->
-<!--          <div class="flex gap-2">-->
-<!--            <a th:href="@{/admin/news/edit/{id}(id=${news.id})}" class="btn btn-sm btn-ghost">-->
-<!--              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
-<!--                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />-->
-<!--              </svg>-->
-<!--            </a>-->
-<!--            <form th:action="@{/admin/news/toggle/{id}(id=${news.id})}" method="post" class="inline">-->
-<!--              <button type="submit" class="btn btn-sm btn-ghost" th:title="${news.published ? 'Avpublicera' : 'Publicera'}">-->
-<!--                <svg th:if="${news.published}" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
-<!--                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />-->
-<!--                </svg>-->
-<!--                <svg th:unless="${news.published}" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
-<!--                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />-->
-<!--                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />-->
-<!--                </svg>-->
-<!--              </button>-->
-<!--            </form>-->
-<!--            <form th:action="@{/admin/news/delete/{id}(id=${news.id})}" method="post" class="inline" onsubmit="return confirm('Är du säker på att du vill ta bort denna nyhet?');">-->
-<!--              <button type="submit" class="btn btn-sm btn-ghost text-error">-->
-<!--                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
-<!--                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />-->
-<!--                </svg>-->
-<!--              </button>-->
-<!--            </form>-->
-<!--          </div>-->
-<!--        </td>-->
-<!--      </tr>-->
-<!--      </tbody>-->
-<!--    </table>-->
-
-<!--    <div class="md:hidden space-y-4">-->
-<!--      <div th:each="news : ${newsList}" class="card bg-base-100 shadow-lg">-->
-<!--        <div class="card-body">-->
-<!--          <div class="flex justify-between items-start">-->
-<!--            <div>-->
-<!--              <h2 class="card-title text-lg" th:text="${news.title}">Titel</h2>-->
-<!--              <p class="text-sm text-gray-500" th:text="${news.authorUsername}">Författare</p>-->
-<!--            </div>-->
-<!--            <span th:if="${news.published}" class="badge badge-success">Publicerad</span>-->
-<!--            <span th:unless="${news.published}" class="badge badge-warning">Opublicerad</span>-->
-<!--          </div>-->
-<!--          <p class="text-sm text-gray-500" th:text="${#temporals.format(news.createdAt, 'yyyy-MM-dd HH:mm')}">Datum</p>-->
-<!--          <div class="card-actions justify-end mt-4">-->
-<!--            <a th:href="@{/admin/news/edit/{id}(id=${news.id})}" class="btn btn-sm btn-ghost">Redigera</a>-->
-<!--            <form th:action="@{/admin/news/toggle/{id}(id=${news.id})}" method="post" class="inline">-->
-<!--              <button type="submit" class="btn btn-sm btn-ghost" th:text="${news.published ? 'Avpublicera' : 'Publicera'}">Toggle</button>-->
-<!--            </form>-->
-<!--            <form th:action="@{/admin/news/delete/{id}(id=${news.id})}" method="post" class="inline" onsubmit="return confirm('Är du säker?');">-->
-<!--              <button type="submit" class="btn btn-sm btn-error">Ta bort</button>-->
-<!--            </form>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
-
-<!--<div th:replace="~{fragments/footer::footer}"></div>-->
-
-<!--</body>-->
-<!--</html>-->
-
-
-              <!--/////-->
-
-<!--<!DOCTYPE html>-->
-<!--<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--  <meta charset="UTF-8">-->
-<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--  <title>Nyheter - FBK Balkan Admin</title>-->
-
-<!--  &lt;!&ndash; DaisyUI & Tailwind &ndash;&gt;-->
-<!--  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />-->
-<!--  <script src="https://cdn.tailwindcss.com"></script>-->
-
-<!--  &lt;!&ndash; Google Fonts (Matching list.html) &ndash;&gt;-->
-<!--  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">-->
-
-<!--  &lt;!&ndash; FontAwesome &ndash;&gt;-->
-<!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
-
-<!--  &lt;!&ndash; SweetAlert2 CDN &ndash;&gt;-->
-<!--  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>-->
-
-<!--  <link th:href="@{/css/output.css}" rel="stylesheet">-->
-
-<!--  &lt;!&ndash; Tailwind Config (Matching list.html) &ndash;&gt;-->
-<!--  <script>-->
-<!--    tailwind.config = {-->
-<!--      theme: {-->
-<!--        extend: {-->
-<!--          fontFamily: {-->
-<!--            sans: ['Inter', 'sans-serif'],-->
-<!--            heading: ['Oswald', 'sans-serif'],-->
-<!--          },-->
-<!--          colors: {-->
-<!--            primary: {-->
-<!--              500: '#1e3a8a',-->
-<!--              600: '#1e3a8a',-->
-<!--            },-->
-<!--            secondary: '#475569',-->
-<!--          }-->
-<!--        }-->
-<!--      }-->
-<!--    }-->
-<!--  </script>-->
-
-<!--  <style>-->
-<!--    header .navbar a:hover {-->
-<!--      color: #fdad3a !important;-->
-<!--      transition: color 0.3s ease;-->
-<!--    }-->
-<!--    .fade-in { animation: fadeIn 0.3s ease-in-out; }-->
-<!--    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }-->
-<!--  </style>-->
-<!--</head>-->
-<!--<body class="min-h-screen bg-base-200 flex flex-col">-->
-
-<!--&lt;!&ndash; Navbar Fragment &ndash;&gt;-->
-<!--<div th:replace="~{fragments/navbar :: navbar}"></div>-->
-
-<!--&lt;!&ndash; Main Content &ndash;&gt;-->
-<!--<main class="flex-grow container mx-auto px-4 py-6 md:py-10 max-w-7xl mt-4">-->
-
-<!--  &lt;!&ndash; Page Header &ndash;&gt;-->
-<!--  <div class="mb-8">-->
-<!--    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">-->
-<!--      <div>-->
-<!--        <h1 class="text-4xl md:text-5xl font-heading font-bold text-slate-900 uppercase tracking-tight leading-tight">-->
-<!--          Nyheter-->
-<!--        </h1>-->
-<!--        <p class="text-slate-500 mt-2 font-medium max-w-lg">-->
-<!--          Skapa, redigera och hantera nyheter för webbplatsen.-->
-<!--        </p>-->
-<!--      </div>-->
-
-<!--      <div class="flex-shrink-0">-->
-<!--        <a th:href="@{/admin/news/create}"-->
-<!--           class="btn btn-primary btn-md h-12 rounded-xl bg-primary-600 hover:bg-primary-700 text-white border-none shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 font-bold gap-2 px-6">-->
-<!--          <i class="fa-solid fa-plus"></i>-->
-<!--          Ny Nyhet-->
-<!--        </a>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-
-<!--  &lt;!&ndash; Alert Messages &ndash;&gt;-->
-<!--  <div th:if="${success}" class="alert alert-success mb-6 shadow-lg border-none fade-in">-->
-<!--    <i class="fa-solid fa-check-circle"></i>-->
-<!--    <span th:text="${success}"></span>-->
-<!--  </div>-->
-<!--  <div th:if="${error}" class="alert alert-error mb-6 shadow-lg border-none fade-in">-->
-<!--    <i class="fa-solid fa-exclamation-triangle"></i>-->
-<!--    <span th:text="${error}"></span>-->
-<!--  </div>-->
-
-<!--  &lt;!&ndash; Main Card Container &ndash;&gt;-->
-<!--  <div class="card bg-base-100 shadow-lg border border-slate-200 rounded-3xl overflow-hidden">-->
-<!--    <div class="card-body p-6">-->
-
-<!--      &lt;!&ndash; News Grid &ndash;&gt;-->
-<!--      <div th:if="${!#lists.isEmpty(newsList)}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">-->
-
-<!--        &lt;!&ndash; News Item Card &ndash;&gt;-->
-<!--        <div th:each="news : ${newsList}" class="bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-md transition-all duration-200 group">-->
-
-<!--          &lt;!&ndash; Image Area &ndash;&gt;-->
-<!--          <div class="relative h-48 bg-slate-200 overflow-hidden">-->
-<!--            <img th:if="${news.displayImageUrl != null}"-->
-<!--                 th:src="${news.displayImageUrl}"-->
-<!--                 alt="Nyhetsbild"-->
-<!--                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">-->
-
-<!--            &lt;!&ndash; Placeholder if no image &ndash;&gt;-->
-<!--            <div th:unless="${news.displayImageUrl != null}" class="w-full h-full flex items-center justify-center bg-primary/5">-->
-<!--              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-primary/20" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
-<!--                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />-->
-<!--              </svg>-->
-<!--            </div>-->
-
-<!--            &lt;!&ndash; Category Badge Example (Optional visual flair) &ndash;&gt;-->
-<!--            <div class="absolute top-3 left-3">-->
-<!--                            <span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider shadow-sm">-->
-<!--                                Nyhet-->
-<!--                            </span>-->
-<!--            </div>-->
-<!--          </div>-->
-
-<!--          &lt;!&ndash; Content Area &ndash;&gt;-->
-<!--          <div class="p-5 flex flex-col flex-grow">-->
-<!--            <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1"-->
-<!--               th:text="${#temporals.format(news.createdAt, 'yyyy-MM-dd HH:mm')}">2023-01-01 12:00</p>-->
-
-<!--            <h2 class="font-heading font-bold text-lg text-slate-800 mb-2 leading-tight line-clamp-2" th:text="${news.title}">Titel</h2>-->
-
-<!--            <p class="text-sm text-slate-500 line-clamp-3 mb-4 flex-grow" th:text="${news.content}">Innehåll...</p>-->
-
-<!--            &lt;!&ndash; Actions Footer &ndash;&gt;-->
-<!--            <div class="border-t border-slate-200 pt-4 mt-auto flex items-center justify-between">-->
-<!--              <a th:href="@{/news/{id}(id=${news.id})}"-->
-<!--                 class="text-sm font-semibold text-primary hover:text-primary/80 transition-colors flex items-center gap-1">-->
-<!--                <i class="fa-regular fa-eye"></i> Visa-->
-<!--              </a>-->
-
-<!--              <div class="flex items-center gap-1">-->
-<!--                &lt;!&ndash; Edit Button &ndash;&gt;-->
-<!--                <a th:href="@{/admin/news/edit/{id}(id=${news.id})}"-->
-<!--                   class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-primary hover:bg-primary/10 transition-colors"-->
-<!--                   title="Redigera">-->
-<!--                  <i class="fa-regular fa-pen-to-square text-lg"></i>-->
-<!--                </a>-->
-
-<!--                &lt;!&ndash; Delete Button &ndash;&gt;-->
-<!--                <button type="button"-->
-<!--                        th:attr="data-id=${news.id}, data-name=${news.title}"-->
-<!--                        onclick="confirmDeleteNews(this)"-->
-<!--                        class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-colors"-->
-<!--                        title="Ta bort">-->
-<!--                  <i class="fa-regular fa-trash-can text-lg"></i>-->
-<!--                </button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-
-<!--      &lt;!&ndash; Empty State &ndash;&gt;-->
-<!--      <div th:if="${#lists.isEmpty(newsList)}" class="flex flex-col items-center justify-center py-20 text-center px-6 bg-slate-50/50">-->
-<!--        <div class="relative w-20 h-20 mb-6">-->
-<!--          <div class="absolute inset-0 bg-primary/5 rounded-full"></div>-->
-<!--          <div class="absolute inset-0 flex items-center justify-center">-->
-<!--            <i class="fa-solid fa-newspaper text-4xl text-primary/30"></i>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <h3 class="font-heading font-bold text-xl text-slate-800 mb-1">Inga nyheter hittades</h3>-->
-<!--        <p class="text-slate-500 text-sm mb-6 max-w-sm">Det finns inga publicerade nyheter ännu.</p>-->
-<!--        <a th:href="@{/admin/news/create}" class="btn btn-primary btn-sm rounded-xl shadow-md">-->
-<!--          <i class="fa-solid fa-plus mr-2"></i> Skapa den första-->
-<!--        </a>-->
-<!--      </div>-->
-
-<!--    </div>-->
-<!--  </div>-->
-
-<!--</main>-->
-
-<!--&lt;!&ndash; Footer Fragment &ndash;&gt;-->
-<!--<div th:replace="~{fragments/footer::footer}"></div>-->
-
-<!--&lt;!&ndash; Hidden Form for Deletion &ndash;&gt;-->
-<!--<form id="deleteForm" method="post" style="display: none;">-->
-<!--  <input type="hidden" name="_method" value="delete"/>-->
-<!--</form>-->
-
-<!--<script>-->
-<!--  function confirmDeleteNews(button) {-->
-<!--    const newsId = button.getAttribute('data-id');-->
-<!--    const newsTitle = button.getAttribute('data-name');-->
-<!--    // Adjust URL to your specific delete mapping-->
-<!--    const deleteUrl = `/admin/news/delete/${newsId}`;-->
-
-<!--    Swal.fire({-->
-<!--      title: 'Radera nyhet?',-->
-<!--      html: `Är du säker på att du vill ta bort <strong class="text-slate-800">${newsTitle}</strong>?<br>Denna åtgärd kan inte ångras!`,-->
-<!--      icon: 'warning',-->
-<!--      showCancelButton: true,-->
-<!--      confirmButtonColor: '#dc2626', // Red color for destructive action-->
-<!--      cancelButtonColor: '#64748b',-->
-<!--      confirmButtonText: '<i class="fa-solid fa-trash-can mr-2"></i> Ja, ta bort!',-->
-<!--      cancelButtonText: 'Avbryt',-->
-<!--      customClass: {-->
-<!--        popup: 'rounded-3xl font-sans',-->
-<!--        confirmButton: 'btn btn-error rounded-xl shadow-lg border-none text-white',-->
-<!--        cancelButton: 'btn btn-ghost rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700'-->
-<!--      },-->
-<!--      showClass: {-->
-<!--        popup: 'animate__animated animate__zoomIn animate__faster'-->
-<!--      }-->
-<!--    }).then((result) => {-->
-<!--      if (result.isConfirmed) {-->
-<!--        const form = document.createElement('form');-->
-<!--        form.method = 'POST';-->
-<!--        form.action = deleteUrl;-->
-<!--        document.body.appendChild(form);-->
-<!--        form.submit();-->
-<!--      }-->
-<!--    });-->
-<!--  }-->
-<!--</script>-->
-
-<!--</body>-->
-<!--</html>-->
-
-<!--///-->
-
 <!DOCTYPE html>
-<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">
+<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nyheter - FBK Balkan Admin</title>
 
-  <!-- DaisyUI & Tailwind -->
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet"/>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Google Fonts (Matching list.html) -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
-
-  <!-- FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- SweetAlert2 CDN -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
   <link th:href="@{/css/output.css}" rel="stylesheet">
 
-  <!-- Tailwind Config (Matching list.html) -->
   <script>
     tailwind.config = {
       theme: {
@@ -386,10 +22,7 @@
             heading: ['Oswald', 'sans-serif'],
           },
           colors: {
-            primary: {
-              500: '#1e3a8a',
-              600: '#1e3a8a',
-            },
+            primary: { 500: '#1e3a8a', 600: '#1e3a8a' },
             secondary: '#475569',
           }
         }
@@ -398,37 +31,33 @@
   </script>
 
   <style>
-    header .navbar a:hover {
-      color: #fdad3a !important;
-      transition: color 0.3s ease;
-    }
+    header .navbar a:hover { color: #fdad3a !important; transition: color 0.3s ease; }
     .fade-in { animation: fadeIn 0.3s ease-in-out; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   </style>
 </head>
 <body class="min-h-screen bg-base-200 flex flex-col">
 
-<!-- Navbar Fragment -->
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<!-- Main Content -->
 <main class="flex-grow container mx-auto px-4 py-6 md:py-10 max-w-7xl mt-4">
 
   <!-- Page Header -->
   <div class="mb-8">
     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
       <div>
-        <h1 class="text-4xl md:text-5xl font-heading font-bold text-slate-900 uppercase tracking-tight leading-tight">
+        <h1 class="text-4xl md:text-5xl font-heading font-bold text-slate-900 uppercase tracking-tight leading-tight"
+            th:text="${isCoachView} ? 'Mina Nyheter' : 'Nyheter'">
           Nyheter
         </h1>
-        <p class="text-slate-500 mt-2 font-medium max-w-lg">
+        <p class="text-slate-500 mt-2 font-medium max-w-lg"
+           th:text="${isCoachView} ? 'Hantera dina egna nyhetsinlägg.' : 'Skapa, redigera och hantera nyheter för webbplatsen.'">
           Skapa, redigera och hantera nyheter för webbplatsen.
         </p>
       </div>
-
       <div class="flex-shrink-0">
-        <a th:href="@{/admin/news/create}"
-           class="btn btn-primary btn-md h-12 rounded-xl bg-primary-600 hover:bg-primary-700 text-white border-none shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 font-bold gap-2 px-6">
+        <a th:href="${isCoachView} ? @{/coach/news/create} : @{/admin/news/create}"
+           class="btn btn-primary btn-md h-12 rounded-xl bg-primary-600 hover:bg-primary-700 text-white border-none shadow-lg font-bold gap-2 px-6">
           <i class="fa-solid fa-plus"></i>
           Ny Nyhet
         </a>
@@ -437,95 +66,115 @@
   </div>
 
   <!-- Alert Messages -->
-  <div th:if="${success}" class="alert alert-success mb-6 shadow-lg border-none fade-in">
+  <div th:if="${successMessage}" class="alert alert-success mb-6 shadow-lg border-none fade-in">
     <i class="fa-solid fa-check-circle"></i>
-    <span th:text="${success}"></span>
+    <span th:text="${successMessage}"></span>
   </div>
   <div th:if="${error}" class="alert alert-error mb-6 shadow-lg border-none fade-in">
     <i class="fa-solid fa-exclamation-triangle"></i>
     <span th:text="${error}"></span>
   </div>
 
-  <!-- Main Card Container -->
+  <!-- Main Card -->
   <div class="card bg-base-100 shadow-lg border border-slate-200 rounded-3xl overflow-hidden">
     <div class="card-body p-6">
 
       <!-- News Grid -->
       <div th:if="${!#lists.isEmpty(newsList)}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        <!-- News Item Card -->
-        <div th:each="news : ${newsList}" class="bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-md transition-all duration-200 group">
+        <div th:each="news : ${newsList}"
+             class="bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-md transition-all duration-200 group">
 
-          <!-- Image Area -->
+          <!-- Image -->
           <div class="relative h-48 bg-slate-200 overflow-hidden">
             <img th:if="${news.displayImageUrl != null}"
                  th:src="${news.displayImageUrl}"
                  alt="Nyhetsbild"
                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-
-            <!-- Placeholder if no image -->
-            <div th:unless="${news.displayImageUrl != null}" class="w-full h-full flex items-center justify-center bg-primary/5">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-primary/20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+            <div th:unless="${news.displayImageUrl != null}"
+                 class="w-full h-full flex items-center justify-center bg-primary/5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-primary/20" fill="none"
+                   viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
               </svg>
             </div>
-
-            <!-- Category Badge Example (Optional visual flair) -->
+            <!-- Published badge -->
             <div class="absolute top-3 left-3">
-                            <span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider shadow-sm">
-                                Nyhet
-                            </span>
+              <span th:if="${news.published}"
+                    class="bg-green-600 text-white text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider shadow-sm">
+                Publicerad
+              </span>
+              <span th:unless="${news.published}"
+                    class="bg-yellow-500 text-white text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider shadow-sm">
+                Väntar
+              </span>
             </div>
           </div>
 
-          <!-- Content Area -->
+          <!-- Content -->
           <div class="p-5 flex flex-col flex-grow">
             <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1"
                th:text="${#temporals.format(news.createdAt, 'yyyy-MM-dd HH:mm')}">2023-01-01 12:00</p>
+            <h2 class="font-heading font-bold text-lg text-slate-800 mb-2 leading-tight line-clamp-2"
+                th:text="${news.title}">Titel</h2>
+            <p class="text-sm text-slate-500 line-clamp-3 mb-4 flex-grow"
+               th:text="${news.content}">Innehåll...</p>
 
-            <h2 class="font-heading font-bold text-lg text-slate-800 mb-2 leading-tight line-clamp-2" th:text="${news.title}">Titel</h2>
-
-            <p class="text-sm text-slate-500 line-clamp-3 mb-4 flex-grow" th:text="${news.content}">Innehåll...</p>
-
-            <!-- Actions Footer -->
+            <!-- Actions -->
             <div class="border-t border-slate-200 pt-4 mt-auto flex items-center justify-between">
+
+              <!-- Visa -->
               <a th:href="@{/news/{id}(id=${news.id})}"
                  class="text-sm font-semibold text-primary hover:text-primary/80 transition-colors flex items-center gap-1">
                 <i class="fa-regular fa-eye"></i> Visa
               </a>
 
               <div class="flex items-center gap-1">
-                <!-- Edit Button -->
-                <a th:href="@{/admin/news/edit/{id}(id=${news.id})}"
+
+                <!-- Redigera: coach → /coach/news/edit/{id}, admin → /admin/news/edit/{id} -->
+                <a th:if="${#authentication.name == news.authorUsername
+                            or #authentication.principal.authorities.?[authority == 'ROLE_ADMIN'].size() > 0}"
+                   th:href="${isCoachView}
+                             ? @{/coach/news/edit/{id}(id=${news.id})}
+                             : @{/admin/news/edit/{id}(id=${news.id})}"
                    class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-primary hover:bg-primary/10 transition-colors"
                    title="Redigera">
                   <i class="fa-regular fa-pen-to-square text-lg"></i>
                 </a>
 
-                <!-- Toggle Published Button (Admin Only) -->
-                <form th:action="@{/admin/news/toggle/{id}(id=${news.id})}" method="post" class="inline" sec:authorize="hasRole('ADMIN')">
-                  <button type="submit" class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-primary transition-colors" th:title="${news.published ? 'Avpublicera' : 'Publicera'}">
+                <!-- Toggle Published (Admin Only) -->
+                <form th:action="@{/admin/news/toggle/{id}(id=${news.id})}"
+                      method="post" class="inline"
+                      sec:authorize="hasRole('ADMIN')">
+                  <button type="submit"
+                          class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-primary transition-colors"
+                          th:title="${news.published ? 'Avpublicera' : 'Publicera'}">
                     <i th:class="${news.published ? 'fa-solid fa-eye-slash text-lg' : 'fa-solid fa-eye text-lg'}"></i>
                   </button>
                 </form>
 
-                <!-- Delete Button (Admin Only) -->
+                <!-- Ta bort -->
                 <button type="button"
-                        sec:authorize="hasRole('ADMIN')"
-                        th:attr="data-id=${news.id}, data-name=${news.title}"
+                        th:if="${#authentication.name == news.authorUsername
+                                or #authentication.principal.authorities.?[authority == 'ROLE_ADMIN'].size() > 0}"
+                        th:attr="data-id=${news.id}, data-name=${news.title}, data-coach=${isCoachView}"
                         onclick="confirmDeleteNews(this)"
                         class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-colors"
                         title="Ta bort">
                   <i class="fa-regular fa-trash-can text-lg"></i>
                 </button>
+
               </div>
             </div>
           </div>
         </div>
+
       </div>
 
       <!-- Empty State -->
-      <div th:if="${#lists.isEmpty(newsList)}" class="flex flex-col items-center justify-center py-20 text-center px-6 bg-slate-50/50">
+      <div th:if="${#lists.isEmpty(newsList)}"
+           class="flex flex-col items-center justify-center py-20 text-center px-6 bg-slate-50/50">
         <div class="relative w-20 h-20 mb-6">
           <div class="absolute inset-0 bg-primary/5 rounded-full"></div>
           <div class="absolute inset-0 flex items-center justify-center">
@@ -533,8 +182,9 @@
           </div>
         </div>
         <h3 class="font-heading font-bold text-xl text-slate-800 mb-1">Inga nyheter hittades</h3>
-        <p class="text-slate-500 text-sm mb-6 max-w-sm">Det finns inga publicerade nyheter ännu.</p>
-        <a th:href="@{/admin/news/create}" class="btn btn-primary btn-sm rounded-xl shadow-md">
+        <p class="text-slate-500 text-sm mb-6 max-w-sm">Det finns inga nyheter ännu. Skapa den första!</p>
+        <a th:href="${isCoachView} ? @{/coach/news/create} : @{/admin/news/create}"
+           class="btn btn-primary btn-sm rounded-xl shadow-md">
           <i class="fa-solid fa-plus mr-2"></i> Skapa den första
         </a>
       </div>
@@ -544,27 +194,25 @@
 
 </main>
 
-<!-- Footer Fragment -->
 <div th:replace="~{fragments/footer::footer}"></div>
-
-<!-- Hidden Form for Deletion -->
-<form id="deleteForm" method="post" style="display: none;">
-  <input type="hidden" name="_method" value="delete"/>
-</form>
 
 <script>
   function confirmDeleteNews(button) {
     const newsId = button.getAttribute('data-id');
     const newsTitle = button.getAttribute('data-name');
-    // Adjust URL to your specific delete mapping
-    const deleteUrl = `/admin/news/delete/${newsId}`;
+    const isCoachView = button.getAttribute('data-coach') === 'true';
+
+    // يختار الـ URL الصحيح حسب نوع المستخدم
+    const deleteUrl = isCoachView
+            ? `/coach/news/delete/${newsId}`
+            : `/admin/news/delete/${newsId}`;
 
     Swal.fire({
       title: 'Radera nyhet?',
       html: `Är du säker på att du vill ta bort <strong class="text-slate-800">${newsTitle}</strong>?<br>Denna åtgärd kan inte ångras!`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#dc2626', // Red color for destructive action
+      confirmButtonColor: '#dc2626',
       cancelButtonColor: '#64748b',
       confirmButtonText: '<i class="fa-solid fa-trash-can mr-2"></i> Ja, ta bort!',
       cancelButtonText: 'Avbryt',
@@ -572,9 +220,6 @@
         popup: 'rounded-3xl font-sans',
         confirmButton: 'btn btn-error rounded-xl shadow-lg border-none text-white',
         cancelButton: 'btn btn-ghost rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700'
-      },
-      showClass: {
-        popup: 'animate__animated animate__zoomIn animate__faster'
       }
     }).then((result) => {
       if (result.isConfirmed) {
