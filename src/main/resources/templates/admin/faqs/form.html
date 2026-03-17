@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>FAQ Form</title>
+  <link th:href="@{/css/output.css}" rel="stylesheet">
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .fade-in {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body class="bg-base-200 p-10">
+
+<!-- Optional Back Button -->
+<a th:href="@{/admin/faqs}"
+   class="inline-flex items-center text-sm font-semibold text-slate-500 hover:text-primary-600 transition-colors mb-4 group">
+  <i class="fa-solid fa-arrow-left mr-2 transform group-hover:-translate-x-1 transition-transform"></i>
+  Tillbaka till översikt
+</a>
+
+<!-- Card Wrapper -->
+<div class="card bg-base-100 shadow-lg border border-slate-200 rounded-3xl overflow-hidden">
+  <div class="card-body p-6 md:p-10 space-y-6">
+
+    <!-- Page Title -->
+    <h1 class="text-4xl font-heading font-bold text-slate-900 uppercase tracking-tight mb-2"
+        th:text="${faq.id != null ? 'Redigera FAQ' : 'Skapa FAQ'}">
+      Skapa FAQ
+    </h1>
+
+    <!-- Optional Subtitle -->
+    <p class="text-slate-500 mt-2 font-medium max-w-lg"
+       th:text="${faq.id != null ? 'Uppdatera FAQ och klicka spara.' : 'Fyll i fälten nedan för att lägga till en ny FAQ.'}">
+      Fyll i fälten nedan för att lägga till en ny FAQ.
+    </p>
+
+    <!-- Flash Messages -->
+    <div th:if="${success}" class="alert alert-success shadow-sm fade-in mb-4">
+      <i class="fa-solid fa-circle-check"></i>
+      <span th:text="${success}"></span>
+    </div>
+    <div th:if="${error}" class="alert alert-error shadow-sm fade-in mb-4">
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <span th:text="${error}"></span>
+    </div>
+
+    <!-- FAQ Form -->
+    <form th:action="@{/admin/faqs/save}" th:object="${faq}" method="post">
+      <input type="hidden" th:field="*{id}" />
+
+      <!-- Question -->
+      <div class="form-control mb-4">
+        <label class="label">Fråga</label>
+        <input type="text"
+               th:field="*{question}"
+               class="input input-bordered"
+               required
+               maxlength="255"/>
+        <div class="text-error text-sm"
+             th:if="${#fields.hasErrors('question')}"
+             th:errors="*{question}"></div>
+      </div>
+
+      <!-- Answer -->
+      <div class="form-control mb-4">
+        <label class="label">Svar</label>
+        <textarea th:field="*{answer}"
+                  rows="6"
+                  class="textarea textarea-bordered"
+                  required
+                  maxlength="2000"></textarea>
+        <div class="text-error text-sm"
+             th:if="${#fields.hasErrors('answer')}"
+             th:errors="*{answer}"></div>
+      </div>
+
+      <!-- Display Order -->
+      <div class="form-control mb-4">
+        <label class="label">Ordning</label>
+        <input type="number"
+               th:field="*{displayOrder}"
+               class="input input-bordered"
+               min="0"
+               max="999"/>
+      </div>
+
+      <!-- Visible Toggle -->
+      <div class="form-control mb-6">
+        <label class="cursor-pointer label">
+          <span class="label-text">Synlig</span>
+          <input type="checkbox"
+                 th:field="*{visible}"
+                 class="toggle toggle-primary"/>
+        </label>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex flex-col-reverse md:flex-row items-center justify-end gap-4 pt-4">
+        <div class="flex w-full md:w-auto gap-3">
+          <a href="/admin/faqs" class="flex-1 md:flex-none btn btn-ghost h-12 rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-50 hover:border-slate-400 font-medium shadow-sm">
+            Avbryt
+          </a>
+          <button type="submit" class="flex-1 md:flex-none btn btn-primary h-12 rounded-xl bg-primary-600 hover:bg-primary-700 text-white border-none shadow-lg font-bold gap-2 px-8">
+            <i class="fa-regular fa-floppy-disk"></i>
+            <span th:text="${faq.id != null ? 'Spara ändringar' : 'Skapa FAQ'}">Skapa FAQ</span>
+          </button>
+        </div>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+</body>
+</html>

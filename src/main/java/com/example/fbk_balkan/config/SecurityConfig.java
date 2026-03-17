@@ -36,7 +36,7 @@ public class SecurityConfig {
 
 //                        publicly accessible URLs
                                 .requestMatchers("/", "/css/**", "/images/**", "/login", "/login-error").permitAll()
-                                .requestMatchers("/trial-registration", "/trial-registration/success","/about").permitAll()
+                                .requestMatchers("/trial-registration", "/trial-registration/success","/about","/faq").permitAll()
                                 .requestMatchers("/news", "/news/**","/public-teams/**").permitAll()
 
 
@@ -44,7 +44,7 @@ public class SecurityConfig {
                                 .requestMatchers("/coach/**").hasAnyRole("COACH", "ADMIN")
                                 .requestMatchers("/socialadmin/**").hasRole("SOCIAL_ADMIN")
                                 .requestMatchers("/admin/news/**").hasAnyRole("SOCIAL_ADMIN", "ADMIN")
-                                .requestMatchers("/admin/dashboard", "/admin/teams", "/admin/age-groups", "/admin/coaches", "/admin/trials")
+                                .requestMatchers("/admin/dashboard", "/admin/teams", "/admin/age-groups", "/admin/coaches", "/admin/trials", "/admin/faqs/**")
                                 .hasRole("ADMIN")
                                 .requestMatchers("/team-register").hasRole("ADMIN")
 
