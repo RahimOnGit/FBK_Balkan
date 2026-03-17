@@ -2,7 +2,9 @@ package com.example.fbk_balkan.service;
 
 import com.example.fbk_balkan.dto.NewsDTO;
 import com.example.fbk_balkan.entity.News;
+import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.repository.NewsRepository;
+import com.example.fbk_balkan.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,9 @@ public class NewsService {
 
     @Autowired
     private NewsRepository newsRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public List<News> getAllPublishedNews() {
         return newsRepository.findByPublishedTrueOrderByCreatedAtDesc();
@@ -45,6 +50,15 @@ public class NewsService {
         }
 
         news.setAuthorUsername(authorUsername);
+
+        // Set author full name by looking up the user
+        Optional<User> user = userRepository.findByEmail(authorUsername);
+        if (user.isPresent()) {
+            news.setAuthorFullName(user.get().getFullName());
+        } else {
+            news.setAuthorFullName(authorUsername);
+        }
+
         return newsRepository.save(news);
     }
 

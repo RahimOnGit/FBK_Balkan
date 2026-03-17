@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontakta oss | FBK Balkan</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <style>
+        .font-virage { font-family: 'Roboto Condensed', sans-serif; }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(0,0,0,0.04);
+            border: 1.5px solid rgba(0,0,0,0.15);
+            border-radius: 12px;
+            color: rgba(0,0,0,0.9);
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 0.95rem;
+            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+
+        .form-input::placeholder { color: rgba(0,0,0,0.35); }
+
+        .form-input:focus {
+            border-color: #F5B301;
+            background: rgba(245,179,1,0.06);
+            box-shadow: 0 0 0 3px rgba(245,179,1,0.15);
+        }
+
+        .form-input.error {
+            border-color: #ef4444;
+            background: rgba(239,68,68,0.05);
+        }
+
+        .form-label {
+            display: block;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 0.78rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(0,0,0,0.55);
+            margin-bottom: 0.4rem;
+        }
+
+        .contact-card {
+            background: rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.09);
+            border-radius: 20px;
+            padding: 1.6rem;
+            transition: border-color 0.2s, background 0.2s, transform 0.2s;
+        }
+
+        .contact-card:hover {
+            border-color: rgba(245,179,1,0.5);
+            background: rgba(245,179,1,0.04);
+            transform: translateY(-2px);
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 0.7rem 1.4rem;
+            border-radius: 100px;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .social-btn-instagram {
+            background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+            color: #fff;
+        }
+
+        .social-btn-instagram:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(253,29,29,0.35);
+        }
+
+        .social-btn-facebook {
+            background: #1877f2;
+            color: #fff;
+        }
+
+        .social-btn-facebook:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(24,119,242,0.35);
+        }
+
+        /* ── YouTube ── */
+        .social-btn-youtube {
+            background: #FF0000;
+            color: #fff;
+        }
+
+        .social-btn-youtube:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(255, 0, 0, 0.45);
+        }
+
+        .submit-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.85rem 2.5rem;
+            background: linear-gradient(135deg, #F5B301, #d9a000);
+            color: #153B6F;
+            border: none;
+            border-radius: 100px;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 8px 24px rgba(245,179,1,0.35);
+        }
+
+        .submit-btn:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+            box-shadow: 0 12px 32px rgba(245,179,1,0.45);
+        }
+
+        .submit-btn:active { transform: scale(0.98); }
+
+        .error-msg {
+            color: #dc2626;
+            font-size: 0.8rem;
+            margin-top: 0.35rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .success-toast {
+            background: rgba(34,197,94,0.1);
+            border: 1px solid rgba(34,197,94,0.4);
+            border-radius: 16px;
+            padding: 1rem 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #16a34a;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 600;
+        }
+
+        .icon-box-secondary {
+            width: 2.75rem;
+            height: 2.75rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: rgba(245,179,1,0.15);
+        }
+
+        .icon-box-secondary svg {
+            stroke: #F5B301;
+        }
+
+        .label-secondary {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #F5B301;
+            margin-bottom: 0.25rem;
+        }
+
+        .divider-secondary {
+            width: 4rem;
+            height: 0.25rem;
+            border-radius: 9999px;
+            background: linear-gradient(90deg, #F5B301, #fbbf24);
+        }
+
+        .required-star {
+            color: #F5B301;
+        }
+    </style>
+</head>
+
+<body class="font-virage antialiased" style="background: #ffffff; color: rgba(0,0,0,0.85); min-height: 100vh;">
+
+<header class="sticky top-0 z-[100] bg-primary shadow-lg">
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</header>
+
+<main>
+    <!-- HERO -->
+    <section class="relative min-h-[45vh] flex items-center justify-center overflow-hidden bg-primary py-20">
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute top-0 left-0 w-96 h-96 bg-secondary rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2"></div>
+            <div class="absolute bottom-0 right-0 w-96 h-96 bg-secondary rounded-full blur-[120px] translate-x-1/2 translate-y-1/2"></div>
+        </div>
+        <div class="container mx-auto px-4 relative z-10 text-center">
+            <div class="inline-block px-4 py-1 mb-6 border border-secondary/30 rounded-full bg-secondary/10 text-secondary text-sm font-bold tracking-widest uppercase">
+                Vi finns här för dig
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tighter italic">
+                Kontakta <span class="text-secondary">oss</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto leading-relaxed">
+                Har du frågor om klubben, aktiviteter eller vill engagera dig? Vi återkommer så snart som möjligt.
+            </p>
+        </div>
+    </section>
+
+    <!-- CONTENT -->
+    <section class="py-16 md:py-24" style="background: #ffffff;">
+        <div class="container mx-auto px-4 max-w-6xl">
+
+            <!-- Success message -->
+            <div th:if="${successMessage}" class="success-toast mb-10 max-w-2xl mx-auto">
+                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span th:text="${successMessage}"></span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+
+                <!-- Left: Contact Info -->
+                <div class="space-y-6">
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-bold italic uppercase tracking-tighter mb-3" style="color: rgba(0,0,0,0.9);">
+                            Hitta oss
+                        </h2>
+                        <div class="divider-secondary"></div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="contact-card">
+                        <div class="flex items-start gap-4">
+                            <div class="icon-box-secondary">
+                                <svg width="20" height="20" fill="none" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="label-secondary">Adress</div>
+                                <div class="font-semibold" style="color: rgba(0,0,0,0.85);">FBK Balkan</div>
+                                <div style="color: rgba(0,0,0,0.55); font-size: 0.9rem;">Östra fäladsgatan 60, 212 24 Malmö</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="contact-card">
+                        <div class="flex items-start gap-4">
+                            <div class="icon-box-secondary">
+                                <svg width="20" height="20" fill="none" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="label-secondary">E-post</div>
+                                <div class="font-semibold" style="color: rgba(0,0,0,0.85);">Styrelse</div>
+                                <a href="mailto:info@fbkbalkan.se" style="color: rgba(0,0,0,0.55); font-size: 0.9rem; text-decoration: none; transition: color 0.2s;"
+                                   onmouseover="this.style.color='#F5B301'" onmouseout="this.style.color='rgba(0,0,0,0.55)'">
+                                    info@fbkbalkan.se
+                                </a>
+                                <div class="mt-2 font-semibold" style="color: rgba(0,0,0,0.85);">Ungdomssektion</div>
+                                <a href="mailto:ungdom@fbkbalkan.se" style="color: rgba(0,0,0,0.55); font-size: 0.9rem; text-decoration: none; transition: color 0.2s;"
+                                   onmouseover="this.style.color='#F5B301'" onmouseout="this.style.color='rgba(0,0,0,0.55)'">
+                                    ungdom@fbkbalkan.se
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="contact-card">
+                        <div class="flex items-start gap-4">
+                            <div class="icon-box-secondary">
+                                <svg width="20" height="20" fill="none" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="label-secondary">Telefon</div>
+                                <div class="font-semibold" style="color: rgba(0,0,0,0.85);">Ordförande</div>
+                                <a href="tel:+46701234567" style="color: rgba(0,0,0,0.55); font-size: 0.9rem; text-decoration: none; transition: color 0.2s;"
+                                   onmouseover="this.style.color='#F5B301'" onmouseout="this.style.color='rgba(0,0,0,0.55)'">
+                                    070-000 00 00
+                                </a>
+                                <div class="mt-2 font-semibold" style="color: rgba(0,0,0,0.85);">Ungdomsansvarig</div>
+                                <a href="tel:+46707654321" style="color: rgba(0,0,0,0.55); font-size: 0.9rem; text-decoration: none; transition: color 0.2s;"
+                                   onmouseover="this.style.color='#F5B301'" onmouseout="this.style.color='rgba(0,0,0,0.55)'">
+                                    070-000 00 00
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Media -->
+                    <div class="contact-card">
+                        <div class="label-secondary" style="margin-bottom: 1rem;">Följ oss</div>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="https://www.instagram.com/fbkbalkan" target="_blank" rel="noopener noreferrer" class="social-btn social-btn-instagram">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                </svg>
+                                Instagram
+                            </a>
+                            <a href="https://www.facebook.com/fbkbalkan" target="_blank" rel="noopener noreferrer" class="social-btn social-btn-facebook">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                </svg>
+                                Facebook
+                            </a>
+                            <a href="https://www.youtube.com/@Malm%C3%B6Fotboll" target="_blank" rel="noopener noreferrer" class="social-btn social-btn-youtube">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.872.505 9.377.505 9.377.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                </svg>
+                                YouTube
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Contact Form -->
+                <div>
+                    <div style="background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.08); border-radius: 24px; padding: 2.5rem;">
+                        <h2 class="text-3xl md:text-4xl font-bold italic uppercase tracking-tighter mb-2" style="color: rgba(0,0,0,0.9);">
+                            Skicka ett meddelande
+                        </h2>
+                        <div class="divider-secondary mb-8"></div>
+
+                        <form th:action="@{/kontakt}" th:object="${contactForm}" method="post" class="space-y-5" novalidate>
+
+                            <!-- Name -->
+                            <div>
+                                <label class="form-label">
+                                    Namn <span class="required-star">*</span>
+                                </label>
+                                <input type="text" th:field="*{name}" placeholder="Ditt fullständiga namn"
+                                       class="form-input" th:classappend="${#fields.hasErrors('name')} ? 'error' : ''">
+                                <div th:if="${#fields.hasErrors('name')}" class="error-msg">
+                                    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01"/></svg>
+                                    <span th:errors="*{name}"></span>
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div>
+                                <label class="form-label">
+                                    E-post <span class="required-star">*</span>
+                                </label>
+                                <input type="email" th:field="*{email}" placeholder="din@epost.se"
+                                       class="form-input" th:classappend="${#fields.hasErrors('email')} ? 'error' : ''">
+                                <div th:if="${#fields.hasErrors('email')}" class="error-msg">
+                                    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01"/></svg>
+                                    <span th:errors="*{email}"></span>
+                                </div>
+                            </div>
+
+                            <!-- Phone (optional) -->
+                            <div>
+                                <label class="form-label">
+                                    Telefon <span style="color: rgba(0,0,0,0.3); font-size: 0.72rem; font-weight: 400; text-transform: none; letter-spacing: 0;">(valfri)</span>
+                                </label>
+                                <input type="tel" th:field="*{phone}" placeholder="070-000 00 00"
+                                       class="form-input">
+                            </div>
+
+                            <!-- Subject -->
+                            <div>
+                                <label class="form-label">
+                                    Ämne <span class="required-star">*</span>
+                                </label>
+                                <input type="text" th:field="*{subject}" placeholder="Vad gäller ditt ärende?"
+                                       class="form-input" th:classappend="${#fields.hasErrors('subject')} ? 'error' : ''">
+                                <div th:if="${#fields.hasErrors('subject')}" class="error-msg">
+                                    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01"/></svg>
+                                    <span th:errors="*{subject}"></span>
+                                </div>
+                            </div>
+
+                            <!-- Message -->
+                            <div>
+                                <label class="form-label">
+                                    Meddelande <span class="required-star">*</span>
+                                </label>
+                                <textarea th:field="*{message}" rows="5"
+                                          placeholder="Skriv ditt meddelande här..."
+                                          class="form-input" style="resize: vertical; min-height: 140px;"
+                                          th:classappend="${#fields.hasErrors('message')} ? 'error' : ''"></textarea>
+                                <div th:if="${#fields.hasErrors('message')}" class="error-msg">
+                                    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01"/></svg>
+                                    <span th:errors="*{message}"></span>
+                                </div>
+                            </div>
+
+                            <!-- Submit -->
+                            <div class="pt-2">
+                                <button type="submit" class="submit-btn w-full md:w-auto">
+                                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                                    </svg>
+                                    Skicka meddelande
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAP PLACEHOLDER / CTA -->
+    <section class="py-16 bg-primary text-primary-content text-center">
+
+        <h2 class="text-3xl md:text-5xl font-black italic uppercase mb-6">
+            Välkommen till FBK Balkan
+        </h2>
+
+        <p class="text-lg opacity-80 mb-8">
+            Östra fäladsgatan 60, 212 24 Malmö
+        </p>
+
+        <a href="https://www.google.com/maps/place/55%C2%B036'34.4%22N+13%C2%B003'25.2%22E/@55.6095556,13.0544251,623m/data=!3m2!1e3!4b1!4m4!3m3!8m2!3d55.6095556!4d13.057?entry=ttu"
+           target="_blank"
+           class="btn btn-secondary btn-lg rounded-full px-10 text-primary font-bold uppercase italic">
+            Visa på karta
+        </a>
+
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer::footer}"></footer>
+
+</body>
+</html>
