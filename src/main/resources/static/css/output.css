@@ -3359,6 +3359,10 @@ input.tab:checked + .tab-content,
   inset: 0px;
 }
 
+.inset-4 {
+  inset: 1rem;
+}
+
 .-right-2 {
   right: -0.5rem;
 }
@@ -3705,6 +3709,10 @@ input.tab:checked + .tab-content,
   height: 100vh;
 }
 
+.h-\[75vh\] {
+  height: 75vh;
+}
+
 .min-h-\[50vh\] {
   min-height: 50vh;
 }
@@ -4029,6 +4037,12 @@ input.tab:checked + .tab-content,
   margin-bottom: calc(2.5rem * var(--tw-space-y-reverse));
 }
 
+.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
+}
+
 .space-y-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
@@ -4045,12 +4059,6 @@ input.tab:checked + .tab-content,
   --tw-space-y-reverse: 0;
   margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(2rem * var(--tw-space-y-reverse));
-}
-
-.space-y-2 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0;
-  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
 }
 
 .divide-y > :not([hidden]) ~ :not([hidden]) {
@@ -4434,6 +4442,10 @@ input.tab:checked + .tab-content,
 
 .bg-white\/5 {
   background-color: rgb(255 255 255 / 0.05);
+}
+
+.bg-primary\/30 {
+  background-color: var(--fallback-p,oklch(var(--p)/0.3));
 }
 
 .bg-opacity-10 {
@@ -5976,6 +5988,11 @@ input.tab:checked + .tab-content,
   .lg\:py-4 {
     padding-top: 1rem;
     padding-bottom: 1rem;
+  }
+
+  .lg\:py-5 {
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
   }
 
   .lg\:text-2xl {
