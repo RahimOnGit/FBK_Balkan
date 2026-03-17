@@ -40,6 +40,7 @@
 package com.example.fbk_balkan.controller;
 
 import com.example.fbk_balkan.entity.News;
+import com.example.fbk_balkan.repository.FaqRepository;
 import com.example.fbk_balkan.service.NewsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,9 +52,11 @@ import java.util.List;
 public class HomeController {
 
     private final NewsService newsService;
+    private final FaqRepository faqRepository;
 
-    public HomeController(NewsService newsService) {
+    public HomeController(NewsService newsService,FaqRepository faqRepository) {
         this.newsService = newsService;
+        this.faqRepository = faqRepository;
     }
 
     @GetMapping("/")
@@ -61,6 +64,10 @@ public class HomeController {
         List<News> latestNews = newsService.getAllPublishedNews();
         News latestSingleNews = latestNews.isEmpty() ? null : latestNews.get(0);
         model.addAttribute("latestNews", latestSingleNews);
+        model.addAttribute(
+                "homeFaqs",
+                faqRepository.findTop3ByVisibleTrueOrderByDisplayOrderAsc()
+        );
         return "index";
     }
 
@@ -69,11 +76,6 @@ public class HomeController {
         return "about";
     }
 
-// //view page for /team-register
-//    @GetMapping("/team-register")
-//    public String teamRegister() {
-//        return "private-pages/team-register";
-//    }
 
 
 }

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Hantera FAQ</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<body class="bg-base-200 p-10">
+
+<!-- Navbar Fragment -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<h1 class="text-3xl font-bold mb-6">FAQ</h1>
+
+<!-- Success / Error Messages -->
+<div th:if="${success}" class="alert alert-success shadow-sm fade-in mb-4">
+    <i class="fa-solid fa-circle-check"></i>
+    <span th:text="${success}"></span>
+</div>
+<div th:if="${error}" class="alert alert-error shadow-sm fade-in mb-4">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    <span th:text="${error}"></span>
+</div>
+
+
+
+<!-- Create New FAQ Button -->
+<a th:href="@{/admin/faqs/create}" class="btn btn-primary mb-6">
+    Ny FAQ
+</a>
+
+<!-- Empty state display if no FAQs exist -->
+<div th:if="${#lists.isEmpty(faqs)}" class="flex flex-col items-center justify-center py-20 text-center px-6 bg-slate-50/50 rounded-3xl">
+    <div class="relative w-24 h-24 mb-6">
+        <div class="absolute inset-0 bg-primary/5 rounded-full"></div>
+        <div class="absolute inset-0 flex items-center justify-center">
+            <i class="fa-solid fa-question text-5xl text-primary/30"></i>
+        </div>
+    </div>
+    <h3 class="font-heading font-bold text-xl text-slate-800 mb-1">Inga FAQs hittades</h3>
+    <p class="text-slate-500 text-sm mb-6 max-w-sm">Det finns inga FAQ-poster i systemet ännu.</p>
+    <a th:href="@{/admin/faqs/create}" class="btn btn-primary btn-sm rounded-xl shadow-md flex items-center gap-2">
+        <i class="fa-solid fa-plus"></i> Lägg till den första
+    </a>
+</div>
+
+<!-- Table of FAQs -->
+<table th:if="${!#lists.isEmpty(faqs)}" class="table table-zebra w-full">
+    <thead>
+    <tr>
+        <th>Fråga</th>
+        <th>Synlig</th>
+        <th>Datum och tid</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="faq : ${faqs}" class="hover:bg-slate-50/50 transition-colors duration-150">
+        <td th:text="${faq.question}"></td>
+        <td>
+            <span th:if="${faq.visible}" class="badge badge-success">Ja</span>
+            <span th:unless="${faq.visible}" class="badge badge-warning">Nej</span>
+        </td>
+<!--        <td th:text="${#temporals.format(faq.updatedAt,'yyyy-MM-dd HH:mm')}"></td>-->
+        <td class="flex items-center gap-2">
+            <!-- Status badges -->
+            <div class="flex gap-1">
+        <span th:if="${faq.updatedAt.equals(faq.createdAt)}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100">
+            🟢 Ny
+        </span>
+                <span th:if="${faq.updatedAt.isAfter(T(java.time.LocalDateTime).now().minusHours(24)) and !faq.updatedAt.equals(faq.createdAt)}"
+                      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-600 border border-blue-100">
+            🔵 Uppdaterad nyligen
+        </span>
+            </div>
+            <!-- Date / Time -->
+            <div class="text-slate-500 text-sm" th:text="${#temporals.format(faq.updatedAt,'yyyy-MM-dd HH:mm')}"></div>
+        </td>
+        <td class="space-x-2">
+            <!-- Edit button -->
+            <a th:href="@{/admin/faqs/edit/{id}(id=${faq.id})}"
+               class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-primary hover:bg-primary/10 transition-colors"
+               title="Redigera">
+                <i class="fa-regular fa-pen-to-square text-lg"></i>
+            </a>
+
+            <!-- Delete button -->
+            <button type="button"
+                    th:attr="data-id=${faq.id}, data-question=${faq.question}"
+                    onclick="confirmDelete(this)"
+                    class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-colors"
+                    title="Ta bort">
+                <i class="fa-regular fa-trash-can text-lg"></i>
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    function confirmDelete(button) {
+        const faqId = button.getAttribute('data-id');
+        const question = button.getAttribute('data-question');
+        const deleteUrl = `/admin/faqs/delete/${faqId}`;
+
+        Swal.fire({
+            title: 'Är du säker?',
+            text: `Du är på väg att ta bort FAQ: ${question}`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#1e3a8a',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Ja, ta bort!',
+            cancelButtonText: 'Avbryt'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = deleteUrl;
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
