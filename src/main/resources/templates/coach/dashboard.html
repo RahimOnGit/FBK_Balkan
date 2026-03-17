@@ -27,6 +27,21 @@
                     <span th:text="${coachName}"></span>!
                 </h1>
 
+                <!-- Success/Error Messages -->
+                <div th:if="${successMessage}" class="alert alert-success shadow-lg mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span th:text="${successMessage}"></span>
+                </div>
+
+                <div th:if="${errorMessage}" class="alert alert-error shadow-lg mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span th:text="${errorMessage}"></span>
+                </div>
+
                 <!-- Nav buttons (Mina lag / Provträningar / Nyheter) -->
                 <div th:replace="~{coach/content-fragment::dashboard-content}"></div>
 
@@ -34,10 +49,10 @@
                     Du är nu inloggad och kan hantera ditt lag, spelare, träningar och skapa nyheter
                 </p>
 
-                <!-- ==========================================
+                <!--
                      TRIAL REQUESTS SECTION
                      Visible when "Provträningar" button clicked
-                     ========================================== -->
+                     -->
                 <div id="trial-section-container" class="hidden mt-6">
                     <div th:replace="~{coach/content-fragment::trial-requests}"></div>
                 </div>
@@ -60,17 +75,28 @@
     <div th:replace="~{fragments/footer::footer}"></div>
 </div>
 
-<script>
+<script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function () {
 
-        // Grab the three nav buttons by index (same order as in content-fragment)
-        const navButtons = document.querySelectorAll('.dashboard-content-area .btn, .card-body .btn');
+        // ===========================================
+        // HANDLE MAILTO LINK FROM FLASH ATTRIBUTES
+        // ===========================================
+        /*[# th:if="${mailtoLink}"]*/
+        var mailtoLink = /*[[${mailtoLink}]]*/ '';
+        if (mailtoLink) {
+            // Open email client with pre-filled message
+            window.location.href = mailtoLink;
+        }
+        /*[/]*/
 
-        // More reliable: grab by text content
+        // ===========================================
+        // TOGGLE SECTION NAVIGATION
+        // ===========================================
         const allBtns = document.querySelectorAll('.btn');
         let minaLagBtn = null;
         let provBtn = null;
 
+        // Find buttons by text content
         allBtns.forEach(function (btn) {
             const text = btn.textContent.trim().toLowerCase();
             if (text === 'mina lag') minaLagBtn = btn;
@@ -105,14 +131,17 @@
             }
         }
 
+        // Attach event listeners
         if (minaLagBtn && teamContainer) {
-            minaLagBtn.addEventListener('click', function () {
+            minaLagBtn.addEventListener('click', function (e) {
+                e.preventDefault();
                 toggleSection(teamContainer, trialContainer, minaLagBtn, provBtn);
             });
         }
 
         if (provBtn && trialContainer) {
-            provBtn.addEventListener('click', function () {
+            provBtn.addEventListener('click', function (e) {
+                e.preventDefault();
                 toggleSection(trialContainer, teamContainer, provBtn, minaLagBtn);
             });
         }

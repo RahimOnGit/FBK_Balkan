@@ -324,12 +324,13 @@
         </div>
     </div>
     <!-- Main Desktop Navbar -->
-    <div class="navbar-root px-6 lg:px-12 py-3 lg:py-4 flex items-center justify-between">
+    <div class="navbar-root   px-6 lg:px-12 py-3 lg:py-4 flex items-center justify-between">
         <!-- Brand/Logo -->
         <a href="/" class="absolute left-4 lg:left-8 top-14 -translate-y-1/2 z-50 group  ">
             <img src="/images/FBK_BALKAN_logo.png" alt="FBK Balkan"
                  class=" h-24 lg:h-18 transition-all duration-300 transform group-hover:scale-110 group-hover:drop-shadow-[0_0_15px_rgba(245,179,1,0.4)]">
         </a>
+        <!-- Desktop Navigation Center -->
         <!-- Desktop Navigation Center -->
         <nav class="hidden lg:flex items-center gap-12 mx-auto">            <a href="/news" class="nav-link font-virage">Nyheter</a>
             <a href="/about" class="nav-link">Om Klubben</a>
@@ -345,9 +346,9 @@
                 </button>
                 <div class="teams-dropdown">
                     <div class="teams-dropdown-inner">
-                        <ul class="py-1">
-                            <li class="team-item" th:each="team : ${publicTeams}">
-                                <a th:href="@{/public-teams/{id}(id=${team.id})}" th:text="${team.ageGroup}"></a>
+                        <ul class="py-1" th:if="${navbarTeams}">
+                            <li class="team-item" th:each="team : ${navbarTeams}">
+                                <a th:href="@{/public-teams/{id} (id=${team.id})}" th:text="${team.ageGroup}"></a>
                             </li>
                         </ul>
                     </div>

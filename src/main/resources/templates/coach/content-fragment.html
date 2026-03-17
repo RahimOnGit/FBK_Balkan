@@ -1,7 +1,7 @@
 <!--
      DASHBOARD NAV BUTTONS
      -->
-<div th:fragment="dashboard-content">
+<div th:fragment="dashboard-content" class="cbg-base-200 p-3">
     <div class="flex justify-center gap-3 items-center">
         <a class="btn btn-secondary btn-lg text-lg font-bold uppercase wide shadow-xl hover:scale-105 transition-transform cursor-pointer">
             Mina lag
@@ -167,10 +167,37 @@
                     </p>
                 </div>
 
-                <!-- Action buttons (approve/reject) — placeholder for future feature -->
+                <!-- Action buttons (approve/reject) -->
                 <div class="card-actions justify-end mt-3">
-                    <button class="btn btn-success btn-xs">Godkänn</button>
-                    <button class="btn btn-error btn-xs">Avvisa</button>
+                    <!-- Show approve/reject buttons only for PENDING status -->
+                    <div th:if="${req.status != null and req.status.name() == 'PENDING'}">
+                        <form th:action="@{/coach/trial/{id}/approve(id=${req.id})}"
+                              method="post"
+                              style="display: inline;">
+                            <button type="submit" class="btn btn-success btn-xs">
+                                Godkänn
+                            </button>
+                        </form>
+
+                        <form th:action="@{/coach/trial/{id}/reject(id=${req.id})}"
+                              method="post"
+                              style="display: inline;">
+                            <button type="submit" class="btn btn-error btn-xs">
+                                Avvisa
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Show status message for APPROVED/REJECTED -->
+                    <div th:if="${req.status != null and req.status.name() == 'APPROVED'}"
+                         class="text-xs text-success font-semibold">
+                        ✓ Godkänd
+                    </div>
+
+                    <div th:if="${req.status != null and req.status.name() == 'REJECTED'}"
+                         class="text-xs text-error font-semibold">
+                        ✗ Avvisad
+                    </div>
                 </div>
 
             </div>
