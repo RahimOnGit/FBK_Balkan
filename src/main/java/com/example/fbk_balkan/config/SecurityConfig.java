@@ -43,7 +43,7 @@ public class SecurityConfig {
 //                      roles-based access control
                                 .requestMatchers("/coach/**").hasRole("COACH")
                                 .requestMatchers("/admin/news/**").hasAnyRole("SOCIAL_ADMIN", "ADMIN")
-                                .requestMatchers("/admin/dashboard", "/admin/teams", "/admin/age-groups", "/admin/coaches", "/admin/trials")
+                                .requestMatchers("/admin/dashboard", "/admin/teams", "/admin/age-groups", "/admin/coaches", "/admin/trials", "/admin/faqs/**")
                                 .hasRole("ADMIN")
                                 .requestMatchers("/team-register").hasRole("ADMIN")
 
