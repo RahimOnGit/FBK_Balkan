@@ -105,8 +105,8 @@
     </script>
 </div>
 <!-- PREMIUM FAQ SECTION -->
-<!--<section class="py-24 bg-base-100">-->
 <section class="bg-base-100 pt-14 sm:pt-18 pb-14">
+
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
 
         <!-- Title -->
@@ -117,225 +117,20 @@
             <div class="w-20 h-1 bg-secondary mx-auto mt-4 rounded-full"></div>
         </div>
 
-        <!-- FAQ items wrapper -->
-        <!--        <div class="flex flex-col gap-4">-->
+        <!-- FAQ items -->
+        <div th:replace="~{fragments/faq :: faqList(${homeFaqs})}"></div>
 
-        <!-- ITEM 1 -->
-        <div class="faq-item bg-base-200 rounded-2xl shadow-sm border border-base-300 hover:shadow-xl hover:border-secondary transition-all duration-300">
-
-            <button type="button"
-                    class="faq-question w-full flex justify-between items-center p-4 sm:p-6 text-left">
-
-                    <span class="text-lg sm:text-xl font-bold text-primary">
-                        Hur anmäler jag mitt barn?
-                    </span>
-
-                <svg class="faq-icon w-5 sm:w-6 h-5 sm:h-6 text-secondary transition-transform duration-300"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="3"
-                     viewBox="0 0 24 24">
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M19 9l-7 7-7-7" />
-                </svg>
-            </button>
-
-            <!-- Divider line -->
-            <div class="faq-divider border-t border-base-300 mx-4 sm:mx-6"
-                 style="opacity: 0; transition: opacity 0.3s ease;"></div>
-
-            <div class="faq-answer px-4 sm:px-6 overflow-hidden"
-                 style="max-height: 0; transition: max-height 0.5s ease;">
-                <div class="pt-4 pb-4 sm:pb-6 text-base sm:text-base-content/80">
-                    Du gör en intresseanmälan via knappen
-                    "Registrera ditt barn" på startsidan.
-                    Vi kontaktar dig med mer information.
-                </div>
-            </div>
-
+        <!-- Button -->
+        <div class="text-center mt-8">
+            <a href="/faq"
+               class="inline-block px-6 py-3 rounded-xl bg-secondary text-white font-bold hover:opacity-90 transition">
+                Visa alla frågor →
+            </a>
         </div>
 
-        <!-- ITEM 2 -->
-        <div class="faq-item bg-base-200 rounded-2xl shadow-sm border border-base-300 hover:shadow-xl hover:border-secondary transition-all duration-300">
-
-            <button type="button"
-                    class="faq-question w-full flex justify-between items-center p-4 sm:p-6 text-left">
-
-                    <span class="text-lg sm:text-xl font-bold text-primary">
-                        Har ni olika nivåer på träningar?
-                    </span>
-
-                <svg class="faq-icon w-5 sm:w-6 h-5 sm:h-6 text-secondary transition-transform duration-300"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="3"
-                     viewBox="0 0 24 24">
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M19 9l-7 7-7-7" />
-                </svg>
-            </button>
-
-            <div class="faq-divider border-t border-base-300 mx-4 sm:mx-6"
-                 style="opacity: 0; transition: opacity 0.3s ease;"></div>
-
-            <div class="faq-answer px-4 sm:px-6 overflow-hidden"
-                 style="max-height: 0; transition: max-height 0.5s ease;">
-                <div class="pt-4 pb-4 sm:pb-6 text-base sm:text-base-content/80">
-                    Provträning är till för att kunna tycka och känna,vi välkomnar alla Barn/Ungdomar till att provträna med oss
-                </div>
-            </div>
-
-        </div>
-        <!-- ITEM 3 -->
-        <div class="faq-item bg-base-200 rounded-2xl shadow-sm border border-base-300 hover:shadow-xl hover:border-secondary transition-all duration-300">
-
-            <button type="button"
-                    class="faq-question w-full flex justify-between items-center p-4 sm:p-6 text-left">
-
-                    <span class="text-lg sm:text-xl font-bold text-primary">
-                        Var tränar FBK Balkan och vilka tiden ?
-                    </span>
-
-                <svg class="faq-icon w-5 sm:w-6 h-5 sm:h-6 text-secondary transition-transform duration-300"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="3"
-                     viewBox="0 0 24 24">
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M19 9l-7 7-7-7" />
-                </svg>
-            </button>
-
-            <!-- Divider line -->
-            <div class="faq-divider border-t border-base-300 mx-4 sm:mx-6"
-                 style="opacity: 0; transition: opacity 0.3s ease;"></div>
-
-            <div class="faq-answer px-4 sm:px-6 overflow-hidden"
-                 style="max-height: 0; transition: max-height 0.5s ease;">
-                <div class="pt-4 pb-4 sm:pb-6 text-base sm:text-base-content/80">
-                    Vi tränar på Kirsebergs IP , Adress Östra Fäladsgatan 60
-                </div>
-            </div>
-
-        </div>
-        <!-- ITEM 4 -->
-        <div class="faq-item bg-base-200 rounded-2xl shadow-sm border border-base-300 hover:shadow-xl hover:border-secondary transition-all duration-300">
-
-            <button type="button"
-                    class="faq-question w-full flex justify-between items-center p-4 sm:p-6 text-left">
-
-                    <span class="text-lg sm:text-xl font-bold text-primary">
-                        Vad kostar det att träna med er ?
-                    </span>
-
-                <svg class="faq-icon w-5 sm:w-6 h-5 sm:h-6 text-secondary transition-transform duration-300"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="3"
-                     viewBox="0 0 24 24">
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M19 9l-7 7-7-7" />
-                </svg>
-            </button>
-
-            <!-- Divider line -->
-            <div class="faq-divider border-t border-base-300 mx-4 sm:mx-6"
-                 style="opacity: 0; transition: opacity 0.3s ease;"></div>
-
-            <div class="faq-answer px-4 sm:px-6 overflow-hidden"
-                 style="max-height: 0; transition: max-height 0.5s ease;">
-                <div class="pt-4 pb-4 sm:pb-6 text-base sm:text-base-content/80">
-                    Det är gratis att provträna med oss i 14 dagar bara ansök på hemsidan alla är välkomna
-                </div>
-            </div>
-
-        </div>
-        <!-- ITEM 5 -->
-        <div class="faq-item bg-base-200 rounded-2xl shadow-sm border border-base-300 hover:shadow-xl hover:border-secondary transition-all duration-300">
-
-            <button type="button"
-                    class="faq-question w-full flex justify-between items-center p-4 sm:p-6 text-left">
-
-                    <span class="text-lg sm:text-xl font-bold text-primary">
-                        Vilka tränar min barn och ungdomar ?
-                    </span>
-
-                <svg class="faq-icon w-5 sm:w-6 h-5 sm:h-6 text-secondary transition-transform duration-300"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="3"
-                     viewBox="0 0 24 24">
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M19 9l-7 7-7-7" />
-                </svg>
-            </button>
-
-            <!-- Divider line -->
-            <div class="faq-divider border-t border-base-300 mx-4 sm:mx-6"
-                 style="opacity: 0; transition: opacity 0.3s ease;"></div>
-
-            <div class="faq-answer px-4 sm:px-6 overflow-hidden"
-                 style="max-height: 0; transition: max-height 0.5s ease;">
-                <div class="pt-4 pb-4 sm:pb-6 text-base sm:text-base-content/80">
-                    Alla tränare har sin utbildning via Svenska Fotbolls Förbundet som lägsta nivå SvFF D, alla tränare att blivit godkända I Sverige med alla krav som finns när man arbetar med barn
-                </div>
-            </div>
-
-        </div>
-    </div>
     </div>
 </section>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-
-        const items = document.querySelectorAll(".faq-item");
-
-        items.forEach(item => {
-
-            const button = item.querySelector(".faq-question");
-            const answer = item.querySelector(".faq-answer");
-            const icon = item.querySelector(".faq-icon");
-            const divider = item.querySelector(".faq-divider");
-
-            // Force closed on load
-            answer.style.maxHeight = "0px";
-            icon.style.transform = "rotate(0deg)";
-            divider.style.opacity = "0";
-
-            button.addEventListener("click", function () {
-
-                const isOpen = answer.style.maxHeight !== "0px";
-
-                // Close all
-                items.forEach(i => {
-                    i.querySelector(".faq-answer").style.maxHeight = "0px";
-                    i.querySelector(".faq-icon").style.transform = "rotate(0deg)";
-                    i.querySelector(".faq-divider").style.opacity = "0";
-                    i.classList.remove("border-secondary", "shadow-xl");
-                });
-
-                // Open clicked if it was closed
-                if (!isOpen) {
-                    answer.style.maxHeight = answer.scrollHeight + "px";
-                    icon.style.transform = "rotate(180deg)";
-                    divider.style.opacity = "1";
-                    item.classList.add("border-secondary", "shadow-xl");
-                }
-
-            });
-
-        });
-
-    });
-</script>
-
-<!--footer-->
 <div class="mt-8">
     <div th:replace="~{fragments/footer::footer}"></div>
 </div>

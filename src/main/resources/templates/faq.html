@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ | FBK Balkan</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+</head>
+
+<body class="bg-base-100 font-virage text-base-content antialiased">
+
+<!-- Navbar -->
+<header class="sticky top-0 z-[100] bg-primary shadow-lg">
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</header>
+
+<section class="bg-base-100 pt-14 sm:pt-18 pb-16">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+
+        <!-- Back button -->
+        <div class="mb-6">
+            <a href="/"
+               class="inline-flex items-center text-secondary font-bold hover:text-secondary/80 transition-colors text-base sm:text-base-content/80 leading-relaxed">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+                Tillbaka
+            </a>
+        </div>
+
+        <!-- Page Title -->
+        <div class="text-center mb-10">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold italic text-primary tracking-tight leading-snug">
+                <span class="text-secondary">Vanliga frågor om FBK Balkan</span>
+            </h1>
+
+            <p class="mt-4 text-base sm:text-base-content/80 max-w-3xl mx-auto leading-relaxed">
+                Här hittar du svar på de vanligaste frågorna om FBK Balkan.
+            </p>
+        </div>
+
+        <!-- FAQ LIST -->
+        <div th:replace="~{fragments/faq :: faqList(${faqs})}"></div>
+
+        <!-- Contact Help -->
+        <div class="text-center mt-12">
+            <p class="text-base sm:text-base-content/80 leading-relaxed">
+                Hittar du inte svaret på din fråga?
+            </p>
+            <a href="/kontakt"
+               class="inline-block mt-4 px-6 py-3 rounded-xl bg-secondary text-white font-bold hover:opacity-90 transition">
+                Kontakta oss
+            </a>
+        </div>
+        <p class="mt-2 text-sm text-gray-500" th:if="${faqLastUpdated != null}"
+           th:text="'Senast uppdaterad: ' + ${#temporals.format(faqLastUpdated, 'yyyy-MM-dd')}">
+        </p>
+
+    </div>
+</section>
+
+<!-- Footer -->
+<div class="mt-8">
+    <div th:replace="~{fragments/footer::footer}"></div>
+</div>
+
+</body>
+</html>
