@@ -143,6 +143,11 @@
                                     <i class="fa-solid fa-whistle text-[10px]"></i>
                                     Tränare
                                 </span>
+                                <span th:case="'ASSISTANT_COACH'"
+                                      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-50 text-indigo-600 border border-indigo-100">
+                                     <i class="fa-solid fa-user-plus text-[10px]"></i>
+                                    Assisterande tränare
+                                </span>
                                 <span th:case="*" th:text="${user.role}" class="badge badge-ghost text-xs"></span>
                             </span>
                         </td>
