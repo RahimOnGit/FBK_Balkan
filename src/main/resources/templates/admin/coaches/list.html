@@ -4,253 +4,162 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tränare & Admins – FBK Balkan</title>
-
-    <!-- DaisyUI & Tailwind -->
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
-
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- SweetAlert2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <link th:href="@{/css/output.css}" rel="stylesheet">
-
-    <!-- Tailwind Config -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        heading: ['Oswald', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: {
-                            500: '#1e3a8a',
-                            600: '#1e3a8a',
-                        },
-                        secondary: '#475569',
-                    }
-                }
-            }
-        }
-    </script>
-
+    <div th:replace="~{fragments/dashboard-sidebar :: sidebar-styles}"></div>
     <style>
-        header .navbar a:hover {
-            color: #fdad3a !important;
-            transition: color 0.3s ease;
-        }
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
-<body class="min-h-screen bg-base-200 flex flex-col">
+<body class="bg-slate-100">
 
-<!-- Navbar Fragment -->
-<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="dashboard-wrapper">
 
-<!-- Main Content -->
-<main class="flex-grow container mx-auto px-4 py-6 md:py-10 max-w-6xl mt-4">
+    <div th:replace="~{fragments/dashboard-sidebar :: sidebar('coaches')}"></div>
 
-    <!-- Page Header -->
-    <div class="mb-8">
-        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <div>
-                <h1 class="text-4xl md:text-5xl font-heading font-bold text-slate-900 uppercase tracking-tight leading-tight">
-                    Tränare & Admins
-                </h1>
-                <p class="text-slate-500 mt-2 font-medium max-w-lg">
-                    Hantera användare, roller och teamtilldelningar.
-                </p>
-            </div>
-
-            <div class="flex-shrink-0">
-                <a th:href="@{/admin/coaches/create}"
-                   class="btn btn-primary btn-md h-12 rounded-xl bg-primary-600 hover:bg-primary-700 text-white border-none shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 font-bold gap-2 px-6">
-                    <i class="fa-solid fa-plus"></i>
-                    Ny Tränare
-                </a>
-            </div>
+    <div class="dashboard-main">
+        <div class="dashboard-topbar">
+            <span class="dashboard-topbar-title">Tränare &amp; Admins</span>
+            <a th:href="@{/admin/coaches/create}"
+               class="btn btn-primary btn-sm rounded-xl gap-2">
+                <i class="fa-solid fa-plus"></i> Ny Tränare
+            </a>
         </div>
-    </div>
 
-    <!-- Alert Messages -->
-    <div th:if="${success}" class="alert alert-success mb-6 shadow-lg border-none fade-in">
-        <i class="fa-solid fa-check-circle"></i>
-        <span th:text="${success}"></span>
-    </div>
-    <div th:if="${error}" class="alert alert-error mb-6 shadow-lg border-none fade-in">
-        <i class="fa-solid fa-exclamation-triangle"></i>
-        <span th:text="${error}"></span>
-    </div>
+        <div class="dashboard-content">
 
-    <!-- Main Card Container -->
-    <div class="card bg-base-100 shadow-lg border border-slate-200 rounded-3xl overflow-hidden">
-        <div class="card-body p-0">
-
-            <div class="overflow-x-auto w-full">
-                <table class="table w-full text-slate-700">
-                    <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase text-xs tracking-wider">
-                    <tr>
-                        <th class="py-4 px-6 font-semibold">Användare</th>
-                        <th class="py-4 px-6 font-semibold">Kontakt</th>
-                        <th class="py-4 px-6 font-semibold">Roll</th>
-                        <th class="py-4 px-6 font-semibold text-center">Lag</th>
-                        <th class="py-4 px-6 font-semibold">Status</th>
-                        <th class="py-4 px-6 font-semibold text-right">Åtgärder</th>
-                    </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100">
-                    <tr th:each="user : ${users}" class="hover:bg-slate-50/50 transition-colors duration-150 align-middle">
-
-                        <!-- User Column -->
-                        <td class="py-4 px-6">
-                            <div class="flex items-center gap-3">
-                                <div class="avatar placeholder">
-                                    <div class="bg-primary/10 text-primary rounded-full w-10 h-10 ring-1 ring-primary/20">
-                                        <span class="text-lg font-bold" th:text="${#strings.substring(user.fullName, 0, 1)}">T</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="font-bold text-slate-800" th:text="${user.fullName}">Namn Efternamn</div>
-                                    <div class="text-xs opacity-50 font-mono" th:text="'ID: ' + ${user.id}">ID: 123</div>
-                                </div>
-                            </div>
-                        </td>
-
-                        <!-- Contact Column -->
-                        <td class="py-4 px-6">
-                            <div class="flex items-center gap-2 text-slate-600 text-sm">
-                                <i class="fa-regular fa-envelope opacity-50"></i>
-                                <span th:text="${user.email}">email@example.com</span>
-                            </div>
-                        </td>
-
-                        <!-- Role Column -->
-                        <td class="py-4 px-6">
-                            <span th:switch="${user.role}">
-                                <span th:case="'ADMIN'" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-50 text-rose-600 border border-rose-100">
-                                    <i class="fa-solid fa-shield-halved text-[10px]"></i>
-                                    Admin
-                                </span>
-                                <span th:case="'COACH'" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 text-blue-600 border border-blue-100">
-                                    <i class="fa-solid fa-whistle text-[10px]"></i>
-                                    Tränare
-                                </span>
-                                <span th:case="'ASSISTANT_COACH'"
-                                      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-50 text-indigo-600 border border-indigo-100">
-                                     <i class="fa-solid fa-user-plus text-[10px]"></i>
-                                    Assisterande tränare
-                                </span>
-                                <span th:case="*" th:text="${user.role}" class="badge badge-ghost text-xs"></span>
-                            </span>
-                        </td>
-
-                        <!-- Team Count Column -->
-                        <td class="py-4 px-6 text-center">
-                            <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 text-slate-600 font-bold text-xs" th:text="${user.teamCount}">0</span>
-                        </td>
-
-                        <!-- Status Column -->
-                        <td class="py-4 px-6">
-                            <span th:if="${user.enabled}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100">
-                                <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span></span>
-                                Aktiv
-                            </span>
-                            <span th:unless="${user.enabled}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-100">
-                                <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-                                Inaktiverad
-                            </span>
-                        </td>
-
-                        <!-- Actions Column -->
-                        <td class="py-4 px-6">
-                            <div class="flex items-center justify-end gap-1">
-                                <!-- Edit Button -->
-                                <a th:href="@{/admin/coaches/edit/{id}(id=${user.id})}"
-                                   class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-primary hover:bg-primary/10 transition-colors"
-                                   title="Redigera">
-                                    <i class="fa-regular fa-pen-to-square text-lg"></i>
-                                </a>
-
-                                <!-- Delete Button (Trigger for Swal) -->
-                                <button type="button"
-                                        th:attr="data-id=${user.id}, data-name=${user.fullName}"
-                                        onclick="confirmDelete(this)"
-                                        class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-colors"
-                                        title="Ta bort">
-                                    <i class="fa-regular fa-trash-can text-lg"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+            <!-- Alert Messages -->
+            <div th:if="${success}" class="alert alert-success mb-6 shadow-lg border-none fade-in">
+                <i class="fa-solid fa-check-circle"></i>
+                <span th:text="${success}"></span>
+            </div>
+            <div th:if="${error}" class="alert alert-error mb-6 shadow-lg border-none fade-in">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                <span th:text="${error}"></span>
             </div>
 
-            <!-- Empty State -->
-            <div th:if="${#lists.isEmpty(users)}" class="flex flex-col items-center justify-center py-20 text-center px-6 bg-slate-50/50">
-                <div class="relative w-20 h-20 mb-6">
-                    <div class="absolute inset-0 bg-primary/5 rounded-full"></div>
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <i class="fa-solid fa-users-slash text-4xl text-primary/30"></i>
+            <p class="text-slate-500 mb-6 font-medium">Hantera användare, roller och teamtilldelningar.</p>
+
+            <div class="card bg-base-100 shadow-lg border border-slate-200 rounded-3xl overflow-hidden">
+                <div class="card-body p-0">
+                    <div class="overflow-x-auto w-full">
+                        <table class="table w-full text-slate-700">
+                            <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase text-xs tracking-wider">
+                            <tr>
+                                <th class="py-4 px-6 font-semibold">Användare</th>
+                                <th class="py-4 px-6 font-semibold">Kontakt</th>
+                                <th class="py-4 px-6 font-semibold">Roll</th>
+                                <th class="py-4 px-6 font-semibold text-center">Lag</th>
+                                <th class="py-4 px-6 font-semibold">Status</th>
+                                <th class="py-4 px-6 font-semibold text-right">Åtgärder</th>
+                            </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                            <tr th:each="user : ${users}" class="hover:bg-slate-50/50 transition-colors duration-150 align-middle">
+                                <td class="py-4 px-6">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-primary/10 text-primary font-bold text-lg flex items-center justify-center ring-1 ring-primary/20">
+                                            <span th:text="${#strings.substring(user.fullName, 0, 1)}">T</span>
+                                        </div>
+                                        <div>
+                                            <div class="font-bold text-slate-800" th:text="${user.fullName}">Namn</div>
+                                            <div class="text-xs opacity-50 font-mono" th:text="'ID: ' + ${user.id}">ID: 123</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-6">
+                                    <div class="flex items-center gap-2 text-slate-600 text-sm">
+                                        <i class="fa-regular fa-envelope opacity-50"></i>
+                                        <span th:text="${user.email}">email@example.com</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-6">
+                                    <span th:switch="${user.role}">
+                                        <span th:case="'ADMIN'" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-50 text-rose-600 border border-rose-100">
+                                            <i class="fa-solid fa-shield-halved text-[10px]"></i> Admin
+                                        </span>
+                                        <span th:case="'COACH'" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-50 text-blue-600 border border-blue-100">
+                                            <i class="fa-solid fa-whistle text-[10px]"></i> Tränare
+                                        </span>
+                                        <span th:case="*" th:text="${user.role}" class="badge badge-ghost text-xs"></span>
+                                    </span>
+                                </td>
+                                <td class="py-4 px-6 text-center">
+                                    <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 text-slate-600 font-bold text-xs" th:text="${user.teamCount}">0</span>
+                                </td>
+                                <td class="py-4 px-6">
+                                    <span th:if="${user.enabled}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100">
+                                        <span class="relative flex h-2 w-2">
+                                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                        </span>
+                                        Aktiv
+                                    </span>
+                                    <span th:unless="${user.enabled}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-100">
+                                        <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                                        Inaktiverad
+                                    </span>
+                                </td>
+                                <td class="py-4 px-6">
+                                    <div class="flex items-center justify-end gap-1">
+                                        <a th:href="@{/admin/coaches/edit/{id}(id=${user.id})}"
+                                           class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-primary hover:bg-primary/10 transition-colors"
+                                           title="Redigera">
+                                            <i class="fa-regular fa-pen-to-square text-lg"></i>
+                                        </a>
+                                        <button type="button"
+                                                th:attr="data-id=${user.id}, data-name=${user.fullName}"
+                                                onclick="confirmDelete(this)"
+                                                class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-colors"
+                                                title="Ta bort">
+                                            <i class="fa-regular fa-trash-can text-lg"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div th:if="${#lists.isEmpty(users)}" class="flex flex-col items-center justify-center py-20 text-center px-6 bg-slate-50/50">
+                        <i class="fa-solid fa-users-slash text-5xl text-primary/20 mb-6"></i>
+                        <h3 class="font-bold text-xl text-slate-800 mb-1">Inga tränare hittades</h3>
+                        <p class="text-slate-500 text-sm mb-6 max-w-sm">Det finns inga registrerade tränare i systemet ännu.</p>
+                        <a th:href="@{/admin/coaches/create}" class="btn btn-primary btn-sm rounded-xl shadow-md">
+                            <i class="fa-solid fa-plus mr-2"></i> Lägg till den första
+                        </a>
                     </div>
                 </div>
-                <h3 class="font-heading font-bold text-xl text-slate-800 mb-1">Inga tränare hittades</h3>
-                <p class="text-slate-500 text-sm mb-6 max-w-sm">Det finns inga registrerade tränare i systemet ännu.</p>
-                <a th:href="@{/admin/coaches/create}" class="btn btn-primary btn-sm rounded-xl shadow-md">
-                    <i class="fa-solid fa-plus mr-2"></i> Lägg till den första
-                </a>
             </div>
 
         </div>
     </div>
-
-</main>
-
-<!-- Footer Fragment -->
-<!--<div th:replace="~{fragments/footer::footer}"></div>-->
-
-<!-- Hidden Form for Deletion (Used by JS) -->
-<form id="deleteForm" method="post" style="display: none;">
-    <input type="hidden" name="_method" value="delete"/> <!-- If you use method override filter -->
-</form>
+</div>
 
 <script>
     function confirmDelete(button) {
         const userId = button.getAttribute('data-id');
         const userName = button.getAttribute('data-name');
-        const deleteUrl = `/admin/coaches/delete/${userId}`;
 
         Swal.fire({
             title: 'Är du säker?',
-            html: `Du är på väg att ta bort <strong class="text-slate-800">${userName}</strong>.<br>Denna åtgärd kan inte ångras!`,
+            html: `Du är på väg att ta bort <strong>${userName}</strong>.<br>Denna åtgärd kan inte ångras!`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#1e3a8a', // Primary color
-            cancelButtonColor: '#64748b', // Slate color
+            confirmButtonColor: '#1e3a8a',
+            cancelButtonColor: '#64748b',
             confirmButtonText: '<i class="fa-solid fa-trash-can mr-2"></i> Ja, ta bort!',
             cancelButtonText: 'Avbryt',
-            customClass: {
-                popup: 'rounded-3xl font-sans',
-                confirmButton: 'btn btn-primary rounded-xl shadow-lg border-none text-white',
-                cancelButton: 'btn btn-ghost rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700'
-            },
-            showClass: {
-                popup: 'animate__animated animate__zoomIn animate__faster'
-            }
+            customClass: { popup: 'rounded-3xl' }
         }).then((result) => {
             if (result.isConfirmed) {
-                // Create a form dynamically to submit the POST request
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = deleteUrl;
+                form.action = `/admin/coaches/delete/${userId}`;
                 document.body.appendChild(form);
                 form.submit();
             }
