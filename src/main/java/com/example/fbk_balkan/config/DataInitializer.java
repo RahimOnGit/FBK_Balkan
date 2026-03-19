@@ -69,6 +69,20 @@ public class DataInitializer implements CommandLineRunner {
             userRepository.save(admin);
             System.out.println("Default admin created - :"+ admin.getEmail()   +", Password: password");
         }
+        //Create a default assistant coach if none exists
+        if (!userRepository.findByEmail("assistant@fbkbalkan.se").isPresent()) {
+            User assistant = new User();
+//            admin.setUsername("admin");
+            assistant.setLastName("Kh");
+            assistant.setFirstName("Hadia");
+
+            assistant.setPassword(passwordEncoder.encode("password"));
+            assistant.setEmail("assistant@fbkbalkan.se");
+            assistant.setRole(Role.ASSISTANT_COACH);
+            assistant.setEnabled(true);
+            userRepository.save(assistant);
+            System.out.println("Default admin created - :"+ assistant.getEmail()   +", Password: password");
+        }
     }
 
     private void initTeamsFromSvff() {
