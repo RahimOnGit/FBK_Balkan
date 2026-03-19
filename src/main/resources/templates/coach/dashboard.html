@@ -1,151 +1,171 @@
 <!DOCTYPE html>
-<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
+<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coach Dashboard - FBK Balkan</title>
     <link th:href="@{/css/output.css}" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <div th:replace="~{fragments/dashboard-sidebar :: sidebar-styles}"></div>
 </head>
-<body class="min-h-screen bg-base-100">
+<body class="bg-slate-100">
 
-<!-- Navbar -->
-<div class="absolute top-0 left-0 z-[10] right-0 bg-primary">
-    <div th:replace="~{fragments/navbar::navbar}"></div>
-</div>
+<div class="dashboard-wrapper">
 
-<!-- Dashboard Content -->
-<div class="min-h-screen pt-32 px-4 py-12">
-    <div class="mt-8">
-        <div class="card bg-base-100 shadow-xl p-5">
-            <div class="card-body">
+    <div th:replace="~{fragments/dashboard-sidebar :: sidebar('dashboard')}"></div>
 
-                <!-- Welcome heading -->
-                <h1 class="card-title text-3xl justify-center mb-4">
-                    Välkommen
-                    <span th:text="${coachName}"></span>!
-                </h1>
+    <div class="dashboard-main">
+        <div class="dashboard-topbar">
+            <span class="dashboard-topbar-title">
+                Välkommen, <span th:text="${coachName}">Coach</span>!
+            </span>
+            <a href="/" class="text-sm text-slate-500 hover:text-primary font-medium transition-colors">
+                ← Tillbaka till webbplats
+            </a>
+        </div>
 
-                <!-- Success/Error Messages -->
-                <div th:if="${successMessage}" class="alert alert-success shadow-lg mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span th:text="${successMessage}"></span>
-                </div>
+        <div class="dashboard-content">
 
-                <div th:if="${errorMessage}" class="alert alert-error shadow-lg mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span th:text="${errorMessage}"></span>
-                </div>
-
-                <!-- Nav buttons (Mina lag / Provträningar / Nyheter) -->
-                <div th:replace="~{coach/content-fragment::dashboard-content}"></div>
-
-                <p class="text-base-content/70 text-center mb-6">
-                    Du är nu inloggad och kan hantera ditt lag, spelare, träningar och skapa nyheter
-                </p>
-
-                <!--
-                     TRIAL REQUESTS SECTION
-                     Visible when "Provträningar" button clicked
-                     -->
-                <div id="trial-section-container" class="hidden mt-6">
-                    <div th:replace="~{coach/content-fragment::trial-requests}"></div>
-                </div>
-
-                <!-- ==========================================
-                     TEAMS SECTION
-                     Visible when "Mina lag" button clicked
-                     ========================================== -->
-                <div id="team-section-container" class="hidden mt-6">
-                    <div th:replace="~{coach/content-fragment::team-section}"></div>
-                </div>
-
+            <!-- Success/Error Messages -->
+            <div th:if="${successMessage}" class="alert alert-success shadow-lg mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span th:text="${successMessage}"></span>
             </div>
+            <div th:if="${errorMessage}" class="alert alert-error shadow-lg mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span th:text="${errorMessage}"></span>
+            </div>
+
+            <!-- Quick stats row -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <div class="card bg-white shadow">
+                    <div class="card-body items-center text-center py-5">
+                        <h2 class="text-4xl font-black text-primary" th:text="${teamCount}">0</h2>
+                        <p class="font-medium text-slate-500">Mina Lag</p>
+                    </div>
+                </div>
+                <div class="card bg-white shadow">
+                    <div class="card-body items-center text-center py-5">
+                        <h2 class="text-4xl font-black text-primary" th:text="${requestSize}">0</h2>
+                        <p class="font-medium text-slate-500">Provträningar</p>
+                    </div>
+                </div>
+                <div class="card bg-white shadow relative">
+                    <div class="card-body items-center text-center py-5">
+                        <h2 class="text-4xl font-black text-warning" th:text="${pendingCount}">0</h2>
+                        <p class="font-medium text-slate-500">Väntar på svar</p>
+                        <div th:if="${pendingCount > 0}" class="absolute -top-2 -right-2 badge badge-error badge-lg animate-pulse">NYTT!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shortcut buttons -->
+            <div class="flex flex-wrap gap-3 mb-8">
+                <button id="btn-teams"
+                        class="btn btn-primary gap-2"
+                        onclick="showSection('teams')">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    Mina Lag
+                </button>
+                <button id="btn-trials"
+                        class="btn btn-outline gap-2"
+                        onclick="showSection('trials')">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                    </svg>
+                    Provträningar
+                    <span th:if="${pendingCount > 0}" class="badge badge-warning badge-sm" th:text="${pendingCount}">0</span>
+                </button>
+                <a href="/coach/news" class="btn btn-outline gap-2">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z"/>
+                    </svg>
+                    Nyheter
+                </a>
+            </div>
+
+            <!-- Teams Section -->
+            <div id="section-teams" class="hidden">
+                <div th:replace="~{coach/content-fragment :: team-section}"></div>
+            </div>
+
+            <!-- Trials Section -->
+            <div id="section-trials" class="hidden">
+                <div th:replace="~{coach/content-fragment :: trial-requests}"></div>
+            </div>
+
+            <!-- Default welcome message when nothing is selected -->
+            <div id="section-welcome" class="card bg-white shadow-lg">
+                <div class="card-body text-center py-12">
+                    <div class="text-6xl mb-4">⚽</div>
+                    <h2 class="text-2xl font-bold text-slate-700 mb-2">Välkommen till din kontrollpanel</h2>
+                    <p class="text-slate-500 max-w-md mx-auto">
+                        Använd sidomenyn eller knapparna ovan för att hantera dina lag, provträningar och nyheter.
+                    </p>
+                </div>
+            </div>
+
         </div>
     </div>
-</div>
-
-<!-- Footer -->
-<div class="mt-8">
-    <div th:replace="~{fragments/footer::footer}"></div>
 </div>
 
 <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function () {
 
-        // ===========================================
-        // HANDLE MAILTO LINK FROM FLASH ATTRIBUTES
-        // ===========================================
+        // Handle mailto link from flash attributes
         /*[# th:if="${mailtoLink}"]*/
         var mailtoLink = /*[[${mailtoLink}]]*/ '';
         if (mailtoLink) {
-            // Open email client with pre-filled message
             window.location.href = mailtoLink;
         }
         /*[/]*/
 
-        // ===========================================
-        // TOGGLE SECTION NAVIGATION
-        // ===========================================
-        const allBtns = document.querySelectorAll('.btn');
-        let minaLagBtn = null;
-        let provBtn = null;
-
-        // Find buttons by text content
-        allBtns.forEach(function (btn) {
-            const text = btn.textContent.trim().toLowerCase();
-            if (text === 'mina lag') minaLagBtn = btn;
-            if (text === 'provträningar') provBtn = btn;
-        });
-
-        const teamContainer = document.getElementById('team-section-container');
-        const trialContainer = document.getElementById('trial-section-container');
-
-        // Toggle helper: shows target, hides other, toggles active style
-        function toggleSection(target, other, clickedBtn, otherBtn) {
-            const isAlreadyOpen = !target.classList.contains('hidden');
-
-            // Hide both first
-            target.classList.add('hidden');
-            other.classList.add('hidden');
-
-            // Remove active styling from both buttons
-            if (clickedBtn) clickedBtn.classList.remove('btn-secondary');
-            if (otherBtn) otherBtn.classList.remove('btn-secondary');
-            if (clickedBtn) clickedBtn.classList.add('btn-neutral');
-            if (otherBtn) otherBtn.classList.add('btn-neutral');
-
-            // If it was closed → open it; if it was open → leave closed (toggle)
-            if (!isAlreadyOpen) {
-                target.classList.remove('hidden');
-                if (clickedBtn) {
-                    clickedBtn.classList.remove('btn-neutral');
-                    clickedBtn.classList.add('btn-secondary');
-                }
-                target.scrollIntoView({behavior: 'smooth', block: 'start'});
-            }
-        }
-
-        // Attach event listeners
-        if (minaLagBtn && teamContainer) {
-            minaLagBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                toggleSection(teamContainer, trialContainer, minaLagBtn, provBtn);
-            });
-        }
-
-        if (provBtn && trialContainer) {
-            provBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                toggleSection(trialContainer, teamContainer, provBtn, minaLagBtn);
-            });
+        // Check for URL param to auto-open a section
+        const urlParams = new URLSearchParams(window.location.search);
+        const showParam = urlParams.get('show');
+        if (showParam === 'trials') {
+            showSection('trials');
+        } else if (showParam === 'teams') {
+            showSection('teams');
         }
     });
+
+    function showSection(name) {
+        const sections = ['teams', 'trials', 'welcome'];
+        const buttons = { teams: 'btn-teams', trials: 'btn-trials' };
+
+        sections.forEach(function(s) {
+            const el = document.getElementById('section-' + s);
+            if (el) el.classList.add('hidden');
+        });
+
+        Object.values(buttons).forEach(function(btnId) {
+            const btn = document.getElementById(btnId);
+            if (btn) {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-outline');
+            }
+        });
+
+        const target = document.getElementById('section-' + name);
+        if (target) {
+            target.classList.remove('hidden');
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        const activeBtn = document.getElementById('btn-' + name);
+        if (activeBtn) {
+            activeBtn.classList.remove('btn-outline');
+            activeBtn.classList.add('btn-primary');
+        }
+    }
 </script>
 </body>
 </html>
