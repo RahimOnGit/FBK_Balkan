@@ -7,6 +7,7 @@
     <title>Admin Dashboard – FBK Balkan</title>
     <link th:href="@{/css/output.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <div th:replace="~{fragments/dashboard-sidebar :: sidebar-styles}"></div>
 
     <style>
         .notification-pulse {
@@ -29,278 +30,215 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-base-200">
+<body class="bg-slate-100">
 
-<div th:replace="~{fragments/navbar::navbar}"></div>
+<div class="dashboard-wrapper">
 
-<div class="container mx-auto px-4 py-8 pt-24">
+    <div th:replace="~{fragments/dashboard-sidebar :: sidebar('dashboard')}"></div>
 
-    <h1 class="text-4xl font-bold font-virage text-primary mb-10 text-center">
-        Admin Dashboard
-    </h1>
+    <div class="dashboard-main">
+        <div class="dashboard-topbar">
+            <span class="dashboard-topbar-title">Admin Dashboard</span>
+            <a href="/" class="text-sm text-slate-500 hover:text-primary font-medium transition-colors">
+                ← Tillbaka till webbplats
+            </a>
+        </div>
 
-    <!-- ============================================================
-         🔔 NOTIFICATION BANNER — Pending News from Coach/Social Admin
-         ============================================================ -->
-    <div th:if="${pendingNewsCount > 0}"
-         class="slide-in mb-8">
+        <div class="dashboard-content">
 
-        <!-- Banner Header -->
-        <div class="alert shadow-lg border border-warning/30 bg-amber-50 rounded-2xl">
-            <div class="flex items-start gap-4 w-full">
-
-                <!-- Icon with pulse -->
-                <div class="relative shrink-0 mt-1">
-                    <div class="w-10 h-10 rounded-full bg-warning/20 flex items-center justify-center">
-                        <i class="fa-solid fa-bell text-warning text-lg"></i>
-                    </div>
-                    <span class="absolute -top-1 -right-1 w-4 h-4 bg-warning rounded-full notification-pulse"></span>
-                </div>
-
-                <div class="flex-1 min-w-0">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
-                        <div>
-                            <h3 class="font-bold text-amber-900 text-lg">
-                                Nyheter väntar på granskning
-                            </h3>
-                            <p class="text-amber-700 text-sm">
-                                <span th:text="${pendingNewsCount}">0</span>
-                                nyhet(er) skapade av tränare/redaktör väntar på din godkännelse.
-                            </p>
+            <!-- ============================================================
+                 NOTIFICATION BANNER — Pending News
+                 ============================================================ -->
+            <div th:if="${pendingNewsCount > 0}" class="slide-in mb-8">
+                <div class="alert shadow-lg border border-warning/30 bg-amber-50 rounded-2xl">
+                    <div class="flex items-start gap-4 w-full">
+                        <div class="relative shrink-0 mt-1">
+                            <div class="w-10 h-10 rounded-full bg-warning/20 flex items-center justify-center">
+                                <i class="fa-solid fa-bell text-warning text-lg"></i>
+                            </div>
+                            <span class="absolute -top-1 -right-1 w-4 h-4 bg-warning rounded-full notification-pulse"></span>
                         </div>
-                        <a href="/admin/news"
-                           class="btn btn-warning btn-sm rounded-xl gap-2 shrink-0 text-white border-none shadow-md">
-                            <i class="fa-solid fa-arrow-right"></i>
-                            Granska alla
-                        </a>
-                    </div>
-
-                    <!-- Pending News List (max 3 visas) -->
-                    <div class="bg-white/70 rounded-xl border border-amber-200 overflow-hidden">
-                        <div th:each="news, iterStat : ${pendingNews}"
-                             th:if="${iterStat.index < 3}"
-                             class="news-row flex items-center justify-between gap-3 px-4 py-3 border-b border-amber-100 last:border-b-0">
-
-                            <div class="flex items-center gap-3 min-w-0">
-                                <!-- Thumbnail eller placeholder -->
-                                <div class="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-amber-100 flex items-center justify-center">
-                                    <img th:if="${news.displayImageUrl != null}"
-                                         th:src="${news.displayImageUrl}"
-                                         alt=""
-                                         class="w-full h-full object-cover">
-                                    <i th:unless="${news.displayImageUrl != null}"
-                                       class="fa-regular fa-newspaper text-amber-400 text-sm"></i>
-                                </div>
-
-                                <div class="min-w-0">
-                                    <p class="font-semibold text-amber-900 text-sm truncate"
-                                       th:text="${news.title}">Nyhetstitel</p>
-                                    <p class="text-xs text-amber-600">
-                                        Av <span th:text="${news.authorFullName ?: news.authorUsername}">Tränare</span>
-                                        · <span th:text="${#temporals.format(news.createdAt, 'yyyy-MM-dd HH:mm')}">Datum</span>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+                                <div>
+                                    <h3 class="font-bold text-amber-900 text-lg">Nyheter väntar på granskning</h3>
+                                    <p class="text-amber-700 text-sm">
+                                        <span th:text="${pendingNewsCount}">0</span>
+                                        nyhet(er) skapade av tränare/redaktör väntar på din godkännelse.
                                     </p>
                                 </div>
-                            </div>
-
-                            <div class="flex items-center gap-2 shrink-0">
-                                <!-- Publicera direkt -->
-                                <form th:action="@{/admin/news/toggle/{id}(id=${news.id})}" method="post" class="inline">
-                                    <button type="submit"
-                                            class="btn btn-xs btn-success rounded-lg gap-1 border-none text-white"
-                                            title="Publicera">
-                                        <i class="fa-solid fa-check"></i>
-                                        Publicera
-                                    </button>
-                                </form>
-
-                                <!-- Redigera -->
-                                <a th:href="@{/admin/news/edit/{id}(id=${news.id})}"
-                                   class="btn btn-xs btn-ghost rounded-lg text-amber-700 hover:bg-amber-100"
-                                   title="Redigera">
-                                    <i class="fa-regular fa-pen-to-square"></i>
+                                <a href="/admin/news"
+                                   class="btn btn-warning btn-sm rounded-xl gap-2 shrink-0 text-white border-none shadow-md">
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                    Granska alla
                                 </a>
                             </div>
-                        </div>
-
-                        <!-- "Visa fler" om det finns mer än 3 -->
-                        <div th:if="${pendingNewsCount > 3}"
-                             class="px-4 py-2 bg-amber-50/80 text-center border-t border-amber-100">
-                            <a href="/admin/news"
-                               class="text-xs font-bold text-amber-700 hover:text-amber-900 transition-colors">
-                                + <span th:text="${pendingNewsCount - 3}">0</span> till · Visa alla →
-                            </a>
+                            <div class="bg-white/70 rounded-xl border border-amber-200 overflow-hidden">
+                                <div th:each="news, iterStat : ${pendingNews}"
+                                     th:if="${iterStat.index < 3}"
+                                     class="news-row flex items-center justify-between gap-3 px-4 py-3 border-b border-amber-100 last:border-b-0">
+                                    <div class="flex items-center gap-3 min-w-0">
+                                        <div class="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-amber-100 flex items-center justify-center">
+                                            <img th:if="${news.displayImageUrl != null}" th:src="${news.displayImageUrl}" alt="" class="w-full h-full object-cover">
+                                            <i th:unless="${news.displayImageUrl != null}" class="fa-regular fa-newspaper text-amber-400 text-sm"></i>
+                                        </div>
+                                        <div class="min-w-0">
+                                            <p class="font-semibold text-amber-900 text-sm truncate" th:text="${news.title}">Nyhetstitel</p>
+                                            <p class="text-xs text-amber-600">
+                                                Av <span th:text="${news.authorFullName ?: news.authorUsername}">Tränare</span>
+                                                · <span th:text="${#temporals.format(news.createdAt, 'yyyy-MM-dd HH:mm')}">Datum</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2 shrink-0">
+                                        <form th:action="@{/admin/news/toggle/{id}(id=${news.id})}" method="post" class="inline">
+                                            <button type="submit" class="btn btn-xs btn-success rounded-lg gap-1 border-none text-white" title="Publicera">
+                                                <i class="fa-solid fa-check"></i> Publicera
+                                            </button>
+                                        </form>
+                                        <a th:href="@{/admin/news/edit/{id}(id=${news.id})}" class="btn btn-xs btn-ghost rounded-lg text-amber-700 hover:bg-amber-100" title="Redigera">
+                                            <i class="fa-regular fa-pen-to-square"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div th:if="${pendingNewsCount > 3}" class="px-4 py-2 bg-amber-50/80 text-center border-t border-amber-100">
+                                    <a href="/admin/news" class="text-xs font-bold text-amber-700 hover:text-amber-900 transition-colors">
+                                        + <span th:text="${pendingNewsCount - 3}">0</span> till · Visa alla →
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <!-- ============================================================
-         END NOTIFICATION BANNER
-         ============================================================ -->
 
-    <!-- Statistik-kort -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-
-        <div class="card bg-base-100 shadow-xl">
-            <div class="card-body items-center text-center">
-                <h2 class="card-title text-5xl font-black text-primary">
-                    <span th:text="${teamCount}">0</span>
-                </h2>
-                <p class="text-lg font-medium">Lag</p>
-            </div>
-        </div>
-
-        <div class="card bg-base-100 shadow-xl">
-            <div class="card-body items-center text-center">
-                <h2 class="card-title text-5xl font-black text-primary">
-                    <span th:text="${playerCount}">0</span>
-                </h2>
-                <p class="text-lg font-medium">Registrerade spelare</p>
-            </div>
-        </div>
-
-        <div class="card bg-base-100 shadow-xl relative">
-            <div class="card-body items-center text-center">
-                <h2 class="card-title text-5xl font-black text-primary">
-                    <span th:text="${pendingTrials}">0</span>
-                </h2>
-                <p class="text-lg font-medium">Väntande provträningar</p>
-
-                <div th:if="${pendingTrials > 0}"
-                     class="absolute -top-2 -right-2 badge badge-error badge-lg animate-pulse">
-                    NYTT!
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body items-center text-center">
+                        <h2 class="card-title text-5xl font-black text-primary">
+                            <span th:text="${teamCount}">0</span>
+                        </h2>
+                        <p class="text-lg font-medium">Lag</p>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow-lg">
+                    <div class="card-body items-center text-center">
+                        <h2 class="card-title text-5xl font-black text-primary">
+                            <span th:text="${playerCount}">0</span>
+                        </h2>
+                        <p class="text-lg font-medium">Registrerade spelare</p>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow-lg relative">
+                    <div class="card-body items-center text-center">
+                        <h2 class="card-title text-5xl font-black text-primary">
+                            <span th:text="${pendingTrials}">0</span>
+                        </h2>
+                        <p class="text-lg font-medium">Väntande provträningar</p>
+                        <div th:if="${pendingTrials > 0}" class="absolute -top-2 -right-2 badge badge-error badge-lg animate-pulse">NYTT!</div>
+                    </div>
                 </div>
             </div>
+
+            <!-- Quick Links -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <a href="/admin/news" class="btn btn-primary btn-lg btn-block flex items-center justify-center gap-2 shadow relative">
+                    <i class="fa-solid fa-newspaper"></i>
+                    Hantera Nyheter
+                    <span th:if="${pendingNewsCount > 0}" class="absolute -top-2 -right-2 badge badge-warning badge-md font-bold notification-pulse" th:text="${pendingNewsCount}">0</span>
+                </a>
+                <a href="/admin/teams" class="btn btn-primary btn-lg btn-block">
+                    <i class="fa-solid fa-users mr-2"></i> Hantera Lag
+                </a>
+                <a href="/admin/coaches" class="btn btn-primary btn-lg btn-block flex items-center justify-center gap-2 shadow">
+                    <i class="fa-solid fa-user-tie"></i> Hantera Tränare
+                </a>
+                <a href="/admin/faqs" class="btn btn-primary btn-lg btn-block flex items-center justify-center gap-2 shadow">
+                    <i class="fa-solid fa-circle-question"></i> Hantera FAQ
+                </a>
+            </div>
+
+            <!-- Latest Trials -->
+            <div id="trials" class="card bg-base-100 shadow-lg mb-6">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">Senaste provträningsanmälningar</h2>
+                    <div th:if="${#lists.isEmpty(latestTrials)}" class="alert alert-info">
+                        Inga provträningsanmälningar ännu.
+                    </div>
+                    <div th:unless="${#lists.isEmpty(latestTrials)}" class="overflow-x-auto">
+                        <table class="table table-zebra w-full">
+                            <thead>
+                            <tr>
+                                <th>Namn</th>
+                                <th>Födelseår</th>
+                                <th>Datum anmäld</th>
+                                <th>Önskat datum</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="trial : ${latestTrials}">
+                                <td th:text="${trial.firstName + ' ' + trial.lastName}"></td>
+                                <td th:text="${#temporals.year(trial.birthDate)}"></td>
+                                <td th:text="${#temporals.format(trial.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+                                <td th:text="${#temporals.format(trial.preferredTrainingDate, 'yyyy-MM-dd')}"></td>
+                                <td>
+                                    <span th:switch="${trial.status}" class="badge">
+                                        <span th:case="'PENDING'" class="badge badge-warning">Väntar</span>
+                                        <span th:case="'APPROVED'" class="badge badge-success">Godkänd</span>
+                                        <span th:case="'REJECTED'" class="badge badge-error">Avvisad</span>
+                                        <span th:case="*">Okänd</span>
+                                    </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Latest Teams -->
+            <div class="card bg-base-100 shadow-lg">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">Senaste skapade lag</h2>
+                    <div th:if="${#lists.isEmpty(latestTeams)}" class="alert alert-info">
+                        Inga lag registrerade ännu.
+                    </div>
+                    <div th:unless="${#lists.isEmpty(latestTeams)}" class="overflow-x-auto">
+                        <table class="table table-zebra w-full">
+                            <thead>
+                            <tr>
+                                <th>Lagnamn</th>
+                                <th>Åldersgrupp</th>
+                                <th>Skapad</th>
+                                <th>Tränare</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="team : ${latestTeams}">
+                                <td th:text="${team.name}">Lag namn</td>
+                                <td th:text="${team.ageGroup}">Åldersgrupp</td>
+                                <td th:text="${#temporals.format(team.createdDate, 'yyyy-MM-dd HH:mm')}">Datum</td>
+                                <td th:text="${team.coachName}">—</td>
+                                <td>
+                                    <span th:if="${team.active}" class="badge badge-success">Aktiv</span>
+                                    <span th:unless="${team.active}" class="badge badge-warning">Inaktiv</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-actions justify-end mt-4">
+                        <a th:href="@{/admin/teams}" class="btn btn-outline btn-sm">Visa alla lag →</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
-
-    <!-- Snabblänkar -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 mb-12">
-
-        <!-- Nyheter med badge om det finns pending -->
-        <a href="/admin/news"
-           class="btn btn-primary btn-lg btn-block flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all relative">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-            </svg>
-            Hantera Nyheter
-            <!-- Badge visas om det finns opublicerade nyheter -->
-            <span th:if="${pendingNewsCount > 0}"
-                  class="absolute -top-2 -right-2 badge badge-warning badge-md font-bold notification-pulse"
-                  th:text="${pendingNewsCount}">0</span>
-        </a>
-
-        <a href="/admin/teams" class="btn btn-lg btn-primary btn-block">
-            Hantera lag
-        </a>
-
-        <a href="/admin/coaches"
-           class="btn btn-lg btn-primary btn-block flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-            Hantera Tränare och Admin
-        </a>
-        <!-- FAQ admin link -->
-        <a href="/admin/faqs "
-           class="btn btn-lg btn-primary btn-block flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all">
-            Hantera FAQ
-        </a>
-    </div>
-
-    <!-- Senaste provträningar -->
-    <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-            <h2 class="card-title text-2xl mb-6">Senaste provträningsanmälningar</h2>
-
-            <div th:if="${#lists.isEmpty(latestTrials)}" class="alert alert-info">
-                Inga provträningsanmälningar ännu.
-            </div>
-
-            <div th:unless="${#lists.isEmpty(latestTrials)}" class="overflow-x-auto">
-                <table class="table table-zebra w-full">
-                    <thead>
-                    <tr>
-                        <th>Namn</th>
-                        <th>Födelseår</th>
-                        <th>Datum anmäld</th>
-                        <th>Önskat datum</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="trial : ${latestTrials}">
-                        <td th:text="${trial.firstName + ' ' + trial.lastName}"></td>
-                        <td th:text="${#temporals.year(trial.birthDate)}"></td>
-                        <td th:text="${#temporals.format(trial.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
-                        <td th:text="${#temporals.format(trial.preferredTrainingDate, 'yyyy-MM-dd')}"></td>
-                        <td>
-                            <span th:switch="${trial.status}" class="badge">
-                                <span th:case="'PENDING'" class="badge-warning">Väntar</span>
-                                <span th:case="'APPROVED'" class="badge-success">Godkänd</span>
-                                <span th:case="'REJECTED'" class="badge-error">Avvisad</span>
-                                <span th:case="*">Okänd</span>
-                            </span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="card-actions justify-end mt-6">
-                <a href="/admin/trials" class="btn btn-outline">Visa alla anmälningar →</a>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Senaste lag -->
-    <div class="card bg-base-100 shadow-xl mt-8">
-        <div class="card-body">
-            <h2 class="card-title text-2xl mb-6">Senaste skapade lag</h2>
-
-            <div th:if="${#lists.isEmpty(latestTeams)}" class="alert alert-info">
-                Inga lag registrerade ännu.
-            </div>
-
-            <div th:unless="${#lists.isEmpty(latestTeams)}" class="overflow-x-auto">
-                <table class="table table-zebra w-full">
-                    <thead>
-                    <tr>
-                        <th>Lagnamn</th>
-                        <th>Åldersgrupp</th>
-                        <th>Skapad</th>
-                        <th>Tränare</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="team : ${latestTeams}">
-                        <td th:text="${team.name}">Lag namn</td>
-                        <td th:text="${team.ageGroup}">Åldersgrupp</td>
-                        <td th:text="${#temporals.format(team.createdDate, 'yyyy-MM-dd HH:mm')}">Datum</td>
-                        <td th:text="${team.coachName}">—</td>
-                        <td>
-                            <span th:if="${team.active}" class="badge badge-success">Aktiv</span>
-                            <span th:unless="${team.active}" class="badge badge-warning">Inaktiv</span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!--  btn btn-outline -->
-            <div class="card-actions justify-end mt-6">
-                <a th:href="@{/admin/teams}" class="btn btn-outline">Visa alla lag →</a>
-            </div>
-        </div>
-    </div>
-
 </div>
 
-<div th:replace="~{fragments/footer::footer}"></div>
 </body>
 </html>

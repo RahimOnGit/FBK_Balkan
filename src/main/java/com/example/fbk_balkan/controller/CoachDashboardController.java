@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.UnsupportedEncodingException;
@@ -44,7 +45,8 @@ public class CoachDashboardController {
     @GetMapping("/coach/dashboard")
     @PreAuthorize("hasRole('COACH')")
     public String dashboard(Model model,
-                            @AuthenticationPrincipal UserDetails userDetails) {
+                            @AuthenticationPrincipal UserDetails userDetails,
+                            @RequestParam(value = "show", required = false) String show) {
 
         // Get coach details from userDetails and add to model
         String coachEmail = userDetails.getUsername();
@@ -78,6 +80,10 @@ public class CoachDashboardController {
             model.addAttribute("trialRequests", List.of());
             model.addAttribute("requestSize", 0);
             model.addAttribute("pendingCount", 0);
+        }
+
+        if (show != null) {
+            model.addAttribute("show", show);
         }
 
         return "coach/dashboard";
