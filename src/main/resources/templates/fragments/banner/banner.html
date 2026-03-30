@@ -3,12 +3,18 @@
     <!--   Background image + overlay   -->
     <div class="relative w-full h-[500px] md:h-[600px] lg:h-[700px] ">
 
+
         <!-- Background image with gradient overlay -->
         <div th:replace="~{fragments/banner/banner-bg::banner-bg}"></div>
+
+        <section class="relative z-20 flex justify-start px-4 mb-8">
+            <div th:replace="~{fragments/match-result::match-result}"></div>
+        </section>
 
 
         <!-- Content container -->
         <div class="relative z-10 container mx-auto px-6  flex flex-col justify-center items-center text-center text-white">
+
 
             <!-- Club name – big & bold -->
             <h1 class="text-5xl md:text-6xl lg:text-7xl font-black font-virage tracking-tight drop-shadow-2xl mb-4 uppercase">
