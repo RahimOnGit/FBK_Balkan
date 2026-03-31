@@ -241,6 +241,16 @@
             </svg>
             Dashboard
         </a>
+        <a sec:authorize="hasRole('SOCIAL_ADMIN')" href="/socialadmin/dashboard"
+           th:class="'sidebar-link' + (${activePage == 'dashboard'} ? ' active' : '')">
+            <svg class="sidebar-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="7" height="7" rx="1"/>
+                <rect x="14" y="3" width="7" height="7" rx="1"/>
+                <rect x="3" y="14" width="7" height="7" rx="1"/>
+                <rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+            Dashboard
+        </a>
 
         <div class="sidebar-divider"></div>
 
@@ -262,6 +272,21 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-8H7v8M7 4v4h8"/>
             </svg>
             Nyheter
+        </a>
+        <a sec:authorize="hasRole('SOCIAL_ADMIN')" href="/admin/news"
+           th:class="'sidebar-link' + (${activePage == 'news'} ? ' active' : '')">
+            <svg class="sidebar-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-8H7v8M7 4v4h8"/>
+            </svg>
+            Nyheter
+        </a>
+        <a sec:authorize="hasRole('SOCIAL_ADMIN')" href="/admin/news/create"
+           th:class="'sidebar-link' + (${activePage == 'news-create'} ? ' active' : '')">
+            <svg class="sidebar-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+            </svg>
+            Ny nyhet
         </a>
 
         <!-- Trials -->

@@ -98,12 +98,12 @@ public class NewsController {
             newsDTO.setExternalImageUrl(null);
         }
 
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        boolean canPublish = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN") || a.getAuthority().equals("ROLE_SOCIAL_ADMIN"));
 
-        newsService.createNews(newsDTO, authentication.getName(), isAdmin);
+        newsService.createNews(newsDTO, authentication.getName(), canPublish);
         redirectAttributes.addFlashAttribute("successMessage",
-                isAdmin ? "Nyhet skapad!" : "Nyhet skapad och väntar på granskning!");
+                canPublish ? "Nyhet skapad!" : "Nyhet skapad och väntar på granskning!");
         return "redirect:/admin/news";
     }
 
@@ -113,10 +113,10 @@ public class NewsController {
         News news = newsService.getNewsById(id)
                 .orElseThrow(() -> new RuntimeException("Nyhet hittades inte"));
 
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        boolean canPublish = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN") || a.getAuthority().equals("ROLE_SOCIAL_ADMIN"));
 
-        if (!isAdmin && !news.getAuthorUsername().equals(authentication.getName())) {
+        if (!canPublish && !news.getAuthorUsername().equals(authentication.getName())) {
             throw new RuntimeException("Du har inte behörighet att redigera denna nyhet");
         }
 
@@ -150,23 +150,23 @@ public class NewsController {
         News existingNews = newsService.getNewsById(id)
                 .orElseThrow(() -> new RuntimeException("Nyhet hittades inte"));
 
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        boolean canPublish = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN") || a.getAuthority().equals("ROLE_SOCIAL_ADMIN"));
 
-        if (!isAdmin && !existingNews.getAuthorUsername().equals(authentication.getName())) {
+        if (!canPublish && !existingNews.getAuthorUsername().equals(authentication.getName())) {
             throw new RuntimeException("Du har inte behörighet att redigera denna nyhet");
         }
 
         handleImageUpdate(newsDTO, imageFile, deleteImageFlag, existingNews.getImageUrl());
 
-        newsService.updateNews(id, newsDTO, isAdmin);
+        newsService.updateNews(id, newsDTO, canPublish);
         redirectAttributes.addFlashAttribute("successMessage",
-                isAdmin ? "Nyhet uppdaterad!" : "Nyhet uppdaterad och väntar på granskning!");
+                canPublish ? "Nyhet uppdaterad!" : "Nyhet uppdaterad och väntar på granskning!");
         return "redirect:/admin/news";
     }
 
     @PostMapping("/admin/news/delete/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'COACH')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'COACH', 'SOCIAL_ADMIN')")
     public String deleteNews(
             @PathVariable Long id,
             Authentication authentication,
@@ -175,10 +175,10 @@ public class NewsController {
         News news = newsService.getNewsById(id)
                 .orElseThrow(() -> new RuntimeException("Nyhet hittades inte"));
 
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        boolean canPublish = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN") || a.getAuthority().equals("ROLE_SOCIAL_ADMIN"));
 
-        if (!isAdmin && !news.getAuthorUsername().equals(authentication.getName())) {
+        if (!canPublish && !news.getAuthorUsername().equals(authentication.getName())) {
             throw new RuntimeException("Du har inte behörighet att ta bort denna nyhet");
         }
 
@@ -188,7 +188,7 @@ public class NewsController {
     }
 
     @PostMapping("/admin/news/toggle/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SOCIAL_ADMIN')")
     public String togglePublished(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         newsService.togglePublished(id);
         redirectAttributes.addFlashAttribute("successMessage", "Publiceringsstatus ändrad!");
@@ -196,7 +196,7 @@ public class NewsController {
     }
 
     @PostMapping("/admin/news/delete-image/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SOCIAL_ADMIN')")
     public String deleteImage(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         String oldImageUrl = newsService.clearNewsImage(id);
         if (oldImageUrl != null) {
