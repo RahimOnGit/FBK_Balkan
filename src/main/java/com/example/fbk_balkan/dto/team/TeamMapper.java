@@ -5,6 +5,9 @@ import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.entity.Team;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class TeamMapper {
 
@@ -31,6 +34,20 @@ public class TeamMapper {
             coachDto.setEmail(team.getCoach().getEmail());
             dto.setCoach(coachDto);
         }
+        // Map assistant coaches
+        if (team.getAssistantCoaches() != null && !team.getAssistantCoaches().isEmpty()) {
+            List<UserDto> assistantDtos = team.getAssistantCoaches().stream()
+                    .map(a -> {
+                        UserDto u = new UserDto();
+                        u.setId(a.getId());
+                        u.setFirstName(a.getFirstName());
+                        u.setLastName(a.getLastName());
+                        u.setEmail(a.getEmail());
+                        return u;
+                    })
+                    .toList();
+            dto.setAssistantCoaches(assistantDtos);
+        }
 
         return dto;
     }
@@ -52,7 +69,8 @@ public class TeamMapper {
         team.setDescription(createDto.getDescription());
         team.setActive(createDto.isActive());
         team.setCoach(coach); // Set the actual Coach entity
-
+        // Initialize empty list for assistant coaches; service will populate
+        team.setAssistantCoaches(new ArrayList<>());
         return team;
     }
 }

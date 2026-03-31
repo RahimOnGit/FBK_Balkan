@@ -52,6 +52,7 @@
                                 <th class="py-4 px-6 font-semibold">Lagnamn</th>
                                 <th class="py-4 px-6 font-semibold">Åldersgrupp</th>
                                 <th class="py-4 px-6 font-semibold">Huvudtränare</th>
+                                <th class="py-4 px-6 font-semibold">Assistenttränare</th>
                                 <th class="py-4 px-6 font-semibold text-center">Status</th>
                                 <th class="py-4 px-6 font-semibold text-right">Åtgärder</th>
                             </tr>
@@ -71,6 +72,7 @@
                                 </td>
                                 <td class="py-4 px-6" th:text="${team.ageGroup}">P16</td>
                                 <td class="py-4 px-6" th:text="${team.coachName ?: '—'}">—</td>
+                                <td class="py-4 px-6" th:text="${team.assistantNames ?: '—'}">—</td>
                                 <td class="py-4 px-6 text-center">
                                     <span th:if="${team.active}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100">
                                         <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Aktiv

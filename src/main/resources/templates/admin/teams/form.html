@@ -67,6 +67,27 @@
         </option>
       </select>
     </div>
+    <div class="form-control">
+      <label class="label">Assistenttränare</label>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto border rounded-lg p-3 bg-base-100">
+
+        <label th:each="assistant : ${assistantCoaches}" class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox"
+                 name="assistantCoachIds"
+                 th:value="${assistant.id}"
+                 th:checked="${team.assistantCoachIds.contains(assistant.id)}"
+                 class="checkbox checkbox-primary"/>
+
+          <span th:text="${assistant.firstName} + ' ' + ${assistant.lastName}"></span>
+        </label>
+
+      </div>
+
+      <p class="text-xs text-slate-400 mt-1">
+        Välj en eller flera assisterande tränare.
+      </p>
+    </div>
 
     <!-- Lagstatus -->
     <div class="form-control">
