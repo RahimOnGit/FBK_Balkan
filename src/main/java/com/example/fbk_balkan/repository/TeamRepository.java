@@ -1,6 +1,7 @@
 package com.example.fbk_balkan.repository;
 
 import com.example.fbk_balkan.entity.Team;
+import com.example.fbk_balkan.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -48,4 +49,5 @@ boolean existsByNameAndAgeGroup(String name, String ageGroup);
 
 
     boolean existsByName(String name);
+
 }

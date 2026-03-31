@@ -4,6 +4,7 @@ import com.example.fbk_balkan.dto.team.TeamCreateDto;
 import com.example.fbk_balkan.dto.team.TeamListItemDTO;
 import com.example.fbk_balkan.entity.Role;
 import com.example.fbk_balkan.entity.Team;
+import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.repository.UserRepository;
 import com.example.fbk_balkan.service.TeamService;
 import jakarta.validation.Valid;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin/teams")
@@ -56,11 +58,17 @@ public class AdminTeamController {
         if (team.getCoach() != null) {
             dto.setCoachId(team.getCoach().getId());
         }
-
+        dto.setAssistantCoachIds(
+                team.getAssistantCoaches() != null
+                        ? team.getAssistantCoaches().stream()
+                        .map(User::getId)
+                        .toList()
+                        : List.of()
+        );
         model.addAttribute("team", dto);
         model.addAttribute("coaches", userRepository.findByRole(Role.COACH));
         model.addAttribute("isEdit", true);
-
+        model.addAttribute("assistantCoaches", userRepository.findByRole(Role.ASSISTANT_COACH));
         return "admin/teams/form";   // ← Samma modell som användes för att skapa teamet
     }
 
@@ -77,7 +85,10 @@ public class AdminTeamController {
 
         if (result.hasErrors()) {
             model.addAttribute("coaches", userRepository.findByRole(Role.COACH));
+            model.addAttribute("assistantCoaches", userRepository.findByRole(Role.ASSISTANT_COACH));
             model.addAttribute("isEdit", dto.getId() != null);
+            // validation for assistant
+            model.addAttribute("error", "Huvudtränare kan inte vara assistenttränare i samma lag");
             return "admin/teams/form";
         }
 
@@ -95,6 +106,7 @@ public class AdminTeamController {
         } catch (Exception e) {
             ra.addFlashAttribute("error", "Ett fel uppstod: " + e.getMessage());
             model.addAttribute("coaches", userRepository.findByRole(Role.COACH));
+            model.addAttribute("assistantCoaches", userRepository.findByRole(Role.ASSISTANT_COACH)); // NEW
             model.addAttribute("isEdit", dto.getId() != null);
             return "admin/teams/form";
         }

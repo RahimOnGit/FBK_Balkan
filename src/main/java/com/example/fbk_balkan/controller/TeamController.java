@@ -8,6 +8,7 @@ import com.example.fbk_balkan.repository.UserRepository;
 import com.example.fbk_balkan.service.TeamService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,6 +21,7 @@ import java.util.Comparator;
 
 @Controller
 @RequestMapping("/team-register")
+@PreAuthorize("hasRole('ADMIN')")
 public class TeamController {
     @Autowired
     private TeamService teamService;

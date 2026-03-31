@@ -3,8 +3,10 @@ package com.example.fbk_balkan.service;
 import com.example.fbk_balkan.dto.UserCreateUpdateDto;
 import com.example.fbk_balkan.dto.UserListItemDTO;
 import com.example.fbk_balkan.entity.Role;
+import com.example.fbk_balkan.entity.Team;
 import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.mapper.UserMapper;          // ny mapper – skapa denna
+import com.example.fbk_balkan.repository.TeamRepository;
 import com.example.fbk_balkan.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -26,6 +28,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final TeamRepository teamRepository;
 
     /**
      * Hämta alla användare som lista för admin-vyn
@@ -135,7 +138,12 @@ public class UserService {
                     dto.setFullName(user.getFirstName() + " " + user.getLastName());
                     dto.setEmail(user.getEmail());
                     dto.setRole(user.getRole());
-                    dto.setTeamCount(user.getTeams() != null ? user.getTeams().size() : 0);
+//                    dto.setTeamCount(user.getTeams() != null ? user.getTeams().size() : 0);
+                    // Count main teams (as head coach)
+                    int headCoachTeams = user.getTeams().size();
+                    int assistantTeams = user.getAssistantTeams().size();
+                    // Combine both counts into teamCount
+                    dto.setTeamCount(headCoachTeams + (int) assistantTeams);
                     dto.setEnabled(user.isEnabled());
                     return dto;
                 })

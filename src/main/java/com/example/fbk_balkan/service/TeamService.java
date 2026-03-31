@@ -1,6 +1,8 @@
 package com.example.fbk_balkan.service;
 
+import com.example.fbk_balkan.dto.TeamCreateUpdateDTO;
 import com.example.fbk_balkan.dto.team.*;
+import com.example.fbk_balkan.entity.Role;
 import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.entity.Team;
 import com.example.fbk_balkan.repository.UserRepository;
@@ -43,11 +45,43 @@ public TeamDto createTeam(TeamCreateDto teamCreateDto) {
 //validate and fetch coach
         User coach = userRepository.findById(teamCreateDto.getCoachId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid coach ID"));
+        //NEW Validation
+        if (coach.getRole() != Role.COACH) {
+            throw new IllegalArgumentException("Selected user is not a head coach");
+        }
+
 
 //    convert DTO to entity
         Team team = teamMapper.toEntity(teamCreateDto, coach);
         team.setCreatedDate(LocalDateTime.now());
         team.setUpdatedDate(LocalDateTime.now());
+
+        //NEW 4. Fetch and set assistant coaches (null-safe, distinct, and validate roles)
+        if (teamCreateDto.getAssistantCoachIds() != null && !teamCreateDto.getAssistantCoachIds().isEmpty()) {
+            List<Long> assistantIds = teamCreateDto.getAssistantCoachIds().stream()
+                    .filter(id -> id != null)
+                    .distinct()
+                    .toList();
+
+            //   Prevent head coach from being listed as assistant
+            if (assistantIds.contains(coach.getId())) {
+                throw new IllegalArgumentException("Huvudtränare kan inte vara assistenttränare i samma lag");
+            }
+
+            List<User> assistants = assistantIds.stream()
+                    .map(id -> userRepository.findById(id)
+                            .orElseThrow(() -> new IllegalArgumentException("Assistant coach not found: " + id))
+                    )
+                    .peek(u -> {
+                        if (u.getRole() != Role.ASSISTANT_COACH) {
+                            throw new IllegalArgumentException("User is not an assistant coach: " + u.getId());
+                        }
+                    })
+                    .collect(Collectors.toList());
+
+            team.setAssistantCoaches(assistants);
+        }
+
 
 //    save entity
         Team savedTeam = teamRepository.save(team);
@@ -85,6 +119,13 @@ public List<TeamListItemDTO> findAllForAdminList() {
                                 ? team.getCoach().getFirstName() + " " + team.getCoach().getLastName()
                                 : "—"
                 );
+                // Add assistant coaches names
+                dto.setAssistantNames(
+                        team.getAssistantCoaches().stream()
+                                .map(u -> u.getFirstName() + " " + u.getLastName())
+                                .collect(Collectors.joining(", "))
+                );
+
                 return dto;
             })
             .toList();
@@ -184,6 +225,18 @@ public List<Team> getActiveTeams() {
 
         User coach = userRepository.findById(dto.getCoachId())
                 .orElseThrow(() -> new IllegalArgumentException("Tränaren är inte närvarande."));
+        if (coach.getRole() != Role.COACH) {
+            throw new IllegalArgumentException("Selected user is not a head coach");
+        }
+        // Null-safe and distinct assistant coach IDs
+        List<Long> assistantIds = dto.getAssistantCoachIds() != null
+                ? dto.getAssistantCoachIds().stream().distinct().toList()
+                : List.of();
+
+        // Prevent head coach from being an assistant
+        if (assistantIds.contains(dto.getCoachId())) {
+            throw new IllegalArgumentException("Huvudtränare kan inte vara assistenttränare i samma lag");
+        }
 
         // Uppdatera fält
         team.setName(dto.getName());
@@ -193,6 +246,17 @@ public List<Team> getActiveTeams() {
         team.setDescription(dto.getDescription());
         team.setActive(dto.isActive());
         team.setCoach(coach);
+
+        // Update assistant coaches
+        List<User> assistants = dto.getAssistantCoachIds().stream()
+                .map(assistantId -> userRepository.findById(assistantId)
+                        .filter(u -> u.getRole() == Role.ASSISTANT_COACH)
+                        .orElseThrow(() -> new IllegalArgumentException("Invalid assistant coach ID: " + assistantId))
+                )
+                .collect(Collectors.toList());
+
+        team.setAssistantCoaches(assistants);
+        team.setUpdatedDate(LocalDateTime.now());
 
         teamRepository.save(team);
     }

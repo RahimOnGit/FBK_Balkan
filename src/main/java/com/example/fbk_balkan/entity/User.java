@@ -48,6 +48,10 @@ public class User {
     @OneToMany(mappedBy = "coach", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Team> teams = new ArrayList<>();   // ← fortfarande coach i Team-tabellen
 
+    // NEW: teams where user is assistant coach
+    @Builder.Default
+    @ManyToMany(mappedBy = "assistantCoaches")
+    private List<Team> assistantTeams = new ArrayList<>();
     // hjälpfunktioner (samma som tidigare)
     public void addTeam(Team team) {
         teams.add(team);

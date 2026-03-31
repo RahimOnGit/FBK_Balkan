@@ -4,6 +4,8 @@ import com.example.fbk_balkan.dto.UserDto;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Data
 public class TeamDto {
     private Long id;
@@ -14,6 +16,7 @@ public class TeamDto {
     private UserDto coach; // Embedded coach info
     private boolean active;
     private String description;
+    private List<UserDto> assistantCoaches;
 
     // Audit fields — useful for admin/debugging
     private LocalDateTime createdDate;

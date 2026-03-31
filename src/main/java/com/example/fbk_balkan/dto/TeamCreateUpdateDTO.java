@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 public class TeamCreateUpdateDTO {
     private Long id;
@@ -30,4 +33,6 @@ public class TeamCreateUpdateDTO {
     private Long coachId;           // ← viktig!
 
     private boolean active = true;
+
+
 }

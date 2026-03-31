@@ -10,6 +10,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "teams")
@@ -62,4 +64,11 @@ public class Team {
     public enum Gender {
         MALE, FEMALE, MIXED
     }
+    @ManyToMany
+    @JoinTable(
+            name = "team_assistants",
+            joinColumns = @JoinColumn(name = "team_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> assistantCoaches = new ArrayList<>();
 }
