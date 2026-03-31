@@ -16,4 +16,5 @@ public class TeamListItemDTO {
     private String coachName;
     private boolean active;
     private LocalDateTime createdDate;
+    private String assistantNames;
 }
