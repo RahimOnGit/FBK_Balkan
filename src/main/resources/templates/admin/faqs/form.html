@@ -1,124 +1,211 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
+<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>FAQ Form</title>
-  <link th:href="@{/css/output.css}" rel="stylesheet">
-  <!-- FontAwesome for icons -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${faq.id != null ? 'Redigera FAQ' : 'Skapa FAQ'} + ' - FBK Balkan'">FAQ - FBK Balkan</title>
+
+  <!-- DaisyUI & Tailwind -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link th:href="@{/css/output.css}" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['Oswald', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#1e3a8a',
+              600: '#1e3a8a',
+              700: '#1e3a8a',
+              800: '#1e3a8a',
+              900: '#1e3a8a',
+            },
+            secondary: '#475569',
+          }
+        }
+      }
+    }
+  </script>
+
   <style>
+    header .navbar a:hover {
+      color: #fdad3a !important;
+      transition: color 0.3s ease;
+    }
     .fade-in {
       animation: fadeIn 0.3s ease-in-out;
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(5px); }
       to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
+<body class="min-h-screen bg-base-200 flex flex-col">
 
-<body class="bg-base-200 p-10">
+<!-- Navbar Fragment -->
+<div th:replace="~{fragments/navbar::navbar}"></div>
 
-<!-- Optional Back Button -->
-<a th:href="@{/admin/faqs}"
-   class="inline-flex items-center text-sm font-semibold text-slate-500 hover:text-primary-600 transition-colors mb-4 group">
-  <i class="fa-solid fa-arrow-left mr-2 transform group-hover:-translate-x-1 transition-transform"></i>
-  Tillbaka till översikt
-</a>
+<!-- Main Content -->
+<main class="flex-grow container mx-auto px-4 py-6 md:py-10 max-w-2xl mt-4">
 
-<!-- Card Wrapper -->
-<div class="card bg-base-100 shadow-lg border border-slate-200 rounded-3xl overflow-hidden">
-  <div class="card-body p-6 md:p-10 space-y-6">
-
-    <!-- Page Title -->
-    <h1 class="text-4xl font-heading font-bold text-slate-900 uppercase tracking-tight mb-2"
-        th:text="${faq.id != null ? 'Redigera FAQ' : 'Skapa FAQ'}">
-      Skapa FAQ
-    </h1>
-
-    <!-- Optional Subtitle -->
-    <p class="text-slate-500 mt-2 font-medium max-w-lg"
-       th:text="${faq.id != null ? 'Uppdatera FAQ och klicka spara.' : 'Fyll i fälten nedan för att lägga till en ny FAQ.'}">
-      Fyll i fälten nedan för att lägga till en ny FAQ.
-    </p>
-
-    <!-- Flash Messages -->
-    <div th:if="${success}" class="alert alert-success shadow-sm fade-in mb-4">
-      <i class="fa-solid fa-circle-check"></i>
-      <span th:text="${success}"></span>
-    </div>
-    <div th:if="${error}" class="alert alert-error shadow-sm fade-in mb-4">
-      <i class="fa-solid fa-circle-exclamation"></i>
-      <span th:text="${error}"></span>
-    </div>
-
-    <!-- FAQ Form -->
-    <form th:action="@{/admin/faqs/save}" th:object="${faq}" method="post">
-      <input type="hidden" th:field="*{id}" />
-
-      <!-- Question -->
-      <div class="form-control mb-4">
-        <label class="label">Fråga</label>
-        <input type="text"
-               th:field="*{question}"
-               class="input input-bordered"
-               required
-               maxlength="255"/>
-        <div class="text-error text-sm"
-             th:if="${#fields.hasErrors('question')}"
-             th:errors="*{question}"></div>
+  <!-- Page Header -->
+  <div class="mb-8">
+    <a href="/admin/faqs" class="inline-flex items-center text-sm font-semibold text-slate-500 hover:text-primary-600 transition-colors mb-4 group">
+      <i class="fa-solid fa-arrow-left mr-2 transform group-hover:-translate-x-1 transition-transform"></i>
+      Tillbaka till översikt
+    </a>
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+      <div>
+        <h1 class="text-4xl md:text-5xl font-heading font-bold text-slate-900 uppercase tracking-tight leading-tight"
+            th:text="${faq.id != null ? 'Redigera FAQ' : 'Skapa FAQ'}">
+          Skapa FAQ
+        </h1>
+        <p class="text-slate-500 mt-2 font-medium max-w-lg"
+           th:text="${faq.id != null ? 'Uppdatera informationen och tryck på spara när du är klar.' : 'Fyll i fälten nedan för att lägga till en ny FAQ.'}">
+          Fyll i fälten nedan för att lägga till en ny FAQ.
+        </p>
       </div>
 
-      <!-- Answer -->
-      <div class="form-control mb-4">
-        <label class="label">Svar</label>
-        <textarea th:field="*{answer}"
-                  rows="6"
-                  class="textarea textarea-bordered"
-                  required
-                  maxlength="2000"></textarea>
-        <div class="text-error text-sm"
-             th:if="${#fields.hasErrors('answer')}"
-             th:errors="*{answer}"></div>
-      </div>
-
-      <!-- Display Order -->
-      <div class="form-control mb-4">
-        <label class="label">Ordning</label>
-        <input type="number"
-               th:field="*{displayOrder}"
-               class="input input-bordered"
-               min="0"
-               max="999"/>
-      </div>
-
-      <!-- Visible Toggle -->
-      <div class="form-control mb-6">
-        <label class="cursor-pointer label">
-          <span class="label-text">Synlig</span>
-          <input type="checkbox"
-                 th:field="*{visible}"
-                 class="toggle toggle-primary"/>
-        </label>
-      </div>
-
-      <!-- Buttons -->
-      <div class="flex flex-col-reverse md:flex-row items-center justify-end gap-4 pt-4">
-        <div class="flex w-full md:w-auto gap-3">
-          <a href="/admin/faqs" class="flex-1 md:flex-none btn btn-ghost h-12 rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-50 hover:border-slate-400 font-medium shadow-sm">
-            Avbryt
-          </a>
-          <button type="submit" class="flex-1 md:flex-none btn btn-primary h-12 rounded-xl bg-primary-600 hover:bg-primary-700 text-white border-none shadow-lg font-bold gap-2 px-8">
-            <i class="fa-regular fa-floppy-disk"></i>
-            <span th:text="${faq.id != null ? 'Spara ändringar' : 'Skapa FAQ'}">Skapa FAQ</span>
-          </button>
+      <!-- Edit Mode Badge -->
+      <div th:if="${faq.id != null}" class="hidden md:block">
+        <div class="badge badge-lg badge-outline border-slate-300 text-slate-500 p-4 font-normal gap-2">
+          <i class="fa-regular fa-pen-to-square"></i> Redigerar läge
         </div>
       </div>
-    </form>
-
+    </div>
   </div>
-</div>
+
+  <!-- Form Container -->
+  <div class="card bg-base-100 shadow-lg border border-slate-200 rounded-3xl overflow-hidden">
+    <div class="card-body p-0">
+      <form th:action="@{/admin/faqs/save}" th:object="${faq}" method="post" class="p-6 md:p-10 space-y-8">
+
+        <input type="hidden" th:field="*{id}" />
+
+        <!-- Error Message -->
+        <div th:if="${error}" class="alert alert-error shadow-sm fade-in">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <span th:text="${error}"></span>
+        </div>
+
+        <!-- Success Message -->
+        <div th:if="${success}" class="alert alert-success shadow-sm fade-in">
+          <i class="fa-solid fa-circle-check"></i>
+          <span th:text="${success}"></span>
+        </div>
+
+        <!-- Section 1: FAQ Content -->
+        <div class="space-y-6">
+          <h3 class="font-heading font-bold text-slate-800 text-lg flex items-center gap-2">
+            <i class="fa-regular fa-message-question text-primary-600"></i>
+            FAQ-innehåll
+          </h3>
+
+          <!-- Question -->
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text font-bold text-slate-700 text-base">Fråga <span class="text-error">*</span></span>
+            </label>
+            <input type="text"
+                   th:field="*{question}"
+                   class="input input-bordered w-full h-12 text-base border-slate-300 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 rounded-xl transition-all placeholder:text-slate-400"
+                   placeholder="Skriv frågan här..." required maxlength="255" />
+            <label class="label" th:if="${#fields.hasErrors('question')}">
+              <span class="label-text-alt text-error font-semibold" th:errors="*{question}"></span>
+            </label>
+          </div>
+
+          <!-- Answer -->
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text font-bold text-slate-700 text-base">Svar <span class="text-error">*</span></span>
+            </label>
+            <textarea th:field="*{answer}"
+                      rows="6"
+                      class="textarea textarea-bordered w-full text-base border-slate-300 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 rounded-xl transition-all placeholder:text-slate-400 resize-none"
+                      placeholder="Skriv svaret här..." required maxlength="2000"></textarea>
+            <label class="label" th:if="${#fields.hasErrors('answer')}">
+              <span class="label-text-alt text-error font-semibold" th:errors="*{answer}"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="divider text-slate-300 my-0"></div>
+
+        <!-- Section 2: Display Settings -->
+        <div class="space-y-6">
+          <h3 class="font-heading font-bold text-slate-800 text-lg flex items-center gap-2">
+            <i class="fa-solid fa-sliders text-primary-600"></i>
+            Visningsinställningar
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+            <!-- Display Order -->
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-bold text-slate-700 text-base">Visningsordning</span>
+              </label>
+              <input type="number"
+                     th:field="*{displayOrder}"
+                     class="input input-bordered w-full h-12 text-base border-slate-300 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 rounded-xl transition-all placeholder:text-slate-400"
+                     min="0" max="999" placeholder="0" />
+              <label class="label">
+                <span class="label-text-alt text-slate-400">Lägre siffra visas först.</span>
+              </label>
+            </div>
+
+            <!-- Visible Toggle -->
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-bold text-slate-700 text-base">Synlighet</span>
+              </label>
+              <label class="cursor-pointer flex items-center gap-4 bg-slate-50 p-3 rounded-xl border border-slate-200 h-12">
+                <div class="relative">
+                  <input type="checkbox" th:field="*{visible}" class="sr-only peer" />
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                </div>
+                <span class="font-medium text-slate-700 text-sm">Synlig på webbplatsen</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider text-slate-300 my-0"></div>
+
+        <!-- Section 3: Actions Footer -->
+        <div class="flex flex-col-reverse md:flex-row items-center justify-end gap-4 pt-4">
+          <div class="flex w-full md:w-auto gap-3">
+            <a href="/admin/faqs" class="flex-1 md:flex-none btn btn-md h-12 rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-50 hover:border-slate-400 bg-white font-medium shadow-sm">
+              Avbryt
+            </a>
+            <button type="submit" class="flex-1 md:flex-none btn btn-primary btn-md h-12 rounded-xl bg-primary-600 hover:bg-primary-700 text-white border-none shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 font-bold gap-2 px-8">
+              <i class="fa-regular fa-floppy-disk"></i>
+              <span th:text="${faq.id != null ? 'Spara ändringar' : 'Skapa FAQ'}">Skapa FAQ</span>
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</main>
 
 </body>
 </html>
