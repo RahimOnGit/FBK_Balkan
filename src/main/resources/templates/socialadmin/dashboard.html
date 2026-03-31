@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Admin Dashboard - FBK Balkan</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <div th:replace="~{fragments/dashboard-sidebar :: sidebar-styles}"></div>
+</head>
+<body class="bg-slate-100">
+
+<div class="dashboard-wrapper">
+
+    <div th:replace="~{fragments/dashboard-sidebar :: sidebar('dashboard')}"></div>
+
+    <div class="dashboard-main">
+        <div class="dashboard-topbar">
+            <span class="dashboard-topbar-title">
+                Välkommen, <span th:text="${displayName}">Social Admin</span>!
+            </span>
+            <a href="/" class="text-sm text-slate-500 hover:text-primary font-medium transition-colors">
+                ← Tillbaka till webbplats
+            </a>
+        </div>
+
+        <div class="dashboard-content">
+
+            <!-- Flash messages -->
+            <div th:if="${successMessage}" class="alert alert-success shadow-lg mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span th:text="${successMessage}"></span>
+            </div>
+            <div th:if="${errorMessage}" class="alert alert-error shadow-lg mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span th:text="${errorMessage}"></span>
+            </div>
+
+            <!-- Stats cards -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+                <div class="card bg-white shadow">
+                    <div class="card-body items-center text-center py-5">
+                        <h2 class="text-4xl font-black text-primary" th:text="${totalNews}">0</h2>
+                        <p class="font-medium text-slate-500 text-sm">Totalt nyheter</p>
+                    </div>
+                </div>
+                <div class="card bg-white shadow">
+                    <div class="card-body items-center text-center py-5">
+                        <h2 class="text-4xl font-black text-success" th:text="${publishedCount}">0</h2>
+                        <p class="font-medium text-slate-500 text-sm">Publicerade</p>
+                    </div>
+                </div>
+                <div class="card bg-white shadow">
+                    <div class="card-body items-center text-center py-5 relative">
+                        <h2 class="text-4xl font-black text-warning" th:text="${draftCount}">0</h2>
+                        <p class="font-medium text-slate-500 text-sm">Utkast / Granskning</p>
+                        <div th:if="${draftCount > 0}" class="absolute -top-2 -right-2 badge badge-warning badge-lg animate-pulse">!</div>
+                    </div>
+                </div>
+                <div class="card bg-white shadow">
+                    <div class="card-body items-center text-center py-5">
+                        <h2 class="text-4xl font-black text-secondary" th:text="${myNewsCount}">0</h2>
+                        <p class="font-medium text-slate-500 text-sm">Mina artiklar</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick actions -->
+            <div class="flex flex-wrap gap-3 mb-8">
+                <a href="/admin/news/create" class="btn btn-primary gap-2">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Ny nyhet
+                </a>
+                <a href="/admin/news" class="btn btn-outline gap-2">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-8H7v8M7 4v4h8"/>
+                    </svg>
+                    Hantera nyheter
+                    <span th:if="${draftCount > 0}" class="badge badge-warning badge-sm" th:text="${draftCount}">0</span>
+                </a>
+                <a href="/news" target="_blank" class="btn btn-outline gap-2">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                    </svg>
+                    Se nyheter (publik)
+                </a>
+            </div>
+
+            <!-- Recent news table -->
+            <div class="card bg-white shadow-lg">
+                <div class="card-body">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="card-title text-slate-800">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="text-primary">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z"/>
+                            </svg>
+                            Senaste nyheter
+                        </h2>
+                        <a href="/admin/news" class="text-sm text-primary font-medium hover:underline">Visa alla →</a>
+                    </div>
+
+                    <div th:if="${#lists.isEmpty(recentNews)}" class="text-center py-10 text-slate-400">
+                        <div class="text-5xl mb-3">📰</div>
+                        <p class="font-medium">Inga nyheter ännu.</p>
+                        <a href="/admin/news/create" class="btn btn-primary btn-sm mt-4">Skapa din första nyhet</a>
+                    </div>
+
+                    <div th:unless="${#lists.isEmpty(recentNews)}" class="overflow-x-auto">
+                        <table class="table table-zebra w-full">
+                            <thead>
+                            <tr class="text-slate-500 text-xs uppercase tracking-wider">
+                                <th>Titel</th>
+                                <th>Författare</th>
+                                <th>Status</th>
+                                <th>Åtgärder</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="article : ${recentNews}">
+                                <td>
+                                    <a th:href="@{/news/{id}(id=${article.id})}"
+                                       th:text="${article.title}"
+                                       class="font-semibold text-slate-700 hover:text-primary transition-colors line-clamp-1">
+                                        Titel
+                                    </a>
+                                </td>
+                                <td class="text-slate-500 text-sm" th:text="${article.authorFullName ?: article.authorUsername}">Författare</td>
+                                <td>
+                                    <span th:if="${article.published}" class="badge badge-success badge-sm">Publicerad</span>
+                                    <span th:unless="${article.published}" class="badge badge-warning badge-sm">Utkast</span>
+                                </td>
+                                <td>
+                                    <div class="flex gap-2">
+                                        <a th:href="@{/admin/news/edit/{id}(id=${article.id})}"
+                                           class="btn btn-ghost btn-xs text-primary">
+                                            Redigera
+                                        </a>
+                                        <form th:action="@{/admin/news/toggle/{id}(id=${article.id})}" method="post" style="display:inline">
+                                            <button type="submit"
+                                                    th:class="${article.published} ? 'btn btn-ghost btn-xs text-warning' : 'btn btn-ghost btn-xs text-success'"
+                                                    th:text="${article.published} ? 'Avpublicera' : 'Publicera'">
+                                                Publicera
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

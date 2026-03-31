@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
 //                        publicly accessible URLs
-                                .requestMatchers("/", "/css/**", "/images/**", "/login", "/login-error").permitAll()
+                                .requestMatchers("/", "/css/**", "/images/**","/uploads/**", "/login", "/login-error").permitAll()
                                 .requestMatchers("/trial-registration", "/trial-registration/success","/about").permitAll()
                                 .requestMatchers("/kontakt").permitAll()
                                 .requestMatchers("/trial-registration", "/trial-registration/success","/about","/faq").permitAll()
@@ -66,6 +66,8 @@ public class SecurityConfig {
                                 response.sendRedirect("/admin/dashboard");
                             } else if (role.equals("ROLE_COACH")) {
                                 response.sendRedirect("/coach/dashboard");
+                            } else if (role.equals("ROLE_SOCIAL_ADMIN")) {
+                                response.sendRedirect("/socialadmin/dashboard");
                             } else {
                                 response.sendRedirect("/");
                             }

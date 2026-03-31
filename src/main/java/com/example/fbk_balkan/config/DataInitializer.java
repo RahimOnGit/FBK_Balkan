@@ -40,19 +40,25 @@ public class DataInitializer implements CommandLineRunner {
         }
         initTeamsFromSvff();
 
-        // Create a default social admin if none exists
-        if (!userRepository.findByEmail("social@fbkbalkan.se").isPresent()) {
+        // Create a default social admin if none exists, or fix role if wrong
+        var socialAdminOpt = userRepository.findByEmail("social@fbkbalkan.se");
+        if (socialAdminOpt.isEmpty()) {
             User socialAdmin = new User();
-//            socialAdmin.setUsername("socialadmin");
             socialAdmin.setLastName("Khalid");
             socialAdmin.setFirstName("IB");
-
             socialAdmin.setPassword(passwordEncoder.encode("password"));
             socialAdmin.setEmail("social@fbkbalkan.se");
-            socialAdmin.setRole(Role.ADMIN);
+            socialAdmin.setRole(Role.SOCIAL_ADMIN);
             socialAdmin.setEnabled(true);
             userRepository.save(socialAdmin);
-            System.out.println("Default social admin created - : +"+socialAdmin.getEmail()+", Password: password");
+            System.out.println("Default social admin created: " + socialAdmin.getEmail() + ", Password: password");
+        } else {
+            User socialAdmin = socialAdminOpt.get();
+            if (socialAdmin.getRole() != Role.SOCIAL_ADMIN) {
+                socialAdmin.setRole(Role.SOCIAL_ADMIN);
+                userRepository.save(socialAdmin);
+                System.out.println("Fixed social admin role to SOCIAL_ADMIN for: " + socialAdmin.getEmail());
+            }
         }
 
         // Create a default admin if none exists
@@ -93,11 +99,11 @@ public class DataInitializer implements CommandLineRunner {
             for (SvffTeamDto svff : svffTeams) {
 
                 //skip teams with no numbers in name (i.e senior and hj -> skip , fbk balkan 2014 -> OK )
-if(!svff.getName().matches(".*\\d+.*"))
-{
-    System.out.println("Skipping team with no numbers in name: " + svff.getName());
-    continue;
-}
+                if(!svff.getName().matches(".*\\d+.*"))
+                {
+                    System.out.println("Skipping team with no numbers in name: " + svff.getName());
+                    continue;
+                }
 
                 // Skip if team already in DB by name
                 if (teamRepository.existsByName(svff.getName())) {
