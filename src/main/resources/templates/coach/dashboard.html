@@ -1,171 +1,780 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Coach Dashboard - FBK Balkan</title>-->
+<!--    <link th:href="@{/css/output.css}" rel="stylesheet">-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">-->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
+<!--    <div th:replace="~{fragments/dashboard-sidebar :: sidebar-styles}"></div>-->
+<!--</head>-->
+<!--<body class="bg-slate-100">-->
+
+<!--<div class="dashboard-wrapper">-->
+
+<!--    <div th:replace="~{fragments/dashboard-sidebar :: sidebar('dashboard')}"></div>-->
+
+<!--    <div class="dashboard-main">-->
+<!--        <div class="dashboard-topbar">-->
+<!--            <span class="dashboard-topbar-title">-->
+<!--                Välkommen, <span th:text="${coachName}">Coach</span>!-->
+<!--            </span>-->
+<!--            <a href="/" class="text-sm text-slate-500 hover:text-primary font-medium transition-colors">-->
+<!--                ← Tillbaka till webbplats-->
+<!--            </a>-->
+<!--        </div>-->
+
+<!--        <div class="dashboard-content">-->
+
+<!--            &lt;!&ndash; Flash messages &ndash;&gt;-->
+<!--            <div th:if="${successMessage}" class="alert alert-success shadow-lg mb-4">-->
+<!--                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">-->
+<!--                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>-->
+<!--                </svg>-->
+<!--                <span th:text="${successMessage}"></span>-->
+<!--            </div>-->
+<!--            <div th:if="${errorMessage}" class="alert alert-error shadow-lg mb-4">-->
+<!--                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">-->
+<!--                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>-->
+<!--                </svg>-->
+<!--                <span th:text="${errorMessage}"></span>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Stats cards &ndash;&gt;-->
+<!--            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">-->
+<!--                <div class="card bg-white shadow">-->
+<!--                    <div class="card-body items-center text-center py-5">-->
+<!--                        <h2 class="text-4xl font-black text-primary" th:text="${teamCount}">0</h2>-->
+<!--                        <p class="font-medium text-slate-500 text-sm">Mina lag</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="card bg-white shadow">-->
+<!--                    <div class="card-body items-center text-center py-5">-->
+<!--                        <h2 class="text-4xl font-black text-success" th:text="${requestSize}">0</h2>-->
+<!--                        <p class="font-medium text-slate-500 text-sm">Provträningar</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="card bg-white shadow relative">-->
+<!--                    <div class="card-body items-center text-center py-5">-->
+<!--                        <h2 class="text-4xl font-black text-warning" th:text="${pendingCount}">0</h2>-->
+<!--                        <p class="font-medium text-slate-500 text-sm">Väntar på svar</p>-->
+<!--                        <div th:if="${pendingCount > 0}" class="absolute -top-2 -right-2 badge badge-warning badge-lg animate-pulse">!</div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Quick actions &ndash;&gt;-->
+<!--            <div class="flex flex-wrap gap-3 mb-8">-->
+<!--                <a href="/coach/dashboard" class="btn btn-primary gap-2">-->
+<!--                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">-->
+<!--                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>-->
+<!--                    </svg>-->
+<!--                    Provträningar-->
+<!--                    <span th:if="${pendingCount > 0}" class="badge badge-warning badge-sm" th:text="${pendingCount}">0</span>-->
+<!--                </a>-->
+<!--                <a href="/coach/news" class="btn btn-outline gap-2">-->
+<!--                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">-->
+<!--                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z"/>-->
+<!--                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-8H7v8M7 4v4h8"/>-->
+<!--                    </svg>-->
+<!--                    Nyheter-->
+<!--                </a>-->
+<!--                <a href="/news" target="_blank" class="btn btn-outline gap-2">-->
+<!--                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">-->
+<!--                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>-->
+<!--                    </svg>-->
+<!--                    Se webbplats (publik)-->
+<!--                </a>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Trial requests table &ndash;&gt;-->
+<!--            <div class="card bg-white shadow-lg mb-6">-->
+<!--                <div class="card-body">-->
+<!--                    <div class="flex items-center justify-between mb-4">-->
+<!--                        <h2 class="card-title text-slate-800">-->
+<!--                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="text-primary">-->
+<!--                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>-->
+<!--                            </svg>-->
+<!--                            Provträningsförfrågningar-->
+<!--                        </h2>-->
+<!--                        <span th:if="${pendingCount > 0}" class="badge badge-warning badge-md" th:text="${pendingCount} + ' väntar'">0 väntar</span>-->
+<!--                    </div>-->
+
+<!--                    <div th:if="${requestSize == 0}" class="text-center py-10 text-slate-400">-->
+<!--                        <div class="text-5xl mb-3">📋</div>-->
+<!--                        <p class="font-medium">Inga provträningsförfrågningar ännu.</p>-->
+<!--                    </div>-->
+
+<!--                    <div th:unless="${requestSize == 0}" class="overflow-x-auto">-->
+<!--                        <table class="table table-zebra w-full">-->
+<!--                            <thead>-->
+<!--                            <tr class="text-slate-500 text-xs uppercase tracking-wider">-->
+<!--                                <th>Barn</th>-->
+<!--                                <th>Född</th>-->
+<!--                                <th>Kontaktperson</th>-->
+<!--                                <th>Önskat datum</th>-->
+<!--                                <th>Status</th>-->
+<!--                                <th>Åtgärder</th>-->
+<!--                            </tr>-->
+<!--                            </thead>-->
+<!--                            <tbody>-->
+<!--                            <tr th:each="req : ${trialRequests}">-->
+<!--                                <td class="font-semibold text-slate-700" th:text="${req.firstName} + ' ' + ${req.lastName}">Namn</td>-->
+<!--                                <td class="text-slate-500 text-sm" th:text="${req.birthDate}">2013-01-01</td>-->
+<!--                                <td>-->
+<!--                                    <div class="text-sm text-slate-700" th:text="${req.relativeName}">Förälder</div>-->
+<!--                                    <a th:href="'mailto:' + ${req.relativeEmail}"-->
+<!--                                       th:text="${req.relativeEmail}"-->
+<!--                                       class="text-xs text-primary hover:underline break-all">email@example.com</a>-->
+<!--                                </td>-->
+<!--                                <td class="text-slate-500 text-sm" th:text="${req.preferredTrainingDate}">2025-01-01</td>-->
+<!--                                <td>-->
+<!--                                    <span th:if="${req.status != null and req.status.name() == 'PENDING'}" class="badge badge-warning badge-sm">Väntar</span>-->
+<!--                                    <span th:if="${req.status != null and req.status.name() == 'APPROVED'}" class="badge badge-success badge-sm">Godkänd</span>-->
+<!--                                    <span th:if="${req.status != null and req.status.name() == 'REJECTED'}" class="badge badge-error badge-sm">Avvisad</span>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <div th:if="${req.status != null and req.status.name() == 'PENDING'}" class="flex gap-2">-->
+<!--                                        <form th:action="@{/coach/trial/{id}/approve(id=${req.id})}" method="post" style="display:inline">-->
+<!--                                            <button type="submit" class="btn btn-ghost btn-xs text-success">Godkänn</button>-->
+<!--                                        </form>-->
+<!--                                        <form th:action="@{/coach/trial/{id}/reject(id=${req.id})}" method="post" style="display:inline">-->
+<!--                                            <button type="submit" class="btn btn-ghost btn-xs text-error">Avvisa</button>-->
+<!--                                        </form>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+<!--                            </tbody>-->
+<!--                        </table>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Teams section &ndash;&gt;-->
+<!--            <div class="card bg-white shadow-lg">-->
+<!--                <div class="card-body">-->
+<!--                    <div class="flex items-center justify-between mb-4">-->
+<!--                        <h2 class="card-title text-slate-800">-->
+<!--                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="text-primary">-->
+<!--                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>-->
+<!--                            </svg>-->
+<!--                            Mina lag-->
+<!--                        </h2>-->
+<!--                    </div>-->
+
+<!--                    <div th:if="${teamCount == 0}" class="text-center py-10 text-slate-400">-->
+<!--                        <div class="text-5xl mb-3">⚽</div>-->
+<!--                        <p class="font-medium">Du har inga lag ännu.</p>-->
+<!--                    </div>-->
+
+<!--                    <div th:unless="${teamCount == 0}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">-->
+<!--                        <div th:each="team : ${teams}" class="card bg-slate-50 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">-->
+<!--                            <div class="card-body p-4">-->
+<!--                                <h3 class="font-bold text-slate-800" th:text="${team.name}">Lagnamn</h3>-->
+<!--                                <p class="text-sm text-slate-500">-->
+<!--                                    <span class="font-semibold">Åldersgrupp:</span>-->
+<!--                                    <span th:text="${team.ageGroup}">U15</span>-->
+<!--                                </p>-->
+<!--                                <p th:if="${team.description}" class="text-sm text-slate-500 line-clamp-2" th:text="${team.description}">Beskrivning</p>-->
+<!--                                <div class="card-actions justify-end mt-2">-->
+<!--                                    <a th:href="@{/team/{id}(id=${team.id})}" class="btn btn-ghost btn-xs text-primary">Visa detaljer →</a>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<script th:inline="javascript">-->
+<!--    document.addEventListener('DOMContentLoaded', function () {-->
+<!--        /*[# th:if="${mailtoLink}"]*/-->
+<!--        var mailtoLink = /*[[${mailtoLink}]]*/ '';-->
+<!--        if (mailtoLink) {-->
+<!--            window.location.href = mailtoLink;-->
+<!--        }-->
+<!--        /*[/]*/-->
+<!--    });-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+<!--//////-->
+
 <!DOCTYPE html>
-<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">
+<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coach Dashboard - FBK Balkan</title>
+    <title>FBK Balkan – Talangfabriken i Malmö</title>
     <link th:href="@{/css/output.css}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <div th:replace="~{fragments/dashboard-sidebar :: sidebar-styles}"></div>
+    <style>
+        .font-virage { font-family: 'Roboto Condensed', sans-serif; }
+
+        /* Hero */
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            filter: blur(12px);
+            transform: scale(1.08);
+            transition: opacity 0.5s;
+        }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg,
+            rgba(21,59,111,0.92) 0%,
+            rgba(21,59,111,0.75) 50%,
+            rgba(21,59,111,0.45) 100%);
+        }
+
+        /* News cards */
+        .news-card {
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.25s, box-shadow 0.25s;
+            text-decoration: none;
+            color: inherit;
+        }
+        .news-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.14);
+        }
+        .news-card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #e2e8f0;
+        }
+        .news-card-img-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #153B6F 0%, #1e4a8a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        .news-card-body {
+            flex: 1;
+            padding: 1.25rem 1.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .news-card-date {
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #F5B301;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .news-card-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1.35;
+            font-style: italic;
+            flex: 1;
+        }
+        .news-card-arrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #153B6F;
+            margin-top: 1rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        /* Section headings */
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #F5B301;
+            margin-bottom: 0.5rem;
+        }
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            color: #1e293b;
+            font-style: italic;
+            line-height: 1.15;
+        }
+
+        /* Stats strip */
+        .stat-item {
+            text-align: center;
+            padding: 1rem 0;
+        }
+        .stat-number {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 900;
+            color: #F5B301;
+            font-style: italic;
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+            margin-top: 0.4rem;
+        }
+
+        /* Values strip */
+        .value-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(245,179,1,0.18);
+            border-radius: 14px;
+            padding: 1.75rem 1.5rem;
+            text-align: center;
+            transition: background 0.25s;
+        }
+        .value-card:hover {
+            background: rgba(245,179,1,0.08);
+        }
+        .value-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        .value-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: white;
+            font-style: italic;
+            margin-bottom: 0.4rem;
+        }
+        .value-desc {
+            font-size: 0.83rem;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.5;
+        }
+
+        /* Scroll indicator */
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
+        }
+        .scroll-indicator { animation: bounce-slow 2s infinite; }
+    </style>
 </head>
-<body class="bg-slate-100">
+<body class="min-h-screen bg-base-100">
 
-<div class="dashboard-wrapper">
+<!-- Navbar -->
+<div class="absolute top-0 left-0 z-[9999] right-0">
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</div>
 
-    <div th:replace="~{fragments/dashboard-sidebar :: sidebar('dashboard')}"></div>
+<!-- ═══════════════════════════════════════════════ HERO ══ -->
+<section class="relative h-screen min-h-[600px] max-h-[900px] overflow-hidden flex items-center">
 
-    <div class="dashboard-main">
-        <div class="dashboard-topbar">
-            <span class="dashboard-topbar-title">
-                Välkommen, <span th:text="${coachName}">Coach</span>!
-            </span>
-            <a href="/" class="text-sm text-slate-500 hover:text-primary font-medium transition-colors">
-                ← Tillbaka till webbplats
-            </a>
-        </div>
+    <!-- Blurred background -->
+    <div class="hero-bg"
+         th:style="${latestNews != null and latestNews.displayImageUrl != null}
+             ? 'background-image: url(' + ${latestNews.displayImageUrl} + ')'
+             : 'background-image: url(/images/hero-image.png)'">
+    </div>
+    <div class="hero-overlay"></div>
 
-        <div class="dashboard-content">
+    <!-- Content -->
+    <div class="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 pt-20">
+        <div class="max-w-2xl">
 
-            <!-- Success/Error Messages -->
-            <div th:if="${successMessage}" class="alert alert-success shadow-lg mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                <span th:text="${successMessage}"></span>
-            </div>
-            <div th:if="${errorMessage}" class="alert alert-error shadow-lg mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                <span th:text="${errorMessage}"></span>
+            <!-- Eyebrow badge -->
+            <div class="inline-flex items-center gap-2 bg-secondary/20 border border-secondary/40 rounded-full px-4 py-1.5 mb-8">
+                <span class="w-2 h-2 rounded-full bg-secondary animate-pulse inline-block"></span>
+                <span class="text-secondary text-xs font-bold tracking-widest uppercase">Malmös stolthet sedan 1962</span>
             </div>
 
-            <!-- Quick stats row -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-                <div class="card bg-white shadow">
-                    <div class="card-body items-center text-center py-5">
-                        <h2 class="text-4xl font-black text-primary" th:text="${teamCount}">0</h2>
-                        <p class="font-medium text-slate-500">Mina Lag</p>
-                    </div>
-                </div>
-                <div class="card bg-white shadow">
-                    <div class="card-body items-center text-center py-5">
-                        <h2 class="text-4xl font-black text-primary" th:text="${requestSize}">0</h2>
-                        <p class="font-medium text-slate-500">Provträningar</p>
-                    </div>
-                </div>
-                <div class="card bg-white shadow relative">
-                    <div class="card-body items-center text-center py-5">
-                        <h2 class="text-4xl font-black text-warning" th:text="${pendingCount}">0</h2>
-                        <p class="font-medium text-slate-500">Väntar på svar</p>
-                        <div th:if="${pendingCount > 0}" class="absolute -top-2 -right-2 badge badge-error badge-lg animate-pulse">NYTT!</div>
-                    </div>
-                </div>
-            </div>
+            <!-- Headline -->
+            <h1 class="text-secondary font-virage font-black italic leading-none mb-2"
+                style="font-size: clamp(3rem, 8vw, 6rem);">Teknik</h1>
+            <h1 class="text-white font-virage font-black leading-none mb-10"
+                style="font-size: clamp(2.5rem, 7vw, 5.5rem);">Före långa bollar</h1>
 
-            <!-- Shortcut buttons -->
-            <div class="flex flex-wrap gap-3 mb-8">
-                <button id="btn-teams"
-                        class="btn btn-primary gap-2"
-                        onclick="showSection('teams')">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    </svg>
-                    Mina Lag
-                </button>
-                <button id="btn-trials"
-                        class="btn btn-outline gap-2"
-                        onclick="showSection('trials')">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <!-- CTA buttons -->
+            <div class="flex flex-wrap gap-4">
+                <a href="/trial-registration"
+                   class="inline-flex items-center gap-2 bg-secondary text-primary font-bold px-8 py-4 rounded-full text-base uppercase tracking-wide hover:bg-yellow-300 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 font-virage">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                     </svg>
-                    Provträningar
-                    <span th:if="${pendingCount > 0}" class="badge badge-warning badge-sm" th:text="${pendingCount}">0</span>
-                </button>
-                <a href="/coach/news" class="btn btn-outline gap-2">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v8a2 2 0 01-2 2z"/>
-                    </svg>
-                    Nyheter
+                    Intresseanmälan
+                </a>
+                <a href="/about"
+                   class="inline-flex items-center gap-2 bg-white/10 text-white border border-white/30 font-bold px-8 py-4 rounded-full text-base uppercase tracking-wide hover:bg-white/20 transition-all font-virage backdrop-blur-sm">
+                    Om klubben
                 </a>
             </div>
 
-            <!-- Teams Section -->
-            <div id="section-teams" class="hidden">
-                <div th:replace="~{coach/content-fragment :: team-section}"></div>
+            <!-- Latest news preview -->
+            <div th:if="${latestNews != null}" class="mt-14 pt-8 border-t border-white/15">
+                <p class="section-label mb-3">Senaste nyhet</p>
+                <a th:href="@{/news/{id}(id=${latestNews.id})}"
+                   class="group flex items-start gap-4 hover:opacity-90 transition-opacity">
+                    <div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-white/10">
+                        <img th:if="${latestNews.displayImageUrl != null}"
+                             th:src="${latestNews.displayImageUrl}"
+                             class="w-full h-full object-cover" alt="">
+                        <div th:unless="${latestNews.displayImageUrl != null}"
+                             class="w-full h-full flex items-center justify-center text-2xl">⚽</div>
+                    </div>
+                    <div>
+                        <h4 th:text="${latestNews.title}"
+                            class="text-white font-bold font-virage italic text-xl leading-snug group-hover:text-secondary transition-colors"></h4>
+                        <p th:text="${#temporals.format(latestNews.createdAt, 'dd MMM yyyy')}"
+                           class="text-white/50 text-xs mt-1"></p>
+                    </div>
+                </a>
+                <a href="/news" class="inline-flex items-center gap-1 text-white/60 hover:text-secondary text-sm font-semibold mt-4 transition-colors">
+                    Visa alla nyheter
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
             </div>
-
-            <!-- Trials Section -->
-            <div id="section-trials" class="hidden">
-                <div th:replace="~{coach/content-fragment :: trial-requests}"></div>
-            </div>
-
-            <!-- Default welcome message when nothing is selected -->
-            <div id="section-welcome" class="card bg-white shadow-lg">
-                <div class="card-body text-center py-12">
-                    <div class="text-6xl mb-4">⚽</div>
-                    <h2 class="text-2xl font-bold text-slate-700 mb-2">Välkommen till din kontrollpanel</h2>
-                    <p class="text-slate-500 max-w-md mx-auto">
-                        Använd sidomenyn eller knapparna ovan för att hantera dina lag, provträningar och nyheter.
-                    </p>
-                </div>
-            </div>
-
         </div>
     </div>
-</div>
 
-<script th:inline="javascript">
-    document.addEventListener('DOMContentLoaded', function () {
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 scroll-indicator z-10">
+        <svg width="28" height="28" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+        </svg>
+    </div>
+</section>
 
-        // Handle mailto link from flash attributes
-        /*[# th:if="${mailtoLink}"]*/
-        var mailtoLink = /*[[${mailtoLink}]]*/ '';
-        if (mailtoLink) {
-            window.location.href = mailtoLink;
-        }
-        /*[/]*/
+<!-- ═══════════════════════════════════════════ STATS STRIP ══ -->
+<section class="bg-primary py-12">
+    <div class="max-w-5xl mx-auto px-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 divide-x divide-white/10">
+            <div class="stat-item">
+                <div class="stat-number">1962</div>
+                <div class="stat-label">Grundat</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">60+</div>
+                <div class="stat-label">Års erfarenhet</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">#1</div>
+                <div class="stat-label">Talangfabrik</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">⚽</div>
+                <div class="stat-label">Malmös stolthet</div>
+            </div>
+        </div>
+    </div>
+</section>
 
-        // Check for URL param to auto-open a section
-        const urlParams = new URLSearchParams(window.location.search);
-        const showParam = urlParams.get('show');
-        if (showParam === 'trials') {
-            showSection('trials');
-        } else if (showParam === 'teams') {
-            showSection('teams');
-        }
-    });
+<!-- ════════════════════════════════════════ LATEST NEWS ══ -->
+<section th:if="${not #lists.isEmpty(recentNews)}" class="py-20 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
 
-    function showSection(name) {
-        const sections = ['teams', 'trials', 'welcome'];
-        const buttons = { teams: 'btn-teams', trials: 'btn-trials' };
+        <!-- Section header -->
+        <div class="flex items-end justify-between mb-10">
+            <div>
+                <p class="section-label">Från klubben</p>
+                <h2 class="section-title">Senaste nyheter</h2>
+            </div>
+            <a href="/news"
+               class="hidden sm:inline-flex items-center gap-1.5 text-primary font-bold text-sm uppercase tracking-wide hover:text-secondary transition-colors">
+                Alla nyheter
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
 
-        sections.forEach(function(s) {
-            const el = document.getElementById('section-' + s);
-            if (el) el.classList.add('hidden');
-        });
+        <!-- News grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <a th:each="article : ${recentNews}"
+               th:href="@{/news/{id}(id=${article.id})}"
+               class="news-card">
 
-        Object.values(buttons).forEach(function(btnId) {
-            const btn = document.getElementById(btnId);
-            if (btn) {
-                btn.classList.remove('btn-primary');
-                btn.classList.add('btn-outline');
-            }
-        });
+                <!-- Image -->
+                <img th:if="${article.displayImageUrl != null}"
+                     th:src="${article.displayImageUrl}"
+                     th:alt="${article.title}"
+                     class="news-card-img">
+                <div th:unless="${article.displayImageUrl != null}" class="news-card-img-placeholder">⚽</div>
 
-        const target = document.getElementById('section-' + name);
-        if (target) {
-            target.classList.remove('hidden');
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+                <!-- Body -->
+                <div class="news-card-body">
+                    <div class="news-card-date"
+                         th:text="${#temporals.format(article.createdAt, 'dd MMM yyyy')}">Datum</div>
+                    <div class="news-card-title" th:text="${article.title}">Rubrik</div>
+                    <span class="news-card-arrow">
+                        Läs mer
+                        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                </div>
+            </a>
+        </div>
 
-        const activeBtn = document.getElementById('btn-' + name);
-        if (activeBtn) {
-            activeBtn.classList.remove('btn-outline');
-            activeBtn.classList.add('btn-primary');
-        }
-    }
-</script>
+        <!-- Mobile "all news" link -->
+        <div class="text-center mt-8 sm:hidden">
+            <a href="/news" class="btn btn-outline btn-primary rounded-full">Visa alla nyheter</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════ VALUES ══ -->
+<section class="bg-primary py-20">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+        <div class="text-center mb-12">
+            <p class="text-secondary text-xs font-bold tracking-widest uppercase mb-2">Vår filosofi</p>
+            <h2 class="text-white font-black italic font-virage" style="font-size: clamp(2rem, 4vw, 3rem);">Där nästa talang växer upp</h2>
+            <p class="text-white/50 mt-3 max-w-xl mx-auto">Precis som Zlatan en gång började här, ger vi nästa generation en plats att växa, lära och vinna.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="value-card">
+                <div class="value-icon">🏆</div>
+                <div class="value-title">Teknik</div>
+                <div class="value-desc">Vi prioriterar teknisk skicklighet och smart spel framför fysisk styrka.</div>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">🤝</div>
+                <div class="value-title">Trygghet</div>
+                <div class="value-desc">En trygg miljö där varje spelare kan utvecklas i sin egen takt.</div>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">⭐</div>
+                <div class="value-title">Respekt</div>
+                <div class="value-desc">Respekt för spelare, ledare och motståndare – alltid och utan undantag.</div>
+            </div>
+        </div>
+        <div class="text-center mt-10">
+            <a href="/trial-registration"
+               class="inline-flex items-center gap-2 bg-secondary text-primary font-bold px-8 py-3.5 rounded-full uppercase tracking-wide hover:bg-yellow-300 transition-all font-virage">
+                Boka provträning nu
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════ YOUTUBE ══ -->
+<section class="relative overflow-hidden bg-slate-950 py-20">
+
+    <!-- Background texture -->
+    <div class="pointer-events-none absolute inset-0"
+         style="background-image: radial-gradient(circle at 20% 50%, rgba(21,59,111,0.18) 0%, transparent 55%),
+                                   radial-gradient(circle at 80% 50%, rgba(255,0,0,0.06) 0%, transparent 50%);"></div>
+
+    <div class="relative max-w-6xl mx-auto px-6 lg:px-12">
+
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-10 lg:gap-16 items-center">
+
+            <!-- ── LEFT: Channel info (2 columns) ── -->
+            <div class="lg:col-span-2 flex flex-col gap-6">
+
+                <!-- YouTube badge -->
+                <div class="inline-flex items-center gap-2 w-fit bg-white/5 border border-white/10 rounded-full px-4 py-1.5">
+                    <svg width="22" height="16" viewBox="0 0 28 20" fill="none">
+                        <rect width="28" height="20" rx="5" fill="#FF0000"/>
+                        <polygon points="11,6 11,14 19,10" fill="white"/>
+                    </svg>
+                    <span class="text-white/60 text-xs font-bold tracking-widest uppercase">YouTube</span>
+                </div>
+
+                <!-- Heading -->
+                <div>
+                    <h2 class="text-white font-black italic font-virage leading-tight"
+                        style="font-size: clamp(1.8rem, 3.5vw, 2.8rem);">
+                        Följ oss på YouTube
+                    </h2>
+                    <p class="text-white/40 mt-3 text-sm leading-relaxed">
+                        Matchhöjdpunkter, träningsklipp och allt som händer bakom kulisserna hos FBK Balkan.
+                    </p>
+                </div>
+
+                <!-- Divider -->
+                <div class="w-12 h-0.5 bg-red-600 rounded-full"></div>
+
+                <!-- Channel card -->
+                <div class="flex items-center gap-3 bg-white/5 border border-white/8 rounded-xl p-4">
+                    <div class="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center flex-shrink-0 shadow-md">
+                        <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+                            <polygon points="3,1 3,9 10,5" fill="white"/>
+                        </svg>
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-white font-bold text-sm truncate">FBK Balkan</p>
+                        <p class="text-white/35 text-xs">Officiell kanal</p>
+                    </div>
+                    <div class="ml-auto flex-shrink-0">
+                        <span class="inline-flex items-center gap-1 bg-white/8 text-white/50 text-xs px-2.5 py-1 rounded-full">
+                            <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><circle cx="4" cy="4" r="4"/></svg>
+                            Live
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Subscribe button -->
+                <a href="https://www.youtube.com/channel/UCAcquTaKhJu0resneu7e2_w"
+                   target="_blank" rel="noopener"
+                   class="inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-xl uppercase tracking-wide text-sm transition-all hover:shadow-lg hover:shadow-red-950/60 active:scale-95 w-full sm:w-auto">
+                    <svg width="18" height="14" viewBox="0 0 28 20" fill="none">
+                        <rect width="28" height="20" rx="5" fill="white" fill-opacity="0.2"/>
+                        <polygon points="11,4 11,16 21,10" fill="white"/>
+                    </svg>
+                    Prenumerera på kanalen
+                </a>
+
+            </div>
+
+            <!-- ── RIGHT: Video player (3 columns) ── -->
+            <div class="lg:col-span-3">
+
+                <!-- Player chrome -->
+                <div class="rounded-2xl overflow-hidden shadow-[0_20px_80px_rgba(0,0,0,0.7)] bg-slate-900 border border-white/8">
+
+                    <!-- Fake browser bar -->
+                    <div class="flex items-center gap-1.5 px-4 py-3 bg-slate-800 border-b border-white/6">
+                        <span class="w-2.5 h-2.5 rounded-full bg-red-500/70"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/70"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-green-500/70"></span>
+                        <div class="flex-1 mx-3 bg-slate-700/60 rounded-full h-5 flex items-center px-3">
+                            <span class="text-white/25 text-xs truncate">youtube.com · FBK Balkan</span>
+                        </div>
+                        <svg width="14" height="14" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                    </div>
+
+                    <!-- Video area -->
+                    <div class="relative aspect-video bg-slate-900">
+                        <!-- Loading placeholder -->
+                        <div id="ytPlaceholder"
+                             class="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-gradient-to-br from-slate-900 to-slate-800">
+                            <div class="relative">
+                                <svg width="52" height="37" viewBox="0 0 28 20" fill="none" class="opacity-20">
+                                    <rect width="28" height="20" rx="5" fill="#FF0000"/>
+                                    <polygon points="11,6 11,14 19,10" fill="white"/>
+                                </svg>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="w-5 h-5 border-2 border-white/20 border-t-white/60 rounded-full animate-spin"></div>
+                                </div>
+                            </div>
+                            <p class="text-white/20 text-xs tracking-widest uppercase">Hämtar senaste video…</p>
+                        </div>
+
+                        <iframe id="ytEmbed"
+                                class="w-full h-full relative z-10"
+                                cid="UCAcquTaKhJu0resneu7e2_w"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                                style="opacity:0; transition: opacity 0.5s;"></iframe>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (() => {
+            const iframe = document.getElementById('ytEmbed');
+            const placeholder = document.getElementById('ytPlaceholder');
+            if (!iframe) return;
+            const cid = iframe.getAttribute('cid');
+            const channelURL = encodeURIComponent(`https://www.youtube.com/feeds/videos.xml?channel_id=${cid}`);
+            fetch(`https://api.rss2json.com/v1/api.json?rss_url=${channelURL}`)
+                .then(r => r.json())
+                .then(result => {
+                    const link = result.items[0].link;
+                    const id = link.substr(link.indexOf("=") + 1);
+                    iframe.setAttribute("src", `https://youtube.com/embed/${id}?autoplay=0&rel=0&modestbranding=1`);
+                    iframe.onload = () => {
+                        iframe.style.opacity = '1';
+                        if (placeholder) placeholder.style.display = 'none';
+                    };
+                })
+                .catch(() => {
+                    if (placeholder) {
+                        placeholder.innerHTML = '<p class="text-white/25 text-sm">Videon är inte tillgänglig just nu.</p>';
+                    }
+                });
+        })();
+    </script>
+</section>
+
+<!-- ════════════════════════════════════════ FAQ ══ -->
+<section class="py-20 bg-white">
+    <div class="max-w-4xl mx-auto px-6 lg:px-12">
+
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <p class="section-label">Har du frågor?</p>
+            <h2 class="section-title">Vanliga frågor</h2>
+            <div class="w-16 h-1 bg-secondary mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <!-- FAQ items -->
+        <div th:replace="~{fragments/faq :: faqList(${homeFaqs})}"></div>
+
+        <!-- CTA -->
+        <div class="text-center mt-10">
+            <a href="/faq"
+               class="inline-flex items-center gap-2 bg-primary text-white font-bold px-8 py-3.5 rounded-full uppercase tracking-wide hover:bg-blue-900 transition-all font-virage">
+                Visa alla frågor
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════ CTA BANNER ══ -->
+<section class="bg-secondary py-16">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+        <h2 class="text-primary font-black italic font-virage mb-3" style="font-size: clamp(1.8rem, 4vw, 2.8rem);">
+            Redo att bli en del av FBK Balkan?
+        </h2>
+        <p class="text-primary/70 mb-8 text-lg">
+            Registrera ditt barn idag och ge dem chansen att växa som spelare och människa.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/trial-registration"
+               class="inline-flex items-center justify-center gap-2 bg-primary text-white font-bold px-8 py-4 rounded-full uppercase tracking-wide hover:bg-blue-900 transition-all font-virage">
+                Intresseanmälan
+            </a>
+            <a href="/kontakt"
+               class="inline-flex items-center justify-center gap-2 bg-transparent text-primary border-2 border-primary font-bold px-8 py-4 rounded-full uppercase tracking-wide hover:bg-primary hover:text-white transition-all font-virage">
+                Kontakta oss
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer::footer}"></div>
+
 </body>
 </html>
