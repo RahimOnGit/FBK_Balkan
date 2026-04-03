@@ -1,0 +1,23 @@
+package com.example.fbk_balkan.dto.match;
+
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.time.LocalDateTime;
+@JsonIgnoreProperties(ignoreUnknown = true)
+
+public record GameDTO(
+        Long gameNumber,
+        String homeTeamName,
+        String awayTeamName,
+        String homeTeamImageUrl,
+        String awayTeamImageUrl,
+        Integer goalsScoredHomeTeam,
+        Integer goalsScoredAwayTeam,
+        String competitionName,
+        String seasonName,
+
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        LocalDateTime timeAsDateTime
+) {}
