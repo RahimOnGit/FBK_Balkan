@@ -26,7 +26,7 @@ public class SvffApiService {
     @Cacheable("svffGames")
     public List<GameDTO> fetchGames()
     {
-        String url = baseUrl + "/club/upcoming-games?from=2026-03-01&to=2026-03-10";
+        String url = baseUrl + "/club/upcoming-games?from=2026-03-01&to=2026-04-30";
         HttpHeaders headers = new HttpHeaders();
         headers.add("ApiKey", apiKey);
         headers.add("Cache-Control" , "no-cache");
