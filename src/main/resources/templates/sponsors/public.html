@@ -62,11 +62,13 @@
             letter-spacing: 0.06em;
             text-transform: uppercase;
         }
-        .badge-main    { background: linear-gradient(135deg, #153B6F, #0d2a52); color: #F5B301; border: 2px solid rgba(245,179,1,0.4); }
-        .badge-gold    { background: linear-gradient(135deg, #b8860b, #d4a017); color: #fff; border: 2px solid #c8a025; }
-        .badge-silver  { background: linear-gradient(135deg, #6b7280, #9ca3af); color: #fff; border: 2px solid #9ca3af; }
-        .badge-bronze  { background: linear-gradient(135deg, #92400e, #b45309); color: #fff; border: 2px solid #c07a3e; }
-        .badge-parent  { background: linear-gradient(135deg, #1d4ed8, #2563eb); color: #fff; border: 2px solid #3b82f6; }
+        .badge-main        { background: linear-gradient(135deg, #153B6F, #0d2a52); color: #F5B301; border: 2px solid rgba(245,179,1,0.4); }
+        .badge-gold        { background: linear-gradient(135deg, #1a5c2e, #22763b); color: #fff; border: 2px solid #2d9e50; }
+        .badge-silver      { background: linear-gradient(135deg, #5b21b6, #7c3aed); color: #fff; border: 2px solid #8b5cf6; }
+        .badge-spring-ball { background: linear-gradient(135deg, #059669, #10b981); color: #fff; border: 2px solid #34d399; }
+        .badge-autumn-ball { background: linear-gradient(135deg, #b45309, #d97706); color: #fff; border: 2px solid #fbbf24; }
+        .badge-bronze      { background: linear-gradient(135deg, #374151, #4b5563); color: #fff; border: 2px solid #6b7280; }
+        .badge-parent      { background: linear-gradient(135deg, #be185d, #db2777); color: #fff; border: 2px solid #f472b6; }
 
         .category-line {
             flex: 1;
@@ -223,16 +225,17 @@
         </div>
     </div>
 
-    <!-- Gold Sponsors -->
+    <!-- Företagspartners -->
     <div th:if="${sponsorsByCategory.containsKey(T(com.example.fbk_balkan.enums.SponsorCategory).GOLD)}"
          class="category-section">
         <div class="category-header">
-      <span class="category-badge badge-gold">
-        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        Guldsponsor
-      </span>
+            <span class="category-badge badge-gold">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 4h1m4 0h1"/></svg>
+                Företagspartners
+            </span>
             <div class="category-line"></div>
         </div>
+        <p style="font-size:0.85rem;color:#64748b;margin-bottom:1.5rem;">Lokala företag som stöttar FBK Balkan</p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             <div th:each="sponsor : ${sponsorsByCategory.get(T(com.example.fbk_balkan.enums.SponsorCategory).GOLD)}"
                  class="sponsor-card">
@@ -240,10 +243,10 @@
                     <img th:src="${sponsor.logoUrl}" th:alt="${sponsor.name}">
                 </div>
                 <div class="sponsor-logo-placeholder" th:unless="${sponsor.logoUrl != null}"
-                     style="background: linear-gradient(135deg, #b8860b, #d4a017);">
-                    <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                     style="background: linear-gradient(135deg, #1a5c2e, #22763b);">
+                    <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 4h1m4 0h1"/></svg>
                 </div>
-                <div class="sponsor-name" th:text="${sponsor.name}">Sponsornamn</div>
+                <div class="sponsor-name" th:text="${sponsor.name}">Företagsnamn</div>
                 <p class="sponsor-description" th:if="${sponsor.description}" th:text="${sponsor.description}"></p>
                 <a th:if="${sponsor.websiteUrl}" th:href="${sponsor.websiteUrl}" target="_blank" rel="noopener" class="sponsor-link">
                     <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
@@ -253,16 +256,17 @@
         </div>
     </div>
 
-    <!-- Silver Sponsors -->
+    <!-- Samarbetspartners -->
     <div th:if="${sponsorsByCategory.containsKey(T(com.example.fbk_balkan.enums.SponsorCategory).SILVER)}"
          class="category-section">
         <div class="category-header">
-      <span class="category-badge badge-silver">
-        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        Silversponsor
-      </span>
+            <span class="category-badge badge-silver">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                Samarbetspartners
+            </span>
             <div class="category-line"></div>
         </div>
+        <p style="font-size:0.85rem;color:#64748b;margin-bottom:1.5rem;">Organisationer som hjälper oss att växa</p>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             <div th:each="sponsor : ${sponsorsByCategory.get(T(com.example.fbk_balkan.enums.SponsorCategory).SILVER)}"
                  class="sponsor-card" style="padding: 1.5rem 1rem;">
@@ -270,10 +274,10 @@
                     <img th:src="${sponsor.logoUrl}" th:alt="${sponsor.name}">
                 </div>
                 <div class="sponsor-logo-placeholder" th:unless="${sponsor.logoUrl != null}"
-                     style="background: linear-gradient(135deg, #6b7280, #9ca3af); width:60px;height:60px;margin-bottom:1rem;">
-                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                     style="background: linear-gradient(135deg, #5b21b6, #7c3aed); width:60px;height:60px;margin-bottom:1rem;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 </div>
-                <div class="sponsor-name" style="font-size:1rem;" th:text="${sponsor.name}">Sponsornamn</div>
+                <div class="sponsor-name" style="font-size:1rem;" th:text="${sponsor.name}">Organisationsnamn</div>
                 <a th:if="${sponsor.websiteUrl}" th:href="${sponsor.websiteUrl}" target="_blank" rel="noopener" class="sponsor-link" style="font-size:0.7rem;padding:0.35rem 0.85rem;">
                     Webbplats
                 </a>
@@ -281,16 +285,79 @@
         </div>
     </div>
 
-    <!-- Bronze Sponsors -->
+    <!-- Vårens Bollpartner -->
+    <div th:if="${sponsorsByCategory.containsKey(T(com.example.fbk_balkan.enums.SponsorCategory).SPRING_BALL)}"
+         class="category-section">
+        <div class="category-header">
+            <span class="category-badge badge-spring-ball">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                Vårens Bollpartner
+            </span>
+            <div class="category-line"></div>
+        </div>
+        <p style="font-size:0.85rem;color:#64748b;margin-bottom:1.5rem;">Ser till att barnen har bollar på matcher och alla träningar under vårsäsongen</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div th:each="sponsor : ${sponsorsByCategory.get(T(com.example.fbk_balkan.enums.SponsorCategory).SPRING_BALL)}"
+                 class="sponsor-card" style="border: 2px solid rgba(16,185,129,0.25); background: linear-gradient(135deg, #f0fdf4, #fff);">
+                <div class="sponsor-logo-wrap" th:if="${sponsor.logoUrl != null}">
+                    <img th:src="${sponsor.logoUrl}" th:alt="${sponsor.name}">
+                </div>
+                <div class="sponsor-logo-placeholder" th:unless="${sponsor.logoUrl != null}"
+                     style="background: linear-gradient(135deg, #059669, #10b981);">
+                    <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                </div>
+                <div class="sponsor-name" th:text="${sponsor.name}">Vårens Bollpartner</div>
+                <p class="sponsor-description" th:if="${sponsor.description}" th:text="${sponsor.description}"></p>
+                <a th:if="${sponsor.websiteUrl}" th:href="${sponsor.websiteUrl}" target="_blank" rel="noopener" class="sponsor-link">
+                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    Webbplats
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Höstens Bollpartner -->
+    <div th:if="${sponsorsByCategory.containsKey(T(com.example.fbk_balkan.enums.SponsorCategory).AUTUMN_BALL)}"
+         class="category-section">
+        <div class="category-header">
+            <span class="category-badge badge-autumn-ball">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                Höstens Bollpartner
+            </span>
+            <div class="category-line"></div>
+        </div>
+        <p style="font-size:0.85rem;color:#64748b;margin-bottom:1.5rem;">Ser till att barnen har bollar på matcher och alla träningar under höstsäsongen</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div th:each="sponsor : ${sponsorsByCategory.get(T(com.example.fbk_balkan.enums.SponsorCategory).AUTUMN_BALL)}"
+                 class="sponsor-card" style="border: 2px solid rgba(245,179,1,0.3); background: linear-gradient(135deg, #fffbeb, #fff);">
+                <div class="sponsor-logo-wrap" th:if="${sponsor.logoUrl != null}">
+                    <img th:src="${sponsor.logoUrl}" th:alt="${sponsor.name}">
+                </div>
+                <div class="sponsor-logo-placeholder" th:unless="${sponsor.logoUrl != null}"
+                     style="background: linear-gradient(135deg, #b45309, #d97706);">
+                    <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                </div>
+                <div class="sponsor-name" th:text="${sponsor.name}">Höstens Bollpartner</div>
+                <p class="sponsor-description" th:if="${sponsor.description}" th:text="${sponsor.description}"></p>
+                <a th:if="${sponsor.websiteUrl}" th:href="${sponsor.websiteUrl}" target="_blank" rel="noopener" class="sponsor-link">
+                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    Webbplats
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stödpartners -->
     <div th:if="${sponsorsByCategory.containsKey(T(com.example.fbk_balkan.enums.SponsorCategory).BRONZE)}"
          class="category-section">
         <div class="category-header">
-      <span class="category-badge badge-bronze">
-        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        Bronsponsor
-      </span>
+            <span class="category-badge badge-bronze">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                Stödpartners
+            </span>
             <div class="category-line"></div>
         </div>
+        <p style="font-size:0.85rem;color:#64748b;margin-bottom:1.5rem;">Familjer &amp; privatpersoner som stöttar vår verksamhet</p>
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
             <div th:each="sponsor : ${sponsorsByCategory.get(T(com.example.fbk_balkan.enums.SponsorCategory).BRONZE)}"
                  class="sponsor-card" style="padding: 1.25rem 0.75rem;">
@@ -298,33 +365,33 @@
                     <img th:src="${sponsor.logoUrl}" th:alt="${sponsor.name}">
                 </div>
                 <div class="sponsor-logo-placeholder" th:unless="${sponsor.logoUrl != null}"
-                     style="background: linear-gradient(135deg, #92400e, #b45309); width:50px;height:50px;margin-bottom:0.75rem;">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                     style="background: linear-gradient(135deg, #374151, #4b5563); width:50px;height:50px;margin-bottom:0.75rem;">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                 </div>
-                <div class="sponsor-name" style="font-size:0.9rem;" th:text="${sponsor.name}">Sponsornamn</div>
-                <a th:if="${sponsor.websiteUrl}" th:href="${sponsor.websiteUrl}" target="_blank" rel="noopener" class="sponsor-link" style="font-size:0.65rem;padding:0.3rem 0.7rem;margin-top:0.4rem;">
-                    Webb
-                </a>
+                <div class="sponsor-name" style="font-size:0.9rem;" th:text="${sponsor.name}">Stödpartner</div>
             </div>
         </div>
     </div>
 
-    <!-- Parent Sponsors -->
+    <!-- Barnens Partner -->
     <div th:if="${sponsorsByCategory.containsKey(T(com.example.fbk_balkan.enums.SponsorCategory).PARENT)}"
          class="category-section">
         <div class="category-header">
-      <span class="category-badge badge-parent">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-        Föräldersponsor
-      </span>
+            <span class="category-badge badge-parent">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                Barnens Partner
+            </span>
             <div class="category-line"></div>
         </div>
+        <p style="font-size:0.85rem;color:#64748b;margin-bottom:1.5rem;">Föräldrar och engagerade privatpersoner som gör det lilla extra för barnens fotboll</p>
         <div class="flex flex-wrap gap-3">
             <div th:each="sponsor : ${sponsorsByCategory.get(T(com.example.fbk_balkan.enums.SponsorCategory).PARENT)}"
-                 class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full">
-                <span class="font-semibold text-blue-800 text-sm" th:text="${sponsor.name}">Förälder</span>
+                 class="inline-flex items-center gap-2 px-4 py-2 border rounded-full"
+                 style="background:#fdf2f8;border-color:#fbcfe8;">
+                <svg width="14" height="14" fill="none" stroke="#db2777" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                <span class="font-semibold text-sm" style="color:#9d174d;" th:text="${sponsor.name}">Förälder</span>
                 <a th:if="${sponsor.websiteUrl}" th:href="${sponsor.websiteUrl}" target="_blank" rel="noopener"
-                   class="text-blue-600 hover:text-blue-800 text-xs underline">webb</a>
+                   class="text-xs underline" style="color:#db2777;">webb</a>
             </div>
         </div>
     </div>
