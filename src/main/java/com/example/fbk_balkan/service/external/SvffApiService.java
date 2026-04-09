@@ -1,5 +1,6 @@
 package com.example.fbk_balkan.service.external;
 
+import com.example.fbk_balkan.dto.match.GameDTO;
 import com.example.fbk_balkan.dto.svff.SvffClubResponse;
 import com.example.fbk_balkan.dto.svff.SvffTeamDto;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,22 @@ public class SvffApiService {
     private String baseUrl;
 
     private final RestTemplate restTemplate = new RestTemplate();
+    @Cacheable("svffGames")
+    public List<GameDTO> fetchGames()
+    {
+        String url = baseUrl + "/club/upcoming-games?from=2026-03-01&to=2026-04-30";
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("ApiKey", apiKey);
+        headers.add("Cache-Control" , "no-cache");
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        ResponseEntity<SvffClubResponse> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                entity,
+                SvffClubResponse.class
+        );
+        return response.getBody().getGames();
+    }
     @Cacheable("svffTeams")
     public List<SvffTeamDto> fetchTeams()
     {
