@@ -33,7 +33,7 @@ private final MatchRepository matchRepository;
 
     @Override
     public void run(String... args) {
-        if (userRepository.count() == 0) {
+        if (!userRepository.findByEmail("coach@fbkbalkan.se").isPresent()) {
             User coach = new User();
             coach.setFirstName("Rahim");
             coach.setLastName("Elhaj");
@@ -42,6 +42,7 @@ private final MatchRepository matchRepository;
             coach.setRole(Role.COACH);
             coach.setEnabled(true);
             userRepository.save(coach);
+            System.out.println("Default coach created");
         }
         initTeamsFromSvff();
         initGamesFromSvff();

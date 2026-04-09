@@ -22,4 +22,18 @@ public class MatchMapper {
         match.setTimeAsDateTime(dto.timeAsDateTime());
         return match;
     }
+    public GameDTO toDto(Match entity) {
+        return new GameDTO(
+                entity.getGameNumber(),
+                entity.getHomeTeamName(),
+                entity.getAwayTeamName(),
+                entity.getHomeTeamImageUrl(),
+                entity.getAwayTeamImageUrl(),
+                entity.getGoalsScoredHomeTeam(),
+                entity.getGoalsScoredAwayTeam(),
+                entity.getCompetitionName(),
+                entity.getSeasonName(),
+                entity.getTimeAsDateTime()
+        );
+    }
 }
