@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sponsorer – FBK Balkan Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <div th:replace="~{fragments/dashboard-sidebar :: sidebar-styles}"></div>
+</head>
+<body class="bg-slate-100">
+
+<div class="dashboard-wrapper">
+    <div th:replace="~{fragments/dashboard-sidebar :: sidebar('sponsors')}"></div>
+
+    <div class="dashboard-main">
+        <div class="dashboard-topbar">
+            <span class="dashboard-topbar-title">Hantera Sponsorer</span>
+            <a href="/admin/sponsors/create" class="btn btn-primary btn-sm rounded-xl gap-2">
+                <i class="fa-solid fa-plus"></i> Ny Sponsor
+            </a>
+        </div>
+
+        <div class="dashboard-content">
+
+            <!-- Alerts -->
+            <div th:if="${successMessage}" class="alert alert-success mb-6 shadow-lg border-none">
+                <i class="fa-solid fa-check-circle"></i>
+                <span th:text="${successMessage}"></span>
+            </div>
+            <div th:if="${error}" class="alert alert-error mb-6 shadow-lg border-none">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                <span th:text="${error}"></span>
+            </div>
+
+            <!-- Expiring Soon Warning -->
+            <div th:if="${!#lists.isEmpty(expiringSoon)}"
+                 class="alert alert-warning mb-6 shadow-lg border-none flex-col items-start">
+                <div class="flex items-center gap-2 font-bold">
+                    <i class="fa-solid fa-clock"></i>
+                    <span>Sponsoravtal löper ut snart (inom 30 dagar)</span>
+                </div>
+                <ul class="mt-2 list-disc list-inside text-sm">
+                    <li th:each="s : ${expiringSoon}">
+                        <span th:text="${s.name}"></span>
+                        <span class="font-bold" th:text="' – ' + ${s.category.displayName}"></span>
+                        <span th:text="' – Slutar: ' + ${s.agreementEnd}"></span>
+                        <span th:if="${s.contactEmail}" th:text="' (' + ${s.contactEmail} + ')'"></span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Table Card -->
+            <div class="card bg-base-100 shadow-lg border border-slate-200 rounded-3xl overflow-hidden">
+                <div class="card-body p-6">
+
+                    <!-- Empty state -->
+                    <div th:if="${#lists.isEmpty(sponsors)}" class="text-center py-16">
+                        <i class="fa-solid fa-handshake text-5xl text-slate-300 mb-4"></i>
+                        <p class="text-slate-400 text-lg font-medium">Inga sponsorer registrerade ännu.</p>
+                        <a href="/admin/sponsors/create" class="btn btn-primary mt-4 rounded-xl">Lägg till sponsor</a>
+                    </div>
+
+                    <!-- Sponsors Table -->
+                    <div th:if="${!#lists.isEmpty(sponsors)}" class="overflow-x-auto">
+                        <table class="table table-zebra w-full">
+                            <thead>
+                            <tr class="bg-slate-50 text-slate-600 text-xs uppercase tracking-wider">
+                                <th>Logotyp</th>
+                                <th>Namn</th>
+                                <th>Kategori</th>
+                                <th>Avtalsperiod</th>
+                                <th>Belopp</th>
+                                <th>Kontakt</th>
+                                <th>Status</th>
+                                <th>Åtgärder</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="sponsor : ${sponsors}" class="hover">
+                                <!-- Logo -->
+                                <td>
+                                    <div style="width:60px;height:40px;display:flex;align-items:center;justify-content:center;background:#f8fafc;border-radius:8px;overflow:hidden;">
+                                        <img th:if="${sponsor.logoUrl}" th:src="${sponsor.logoUrl}" th:alt="${sponsor.name}"
+                                             style="max-width:100%;max-height:100%;object-fit:contain;">
+                                        <i th:unless="${sponsor.logoUrl}" class="fa-solid fa-image text-slate-300 text-xl"></i>
+                                    </div>
+                                </td>
+                                <!-- Name -->
+                                <td>
+                                    <div class="font-bold text-slate-800" th:text="${sponsor.name}"></div>
+                                    <div th:if="${sponsor.websiteUrl}" class="text-xs text-slate-400 truncate max-w-xs">
+                                        <a th:href="${sponsor.websiteUrl}" target="_blank" class="link link-primary" th:text="${sponsor.websiteUrl}"></a>
+                                    </div>
+                                </td>
+                                <!-- Category -->
+                                <td>
+                                    <span class="badge badge-sm font-semibold"
+                                          th:classappend="${sponsor.category.name() == 'MAIN'} ? 'badge-primary' :
+                                                          (${sponsor.category.name() == 'GOLD'} ? 'badge-warning' :
+                                                          (${sponsor.category.name() == 'SILVER'} ? 'badge-ghost' :
+                                                          (${sponsor.category.name() == 'BRONZE'} ? 'badge-error' : 'badge-info')))"
+                                          th:text="${sponsor.category.displayName}"></span>
+                                </td>
+                                <!-- Agreement period -->
+                                <td>
+                                    <div th:if="${sponsor.agreementStart != null or sponsor.agreementEnd != null}" class="text-sm">
+                                        <div th:if="${sponsor.agreementStart}" class="text-slate-600">
+                                            <span class="text-xs text-slate-400">Från: </span><span th:text="${sponsor.agreementStart}"></span>
+                                        </div>
+                                        <div th:if="${sponsor.agreementEnd}">
+                                            <span class="text-xs text-slate-400">Till: </span>
+                                            <span th:text="${sponsor.agreementEnd}"
+                                                  th:class="${#temporals.createNow().toLocalDate().plusDays(30).isAfter(sponsor.agreementEnd)} ? 'text-orange-600 font-bold' : 'text-slate-600'"></span>
+                                        </div>
+                                    </div>
+                                    <span th:unless="${sponsor.agreementStart != null or sponsor.agreementEnd != null}" class="text-slate-300 text-sm">–</span>
+                                </td>
+                                <!-- Amount -->
+                                <td>
+                                    <span th:if="${sponsor.amountSek}" th:text="${sponsor.amountSek} + ' kr'" class="font-mono text-sm"></span>
+                                    <span th:unless="${sponsor.amountSek}" class="text-slate-300 text-sm">–</span>
+                                </td>
+                                <!-- Contact -->
+                                <td>
+                                    <div class="text-sm">
+                                        <div th:if="${sponsor.contactName}" class="font-medium" th:text="${sponsor.contactName}"></div>
+                                        <div th:if="${sponsor.contactEmail}" class="text-slate-400 text-xs" th:text="${sponsor.contactEmail}"></div>
+                                        <div th:if="${sponsor.contactPhone}" class="text-slate-400 text-xs" th:text="${sponsor.contactPhone}"></div>
+                                    </div>
+                                    <span th:unless="${sponsor.contactName != null or sponsor.contactEmail != null}" class="text-slate-300 text-sm">–</span>
+                                </td>
+                                <!-- Status -->
+                                <td>
+                                    <span th:if="${sponsor.active}" class="badge badge-success badge-sm">Aktiv</span>
+                                    <span th:unless="${sponsor.active}" class="badge badge-ghost badge-sm">Inaktiv</span>
+                                </td>
+                                <!-- Actions -->
+                                <td>
+                                    <div class="flex items-center gap-2">
+                                        <a th:href="@{/admin/sponsors/edit/{id}(id=${sponsor.id})}"
+                                           class="btn btn-xs btn-outline btn-info rounded-lg">
+                                            <i class="fa-solid fa-pencil"></i>
+                                        </a>
+                                        <form th:action="@{/admin/sponsors/toggle/{id}(id=${sponsor.id})}" method="post" style="display:inline;">
+                                            <button type="submit" class="btn btn-xs btn-outline rounded-lg"
+                                                    th:classappend="${sponsor.active} ? 'btn-warning' : 'btn-success'"
+                                                    th:title="${sponsor.active} ? 'Avaktivera' : 'Aktivera'">
+                                                <i class="fa-solid" th:classappend="${sponsor.active} ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                            </button>
+                                        </form>
+                                        <button class="btn btn-xs btn-outline btn-error rounded-lg"
+                                                onclick="confirmDelete(this)"
+                                                th:data-id="${sponsor.id}"
+                                                th:data-name="${sponsor.name}">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Delete confirmation form (hidden) -->
+<form id="deleteForm" method="post" style="display:none;">
+</form>
+
+<script>
+    function confirmDelete(btn) {
+        const id = btn.dataset.id;
+        const name = btn.dataset.name;
+        Swal.fire({
+            title: 'Ta bort sponsor?',
+            html: `Är du säker på att du vill ta bort <strong>${name}</strong>? Denna åtgärd kan inte ångras.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ja, ta bort',
+            cancelButtonText: 'Avbryt'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.getElementById('deleteForm');
+                form.action = `/admin/sponsors/delete/${id}`;
+                form.submit();
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

@@ -6,6 +6,7 @@ import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.repository.NewsRepository;
 import com.example.fbk_balkan.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,10 @@ public class NewsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    @Lazy
+    private EmailNotificationService emailNotificationService;
 
     public List<News> getAllPublishedNews() {
         return newsRepository.findByPublishedTrueOrderByCreatedAtDesc();
@@ -116,7 +121,34 @@ public class NewsService {
     public void togglePublished(Long id) {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Nyhet hittades inte"));
+        boolean wasPublished = news.isPublished();
         news.setPublished(!news.isPublished());
         newsRepository.save(news);
+        if (!wasPublished && news.isPublished()) {
+            emailNotificationService.sendNewsPublishedNotification(news, news.getAuthorUsername());
+        }
+    }
+
+    @Transactional
+    public News createAndPublishNews(NewsDTO newsDTO, String authorUsername) {
+        News news = new News();
+        news.setTitle(newsDTO.getTitle());
+        news.setContent(newsDTO.getContent());
+        news.setImageUrl(newsDTO.getImageUrl());
+        news.setExternalImageUrl(newsDTO.getExternalImageUrl());
+        news.setLinkUrl(newsDTO.getLinkUrl());
+        news.setPublished(newsDTO.isPublished());
+        news.setAuthorUsername(authorUsername);
+        Optional<User> user = userRepository.findByEmail(authorUsername);
+        if (user.isPresent()) {
+            news.setAuthorFullName(user.get().getFullName());
+        } else {
+            news.setAuthorFullName(authorUsername);
+        }
+        News saved = newsRepository.save(news);
+        if (saved.isPublished()) {
+            emailNotificationService.sendNewsPublishedNotification(saved, authorUsername);
+        }
+        return saved;
     }
 }
