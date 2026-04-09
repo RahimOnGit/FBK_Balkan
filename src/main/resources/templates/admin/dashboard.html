@@ -184,7 +184,8 @@
                                 <td th:text="${#temporals.format(trial.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
                                 <td th:text="${#temporals.format(trial.preferredTrainingDate, 'yyyy-MM-dd')}"></td>
                                 <td>
-                                    <span th:switch="${trial.status}" class="badge">
+<!--                                    <span th:switch="${trial.status}" class="badge">-->
+                                    <span th:switch="${trial.status != null ? trial.status.name() : null}" >
                                         <span th:case="'PENDING'" class="badge badge-warning">Väntar</span>
                                         <span th:case="'APPROVED'" class="badge badge-success">Godkänd</span>
                                         <span th:case="'REJECTED'" class="badge badge-error">Avvisad</span>
