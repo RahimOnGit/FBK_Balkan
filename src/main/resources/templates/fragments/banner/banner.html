@@ -1,13 +1,13 @@
 <div th:fragment="banner">
 
     <!--   Background image + overlay   -->
-    <div class="relative w-full h-[500px] md:h-[600px] lg:h-[700px] ">
+    <div class="relative w-full h-[400px] md:h-[500px] lg:h-[600px] ">
 
 
         <!-- Background image with gradient overlay -->
         <div th:replace="~{fragments/banner/banner-bg::banner-bg}"></div>
 
-        <section class="relative z-20 flex justify-start px-4 mb-8">
+        <section class="relative w-full z-20 px-4 pt-24 mb-8">
             <div th:replace="~{fragments/match::upcoming-match}"></div>
         </section>
 
