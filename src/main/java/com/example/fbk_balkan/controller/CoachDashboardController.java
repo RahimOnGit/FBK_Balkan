@@ -170,6 +170,30 @@ public class CoachDashboardController {
                 registration.getFirstName() + " " + registration.getLastName() +
                 " har blivit godkänd för provträning hos FBK Balkan.\n\n" +
                 "Vi ser fram emot att träffa er!\n\n" +
+                "info\n" +
+                "\n" +
+                "\n" +
+                "Det är väldigt trång på parkeringen, snälla hitta andra alternativ när ni ska hämta och lämna barn inför deras aktiviteter. \n" +
+                "Jag skickar en karta på andra alternativ man måste inte stå vid dom röda pilarna det går även bra att stå vid dom gula Pilarna vid upphämtning \n" +
+                "Det finns andra lag som tränar efter oss så vi måste hjälpas åt att komma in och ut på ett smidigt sätt.  \n" +
+                "\n" +
+                " \n" +
+                "Parkerings karta \n" +
+                "Allt med rött är där man kan parkera glöm inte att sätta klockan på appen även om det är gratis så måste den aktiveras koden finns på \n" +
+                "\n" +
+                "parkeringsplatsen \n" +
+                "Allt med Gult är lämna och upphämtnings zone, man får inte parkera på den gula markerade gatan  men man kan sitta i bilen\n" +
+                "och vänta på sitt barn träna färdigt eller komma förbi och plocka upp \n" +
+                "\n" +
+                "Den gröna är ett parkeringshus om man planerar att var där en längre tid\n" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "Den ljusblåa / Turkos \n" +
+                "Är gången barnen kan gå igenom från parkeringen till Upphämtning platsen som är markerad med gult \n Röd Parkeing \n" +
+                "Grön långtidsparkering \n" +
+                "Gul Lämna och hämta upp \n" +
+                "Turkos - Stig för barnen att ta sig till Gul markering"+
                 "Välkommen till laget!\n\n" +
                 "Med vänliga hälsningar,\n" +
                 "FBK Balkan";
