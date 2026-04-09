@@ -3,42 +3,48 @@
     <!--   Background image + overlay   -->
     <div class="relative w-full h-[500px] md:h-[600px] lg:h-[700px] ">
 
+
         <!-- Background image with gradient overlay -->
         <div th:replace="~{fragments/banner/banner-bg::banner-bg}"></div>
 
+        <section class="relative z-20 flex justify-start px-4 mb-8">
+            <div th:replace="~{fragments/upcoming-match::upcoming-match}"></div>
+        </section>
 
-        <!-- Content container -->
-        <div class="relative z-10 container mx-auto px-6  flex flex-col justify-center items-center text-center text-white">
 
-            <!-- Club name – big & bold -->
-            <h1 class="text-5xl md:text-6xl lg:text-7xl font-black font-virage tracking-tight drop-shadow-2xl mb-4 uppercase">
-                FBK Balkan
-            </h1>
+<!--        &lt;!&ndash; Content container &ndash;&gt;-->
+<!--        <div class="relative z-10 container mx-auto px-6  flex flex-col justify-center items-center text-center text-white">-->
 
-            <!-- Tagline / subtitle -->
-            <p class="text-xl md:text-3xl lg:text-4xl font-bold italic opacity-90 mb-10 drop-shadow-lg">
-                Talangfabriken i Malmö sedan 1962
-            </p>
 
-            <!-- Optional small subtitle / Zlatan reference -->
-            <p class="text-lg md:text-2xl max-w-3xl mb-12 opacity-80">
-                Där Zlatan började – där nästa talang växer upp • Respekt • Trygghet • Utveckling
-            </p>
+<!--            &lt;!&ndash; Club name – big & bold &ndash;&gt;-->
+<!--            <h1 class="text-5xl md:text-6xl lg:text-7xl font-black font-virage tracking-tight drop-shadow-2xl mb-4 uppercase">-->
+<!--                FBK Balkan-->
+<!--            </h1>-->
 
-            <!-- Call-to-action buttons -->
-            <div class="flex flex-col sm:flex-row gap-6">
-                <a href="/trial-registration"
-                   class="btn btn-primary btn-lg text-lg font-bold uppercase wide shadow-xl hover:scale-105 transition-transform">
-                    Boka provträning nu
-                </a>
+<!--            &lt;!&ndash; Tagline / subtitle &ndash;&gt;-->
+<!--            <p class="text-xl md:text-3xl lg:text-4xl font-bold italic opacity-90 mb-10 drop-shadow-lg">-->
+<!--                Talangfabriken i Malmö sedan 1962-->
+<!--            </p>-->
 
-                <a href="/lag"
-                   class="btn btn-outline btn-lg text-lg font-bold uppercase tracking-wide border-2 border-secondary text-secondary hover:bg-secondary hover:text-black transition-colors">
-                    Se våra lag
-                </a>
-            </div>
+<!--            &lt;!&ndash; Optional small subtitle / Zlatan reference &ndash;&gt;-->
+<!--            <p class="text-lg md:text-2xl max-w-3xl mb-12 opacity-80">-->
+<!--                Där Zlatan började – där nästa talang växer upp • Respekt • Trygghet • Utveckling-->
+<!--            </p>-->
 
-        </div>
+<!--            &lt;!&ndash; Call-to-action buttons &ndash;&gt;-->
+<!--            <div class="flex flex-col sm:flex-row gap-6">-->
+<!--                <a href="/trial-registration"-->
+<!--                   class="btn btn-primary btn-lg text-lg font-bold uppercase wide shadow-xl hover:scale-105 transition-transform">-->
+<!--                    Boka provträning nu-->
+<!--                </a>-->
+
+<!--                <a href="/lag"-->
+<!--                   class="btn btn-outline btn-lg text-lg font-bold uppercase tracking-wide border-2 border-secondary text-secondary hover:bg-secondary hover:text-black transition-colors">-->
+<!--                    Se våra lag-->
+<!--                </a>-->
+<!--            </div>-->
+
+<!--        </div>-->
 
         <!-- Optional floating soccer ball (bottom right) -->
 <!--        <img src="https://static.vecteezy.com/system/resources/thumbnails/029/591/303/small/soccer-template-design-football-banner-sport-layout-design-blue-theme-vector.jpg"-->

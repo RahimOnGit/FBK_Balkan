@@ -63,7 +63,7 @@ public class TrialRegistrationService {
         );
 
         trialRegistration.setStatus(com.example.fbk_balkan.entity.TrialStatus.PENDING);
-        trialRegistration.setCreatedAt(LocalDate.from(LocalDateTime.now()));
+//        trialRegistration.setCreatedAt(LocalDate.from(LocalDateTime.now()));
         // Duplicate check
         boolean exists = trialRegistrationRepository
                 .existsByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndBirthDateAndPreferredTrainingDate(
@@ -119,7 +119,7 @@ public class TrialRegistrationService {
                 .referralSource(trialRegistration.getReferralSource())  // NEW
                 .referralOther(trialRegistration.getReferralOther())// NEW
                 .status(trialRegistration.getStatus())
-                .createdAt(trialRegistration.getCreatedAt().atStartOfDay())
+//                .createdAt(trialRegistration.getCreatedAt().atStartOfDay())
                 .coachId(trialRegistration.getCoach() != null ? trialRegistration.getCoach().getId() : null)
                 .build();
 
