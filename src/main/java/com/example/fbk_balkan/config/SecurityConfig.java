@@ -42,6 +42,9 @@ public class SecurityConfig {
                                 .requestMatchers("/kontakt").permitAll()
                                 .requestMatchers("/trial-registration", "/trial-registration/success","/about","/faq").permitAll()
                                 .requestMatchers("/news", "/news/**","/public-teams/**").permitAll()
+                                .requestMatchers("/sponsors").permitAll()
+                                .requestMatchers("/ungdomsportalen").permitAll()
+                                .requestMatchers("/verksamhet").permitAll()
 
 
 //                      roles-based access control
