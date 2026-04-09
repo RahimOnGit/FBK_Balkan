@@ -44,4 +44,8 @@ public class HomeController {
         return "ungdomsportalen";
     }
 
+    @GetMapping("/verksamhet")
+    public String verksamhet() {
+        return "verksamhet";
+    }
 }
