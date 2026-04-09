@@ -39,6 +39,9 @@ public class HomeController {
         return "about";
     }
 
-
+    @GetMapping("/ungdomsportalen")
+    public String ungdomsportalen() {
+        return "ungdomsportalen";
+    }
 
 }
