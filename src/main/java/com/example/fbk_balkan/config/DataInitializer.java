@@ -1,9 +1,13 @@
 package com.example.fbk_balkan.config;
 
+import com.example.fbk_balkan.dto.match.GameDTO;
 import com.example.fbk_balkan.dto.svff.SvffTeamDto;
+import com.example.fbk_balkan.entity.Match;
 import com.example.fbk_balkan.entity.Team;
 import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.entity.Role;
+import com.example.fbk_balkan.mapper.MatchMapper;
+import com.example.fbk_balkan.repository.MatchRepository;
 import com.example.fbk_balkan.repository.TeamRepository;
 import com.example.fbk_balkan.repository.UserRepository;
 import com.example.fbk_balkan.service.external.SvffApiService;
@@ -19,16 +23,17 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
-    private final TeamRepository teamRepository;           // ← ADD
-    private final SvffApiService svffApiService;           // ← ADD
-    private final SvffTeamConverter svffTeamConverter;     // ← ADD
-
+    private final TeamRepository teamRepository;
+    private final SvffApiService svffApiService;
+    private final SvffTeamConverter svffTeamConverter;
+private final MatchMapper matchMapper;
+private final MatchRepository matchRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
-        if (userRepository.count() == 0) {
+        if (!userRepository.findByEmail("coach@fbkbalkan.se").isPresent()) {
             User coach = new User();
             coach.setFirstName("Rahim");
             coach.setLastName("Elhaj");
@@ -37,8 +42,10 @@ public class DataInitializer implements CommandLineRunner {
             coach.setRole(Role.COACH);
             coach.setEnabled(true);
             userRepository.save(coach);
+            System.out.println("Default coach created");
         }
         initTeamsFromSvff();
+        initGamesFromSvff();
 
         // Create a default social admin if none exists, or fix role if wrong
         var socialAdminOpt = userRepository.findByEmail("social@fbkbalkan.se");
@@ -90,12 +97,41 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("Default admin created - :"+ assistant.getEmail()   +", Password: password");
         }
     }
+    private void initGamesFromSvff()
+    {
+        try
+        {
+            List<GameDTO> games = svffApiService.fetchGames();
+            int created = 0;
+
+            for (GameDTO dto : games)
+            {
+       if(matchRepository.existsByGameNumber(dto.gameNumber()))
+       {
+           System.out.println("Skipping existing game: " + dto.homeTeamName());
+           continue;
+       }
+                System.out.println("Game:\t " +  dto.homeTeamName() + "  vs " + dto.awayTeamName());
+            Match match = matchMapper.toEntity(dto);
+            matchRepository.save(match);
+            created++;
+
+            }
+            System.out.println("saved "+ created +" new matches");
+
+
+
+        }
+        catch (Exception e) {
+            // Don't crash the app if API is down
+            System.out.println(" API sync failed: " + e.getMessage());
+        }
+    }
 
     private void initTeamsFromSvff() {
         try {
             List<SvffTeamDto> svffTeams = svffApiService.fetchTeams();
             int created = 0;
-
             for (SvffTeamDto svff : svffTeams) {
 
                 //skip teams with no numbers in name (i.e senior and hj -> skip , fbk balkan 2014 -> OK )
