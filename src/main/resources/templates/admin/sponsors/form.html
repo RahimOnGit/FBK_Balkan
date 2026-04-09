@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${isEdit} ? 'Redigera Sponsor' : 'Ny Sponsor'">Sponsor – FBK Balkan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link th:href="@{/css/output.css}" rel="stylesheet">
+  <div th:replace="~{fragments/dashboard-sidebar :: sidebar-styles}"></div>
+</head>
+<body class="bg-slate-100">
+
+<div class="dashboard-wrapper">
+  <div th:replace="~{fragments/dashboard-sidebar :: sidebar('sponsors')}"></div>
+
+  <div class="dashboard-main">
+    <div class="dashboard-topbar">
+      <a href="/admin/sponsors" class="text-slate-400 hover:text-slate-600 mr-2">
+        <i class="fa-solid fa-arrow-left"></i>
+      </a>
+      <span class="dashboard-topbar-title" th:text="${isEdit} ? 'Redigera Sponsor' : 'Ny Sponsor'">Sponsor</span>
+    </div>
+
+    <div class="dashboard-content max-w-3xl mx-auto">
+
+      <div class="card bg-base-100 shadow-lg border border-slate-200 rounded-3xl overflow-hidden">
+        <div class="card-body p-8">
+
+          <form th:action="${isEdit} ? @{/admin/sponsors/edit/{id}(id=${sponsorId})} : @{/admin/sponsors/create}"
+                th:object="${sponsorDTO}"
+                method="post"
+                enctype="multipart/form-data">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+              <!-- Name -->
+              <div class="form-control md:col-span-2">
+                <label class="label"><span class="label-text font-semibold">Sponsornamn *</span></label>
+                <input type="text" th:field="*{name}" class="input input-bordered rounded-xl"
+                       placeholder="Företagsnamn" required>
+                <div th:if="${#fields.hasErrors('name')}" class="text-error text-sm mt-1"
+                     th:errors="*{name}"></div>
+              </div>
+
+              <!-- Category -->
+              <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Kategori *</span></label>
+                <select th:field="*{category}" class="select select-bordered rounded-xl" required>
+                  <option value="">Välj kategori...</option>
+                  <option th:each="cat : ${categories}"
+                          th:value="${cat.name()}"
+                          th:text="${cat.displayName}"
+                          th:selected="${sponsorDTO.category == cat}"></option>
+                </select>
+                <div th:if="${#fields.hasErrors('category')}" class="text-error text-sm mt-1"
+                     th:errors="*{category}"></div>
+                <div class="label">
+                  <span class="label-text-alt text-slate-400">Föräldersponsor: minst 1 000 kr</span>
+                </div>
+              </div>
+
+              <!-- Amount -->
+              <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Belopp (SEK)</span></label>
+                <input type="number" th:field="*{amountSek}" class="input input-bordered rounded-xl"
+                       placeholder="1000" min="0">
+              </div>
+
+              <!-- Website -->
+              <div class="form-control md:col-span-2">
+                <label class="label"><span class="label-text font-semibold">Webbplats</span></label>
+                <input type="url" th:field="*{websiteUrl}" class="input input-bordered rounded-xl"
+                       placeholder="https://www.example.se">
+              </div>
+
+              <!-- Description -->
+              <div class="form-control md:col-span-2">
+                <label class="label"><span class="label-text font-semibold">Beskrivning</span></label>
+                <textarea th:field="*{description}" class="textarea textarea-bordered rounded-xl h-24"
+                          placeholder="Kort beskrivning av sponsorn..."></textarea>
+              </div>
+
+              <!-- Logo upload -->
+              <div class="form-control md:col-span-2">
+                <label class="label"><span class="label-text font-semibold">Logotyp</span></label>
+                <div th:if="${existingLogoUrl}" class="mb-3 flex items-center gap-3">
+                  <img th:src="${existingLogoUrl}" alt="Nuvarande logotyp"
+                       style="height:60px;max-width:160px;object-fit:contain;border-radius:8px;border:1px solid #e2e8f0;">
+                  <div class="form-control">
+                    <label class="cursor-pointer label gap-2">
+                      <input type="checkbox" name="deleteLogo" value="true" class="checkbox checkbox-error checkbox-sm">
+                      <span class="label-text text-sm text-red-600">Ta bort logotyp</span>
+                    </label>
+                  </div>
+                </div>
+                <input type="file" name="logoFile" accept="image/*" class="file-input file-input-bordered rounded-xl w-full">
+                <div class="label">
+                  <span class="label-text-alt text-slate-400">PNG, JPG, SVG – max 10MB. Laddas upp och lagras på servern.</span>
+                </div>
+              </div>
+
+              <!-- Divider -->
+              <div class="md:col-span-2">
+                <div class="divider text-slate-400 text-sm font-semibold">Avtalsuppgifter</div>
+              </div>
+
+              <!-- Agreement Start -->
+              <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Avtalets startdatum</span></label>
+                <input type="date" th:field="*{agreementStart}" class="input input-bordered rounded-xl">
+              </div>
+
+              <!-- Agreement End -->
+              <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Avtalets slutdatum</span></label>
+                <input type="date" th:field="*{agreementEnd}" class="input input-bordered rounded-xl">
+                <div class="label">
+                  <span class="label-text-alt text-slate-400">Du får en påminnelse 30, 14 och 7 dagar innan utgången</span>
+                </div>
+              </div>
+
+              <!-- Divider -->
+              <div class="md:col-span-2">
+                <div class="divider text-slate-400 text-sm font-semibold">Kontaktperson</div>
+              </div>
+
+              <!-- Contact Name -->
+              <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Kontaktpersonens namn</span></label>
+                <input type="text" th:field="*{contactName}" class="input input-bordered rounded-xl"
+                       placeholder="Förnamn Efternamn">
+              </div>
+
+              <!-- Contact Phone -->
+              <div class="form-control">
+                <label class="label"><span class="label-text font-semibold">Telefon</span></label>
+                <input type="tel" th:field="*{contactPhone}" class="input input-bordered rounded-xl"
+                       placeholder="070-000 00 00">
+              </div>
+
+              <!-- Contact Email -->
+              <div class="form-control md:col-span-2">
+                <label class="label"><span class="label-text font-semibold">E-post</span></label>
+                <input type="email" th:field="*{contactEmail}" class="input input-bordered rounded-xl"
+                       placeholder="kontakt@foretag.se">
+              </div>
+
+              <!-- Active -->
+              <div class="form-control md:col-span-2">
+                <label class="cursor-pointer label justify-start gap-3">
+                  <input type="checkbox" th:field="*{active}" class="checkbox checkbox-primary">
+                  <span class="label-text font-semibold">Aktiv (visas på webbplatsen)</span>
+                </label>
+              </div>
+
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex gap-3 mt-8">
+              <button type="submit" class="btn btn-primary rounded-xl flex-1">
+                <i class="fa-solid fa-save mr-2"></i>
+                <span th:text="${isEdit} ? 'Spara ändringar' : 'Skapa sponsor'"></span>
+              </button>
+              <a href="/admin/sponsors" class="btn btn-ghost rounded-xl">Avbryt</a>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
