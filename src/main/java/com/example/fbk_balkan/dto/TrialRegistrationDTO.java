@@ -111,7 +111,8 @@ public class TrialRegistrationDTO {
                 .relativeNumber(entity.getRelativeNumber())
                 .preferredTrainingDate(entity.getPreferredTrainingDate())
                 .status(entity.getStatus())
-                .createdAt(entity.getCreatedAt().atStartOfDay())
+//                .createdAt(entity.getCreatedAt().atStartOfDay())
+                .createdAt(entity.getCreatedAt())
                 .gender(entity.getGender())
                 .currentClub(entity.getCurrentClub())
                 .clubYears(entity.getClubYears())
@@ -134,7 +135,8 @@ public class TrialRegistrationDTO {
         e.setRelativeNumber(this.relativeNumber);
         e.setPreferredTrainingDate(this.preferredTrainingDate);
         e.setStatus(this.status);
-        e.setCreatedAt(LocalDate.from(this.createdAt));
+//        e.setCreatedAt(LocalDate.from(this.createdAt));
+        e.setCreatedAt(this.createdAt);
         e.setGender(this.gender);
         e.setCurrentClub(this.currentClub);
         e.setClubYears(this.clubYears);
