@@ -10,7 +10,7 @@
     <link th:href="@{/css/output.css}" rel="stylesheet">
     <style>
         .sponsors-hero {
-            background: linear-gradient(135deg, #153B6F 0%, #0d2a52 100%);
+            /*background: linear-gradient(135deg, #153B6F 0%, #0d2a52 100%);*/
             padding: 5rem 1.5rem 3.5rem;
             text-align: center;
             position: relative;
@@ -20,7 +20,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(ellipse at 50% 0%, rgba(245,179,1,0.12) 0%, transparent 70%);
+            /*background: radial-gradient(ellipse at 50% 0%, rgba(245,179,1,0.12) 0%, transparent 70%);*/
         }
         .sponsors-hero-title {
             font-family: 'Roboto Condensed', sans-serif;
@@ -177,11 +177,12 @@
     </style>
 </head>
 <body>
+<div class="sticky top-0 left-0 z-[10] right-0 bg-primary" >
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
-
+</div>
 <!-- Hero -->
-<section class="sponsors-hero">
+<section class="sponsors-hero bg-primary">
     <h1 class="sponsors-hero-title">Våra <span>Sponsorer</span></h1>
     <p class="sponsors-hero-subtitle">Tack till alla som stödjer FBK Balkan och vår verksamhet</p>
 </section>
@@ -259,7 +260,7 @@
     <!-- Samarbetspartners -->
     <div th:if="${sponsorsByCategory.containsKey(T(com.example.fbk_balkan.enums.SponsorCategory).SILVER)}"
          class="category-section">
-        <div class="category-header">
+        <div class="category-header bg-primary">
             <span class="category-badge badge-silver">
                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 Samarbetspartners
