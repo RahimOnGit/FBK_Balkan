@@ -34,6 +34,22 @@ public class TrialRegistrationService {
     //          a coach based on the child's birth year + gender
     // ====
     public TrialRegistrationDTO create(TrialRegistrationDTO trialRegistrationDTO) {
+        LocalDate date = trialRegistrationDTO.getPreferredTrainingDate();
+
+        if (date == null) {
+            throw new IllegalArgumentException("Välj ett datum.");
+        }
+
+        // No past dates
+        if (date.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Datum kan inte vara i det förflutna.");
+        }
+
+        //  Max 60 days ahead
+        if (date.isAfter(LocalDate.now().plusDays(60))) {
+            throw new IllegalArgumentException("Du kan bara boka upp till 60 dagar framåt.");
+        }
+
         // Sanitize all string fields
         String firstName = sanitize(trialRegistrationDTO.getFirstName());
         String lastName = sanitize(trialRegistrationDTO.getLastName());

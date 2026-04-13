@@ -209,8 +209,13 @@
                     <label class="label">
                         <span class="label-text">Önskat provträningsdatum <span aria-hidden="true">*</span></span>
                     </label>
-                    <input class="input input-bordered" type="date" th:field="*{preferredTrainingDate}" required  />
 
+                    <input class="input input-bordered"
+                           type="date"
+                           th:field="*{preferredTrainingDate}"
+                           th:min="${#temporals.format(minTrainingDate, 'yyyy-MM-dd')}"
+                           th:max="${#temporals.format(maxTrainingDate, 'yyyy-MM-dd')}"
+                           required />
                 </div>
 
 
