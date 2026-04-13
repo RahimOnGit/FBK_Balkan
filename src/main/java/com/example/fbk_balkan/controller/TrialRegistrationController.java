@@ -87,6 +87,11 @@ public class TrialRegistrationController {
         // Call service with try/catch to handle duplicates/business errors
         try {
             trialRegistrationService.create(trialRegistrationDTO);
+        } catch (IllegalArgumentException ex) {   // NEW
+            model.addAttribute("availableGenders", Gender.values());
+            model.addAttribute("availableReferralSources", ReferralSource.values());
+            model.addAttribute("validationError", ex.getMessage());
+            return "trial-registration";
         } catch (IllegalStateException ex) {
             model.addAttribute("availableGenders", Gender.values());
             model.addAttribute("availableReferralSources", ReferralSource.values());
@@ -110,5 +115,12 @@ public class TrialRegistrationController {
         }
 
         return "trial-registration-success";
+    }
+    @ModelAttribute
+    public void addTrainingDateLimits(Model model) {
+        LocalDate today = LocalDate.now();
+
+        model.addAttribute("minTrainingDate", today);
+        model.addAttribute("maxTrainingDate", today.plusDays(60));
     }
 }
