@@ -6,7 +6,6 @@
     <style>
         /* ─── Reset & Base ─────────────────────────────────────── */
         .nbr {
-            background: transparent;
             -webkit-backdrop-filter: blur(18px);
             height: 70px;
             display: flex;
@@ -544,10 +543,6 @@
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></svg>
                     Om Klubben
                 </a>
-                <a href="/ungdomsportalen" class="nbr-mob-link">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                    Ungdomsportalen
-                </a>
                 <a href="/trial-registration" class="nbr-mob-link">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                     Intresseanmälan
@@ -556,27 +551,19 @@
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                     Kontakta oss
                 </a>
-                <a href="/sponsors" class="nbr-mob-link">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    Sponsorer
-                </a>
                 <div class="nbr-mob-divider"></div>
                 <div class="nbr-mob-section-label">Våra Lag</div>
                 <a th:each="team : ${navbarTeams}" th:href="@{/public-teams/{id}(id=${team.id})}"
                    th:text="${team.ageGroup}" class="nbr-mob-team-link"></a>
             </div>
 
-            <!-- Dashboard links (admin/coach/social_admin only) -->
+            <!-- Dashboard links (admin/coach only) -->
             <div sec:authorize="hasAnyRole('ADMIN','COACH','SOCIAL_ADMIN')">
                 <a sec:authorize="hasRole('ADMIN')" href="/admin/dashboard" class="nbr-mob-link">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
                     Dashboard
                 </a>
                 <a sec:authorize="hasRole('COACH') and !hasRole('ADMIN')" href="/coach/dashboard" class="nbr-mob-link">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-                    Dashboard
-                </a>
-                <a sec:authorize="hasRole('SOCIAL_ADMIN')" href="/socialadmin/dashboard" class="nbr-mob-link">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
                     Dashboard
                 </a>
@@ -600,10 +587,6 @@
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                     Min Profil
                 </a>
-                <a sec:authorize="hasRole('SOCIAL_ADMIN')" href="/socialadmin/dashboard" class="nbr-mob-link" style="margin-bottom:0.25rem;">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-                    Dashboard
-                </a>
                 <form action="/logout" method="post">
                     <button type="submit" class="nbr-mob-logout">
                         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
@@ -622,7 +605,7 @@
     </div>
 
     <!-- ─── Main Navbar Bar ─────────────────────────────────── -->
-    <div class="nbr">
+    <div class="nbr mt-2">
 
         <!-- Logo -->
         <a href="/" class="nbr-logo">
@@ -635,9 +618,7 @@
             <div sec:authorize="!hasAnyRole('ADMIN','COACH','SOCIAL_ADMIN')" style="display:flex;align-items:center;gap:2.5rem;">
                 <a href="/news" class="nbr-link">Nyheter</a>
                 <a href="/about" class="nbr-link">Om Klubben</a>
-                <a href="/ungdomsportalen" class="nbr-link">Ungdomsportalen</a>
                 <a href="/trial-registration" class="nbr-link">Intresseanmälan</a>
-                <a href="/sponsors" class="nbr-link">Sponsorer</a>
                 <div class="nbr-dropdown-wrap">
                     <button class="nbr-dropdown-btn">
                         Våra Lag
@@ -657,7 +638,6 @@
             <div sec:authorize="hasAnyRole('ADMIN','COACH','SOCIAL_ADMIN')" style="display:flex;align-items:center;gap:2rem;">
                 <a sec:authorize="hasRole('ADMIN')" href="/admin/dashboard" class="nbr-link">Dashboard</a>
                 <a sec:authorize="hasRole('COACH') and !hasRole('ADMIN')" href="/coach/dashboard" class="nbr-link">Dashboard</a>
-                <a sec:authorize="hasRole('SOCIAL_ADMIN')" href="/socialadmin/dashboard" class="nbr-link">Dashboard</a>
             </div>
         </nav>
 
@@ -703,12 +683,6 @@
                                 <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
                             </span>
                                 Coach Dashboard
-                            </a>
-                            <a sec:authorize="hasRole('SOCIAL_ADMIN')" href="/socialadmin/dashboard" class="nbr-pop-link">
-                            <span class="nbr-pop-icon" style="background:rgba(245,179,1,0.1);color:#F5B301;">
-                                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-                            </span>
-                                Social Dashboard
                             </a>
                         </div>
                         <div class="nbr-pop-divider"></div>
