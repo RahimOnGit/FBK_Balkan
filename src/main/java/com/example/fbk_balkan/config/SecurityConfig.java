@@ -17,6 +17,8 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.Statement;
 
 @Configuration
 @EnableWebSecurity
@@ -108,11 +110,42 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
+//    @Bean
+//    public PersistentTokenRepository persistentTokenRepository() {
+//        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+//        tokenRepository.setDataSource(dataSource);
+//        tokenRepository.setCreateTableOnStartup(true);
+//        return tokenRepository;
+//    }
+
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
         JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
         tokenRepository.setDataSource(dataSource);
+
+        // Ensure the table exists manually using SQLite safe syntax
+        // This avoids the 'Table already exists' crash on restarts
+        try (Connection connection = dataSource.getConnection()) {
+            Statement statement = connection.createStatement();
+
+            // SQLite specific "CREATE TABLE IF NOT EXISTS"
+            String sql = "CREATE TABLE IF NOT EXISTS persistent_logins (" +
+                    "username VARCHAR(64) NOT NULL, " +
+                    "series VARCHAR(64) PRIMARY KEY, " +
+                    "token VARCHAR(64) NOT NULL, " +
+                    "last_used TIMESTAMP NOT NULL" +
+                    ")";
+
+            statement.execute(sql);
+        } catch (Exception e) {
+            // Log the error if needed, but don't crash the app
+            System.err.println("Error ensuring persistent_logins table exists: " + e.getMessage());
+        }
+
+        //  We set this to FALSE because we handled the creation manually above.
         tokenRepository.setCreateTableOnStartup(false);
+
         return tokenRepository;
     }
+
 }
