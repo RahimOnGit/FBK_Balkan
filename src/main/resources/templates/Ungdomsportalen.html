@@ -111,40 +111,19 @@
                 <div class="w-24 h-1 bg-secondary mx-auto mt-4 rounded-full"></div>
                 <p class="text-base-content/60 mt-4 max-w-xl mx-auto">Vi erbjuder lag för alla åldrar. Varje grupp tränar med program anpassat efter ålder och mognad.</p>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="card bg-primary text-primary-content shadow-xl card-hover">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <a th:each="team : ${navbarTeams}"
+                   th:href="@{/public-teams/{id}(id=${team.id})}"
+                   class="card bg-primary text-primary-content shadow-xl card-hover no-underline">
                     <div class="card-body items-center text-center py-10">
-                        <div class="text-5xl font-black italic text-secondary mb-2">U6</div>
-                        <h4 class="text-lg font-bold uppercase tracking-wide">Miniorerna</h4>
-                        <p class="opacity-75 text-sm mt-2">5–6 år · Lek &amp; rörelse</p>
+                        <div class="text-4xl font-black italic text-secondary mb-2" th:text="${team.ageGroup}"></div>
+                        <h4 class="text-lg font-bold uppercase tracking-wide" th:text="${team.name}"></h4>
+                        <p class="opacity-75 text-sm mt-2" th:text="${team.trainingLocation != null ? team.trainingLocation : (team.gender == 'FEMALE' ? 'Flickor' : 'Pojkar')}"></p>
                     </div>
-                </div>
-                <div class="card bg-primary text-primary-content shadow-xl card-hover">
-                    <div class="card-body items-center text-center py-10">
-                        <div class="text-5xl font-black italic text-secondary mb-2">U9</div>
-                        <h4 class="text-lg font-bold uppercase tracking-wide">Lillan</h4>
-                        <p class="opacity-75 text-sm mt-2">7–9 år · Bollkontroll &amp; grundteknik</p>
-                    </div>
-                </div>
-                <div class="card bg-primary text-primary-content shadow-xl card-hover">
-                    <div class="card-body items-center text-center py-10">
-                        <div class="text-5xl font-black italic text-secondary mb-2">U13</div>
-                        <h4 class="text-lg font-bold uppercase tracking-wide">Junior</h4>
-                        <p class="opacity-75 text-sm mt-2">10–13 år · Taktik &amp; lagspel</p>
-                    </div>
-                </div>
-                <div class="card bg-primary text-primary-content shadow-xl card-hover">
-                    <div class="card-body items-center text-center py-10">
-                        <div class="text-5xl font-black italic text-secondary mb-2">U17</div>
-                        <h4 class="text-lg font-bold uppercase tracking-wide">Senior junior</h4>
-                        <p class="opacity-75 text-sm mt-2">14–17 år · Avancerad träning</p>
-                    </div>
-                </div>
-            </div>
-            <div class="text-center mt-8">
-                <a href="/våra-lag" class="btn btn-primary btn-outline rounded-full px-8 uppercase italic font-bold">
-                    Se alla lag
                 </a>
+            </div>
+            <div class="text-center mt-8" th:if="${navbarTeams == null or navbarTeams.isEmpty()}">
+                <p class="text-base-content/50 italic">Inga lag tillgängliga just nu.</p>
             </div>
         </div>
     </section>

@@ -50,4 +50,6 @@ boolean existsByNameAndAgeGroup(String name, String ageGroup);
 
     boolean existsByName(String name);
 
+    Optional<Team> findByName(String name);
+
 }
