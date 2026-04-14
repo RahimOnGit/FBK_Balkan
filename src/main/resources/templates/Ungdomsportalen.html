@@ -1,3 +1,314 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="sv" xmlns:th="http://www.thymeleaf.org">-->
+
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Ungdomsportalen | FBK Balkan</title>-->
+<!--    <link th:href="@{/css/output.css}" rel="stylesheet">-->
+<!--    <link-->
+<!--            href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"-->
+<!--            rel="stylesheet">-->
+<!--    <style>-->
+<!--        .font-virage {-->
+<!--            font-family: 'Roboto Condensed', sans-serif;-->
+<!--        }-->
+<!--        .card-hover {-->
+<!--            transition: transform 0.25s, box-shadow 0.25s;-->
+<!--        }-->
+<!--        .card-hover:hover {-->
+<!--            transform: translateY(-4px);-->
+<!--            box-shadow: 0 20px 50px rgba(0,0,0,0.12);-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+
+<!--<body class="bg-base-100 font-virage text-base-content antialiased">-->
+
+<!--<header class="sticky top-0 z-[100] bg-primary shadow-lg">-->
+<!--    <div th:replace="~{fragments/navbar::navbar}"></div>-->
+<!--</header>-->
+
+<!--<main>-->
+
+<!--    &lt;!&ndash; HERO &ndash;&gt;-->
+<!--    <section class="relative min-h-[55vh] flex items-center justify-center overflow-hidden bg-primary py-24">-->
+<!--        <div class="absolute inset-0 opacity-15">-->
+<!--            <div class="absolute top-0 left-0 w-[500px] h-[500px] bg-secondary rounded-full blur-[140px] -translate-x-1/2 -translate-y-1/2"></div>-->
+<!--            <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-accent rounded-full blur-[140px] translate-x-1/2 translate-y-1/2"></div>-->
+<!--        </div>-->
+<!--        <div class="container mx-auto px-4 relative z-10 text-center">-->
+<!--            <div class="inline-block px-4 py-1 mb-6 border border-secondary/30 rounded-full bg-secondary/10 text-secondary text-sm font-bold tracking-widest uppercase">-->
+<!--                För barn &amp; ungdomar-->
+<!--            </div>-->
+<!--            <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tighter italic uppercase">-->
+<!--                Ungdoms<span class="text-secondary">portalen</span>-->
+<!--            </h1>-->
+<!--            <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">-->
+<!--                Allt du behöver veta om ungdomsverksamheten på FBK Balkan – träning, lag, aktiviteter och mycket mer.-->
+<!--            </p>-->
+<!--            <div class="flex flex-wrap justify-center gap-4 mt-10">-->
+<!--                <a href="/trial-registration"-->
+<!--                   class="btn btn-secondary btn-lg rounded-full px-10 text-primary font-bold uppercase italic hover:scale-105 transition-transform">-->
+<!--                    Anmäl ditt barn-->
+<!--                </a>-->
+<!--                <a href="/kontakt"-->
+<!--                   class="btn btn-outline btn-lg rounded-full px-10 border-white text-white hover:bg-white hover:text-primary font-bold uppercase italic transition-all">-->
+<!--                    Kontakta oss-->
+<!--                </a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </section>-->
+
+<!--    &lt;!&ndash; HIGHLIGHTS &ndash;&gt;-->
+<!--    <section class="py-12 -mt-10 relative z-20">-->
+<!--        <div class="container mx-auto px-4">-->
+<!--            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">-->
+<!--                <div class="card bg-base-100 shadow-xl border border-base-200 card-hover">-->
+<!--                    <div class="card-body items-center text-center">-->
+<!--                        <div class="w-14 h-14 bg-secondary/10 rounded-2xl flex items-center justify-center text-secondary mb-3">-->
+<!--                            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">-->
+<!--                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>-->
+<!--                            </svg>-->
+<!--                        </div>-->
+<!--                        <h3 class="card-title text-primary uppercase italic text-xl tracking-wide">Alla är välkomna</h3>-->
+<!--                        <p class="opacity-70 text-sm leading-relaxed">Vi tar emot barn och ungdomar i alla åldrar och nivåer. Oavsett bakgrund – här finns en plats för dig.</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="card bg-base-100 shadow-xl border border-base-200 card-hover">-->
+<!--                    <div class="card-body items-center text-center">-->
+<!--                        <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-3">-->
+<!--                            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">-->
+<!--                                <circle cx="12" cy="12" r="10"/>-->
+<!--                                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>-->
+<!--                                <path d="M2 12h20"/>-->
+<!--                            </svg>-->
+<!--                        </div>-->
+<!--                        <h3 class="card-title text-primary uppercase italic text-xl tracking-wide">Kvalitetsträning</h3>-->
+<!--                        <p class="opacity-70 text-sm leading-relaxed">Erfarna tränare leder anpassad träning med fokus på teknik, lagspel och personlig utveckling.</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="card bg-base-100 shadow-xl border border-base-200 card-hover">-->
+<!--                    <div class="card-body items-center text-center">-->
+<!--                        <div class="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center text-accent mb-3">-->
+<!--                            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">-->
+<!--                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>-->
+<!--                            </svg>-->
+<!--                        </div>-->
+<!--                        <h3 class="card-title text-primary uppercase italic text-xl tracking-wide">Gemenskap</h3>-->
+<!--                        <p class="opacity-70 text-sm leading-relaxed">Mer än fotboll – vi bygger självkänsla, vänskap och en känsla av tillhörighet för varje ung spelare.</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </section>-->
+
+<!--    &lt;!&ndash; AGE GROUPS &ndash;&gt;-->
+<!--    <section class="py-20">-->
+<!--        <div class="container mx-auto px-4">-->
+<!--            <div class="text-center mb-14">-->
+<!--                <h2 class="text-4xl md:text-5xl font-bold uppercase italic text-primary tracking-tighter">Våra Åldersgrupper</h2>-->
+<!--                <div class="w-24 h-1 bg-secondary mx-auto mt-4 rounded-full"></div>-->
+<!--                <p class="text-base-content/60 mt-4 max-w-xl mx-auto">Vi erbjuder lag för alla åldrar. Varje grupp tränar med program anpassat efter ålder och mognad.</p>-->
+<!--            </div>-->
+<!--            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">-->
+<!--                <a th:each="team : ${navbarTeams}"-->
+<!--                   th:href="@{/public-teams/{id}(id=${team.id})}"-->
+<!--                   class="card bg-primary text-primary-content shadow-xl card-hover no-underline">-->
+<!--                    <div class="card-body items-center text-center py-10">-->
+<!--                        <div class="text-4xl font-black italic text-secondary mb-2" th:text="${team.ageGroup}"></div>-->
+<!--                        <h4 class="text-lg font-bold uppercase tracking-wide" th:text="${team.name}"></h4>-->
+<!--                        <p class="opacity-75 text-sm mt-2" th:text="${team.trainingLocation != null ? team.trainingLocation : (team.gender == 'FEMALE' ? 'Flickor' : 'Pojkar')}"></p>-->
+<!--                    </div>-->
+<!--                </a>-->
+<!--            </div>-->
+<!--            <div class="text-center mt-8" th:if="${navbarTeams == null or navbarTeams.isEmpty()}">-->
+<!--                <p class="text-base-content/50 italic">Inga lag tillgängliga just nu.</p>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </section>-->
+
+<!--    &lt;!&ndash; VALUES &ndash;&gt;-->
+<!--    <section class="py-20 bg-base-200">-->
+<!--        <div class="container mx-auto px-4">-->
+<!--            <div class="flex flex-col lg:flex-row gap-16 items-center">-->
+<!--                <div class="lg:w-1/2 space-y-6">-->
+<!--                    <h2 class="text-4xl md:text-5xl font-bold tracking-tighter italic uppercase text-primary">-->
+<!--                        Vad vi <span class="text-secondary">erbjuder</span>-->
+<!--                    </h2>-->
+<!--                    <p class="text-lg text-base-content/70 leading-relaxed">-->
+<!--                        FBK Balkans ungdomsverksamhet är en av Malmös störst och mest uppskattade. Vi fokuserar på att ge varje barn de bästa förutsättningarna – både som fotbollsspelare och som människa.-->
+<!--                    </p>-->
+<!--                    <ul class="space-y-4">-->
+<!--                        <li class="flex items-start gap-4">-->
+<!--                            <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-primary shrink-0 mt-0.5">-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">-->
+<!--                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>-->
+<!--                                </svg>-->
+<!--                            </div>-->
+<!--                            <span class="text-lg">Träning flera gånger i veckan med licensierade tränare</span>-->
+<!--                        </li>-->
+<!--                        <li class="flex items-start gap-4">-->
+<!--                            <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-primary shrink-0 mt-0.5">-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">-->
+<!--                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>-->
+<!--                                </svg>-->
+<!--                            </div>-->
+<!--                            <span class="text-lg">Cuper och seriespel på lokal och regional nivå</span>-->
+<!--                        </li>-->
+<!--                        <li class="flex items-start gap-4">-->
+<!--                            <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-primary shrink-0 mt-0.5">-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">-->
+<!--                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>-->
+<!--                                </svg>-->
+<!--                            </div>-->
+<!--                            <span class="text-lg">Välkomnande och inkluderande miljö för alla barn</span>-->
+<!--                        </li>-->
+<!--                        <li class="flex items-start gap-4">-->
+<!--                            <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-primary shrink-0 mt-0.5">-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">-->
+<!--                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>-->
+<!--                                </svg>-->
+<!--                            </div>-->
+<!--                            <span class="text-lg">Sociala aktiviteter och events utanför fotbollsplanen</span>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+<!--                <div class="lg:w-1/2 w-full">-->
+<!--                    <div class="card bg-primary text-primary-content shadow-2xl p-8 md:p-12 rounded-[2rem]">-->
+<!--                        <h3 class="text-2xl font-bold mb-6 uppercase italic border-b border-white/20 pb-4">Praktisk information</h3>-->
+<!--                        <div class="space-y-5">-->
+<!--                            <div class="flex items-start gap-4">-->
+<!--                                <div class="w-10 h-10 bg-secondary/20 rounded-xl flex items-center justify-center text-secondary shrink-0">-->
+<!--                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">-->
+<!--                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>-->
+<!--                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>-->
+<!--                                    </svg>-->
+<!--                                </div>-->
+<!--                                <div>-->
+<!--                                    <p class="font-bold uppercase text-sm tracking-wide text-secondary">Plats</p>-->
+<!--                                    <p class="opacity-80">Kirsebergs IP, Malmö</p>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="flex items-start gap-4">-->
+<!--                                <div class="w-10 h-10 bg-secondary/20 rounded-xl flex items-center justify-center text-secondary shrink-0">-->
+<!--                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">-->
+<!--                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>-->
+<!--                                    </svg>-->
+<!--                                </div>-->
+<!--                                <div>-->
+<!--                                    <p class="font-bold uppercase text-sm tracking-wide text-secondary">Säsong</p>-->
+<!--                                    <p class="opacity-80">Inomhus (vinter) &amp; utomhus (vår–höst)</p>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="flex items-start gap-4">-->
+<!--                                <div class="w-10 h-10 bg-secondary/20 rounded-xl flex items-center justify-center text-secondary shrink-0">-->
+<!--                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">-->
+<!--                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>-->
+<!--                                    </svg>-->
+<!--                                </div>-->
+<!--                                <div>-->
+<!--                                    <p class="font-bold uppercase text-sm tracking-wide text-secondary">Kontakt</p>-->
+<!--                                    <p class="opacity-80">Kontakta oss via formuläret nedan</p>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="mt-8">-->
+<!--                            <a href="/trial-registration"-->
+<!--                               class="btn btn-secondary w-full rounded-full text-primary font-bold uppercase italic hover:scale-105 transition-transform">-->
+<!--                                Anmäl ditt barn nu-->
+<!--                            </a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </section>-->
+
+<!--    &lt;!&ndash; KLÄDER &ndash;&gt;-->
+<!--    <section class="py-20">-->
+<!--        <div class="container mx-auto px-4">-->
+<!--            <div class="text-center mb-12">-->
+<!--                <h2 class="text-4xl md:text-5xl font-bold uppercase italic text-primary tracking-tighter">Kläder</h2>-->
+<!--                <div class="w-24 h-1 bg-secondary mx-auto mt-4 rounded-full"></div>-->
+<!--                <p class="text-base-content/60 mt-4 max-w-xl mx-auto">Hitta klubbkläder och utrustning för ditt barn – både i vår butik och hos vår partner Stadium.</p>-->
+<!--            </div>-->
+<!--            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">-->
+<!--                &lt;!&ndash; Stadium external &ndash;&gt;-->
+<!--                <a href="https://www.stadium.se/foreningar/1776734" target="_blank" rel="noopener"-->
+<!--                   class="card bg-base-100 border-2 border-base-200 hover:border-secondary shadow-xl card-hover group text-center p-8 no-underline">-->
+<!--                    <div class="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center text-secondary mx-auto mb-4 group-hover:bg-secondary group-hover:text-primary transition-all">-->
+<!--                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">-->
+<!--                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>-->
+<!--                        </svg>-->
+<!--                    </div>-->
+<!--                    <h3 class="text-xl font-bold uppercase italic text-primary mb-2">Stadium – Barnavdelning</h3>-->
+<!--                    <p class="text-base-content/60 text-sm mb-4">Handla sportkläder och utrustning för barn hos vår partner Stadium.</p>-->
+<!--                    <span class="inline-flex items-center gap-2 text-secondary font-bold text-sm uppercase tracking-wide">-->
+<!--            Besök Stadium-->
+<!--            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">-->
+<!--              <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>-->
+<!--            </svg>-->
+<!--          </span>-->
+<!--                </a>-->
+<!--                &lt;!&ndash; Verksamhet internal &ndash;&gt;-->
+<!--                <a href="/verksamhet"-->
+<!--                   class="card bg-primary text-primary-content border-2 border-primary shadow-xl card-hover group text-center p-8 no-underline">-->
+<!--                    <div class="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center text-secondary mx-auto mb-4 group-hover:bg-secondary group-hover:text-primary transition-all">-->
+<!--                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">-->
+<!--                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>-->
+<!--                        </svg>-->
+<!--                    </div>-->
+<!--                    <h3 class="text-xl font-bold uppercase italic mb-2">Vår Verksamhet</h3>-->
+<!--                    <p class="opacity-75 text-sm mb-4">Läs mer om klubbens egna kläder, utrustning och verksamhet.</p>-->
+<!--                    <span class="inline-flex items-center gap-2 text-secondary font-bold text-sm uppercase tracking-wide">-->
+<!--            Gå till Verksamhet-->
+<!--            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">-->
+<!--              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>-->
+<!--            </svg>-->
+<!--          </span>-->
+<!--                </a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </section>-->
+
+<!--    &lt;!&ndash; QUOTE / CALLOUT &ndash;&gt;-->
+<!--    <section class="py-20 bg-primary text-primary-content relative overflow-hidden">-->
+<!--        <div class="absolute inset-0 opacity-10">-->
+<!--            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">-->
+<!--                <path d="M0 100 C 20 0 50 0 100 100" stroke="white" stroke-width="0.5" fill="none"/>-->
+<!--            </svg>-->
+<!--        </div>-->
+<!--        <div class="container mx-auto px-4 relative z-10 text-center max-w-4xl">-->
+<!--            <svg xmlns="http://www.w3.org/2000/svg" class="w-14 h-14 mx-auto mb-6 text-secondary opacity-80" fill="currentColor" viewBox="0 0 24 24">-->
+<!--                <path d="M14.017 21L14.017 18C14.017 16.8954 14.9125 16 16.0171 16H19.0171C19.5694 16 20.0171 15.5523 20.0171 15V9C20.0171 8.44772 19.5694 8 19.0171 8H16.0171C15.4648 8 15.0171 8.44772 15.0171 9V12C15.0171 12.5523 14.5694 13 14.0171 13H12.0171V5H22.0171V15C22.0171 18.3137 19.3308 21 16.0171 21H14.0171ZM2.01709 21L2.01709 18C2.01709 16.8954 2.91252 16 4.01709 16H7.01709C7.56937 16 8.01709 15.5523 8.01709 15V9C8.01709 8.44772 7.56937 8 7.01709 8H4.01709C3.46481 8 3.01709 8.44772 3.01709 9V12C3.01709 12.5523 2.56937 13 2.01709 13H0.0170898V5H10.0171V15C10.0171 18.3137 7.33076 21 4.01709 21H2.01709Z"/>-->
+<!--            </svg>-->
+<!--            <p class="text-2xl md:text-3xl italic font-light leading-relaxed mb-8 opacity-90">-->
+<!--                För många barn är FBK Balkan Junior det första steget in i föreningslivet – fokus ligger inte bara på resultat, utan på <span class="text-secondary font-bold">gemenskap, självkänsla och glädje.</span>-->
+<!--            </p>-->
+<!--            <div class="flex flex-wrap justify-center gap-4">-->
+<!--                <a href="/trial-registration"-->
+<!--                   class="btn btn-secondary btn-lg rounded-full px-10 text-primary font-bold uppercase italic hover:scale-105 transition-transform">-->
+<!--                    Kom igång idag-->
+<!--                </a>-->
+<!--                <a href="/kontakt"-->
+<!--                   class="btn btn-outline btn-lg rounded-full px-10 border-white text-white hover:bg-white hover:text-primary font-bold uppercase italic transition-all">-->
+<!--                    Frågor? Kontakta oss-->
+<!--                </a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </section>-->
+
+<!--</main>-->
+
+<!--<footer th:replace="~{fragments/footer::footer}"></footer>-->
+
+<!--</body>-->
+
+<!--</html>-->
+
+<!--///-->
+
 <!DOCTYPE html>
 <html lang="sv" xmlns:th="http://www.thymeleaf.org">
 
@@ -48,261 +359,3 @@
                 Allt du behöver veta om ungdomsverksamheten på FBK Balkan – träning, lag, aktiviteter och mycket mer.
             </p>
             <div class="flex flex-wrap justify-center gap-4 mt-10">
-                <a href="/trial-registration"
-                   class="btn btn-secondary btn-lg rounded-full px-10 text-primary font-bold uppercase italic hover:scale-105 transition-transform">
-                    Anmäl ditt barn
-                </a>
-                <a href="/kontakt"
-                   class="btn btn-outline btn-lg rounded-full px-10 border-white text-white hover:bg-white hover:text-primary font-bold uppercase italic transition-all">
-                    Kontakta oss
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- HIGHLIGHTS -->
-    <section class="py-12 -mt-10 relative z-20">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="card bg-base-100 shadow-xl border border-base-200 card-hover">
-                    <div class="card-body items-center text-center">
-                        <div class="w-14 h-14 bg-secondary/10 rounded-2xl flex items-center justify-center text-secondary mb-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-                            </svg>
-                        </div>
-                        <h3 class="card-title text-primary uppercase italic text-xl tracking-wide">Alla är välkomna</h3>
-                        <p class="opacity-70 text-sm leading-relaxed">Vi tar emot barn och ungdomar i alla åldrar och nivåer. Oavsett bakgrund – här finns en plats för dig.</p>
-                    </div>
-                </div>
-                <div class="card bg-base-100 shadow-xl border border-base-200 card-hover">
-                    <div class="card-body items-center text-center">
-                        <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
-                                <path d="M2 12h20"/>
-                            </svg>
-                        </div>
-                        <h3 class="card-title text-primary uppercase italic text-xl tracking-wide">Kvalitetsträning</h3>
-                        <p class="opacity-70 text-sm leading-relaxed">Erfarna tränare leder anpassad träning med fokus på teknik, lagspel och personlig utveckling.</p>
-                    </div>
-                </div>
-                <div class="card bg-base-100 shadow-xl border border-base-200 card-hover">
-                    <div class="card-body items-center text-center">
-                        <div class="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center text-accent mb-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                            </svg>
-                        </div>
-                        <h3 class="card-title text-primary uppercase italic text-xl tracking-wide">Gemenskap</h3>
-                        <p class="opacity-70 text-sm leading-relaxed">Mer än fotboll – vi bygger självkänsla, vänskap och en känsla av tillhörighet för varje ung spelare.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- AGE GROUPS -->
-    <section class="py-20">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-14">
-                <h2 class="text-4xl md:text-5xl font-bold uppercase italic text-primary tracking-tighter">Våra Åldersgrupper</h2>
-                <div class="w-24 h-1 bg-secondary mx-auto mt-4 rounded-full"></div>
-                <p class="text-base-content/60 mt-4 max-w-xl mx-auto">Vi erbjuder lag för alla åldrar. Varje grupp tränar med program anpassat efter ålder och mognad.</p>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <a th:each="team : ${navbarTeams}"
-                   th:href="@{/public-teams/{id}(id=${team.id})}"
-                   class="card bg-primary text-primary-content shadow-xl card-hover no-underline">
-                    <div class="card-body items-center text-center py-10">
-                        <div class="text-4xl font-black italic text-secondary mb-2" th:text="${team.ageGroup}"></div>
-                        <h4 class="text-lg font-bold uppercase tracking-wide" th:text="${team.name}"></h4>
-                        <p class="opacity-75 text-sm mt-2" th:text="${team.trainingLocation != null ? team.trainingLocation : (team.gender == 'FEMALE' ? 'Flickor' : 'Pojkar')}"></p>
-                    </div>
-                </a>
-            </div>
-            <div class="text-center mt-8" th:if="${navbarTeams == null or navbarTeams.isEmpty()}">
-                <p class="text-base-content/50 italic">Inga lag tillgängliga just nu.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- VALUES -->
-    <section class="py-20 bg-base-200">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col lg:flex-row gap-16 items-center">
-                <div class="lg:w-1/2 space-y-6">
-                    <h2 class="text-4xl md:text-5xl font-bold tracking-tighter italic uppercase text-primary">
-                        Vad vi <span class="text-secondary">erbjuder</span>
-                    </h2>
-                    <p class="text-lg text-base-content/70 leading-relaxed">
-                        FBK Balkans ungdomsverksamhet är en av Malmös störst och mest uppskattade. Vi fokuserar på att ge varje barn de bästa förutsättningarna – både som fotbollsspelare och som människa.
-                    </p>
-                    <ul class="space-y-4">
-                        <li class="flex items-start gap-4">
-                            <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-primary shrink-0 mt-0.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <span class="text-lg">Träning flera gånger i veckan med licensierade tränare</span>
-                        </li>
-                        <li class="flex items-start gap-4">
-                            <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-primary shrink-0 mt-0.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <span class="text-lg">Cuper och seriespel på lokal och regional nivå</span>
-                        </li>
-                        <li class="flex items-start gap-4">
-                            <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-primary shrink-0 mt-0.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <span class="text-lg">Välkomnande och inkluderande miljö för alla barn</span>
-                        </li>
-                        <li class="flex items-start gap-4">
-                            <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-primary shrink-0 mt-0.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <span class="text-lg">Sociala aktiviteter och events utanför fotbollsplanen</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="lg:w-1/2 w-full">
-                    <div class="card bg-primary text-primary-content shadow-2xl p-8 md:p-12 rounded-[2rem]">
-                        <h3 class="text-2xl font-bold mb-6 uppercase italic border-b border-white/20 pb-4">Praktisk information</h3>
-                        <div class="space-y-5">
-                            <div class="flex items-start gap-4">
-                                <div class="w-10 h-10 bg-secondary/20 rounded-xl flex items-center justify-center text-secondary shrink-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="font-bold uppercase text-sm tracking-wide text-secondary">Plats</p>
-                                    <p class="opacity-80">Kirsebergs IP, Malmö</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-4">
-                                <div class="w-10 h-10 bg-secondary/20 rounded-xl flex items-center justify-center text-secondary shrink-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="font-bold uppercase text-sm tracking-wide text-secondary">Säsong</p>
-                                    <p class="opacity-80">Inomhus (vinter) &amp; utomhus (vår–höst)</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-4">
-                                <div class="w-10 h-10 bg-secondary/20 rounded-xl flex items-center justify-center text-secondary shrink-0">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="font-bold uppercase text-sm tracking-wide text-secondary">Kontakt</p>
-                                    <p class="opacity-80">Kontakta oss via formuläret nedan</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-8">
-                            <a href="/trial-registration"
-                               class="btn btn-secondary w-full rounded-full text-primary font-bold uppercase italic hover:scale-105 transition-transform">
-                                Anmäl ditt barn nu
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- KLÄDER -->
-    <section class="py-20">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl md:text-5xl font-bold uppercase italic text-primary tracking-tighter">Kläder</h2>
-                <div class="w-24 h-1 bg-secondary mx-auto mt-4 rounded-full"></div>
-                <p class="text-base-content/60 mt-4 max-w-xl mx-auto">Hitta klubbkläder och utrustning för ditt barn – både i vår butik och hos vår partner Stadium.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-                <!-- Stadium external -->
-                <a href="https://www.stadium.se/foreningar/1776734" target="_blank" rel="noopener"
-                   class="card bg-base-100 border-2 border-base-200 hover:border-secondary shadow-xl card-hover group text-center p-8 no-underline">
-                    <div class="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center text-secondary mx-auto mb-4 group-hover:bg-secondary group-hover:text-primary transition-all">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold uppercase italic text-primary mb-2">Stadium – Barnavdelning</h3>
-                    <p class="text-base-content/60 text-sm mb-4">Handla sportkläder och utrustning för barn hos vår partner Stadium.</p>
-                    <span class="inline-flex items-center gap-2 text-secondary font-bold text-sm uppercase tracking-wide">
-            Besök Stadium
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-            </svg>
-          </span>
-                </a>
-                <!-- Verksamhet internal -->
-                <a href="/verksamhet"
-                   class="card bg-primary text-primary-content border-2 border-primary shadow-xl card-hover group text-center p-8 no-underline">
-                    <div class="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center text-secondary mx-auto mb-4 group-hover:bg-secondary group-hover:text-primary transition-all">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold uppercase italic mb-2">Vår Verksamhet</h3>
-                    <p class="opacity-75 text-sm mb-4">Läs mer om klubbens egna kläder, utrustning och verksamhet.</p>
-                    <span class="inline-flex items-center gap-2 text-secondary font-bold text-sm uppercase tracking-wide">
-            Gå till Verksamhet
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-            </svg>
-          </span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- QUOTE / CALLOUT -->
-    <section class="py-20 bg-primary text-primary-content relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10">
-            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <path d="M0 100 C 20 0 50 0 100 100" stroke="white" stroke-width="0.5" fill="none"/>
-            </svg>
-        </div>
-        <div class="container mx-auto px-4 relative z-10 text-center max-w-4xl">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-14 h-14 mx-auto mb-6 text-secondary opacity-80" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21L14.017 18C14.017 16.8954 14.9125 16 16.0171 16H19.0171C19.5694 16 20.0171 15.5523 20.0171 15V9C20.0171 8.44772 19.5694 8 19.0171 8H16.0171C15.4648 8 15.0171 8.44772 15.0171 9V12C15.0171 12.5523 14.5694 13 14.0171 13H12.0171V5H22.0171V15C22.0171 18.3137 19.3308 21 16.0171 21H14.0171ZM2.01709 21L2.01709 18C2.01709 16.8954 2.91252 16 4.01709 16H7.01709C7.56937 16 8.01709 15.5523 8.01709 15V9C8.01709 8.44772 7.56937 8 7.01709 8H4.01709C3.46481 8 3.01709 8.44772 3.01709 9V12C3.01709 12.5523 2.56937 13 2.01709 13H0.0170898V5H10.0171V15C10.0171 18.3137 7.33076 21 4.01709 21H2.01709Z"/>
-            </svg>
-            <p class="text-2xl md:text-3xl italic font-light leading-relaxed mb-8 opacity-90">
-                För många barn är FBK Balkan Junior det första steget in i föreningslivet – fokus ligger inte bara på resultat, utan på <span class="text-secondary font-bold">gemenskap, självkänsla och glädje.</span>
-            </p>
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="/trial-registration"
-                   class="btn btn-secondary btn-lg rounded-full px-10 text-primary font-bold uppercase italic hover:scale-105 transition-transform">
-                    Kom igång idag
-                </a>
-                <a href="/kontakt"
-                   class="btn btn-outline btn-lg rounded-full px-10 border-white text-white hover:bg-white hover:text-primary font-bold uppercase italic transition-all">
-                    Frågor? Kontakta oss
-                </a>
-            </div>
-        </div>
-    </section>
-
-</main>
-
-<footer th:replace="~{fragments/footer::footer}"></footer>
-
-</body>
-
-</html>

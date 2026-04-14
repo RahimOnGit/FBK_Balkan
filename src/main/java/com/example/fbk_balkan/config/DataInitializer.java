@@ -26,8 +26,8 @@ public class DataInitializer implements CommandLineRunner {
     private final TeamRepository teamRepository;
     private final SvffApiService svffApiService;
     private final SvffTeamConverter svffTeamConverter;
-private final MatchMapper matchMapper;
-private final MatchRepository matchRepository;
+    private final MatchMapper matchMapper;
+    private final MatchRepository matchRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -103,29 +103,53 @@ private final MatchRepository matchRepository;
         {
             List<GameDTO> games = svffApiService.fetchGames();
             int created = 0;
+            int updated = 0;
 
             for (GameDTO dto : games)
             {
-       if(matchRepository.existsByGameNumber(dto.gameNumber()))
-       {
-           System.out.println("Skipping existing game: " + dto.homeTeamName());
-           continue;
-       }
-                System.out.println("Game:\t " +  dto.homeTeamName() + "  vs " + dto.awayTeamName());
-            Match match = matchMapper.toEntity(dto);
-            matchRepository.save(match);
-            created++;
+                String resolvedHome = resolveTeamName(dto.homeTeamId(), dto.homeTeamName());
+                String resolvedAway = resolveTeamName(dto.awayTeamId(), dto.awayTeamName());
 
+                if(matchRepository.existsByGameNumber(dto.gameNumber()))
+                {
+                    matchRepository.findByGameNumber(dto.gameNumber()).ifPresent(existing -> {
+                        boolean changed = false;
+                        if (existing.getHomeTeamSvffId() == null && dto.homeTeamId() != null) {
+                            existing.setHomeTeamSvffId(dto.homeTeamId());
+                            existing.setHomeTeamName(resolvedHome);
+                            changed = true;
+                        }
+                        if (existing.getAwayTeamSvffId() == null && dto.awayTeamId() != null) {
+                            existing.setAwayTeamSvffId(dto.awayTeamId());
+                            existing.setAwayTeamName(resolvedAway);
+                            changed = true;
+                        }
+                        if (changed) matchRepository.save(existing);
+                    });
+                    updated++;
+                    continue;
+                }
+
+                System.out.println("Game:\t " + resolvedHome + "  vs " + resolvedAway);
+                Match match = matchMapper.toEntity(dto);
+                match.setHomeTeamName(resolvedHome);
+                match.setAwayTeamName(resolvedAway);
+                matchRepository.save(match);
+                created++;
             }
-            System.out.println("saved "+ created +" new matches");
-
-
-
+            System.out.println("saved " + created + " new matches, updated " + updated + " existing matches");
         }
         catch (Exception e) {
             // Don't crash the app if API is down
             System.out.println(" API sync failed: " + e.getMessage());
         }
+    }
+
+    private String resolveTeamName(Long svffTeamId, String fallbackName) {
+        if (svffTeamId == null) return fallbackName;
+        return teamRepository.findBySvffTeamId(svffTeamId)
+                .map(Team::getName)
+                .orElse(fallbackName);
     }
 
     private void initTeamsFromSvff() {
@@ -140,10 +164,6 @@ private final MatchRepository matchRepository;
                     System.out.println("Skipping team with no numbers in name: " + svff.getName());
                     continue;
                 }
-
-//                // Skip if team already in DB by name
-//                if (teamRepository.existsByName(svff.getName())) {
-//                    System.out.println(" Skipping existing: " + svff.getName());
 
                 // If team already in DB by name, backfill svffTeamId if missing
                 if (teamRepository.existsByName(svff.getName())) {
