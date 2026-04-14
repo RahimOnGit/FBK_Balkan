@@ -52,4 +52,5 @@ boolean existsByNameAndAgeGroup(String name, String ageGroup);
 
     Optional<Team> findByName(String name);
 
+    Optional<Team> findBySvffTeamId(Long svffTeamId);
 }

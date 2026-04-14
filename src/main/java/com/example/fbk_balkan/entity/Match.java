@@ -14,19 +14,21 @@ import java.time.LocalDateTime;
 public class Match {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private   Long gameId;
+    private   Long gameId;
 
-  private  Long gameNumber;
-   private String homeTeamName;
-   private String awayTeamName;
-   private String homeTeamImageUrl;
-   private String awayTeamImageUrl;
+    private  Long gameNumber;
+    private Long homeTeamSvffId;
+    private Long awayTeamSvffId;
+    private String homeTeamName;
+    private String awayTeamName;
+    private String homeTeamImageUrl;
+    private String awayTeamImageUrl;
 
-   private Integer goalsScoredHomeTeam;
-   private Integer goalsScoredAwayTeam;
+    private Integer goalsScoredHomeTeam;
+    private Integer goalsScoredAwayTeam;
 
-   private String competitionName;
-   private String seasonName;
+    private String competitionName;
+    private String seasonName;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     LocalDateTime timeAsDateTime;
 

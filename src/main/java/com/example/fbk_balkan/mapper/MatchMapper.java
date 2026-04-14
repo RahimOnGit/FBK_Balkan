@@ -11,6 +11,8 @@ public class MatchMapper {
     public Match toEntity(GameDTO dto) {
         Match match = new Match();
         match.setGameNumber(dto.gameNumber());
+        match.setHomeTeamSvffId(dto.homeTeamId());
+        match.setAwayTeamSvffId(dto.awayTeamId());
         match.setHomeTeamName(dto.homeTeamName());
         match.setAwayTeamName(dto.awayTeamName());
         match.setHomeTeamImageUrl(dto.homeTeamImageUrl());
@@ -25,6 +27,8 @@ public class MatchMapper {
     public GameDTO toDto(Match entity) {
         return new GameDTO(
                 entity.getGameNumber(),
+                entity.getHomeTeamSvffId(),
+                entity.getAwayTeamSvffId(),
                 entity.getHomeTeamName(),
                 entity.getAwayTeamName(),
                 entity.getHomeTeamImageUrl(),
