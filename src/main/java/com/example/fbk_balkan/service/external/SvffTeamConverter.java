@@ -13,6 +13,7 @@ public class SvffTeamConverter {
 
     public Team toTeamEntity(SvffTeamDto svff) {
         Team team = new Team();
+        team.setSvffTeamId(svff.getTeamId());
         team.setName(svff.getName());
         team.setGender(mapGender(svff.getGender()));
         team.setAgeGroup(buildAgeGroup(svff));

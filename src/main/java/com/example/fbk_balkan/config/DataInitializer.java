@@ -141,9 +141,21 @@ private final MatchRepository matchRepository;
                     continue;
                 }
 
-                // Skip if team already in DB by name
+//                // Skip if team already in DB by name
+//                if (teamRepository.existsByName(svff.getName())) {
+//                    System.out.println(" Skipping existing: " + svff.getName());
+
+                // If team already in DB by name, backfill svffTeamId if missing
                 if (teamRepository.existsByName(svff.getName())) {
-                    System.out.println(" Skipping existing: " + svff.getName());
+                    teamRepository.findByName(svff.getName()).ifPresent(existing -> {
+                        if (existing.getSvffTeamId() == null && svff.getTeamId() != null) {
+                            existing.setSvffTeamId(svff.getTeamId());
+                            teamRepository.save(existing);
+                            System.out.println(" Updated svffTeamId for: " + existing.getName());
+                        } else {
+                            System.out.println(" Skipping existing: " + svff.getName());
+                        }
+                    });
                     continue;
                 }
 
