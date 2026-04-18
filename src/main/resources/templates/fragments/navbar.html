@@ -17,7 +17,7 @@
 
         /* ─── Logo ─────────────────────────────────────────────── */
         .nbr-logo img {
-            height: 48px;
+            height: 70px;
             width: auto;
             transition: transform 0.3s, filter 0.3s;
         }
@@ -624,11 +624,11 @@
                         Våra Lag
                         <svg class="nbr-chevron" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                     </button>
-                    <div class="nbr-dropdown-menu">
+                    <div class="nbr-dropdown-menu ">
                         <a th:each="team : ${navbarTeams}" th:href="@{/public-teams/{id}(id=${team.id})}"
                            th:text="${team.ageGroup}" class="nbr-dropdown-item"></a>
                         <div th:if="${navbarTeams == null or #lists.isEmpty(navbarTeams)}"
-                             class="nbr-dropdown-item" style="color:rgba(255,255,255,0.35);pointer-events:none;">
+                             class="nbr-dropdown-item" style="pointer-events:none;">
                             Inga lag tillgängliga
                         </div>
                     </div>
