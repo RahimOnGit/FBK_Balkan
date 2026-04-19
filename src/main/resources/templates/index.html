@@ -70,40 +70,73 @@
 
 
 <!--hero-->
-<div class="hero h-[85vh]  relative  overflow-hidden">
+<!--hero - Changed h-[85vh] to min-h-[85vh] to prevent squashing on short screens -->
+<div class="hero min-h-[85vh] lg:h-[90vh] relative overflow-hidden flex items-center lg:items-center">
+
     <!-- blurred background image -->
-    <div class="absolute inset-0  bg-cover bg-center"
+    <div class="absolute inset-0 bg-cover bg-center"
          th:style="${latestNews != null and latestNews.imageUrl != null} ? 'background-image: url(' + ${latestNews.imageUrl} + ')' : (${latestNews != null and latestNews.externalImageUrl != null} ? 'background-image: url(' + ${latestNews.externalImageUrl} + ')' : 'background-image: url(/images/hero-image.png)')"
          style="filter: blur(10px); transform: scale(1.05);">
     </div>
-    <div class="absolute inset-0 bg-gradient-to-b from-neutral/30 via-neutral/40 to-primary"></div>
-    <!--dark overlay-->
-    <div class="absolute inset-0 "></div>
 
-    <div class="hero-content text-left text-white relative z-10 w-full max-w-7xl px-8">
+    <!-- Professional Gradient: Darker at the top to make navbar readable, darker at bottom for depth -->
+    <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-primary/40 to-primary"></div>
+
+    <!--
+       CONTENT CONTAINER
+       Added pt-32 (small screens) and lg:pt-20 (large screens)
+       to push text below your absolute navbar
+    -->
+    <div class="hero-content text-left text-white relative z-10 w-full max-w-7xl px-6 md:px-12 pt-40 lg:pt-32 pb-12 self-center">
         <div class="flex flex-col lg:flex-row lg:justify-between w-full">
-            <div class="lg:w-1/2">
-                <h1 class="text-5xl lg:text-7xl text-secondary font-bold mb-5 font-virage italic">Teknik</h1>
-                <h1 class="text-5xl lg:text-7xl font-bold mb-5 font-virage">Före långa bollar</h1>
-                <a href="/trial-registration" class="btn btn-wide rounded-full font-virage text-xl lg:text-2xl mt-8 bg-opacity-10 text-base-100 hover:text-primary hover:bg-base-100">Registrera ditt barn</a>
-                <!--              -->
-                <div th:if="${latestNews != null}" class="mt-10">
-                    <!--                    <a href="/news" class="text-2xl font-bold mb-4 text-secondary hover:underline">Visa alla nyheter</a>-->
+            <div class="lg:w-2/3 xl:w-1/2 ">
 
-                    <a th:href="@{/news/{id}(id=${latestNews.id})}"
-                       class="block   rounded-lg p-4 hover:bg-white/20 transition-all mt-4">
-                        <h4 th:text="${latestNews.title}" class="font-bold font-virage italic text-3xl text-white"></h4>
-                        <p th:text="${#temporals.format(latestNews.createdAt, 'dd MMM yyyy')}" class="text-sm text-gray-300 mt-1"></p>
+                <!-- Main Headline -->
+                <h1 class="font-virage leading-[0.8] mb-8 select-none ">
+<!--                                                          min-size on mobile-screen,PREFERRED "ideal" size, max-size on desktop-screen>     -->
+                    <span class="block text-secondary italic text-[clamp(4.5rem,9vw,5rem)] drop-shadow-2xl mb-5">
+                        Teknik
+
+                    </span>
+                    <span class="block text-white uppercase tracking-tighter text-[clamp(2.5rem,7.5vw,3.5rem)] opacity-95">
+                        Före långa bollar
+                    </span>
+                </h1>
+
+                <!-- CTA Button -->
+                <div class="">
+                    <a href="/trial-registration"
+                       class="btn btn-md lg:btn-lg rounded-full font-brand px-10 bg-secondary border-none text-primary hover:bg-white hover:scale-105 transition-all shadow-xl shadow-secondary/20">
+                        Registrera ditt barn
                     </a>
                 </div>
-                <a href="/news" class="btn btn-ghost btn-sm text-white mt-4">Visa alla nyheter &rarr;</a>
+
+                <!-- News Section -->
+                <div th:if="${latestNews != null}" class="mt-20 group max-w-md">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-2 py-0.5 bg-secondary text-primary text-[10px] font-bold uppercase tracking-widest rounded">
+                            Senaste Nyhet
+                        </span>
+                        <div class="h-[1px] flex-1 bg-white/20"></div>
+                    </div>
+
+                    <a th:href="@{/news/{id}(id=${latestNews.id})}" class="block transition-all duration-300 group-hover:translate-x-2">
+                        <h4 th:text="${latestNews.title}"
+                            class="font-virage italic text-2xl md:text-3xl text-white/95 leading-tight group-hover:text-secondary transition-colors">
+                        </h4>
+                        <div class="flex items-center gap-2 mt-3 text-white/50">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <p th:text="${#temporals.format(latestNews.createdAt, 'dd MMM yyyy')}" class="text-[10px] font-bold uppercase tracking-widest"></p>
+                        </div>
+                    </a>
+                </div>
 
             </div>
         </div>
     </div>
-
 </div>
-
 
 <div th:replace="~{fragments/banner/banner::banner}" class="mt-10 md:mt-0">
 </div>
