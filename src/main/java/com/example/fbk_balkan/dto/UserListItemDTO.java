@@ -11,4 +11,5 @@ public class UserListItemDTO {
     private Role role;
     private int teamCount;
     private boolean enabled;
+    private String phone;
 }

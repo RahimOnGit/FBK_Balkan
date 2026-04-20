@@ -1,0 +1,198 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="sv" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Min profil</title>-->
+<!--    <link th:href="@{/css/output.css}" rel="stylesheet">-->
+<!--</head>-->
+
+<!--<body class="bg-slate-100">-->
+
+<!--<div class="max-w-xl mx-auto mt-10">-->
+
+<!--    <div class="card bg-white shadow-lg">-->
+<!--        <div class="card-body">-->
+
+<!--            <h2 class="text-2xl font-bold mb-4">Min profil</h2>-->
+
+<!--            &lt;!&ndash; Success &ndash;&gt;-->
+<!--            <div th:if="${success}" class="alert alert-success mb-4">-->
+<!--                <span th:text="${success}"></span>-->
+<!--            </div>-->
+
+<!--            <form th:action="@{/profile}" th:object="${user}" method="post">-->
+
+<!--                <input type="hidden" th:field="*{id}"/>-->
+
+<!--                &lt;!&ndash; First Name &ndash;&gt;-->
+<!--                <div class="mb-3">-->
+<!--                    <label class="label">Förnamn</label>-->
+<!--                    <input type="text" th:field="*{firstName}" class="input input-bordered w-full"/>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Last Name &ndash;&gt;-->
+<!--                <div class="mb-3">-->
+<!--                    <label class="label">Efternamn</label>-->
+<!--                    <input type="text" th:field="*{lastName}" class="input input-bordered w-full"/>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Email &ndash;&gt;-->
+<!--                <div class="mb-3">-->
+<!--                    <label class="label">E-post</label>-->
+<!--                    <input type="email" th:field="*{email}" class="input input-bordered w-full"/>-->
+<!--                </div>-->
+
+<!--                <button type="submit" class="btn btn-primary w-full mt-4">-->
+<!--                    Spara ändringar-->
+<!--                </button>-->
+
+<!--            </form>-->
+
+<!--        </div>-->
+<!--    </div>-->
+
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+<!DOCTYPE html>
+<html lang="sv"
+      data-theme="fbkbalkan"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Min profil - FBK Balkan</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind + DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+
+    <!-- Sidebar styles -->
+    <div th:replace="~{fragments/dashboard-sidebar :: sidebar-styles}"></div>
+</head>
+
+<body class="bg-slate-100">
+
+<div class="dashboard-wrapper">
+
+    <!-- SIDEBAR -->
+    <div th:replace="~{fragments/dashboard-sidebar :: sidebar('profile')}"></div>
+
+    <!-- MAIN -->
+    <div class="dashboard-main">
+
+        <!-- TOPBAR -->
+        <div class="dashboard-topbar">
+            <span class="dashboard-topbar-title">Min profil</span>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="dashboard-content">
+
+            <div class="max-w-xl mx-auto w-full">
+
+                <!-- CARD -->
+                <div class="card bg-base-100 shadow-lg border border-slate-200 rounded-3xl">
+
+                    <div class="card-body p-5 md:p-8">
+
+                        <!-- HEADER -->
+                        <div class="flex flex-col items-center text-center mb-6">
+
+                            <!-- Avatar -->
+                            <div class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-primary text-white flex items-center justify-center text-3xl font-bold mb-3">
+                                <span th:text="${user.firstName != null ? #strings.substring(user.firstName,0,1) : 'U'}">U</span>
+                            </div>
+
+                            <h2 class="text-lg font-bold text-slate-800"
+                                th:text="${user.firstName + ' ' + user.lastName}">
+                                Namn
+                            </h2>
+
+                            <p class="text-sm text-slate-500"
+                               th:text="${user.email}">
+                                email
+                            </p>
+                        </div>
+
+                        <!-- SUCCESS -->
+                        <div th:if="${success}"
+                             class="alert alert-success mb-4">
+                            <span th:text="${success}"></span>
+                        </div>
+
+                        <!-- DISPLAY INFO (READ ONLY) -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+
+                            <div class="p-3 bg-slate-50 rounded-xl">
+                                <p class="text-xs text-slate-500">Förnamn</p>
+                                <p class="font-semibold" th:text="${user.firstName}">-</p>
+                            </div>
+
+                            <div class="p-3 bg-slate-50 rounded-xl">
+                                <p class="text-xs text-slate-500">Efternamn</p>
+                                <p class="font-semibold" th:text="${user.lastName}">-</p>
+                            </div>
+
+                            <div class="p-3 bg-slate-50 rounded-xl md:col-span-2">
+                                <p class="text-xs text-slate-500">E-post</p>
+                                <p class="font-semibold" th:text="${user.email}">-</p>
+                            </div>
+
+                        </div>
+
+                        <!-- PHONE UPDATE FORM -->
+                        <form th:action="@{/profile/phone}"
+                              th:object="${phoneForm}"
+                              method="post"
+                              class="space-y-4">
+
+                            <!-- PHONE -->
+                            <div>
+                                <label class="label">
+                                    <span class="label-text font-semibold">Telefon</span>
+                                </label>
+
+                                <input type="text"
+                                       th:field="*{phone}"
+                                       placeholder="070-123 45 67"
+                                       class="input input-bordered w-full focus:ring-2 focus:ring-primary" />
+
+                                <label class="label" th:if="${#fields.hasErrors('phone')}">
+                                    <span class="text-red-500 text-sm"
+                                          th:errors="*{phone}"></span>
+                                </label>
+                            </div>
+
+                            <!-- BUTTON -->
+                            <div class="pt-2">
+                                <button type="submit"
+                                        class="btn btn-primary w-full md:w-auto">
+                                    <i class="fa-regular fa-floppy-disk"></i>
+                                    Uppdatera telefon
+                                </button>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
