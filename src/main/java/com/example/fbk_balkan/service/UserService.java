@@ -2,8 +2,8 @@ package com.example.fbk_balkan.service;
 
 import com.example.fbk_balkan.dto.UserCreateUpdateDto;
 import com.example.fbk_balkan.dto.UserListItemDTO;
+import com.example.fbk_balkan.dto.UserProfileViewDto;
 import com.example.fbk_balkan.entity.Role;
-import com.example.fbk_balkan.entity.Team;
 import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.mapper.UserMapper;          // ny mapper – skapa denna
 import com.example.fbk_balkan.repository.TeamRepository;
@@ -12,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -54,6 +55,7 @@ public class UserService {
         dto.setRole(user.getRole());
         dto.setEnabled(user.isEnabled());
         // password lämnas tom vid redigering
+        dto.setPhone(user.getPhone()); // NEW
         return dto;
     }
 
@@ -72,6 +74,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setRole(dto.getRole());
         user.setEnabled(dto.isEnabled());
+        user.setPhone(dto.getPhone());// NEW
         return userRepository.save(user);
     }
 
@@ -160,5 +163,31 @@ public class UserService {
 
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email.trim().toLowerCase());
+    }
+
+    public UserProfileViewDto getCurrentUserProfile(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        UserProfileViewDto dto = new UserProfileViewDto();
+
+        dto.setFirstName(user.getFirstName());
+        dto.setLastName(user.getLastName());
+        dto.setEmail(user.getEmail());
+        dto.setPhone(user.getPhone());
+
+        return dto;
+    }
+    @Transactional
+    public void updatePhone(String email, String phone) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        user.setPhone(
+                phone != null && !phone.isBlank()
+                        ? phone.trim()
+                        : null
+        );
     }
 }
