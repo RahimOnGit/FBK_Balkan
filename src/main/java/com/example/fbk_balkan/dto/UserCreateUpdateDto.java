@@ -29,6 +29,9 @@ public class UserCreateUpdateDto {
 //    @ConditionalOnNotEmpty
     private String password;
 
+    @Size(max = 20, message = "Telefonnummer är för långt")
+    private String phone;
+
     @NotNull(message = "Roll krävs")
 //    private Role role;
     private Role role = Role.COACH;
