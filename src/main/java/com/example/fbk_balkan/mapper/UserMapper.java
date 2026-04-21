@@ -17,6 +17,7 @@ public class UserMapper {
         dto.setRole(user.getRole());
         dto.setEnabled(user.isEnabled());
         dto.setTeamCount(user.getTeams() != null ? user.getTeams().size() : 0);
+        dto.setPhone(user.getPhone());
         return dto;
     }
 
@@ -27,6 +28,12 @@ public class UserMapper {
         u.setLastName(dto.getLastName().trim());
         u.setRole(dto.getRole());
         u.setEnabled(dto.isEnabled());
+        // NEW
+        u.setPhone(
+                dto.getPhone() != null && !dto.getPhone().isBlank()
+                        ? dto.getPhone().trim()
+                        : null
+        );
         return u;
     }
 
@@ -37,5 +44,11 @@ public class UserMapper {
         entity.setRole(dto.getRole());
         entity.setEnabled(dto.isEnabled());
         // lösenord hanteras separat i service
+        // ✅ Safe phone handling
+        entity.setPhone(
+                dto.getPhone() != null && !dto.getPhone().isBlank()
+                        ? dto.getPhone().trim()
+                        : null
+        );
     }
 }

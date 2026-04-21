@@ -58,7 +58,8 @@ public class SecurityConfig {
 
                                 // Role-based access control
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
-
+                                // profile page (IMPORTANT)
+                                .requestMatchers("/profile/**").authenticated()
                                 // Authentication for all other requests
                                 .anyRequest().authenticated()
                 )
