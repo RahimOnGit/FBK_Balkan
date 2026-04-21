@@ -16,14 +16,16 @@ public class Match {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
   private   Long gameId;
 
-  private  Long gameNumber;
-   private String homeTeamName;
-   private String awayTeamName;
-   private String homeTeamImageUrl;
-   private String awayTeamImageUrl;
+    private  Long gameNumber;
+    private Long homeTeamSvffId;
+    private Long awayTeamSvffId;
+    private String homeTeamName;
+    private String awayTeamName;
+    private String homeTeamImageUrl;
+    private String awayTeamImageUrl;
 
-   private Integer goalsScoredHomeTeam;
-   private Integer goalsScoredAwayTeam;
+    private Integer goalsScoredHomeTeam;
+    private Integer goalsScoredAwayTeam;
 
    private String competitionName;
    private String seasonName;

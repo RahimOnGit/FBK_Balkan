@@ -8,4 +8,5 @@ public interface MatchRepository extends JpaRepository<Match,Long> {
     boolean existsByGameNumber(Long gameNumber);
 //fetch matches by team
 
+    java.util.Optional<Match> findByGameNumber(Long gameNumber);
 }
