@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 
 public record GameDTO(
         Long gameNumber,
+        Long homeTeamId,
+        Long awayTeamId,
         String homeTeamName,
         String awayTeamName,
         String homeTeamImageUrl,

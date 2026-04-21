@@ -46,6 +46,9 @@ public class Team {
     @Column(nullable = false)
     private boolean active = true;
 
+    @Column(unique = true)
+    private Long svffTeamId;
+
     // ────────────────────────────────────────────────
     // Koppling till coach
     // ────────────────────────────────────────────────
