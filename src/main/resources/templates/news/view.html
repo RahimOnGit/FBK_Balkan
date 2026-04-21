@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${news.title + ' - FBK Balkan'}">Nyhet - FBK Balkan</title>
     <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
 </head>
 <body class="min-h-screen bg-base-200">
@@ -29,12 +31,11 @@
                 <h1 class="text-2xl md:text-4xl font-bold font-virage text-primary mb-4" th:text="${news.title}">Titel</h1>
                 <div class="flex flex-wrap gap-4 text-sm text-gray-500 mb-6">
                     <span th:text="'Publicerad: ' + ${#temporals.format(news.createdAt, 'yyyy-MM-dd HH:mm')}">Datum</span>
-                    <span th:if="${news.authorFullName}" th:text="'Av: ' + ${news.authorFullName}">Författare</span>
-                    <span th:if="${!news.authorFullName and news.authorUsername}" th:text="'Av: ' + ${news.authorUsername}">Författare</span>
+                    <span th:if="${news.authorFullName != null and !news.authorFullName.isEmpty()}" th:text="'Av: ' + ${news.authorFullName}">Författare</span>
+                    <span th:if="${(news.authorFullName == null or news.authorFullName.isEmpty()) and news.authorUsername != null and !news.authorUsername.isEmpty()}" th:text="'Av: ' + ${news.authorUsername}">Författare</span>
                 </div>
-                <div class="prose max-w-none">
-                    <p th:text="${news.content}" class="whitespace-pre-wrap">Innehåll</p>
-                </div>
+                <div class="max-w-none text-base leading-relaxed text-base-content whitespace-pre-wrap break-words"
+                     th:text="${news.content}">Innehåll</div>
 
                 <div th:if="${news.linkUrl != null and !news.linkUrl.isEmpty()}" class="mt-6">
                     <a th:href="${news.linkUrl}" target="_blank" rel="noopener noreferrer"
