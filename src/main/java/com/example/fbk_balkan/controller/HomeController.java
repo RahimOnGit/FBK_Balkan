@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -41,6 +42,20 @@ public class HomeController {
         model.addAttribute("matches" , matches);
         System.out.println("NEW Match results: " + matchService.fetchMatches());
         return "index";
+    }
+
+    @GetMapping("/matcher")
+    public String matcher(Model model) {
+        List<GameDTO> allMatches = matchService.fetchMatches();
+        List<GameDTO> upcomingMatches = allMatches.stream()
+                .filter(m -> m.goalsScoredHomeTeam() != null && m.goalsScoredHomeTeam() == -1)
+                .sorted(Comparator.comparing(
+                        GameDTO::timeAsDateTime,
+                        Comparator.nullsLast(Comparator.naturalOrder())
+                ))
+                .toList();
+        model.addAttribute("upcomingMatches", upcomingMatches);
+        return "matches";
     }
 
     @GetMapping("/about")
