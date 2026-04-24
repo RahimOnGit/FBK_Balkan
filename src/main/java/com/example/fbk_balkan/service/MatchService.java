@@ -7,21 +7,61 @@ import com.example.fbk_balkan.repository.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
 public class MatchService {
     @Autowired
-private MatchRepository matchRepository;
+    private MatchRepository matchRepository;
     @Autowired
     private MatchMapper matchMapper;
 
-public List<GameDTO> fetchMatches()
-{
-    List<Match> games = matchRepository.findAll();
-   return games.stream()
-            .map(matchMapper::toDto)
-            .toList();
+    public List<GameDTO> fetchMatches() {
+        List<Match> games = matchRepository.findAll();
+        return games.stream()
+                .map(matchMapper::toDto)
+                .toList();
+    }
 
-}
+    public List<GameDTO> fetchMatchesForTeam(Long svffTeamId) {
+        if (svffTeamId == null) return List.of();
+
+        return matchRepository
+                .findByHomeTeamSvffIdOrAwayTeamSvffId(svffTeamId, svffTeamId)
+                .stream()
+                .map(matchMapper::toDto)
+                .toList();
+    }
+
+    public List<GameDTO> fetchUpcomingMatchesForTeam(Long svffTeamId) {
+        if (svffTeamId == null) return List.of();
+        LocalDateTime now = LocalDateTime.now();
+        return matchRepository
+                .findByHomeTeamSvffIdOrAwayTeamSvffId(svffTeamId, svffTeamId)
+                .stream()
+                .map(matchMapper::toDto)
+                .filter(m -> m.timeAsDateTime() != null && m.timeAsDateTime().isAfter(now))
+                .sorted(Comparator.comparing(GameDTO::timeAsDateTime,
+                        Comparator.nullsLast(Comparator.naturalOrder())))
+                .toList();
+    }
+
+    public List<GameDTO> fetchRecentResultsForTeam(Long svffTeamId) {
+        if (svffTeamId == null) return List.of();
+        LocalDateTime now = LocalDateTime.now();
+        return matchRepository
+                .findByHomeTeamSvffIdOrAwayTeamSvffId(svffTeamId, svffTeamId)
+                .stream()
+                .map(matchMapper::toDto)
+                .filter(m -> m.timeAsDateTime() != null
+                        && m.timeAsDateTime().isBefore(now)
+                        && m.goalsScoredHomeTeam() != null
+                        && m.goalsScoredHomeTeam() != -1)
+                .sorted(Comparator.comparing(GameDTO::timeAsDateTime,
+                        Comparator.nullsLast(Comparator.reverseOrder())))
+                .limit(5)
+                .toList();
+    }
 }
