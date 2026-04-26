@@ -1,715 +1,96 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--  <meta charset="UTF-8">-->
-<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--  <title>Kommande Matcher - FBK Balkan</title>-->
-<!--  <link th:href="@{/css/output.css}" rel="stylesheet">-->
-<!--  <link rel="preconnect" href="https://fonts.googleapis.com">-->
-<!--  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>-->
-<!--  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">-->
-<!--</head>-->
-<!--<body class="min-h-screen bg-base-200">-->
-
-<!--<div class="absolute top-0 left-0 z-[10] right-0 bg-primary">-->
-<!--  <div th:replace="~{fragments/navbar::navbar}"></div>-->
-<!--</div>-->
-
-<!--&lt;!&ndash; Hero / Page Header &ndash;&gt;-->
-<!--<section class="relative bg-gradient-to-br from-primary via-primary to-[#0F2D5C] pt-32 pb-16 overflow-hidden">-->
-<!--  <div class="absolute inset-0 opacity-10"-->
-<!--       style="background-image: radial-gradient(circle at 20% 20%, white 1px, transparent 1px), radial-gradient(circle at 80% 80%, white 1px, transparent 1px); background-size: 40px 40px;"></div>-->
-
-<!--  <div class="container mx-auto px-4 relative z-10">-->
-<!--    <div class="max-w-5xl mx-auto">-->
-<!--      <a href="/" class="inline-flex items-center text-white/70 hover:text-secondary text-sm font-bold uppercase tracking-widest mb-4 transition-colors">-->
-<!--        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
-<!--          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>-->
-<!--        </svg>-->
-<!--        Tillbaka till startsidan-->
-<!--      </a>-->
-
-<!--      <div class="flex items-center gap-3 mb-2">-->
-<!--        <span class="w-2 h-10 bg-secondary rounded-full"></span>-->
-<!--        <span class="text-secondary text-xs md:text-sm font-bold uppercase tracking-[0.3em]">Schema</span>-->
-<!--      </div>-->
-
-<!--      <h1 class="text-white text-4xl md:text-6xl font-black uppercase tracking-tight">-->
-<!--        Kommande Matcher-->
-<!--      </h1>-->
-
-<!--      <p class="text-white/60 text-base md:text-lg mt-3 max-w-2xl">-->
-<!--        Alla planerade matcher för FBK Balkan. Följ vårt schema och kom och stötta laget.-->
-<!--      </p>-->
-
-<!--      <div class="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-2">-->
-<!--        <span class="w-2 h-2 bg-secondary rounded-full animate-pulse"></span>-->
-<!--        <span class="text-white text-xs font-bold uppercase tracking-wider">-->
-<!--                    <span th:text="${#lists.size(upcomingMatches)}">0</span> matcher schemalagda-->
-<!--                </span>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</section>-->
-
-<!--&lt;!&ndash; Matches Grid &ndash;&gt;-->
-<!--<section class="py-12 md:py-16 bg-base-200">-->
-<!--  <div class="container mx-auto px-4">-->
-<!--    <div class="max-w-5xl mx-auto">-->
-
-<!--      &lt;!&ndash; Empty State &ndash;&gt;-->
-<!--      <div th:if="${#lists.isEmpty(upcomingMatches)}"-->
-<!--           class="bg-white rounded-2xl border border-gray-200 p-12 text-center shadow-sm">-->
-<!--        <div class="w-16 h-16 bg-base-200 rounded-full flex items-center justify-center mx-auto mb-4">-->
-<!--          <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
-<!--            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"-->
-<!--                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>-->
-<!--          </svg>-->
-<!--        </div>-->
-<!--        <p class="text-gray-700 font-bold uppercase tracking-widest text-sm">Inga kommande matcher</p>-->
-<!--        <p class="text-gray-500 text-sm mt-2">Kolla tillbaka snart för det senaste schemat.</p>-->
-<!--      </div>-->
-
-<!--      &lt;!&ndash; Match Cards &ndash;&gt;-->
-<!--      <div th:if="${not #lists.isEmpty(upcomingMatches)}"-->
-<!--           class="grid grid-cols-1 md:grid-cols-2 gap-5">-->
-
-<!--        <article th:each="match : ${upcomingMatches}"-->
-<!--                 class="group bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl hover:border-secondary/50 transition-all duration-300 overflow-hidden">-->
-
-<!--          &lt;!&ndash; Card Header: Competition + Status &ndash;&gt;-->
-<!--          <div class="bg-primary px-5 py-3 flex items-center justify-between gap-3">-->
-<!--            <div class="flex items-center gap-2 min-w-0">-->
-<!--              <svg class="w-4 h-4 text-secondary flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">-->
-<!--                <path d="M5 4h14a1 1 0 011 1v2a5 5 0 01-4 4.9V13a4 4 0 01-3 3.87V19h3a1 1 0 110 2H8a1 1 0 110-2h3v-2.13A4 4 0 018 13v-1.1A5 5 0 014 7V5a1 1 0 011-1zm1 2v1a3 3 0 002 2.83V6H6zm10 0v3.83A3 3 0 0018 7V6h-2z"/>-->
-<!--              </svg>-->
-<!--              <span class="text-white text-xs font-bold uppercase tracking-wider truncate"-->
-<!--                    th:text="${match.competitionName() != null ? match.competitionName() : 'Match'}">-->
-<!--                                Liga-->
-<!--                            </span>-->
-<!--            </div>-->
-<!--            <span class="inline-flex items-center gap-1.5 bg-secondary text-primary text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full flex-shrink-0">-->
-<!--                            <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>-->
-<!--                            Upcoming-->
-<!--                        </span>-->
-<!--          </div>-->
-
-<!--          &lt;!&ndash; Card Body &ndash;&gt;-->
-<!--          <div class="p-5 md:p-6">-->
-
-<!--            &lt;!&ndash; Date & Time &ndash;&gt;-->
-<!--            <div class="flex items-center justify-between text-sm mb-5 pb-5 border-b border-gray-100">-->
-<!--              <div class="flex items-center gap-2 text-gray-700">-->
-<!--                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
-<!--                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"-->
-<!--                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>-->
-<!--                </svg>-->
-<!--                <span class="font-semibold"-->
-<!--                      th:text="${match.timeAsDateTime() != null ? #temporals.format(match.timeAsDateTime(), 'd MMM yyyy') : 'Datum saknas'}">-->
-<!--                                    12 Apr 2026-->
-<!--                                </span>-->
-<!--              </div>-->
-<!--              <div class="flex items-center gap-2 text-gray-700">-->
-<!--                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
-<!--                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"-->
-<!--                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>-->
-<!--                </svg>-->
-<!--                <span class="font-semibold"-->
-<!--                      th:text="${match.timeAsDateTime() != null ? #temporals.format(match.timeAsDateTime(), 'HH:mm') : '&#45;&#45;:&#45;&#45;'}">-->
-<!--                                    14:00-->
-<!--                                </span>-->
-<!--              </div>-->
-<!--            </div>-->
-
-<!--            &lt;!&ndash; Teams &ndash;&gt;-->
-<!--            <div class="flex items-center justify-between gap-3">-->
-<!--              &lt;!&ndash; Home Team &ndash;&gt;-->
-<!--              <div class="flex flex-col items-center text-center flex-1 min-w-0">-->
-<!--                <div class="w-16 h-16 md:w-20 md:h-20 bg-base-200 rounded-xl p-2 flex items-center justify-center shadow-inner mb-2">-->
-<!--                  <img th:src="${match.homeTeamImageUrl()}"-->
-<!--                       th:alt="${match.homeTeamName()}"-->
-<!--                       class="w-full h-full object-contain"-->
-<!--                       onerror="this.style.display='none'">-->
-<!--                </div>-->
-<!--                <span class="font-bold text-sm md:text-base text-gray-800 truncate w-full"-->
-<!--                      th:text="${match.homeTeamName()}">-->
-<!--                                    FBK Balkan-->
-<!--                                </span>-->
-<!--                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-0.5">Hemma</span>-->
-<!--              </div>-->
-
-<!--              &lt;!&ndash; VS Divider &ndash;&gt;-->
-<!--              <div class="flex flex-col items-center px-2">-->
-<!--                <span class="text-2xl md:text-3xl font-black text-secondary italic">VS</span>-->
-<!--              </div>-->
-
-<!--              &lt;!&ndash; Away Team &ndash;&gt;-->
-<!--              <div class="flex flex-col items-center text-center flex-1 min-w-0">-->
-<!--                <div class="w-16 h-16 md:w-20 md:h-20 bg-base-200 rounded-xl p-2 flex items-center justify-center shadow-inner mb-2">-->
-<!--                  <img th:src="${match.awayTeamImageUrl()}"-->
-<!--                       th:alt="${match.awayTeamName()}"-->
-<!--                       class="w-full h-full object-contain"-->
-<!--                       onerror="this.style.display='none'">-->
-<!--                </div>-->
-<!--                <span class="font-bold text-sm md:text-base text-gray-800 truncate w-full"-->
-<!--                      th:text="${match.awayTeamName()}">-->
-<!--                                    Råå IF-->
-<!--                                </span>-->
-<!--                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mt-0.5">Borta</span>-->
-<!--              </div>-->
-<!--            </div>-->
-
-<!--            &lt;!&ndash; Footer Action &ndash;&gt;-->
-<!--            <div class="mt-6 pt-5 border-t border-gray-100">-->
-<!--              <a th:href="@{'/match-details/' + ${match.gameNumber()}}"-->
-<!--                 class="block text-center bg-base-200 hover:bg-primary hover:text-white text-primary py-2.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-colors">-->
-<!--                Matchdetaljer-->
-<!--              </a>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </article>-->
-
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</section>-->
-
-<!--<div th:replace="~{fragments/footer::footer}"></div>-->
-
-<!--</body>-->
-<!--</html>-->
-
-
-
-<!--//////-->
-
-
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kommande Matcher — FBK Balkan</title>
+  <title>Spelschema — FBK Balkan</title>
 
-  <!-- DaisyUI full CSS (includes Tailwind base) -->
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" />
-  <!-- Tailwind play CDN (generates utilities on the fly) -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Google Fonts: Barlow Condensed (display) + Barlow (body) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
-
-  <script>
-    /* ── Tailwind config: extend with FBK Balkan tokens + DaisyUI theme ── */
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            display: ['"Barlow Condensed"', 'sans-serif'],
-            body:    ['"Barlow"', 'sans-serif'],
-          },
-          colors: {
-            navy:  '#0B1F47',
-            navy2: '#0F2D5C',
-            gold:  '#F5C518',
-          },
-          keyframes: {
-            fadeUp: {
-              '0%':   { opacity: '0', transform: 'translateY(14px)' },
-              '100%': { opacity: '1', transform: 'translateY(0)' },
-            },
-            pulseDot: {
-              '0%,100%': { opacity:'1',  transform:'scale(1)'    },
-              '50%':     { opacity:'.6', transform:'scale(.85)' },
-            },
-          },
-          animation: {
-            'fade-up':   'fadeUp .35s ease both',
-            'pulse-dot': 'pulseDot 2s ease-in-out infinite',
-          },
-        },
-      },
-      daisyui: {
-        themes: [{
-          fbkbalkan: {
-            'primary':          '#0B1F47',
-            'primary-content':  '#ffffff',
-            'secondary':        '#F5C518',
-            'secondary-content':'#0B1F47',
-            'accent':           '#F5C518',
-            'neutral':          '#1A202C',
-            'base-100':         '#ffffff',
-            'base-200':         '#F3F5F9',
-            'base-300':         '#E2E8F0',
-            'base-content':     '#1A202C',
-          },
-        }],
-      },
-    };
-  </script>
+  <!-- DaisyUI + Tailwind -->
+  <link th:href="@{/css/output.css}" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Roboto+Condensed:ital,wght@0,400;0,700;1,700&display=swap" rel="stylesheet" />
 
   <style>
-    body { font-family: 'Barlow', sans-serif; }
-    .font-display { font-family: 'Barlow Condensed', sans-serif !important; }
-    /* card entrance animation class applied via JS */
-    .card-stagger { animation: fadeUp .35s ease both; }
-    @keyframes fadeUp {
-      from { opacity:0; transform:translateY(14px); }
-      to   { opacity:1; transform:translateY(0); }
+    .font-virage { font-family: 'Roboto Condensed', sans-serif; }
+    .hero-glow {
+      background: radial-gradient(circle at 50% 50%, rgba(245, 197, 24, 0.15) 0%, transparent 70%);
     }
-    @keyframes pulseDot {
-      0%,100% { opacity:1; transform:scale(1); }
-      50%     { opacity:.6; transform:scale(.85); }
-    }
-    .animate-pulse-dot { animation: pulseDot 2s ease-in-out infinite; }
   </style>
 </head>
 
-<body class="min-h-screen bg-base-200 font-body" data-theme="fbkbalkan">
+<body class="bg-base-100 font-virage text-white antialiased">
 
-<!-- ═══════════════════════════════════════
-     NAVBAR
-════════════════════════════════════════ -->
-<div class="absolute top-0 left-0 z-[10] right-0 bg-primary">
+<header class="sticky top-0 z-[100] bg-primary/95 backdrop-blur-md border-b border-white/10">
   <div th:replace="~{fragments/navbar::navbar}"></div>
-</div>
+</header>
 
-<!-- ═══════════════════════════════════════
-     HERO
-════════════════════════════════════════ -->
-<section class="relative bg-gradient-to-br from-navy via-navy2 to-[#091729] pt-24 pb-14 overflow-hidden">
+<main>
+  <!-- HERO -->
+  <section class="relative bg-primary  pt-24 pb-20 overflow-hidden">
+    <div class="absolute inset-0 hero-glow"></div>
+    <!-- Decorative Blobs -->
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-secondary/10 rounded-full blur-[100px]"></div>
 
-  <!-- Subtle grid texture -->
-  <div class="absolute inset-0 pointer-events-none"
-       style="background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:48px 48px;"></div>
-  <!-- Glow blobs -->
-  <div class="absolute top-0 left-0 w-96 h-96 rounded-full bg-gold/5 blur-3xl pointer-events-none"></div>
-  <div class="absolute bottom-0 right-0 w-72 h-72 rounded-full bg-gold/4 blur-3xl pointer-events-none"></div>
-
-  <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
-
-    <!-- Back link -->
-    <a href="/"
-       class="inline-flex items-center gap-2 text-white/50 hover:text-gold font-display font-bold text-[11px] tracking-[.14em] uppercase mb-5 transition-colors group no-underline">
-      <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-      </svg>
-      Tillbaka till startsidan
-    </a>
-
-    <!-- Eyebrow -->
-    <div class="flex items-center gap-3 mb-2">
-      <span class="w-1 h-7 bg-gold rounded-full"></span>
-      <span class="font-display font-bold text-[11px] tracking-[.28em] uppercase text-gold">Schema</span>
+    <div class="container mx-auto px-4 relative z-10 text-center">
+      <div class="inline-flex items-center gap-3 mb-6">
+        <span class="h-[1px] w-8 bg-secondary"></span>
+        <span class="text-secondary font-black uppercase tracking-[0.3em] text-xs">Säsongen 2024/25</span>
+        <span class="h-[1px] w-8 bg-secondary"></span>
+      </div>
+      <h1 class="text-6xl md:text-9xl font-black italic uppercase tracking-tighter mb-4 leading-none">
+        Spel<span class="text-secondary">schema</span>
+      </h1>
+      <p class="text-white/50 text-lg md:text-xl max-w-2xl mx-auto uppercase tracking-wide">
+        Följ FBK Balkans herrlag i Division 2 Södra Götaland.
+      </p>
     </div>
+  </section>
 
-    <!-- Title -->
-    <h1 class="font-display font-black leading-none tracking-tight uppercase text-white mb-3"
-        style="font-size:clamp(40px,7vw,72px)">
-      Kommande<br>Matcher
-    </h1>
+  <!-- FIXTURES LIST -->
+  <section class="pb-24 ">
+    <div class="container mx-auto px-4 max-w-6xl">
 
-    <p class="text-white/50 text-sm sm:text-base max-w-md leading-relaxed mb-6">
-      Alla planerade matcher för FBK Balkan. Följ schemat och kom och stötta laget.
-    </p>
+      <!-- Filter Tabs (Visual only, based on PSG style) -->
+      <div class="flex flex-wrap items-center justify-center gap-4 mb-12 border-b border-white/10 pb-6">
+        <button class="text-secondary border-b-2 border-secondary pb-2 px-4 font-black uppercase italic tracking-widest text-sm">Alla Matcher</button>
+        <button class="text-primary hover:text-secondary hover:border-b-2 hover:border-secondary pb-2 px-4 font-black uppercase italic tracking-widest text-sm transition-colors">Herrar A</button>
+        <button class="text-primary hover:text-secondary hover:border-b-2 hover:border-secondary pb-2 px-4 font-black uppercase italic tracking-widest text-sm transition-colors">Damlag</button>
+      </div>
 
-    <!-- Live badge -->
-    <div class="inline-flex items-center gap-2 bg-white/8 border border-white/15 backdrop-blur-md rounded-full px-4 py-2">
-      <span class="w-2 h-2 rounded-full bg-gold animate-pulse-dot"></span>
-      <span class="font-display font-bold text-[11px] tracking-[.16em] uppercase text-white">
-          <span id="match-count" class="text-gold">0</span> matcher schemalagda
-        </span>
+      <!-- THE LIST -->
+      <div class="space-y-16 ">
+
+        <!-- Grouping: Example for Upcoming -->
+        <div class="space-y-6">
+          <div class="flex items-center gap-4">
+            <h2 class="text-2xl font-bold italic text-primary uppercase tracking-tight">Kommande <span class="text-secondary">Matcher</span></h2>
+            <div class="h-[1px] flex-1 bg-white/10"></div>
+          </div>
+
+          <!-- Call the Fragment -->
+          <div th:replace="~{fragments/match :: match-calendar-list(matches=${upcomingMatches})}"></div>
+        </div>
+
+        <!-- Grouping: Example for Recent -->
+        <div class="space-y-6">
+          <div class="flex items-center gap-4">
+            <h2 class="text-2xl font-black italic uppercase tracking-tight text-white/40">Tidigare <span class="text-white/20">Resultat</span></h2>
+            <div class="h-[1px] flex-1 bg-white/10"></div>
+          </div>
+
+          <!-- Call the Fragment -->
+          <div th:replace="~{fragments/match :: match-calendar-list(matches=${pastMatches})}"></div>
+        </div>
+
+      </div>
+
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ═══════════════════════════════════════
-     CONTROLS BAR  (sticky below navbar)
-════════════════════════════════════════ -->
-<div class="sticky top-14 z-40 bg-base-100 border-b border-base-300 shadow-sm">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center gap-3">
+  <!-- CTA BOX -->
 
-    <!-- League -->
-    <label class="flex items-center gap-2 flex-1 min-w-[180px]">
-      <span class="font-display font-bold text-[10px] tracking-[.14em] uppercase text-base-content/40 whitespace-nowrap">Liga</span>
-      <select id="filter-league" onchange="applyFilters()"
-              class="select select-sm select-bordered w-full text-sm font-semibold bg-base-200 focus:outline-none focus:border-navy">
-        <option value="">Alla ligor</option>
-      </select>
-    </label>
-
-    <!-- Date -->
-    <label class="flex items-center gap-2 flex-1 min-w-[180px]">
-      <span class="font-display font-bold text-[10px] tracking-[.14em] uppercase text-base-content/40 whitespace-nowrap">Datum</span>
-      <input type="date" id="filter-date" onchange="applyFilters()"
-             class="input input-sm input-bordered w-full text-sm font-semibold bg-base-200 focus:outline-none focus:border-navy" />
-    </label>
-
-    <!-- Sort join -->
-    <div class="join rounded-lg border border-base-300 overflow-hidden">
-      <button id="sort-asc" onclick="setSort('asc')"
-              class="join-item btn btn-sm border-0 font-display font-bold text-[10px] tracking-[.1em] uppercase gap-1.5 bg-navy text-white hover:bg-navy/90">
-        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/>
-        </svg>
-        Närmast
-      </button>
-      <button id="sort-desc" onclick="setSort('desc')"
-              class="join-item btn btn-sm border-0 font-display font-bold text-[10px] tracking-[.1em] uppercase gap-1.5 bg-base-200 text-base-content/50 hover:bg-base-300">
-        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-        </svg>
-        Senast
-      </button>
-    </div>
-
-    <!-- Reset -->
-    <button onclick="resetFilters()"
-            class="btn btn-sm btn-outline border-base-300 font-display font-bold text-[10px] tracking-[.12em] uppercase text-base-content/50 hover:border-error hover:text-error hover:bg-error/5 gap-1.5">
-      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-        <path stroke-linecap="round" stroke-linejoin="round"
-              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-      </svg>
-      Rensa
-    </button>
-  </div>
-</div>
-
-<!-- Results info -->
-<div class="max-w-5xl mx-auto px-4 sm:px-6 pt-5 pb-2 flex items-center justify-between">
-    <span id="results-text"
-          class="font-display font-bold text-[11px] tracking-[.12em] uppercase text-base-content/40">
-      Visar <span class="text-navy">0</span> matcher
-    </span>
-  <span id="page-indicator"
-        class="font-display font-bold text-[11px] tracking-[.12em] uppercase text-base-content/40"></span>
-</div>
-
-<!-- ═══════════════════════════════════════
-     MATCHES GRID
-════════════════════════════════════════ -->
-<main class="max-w-5xl mx-auto px-4 sm:px-6 pb-16">
-  <div id="matches-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-  <!-- Pagination -->
-  <div id="pagination" class="flex flex-wrap items-center justify-center gap-2 mt-8"></div>
 </main>
 
-<!-- ═══════════════════════════════════════
-     FOOTER
-════════════════════════════════════════ -->
-<div th:replace="~{fragments/footer::footer}"></div>
+<footer th:replace="~{fragments/footer::footer}"></footer>
 
-
-
-<!-- ═══════════════════════════════════════
-     SCRIPT
-════════════════════════════════════════ -->
-<script>
-  /* ── MATCH DATA ─────────────────────────────────────────────────────
-     In your Thymeleaf template replace the array below with:
-
-       const MATCHES = /*[[${upcomingMatches}]]*\/ [];
-
-     Each object must expose: gameNumber, competitionName,
-     homeTeamName, awayTeamName, homeTeamImageUrl,
-     awayTeamImageUrl, time  (ISO-8601, e.g. "2026-05-03T14:00")
-  ─────────────────────────────────────────────────────────────────── */
-  const MATCHES = [
-    { gameNumber:'1001', competitionName:'Division 4 Södra', homeTeamName:'FBK Balkan',    awayTeamName:'Råå IF',          homeTeamImageUrl:'', awayTeamImageUrl:'', time:'2026-05-03T14:00' },
-    { gameNumber:'1002', competitionName:'Division 4 Södra', homeTeamName:'Helsingborg FC', awayTeamName:'FBK Balkan',      homeTeamImageUrl:'', awayTeamImageUrl:'', time:'2026-05-10T16:00' },
-    { gameNumber:'1003', competitionName:'Skånecupen',       homeTeamName:'FBK Balkan',     awayTeamName:'Landskrona BoIS', homeTeamImageUrl:'', awayTeamImageUrl:'', time:'2026-05-17T11:00' },
-    { gameNumber:'1004', competitionName:'Division 4 Södra', homeTeamName:'Ängelholms FF',  awayTeamName:'FBK Balkan',      homeTeamImageUrl:'', awayTeamImageUrl:'', time:'2026-05-24T15:00' },
-    { gameNumber:'1005', competitionName:'Skånecupen',       homeTeamName:'FBK Balkan',     awayTeamName:'Trelleborgs FF',  homeTeamImageUrl:'', awayTeamImageUrl:'', time:'2026-06-01T13:00' },
-    { gameNumber:'1006', competitionName:'Division 4 Södra', homeTeamName:'FBK Balkan',     awayTeamName:'Bjuvs IF',        homeTeamImageUrl:'', awayTeamImageUrl:'', time:'2026-06-07T15:00' },
-    { gameNumber:'1007', competitionName:'Division 4 Södra', homeTeamName:'Klippans FF',    awayTeamName:'FBK Balkan',      homeTeamImageUrl:'', awayTeamImageUrl:'', time:'2026-06-14T14:00' },
-    { gameNumber:'1008', competitionName:'Skånecupen',       homeTeamName:'FBK Balkan',     awayTeamName:'Vellinge IF',     homeTeamImageUrl:'', awayTeamImageUrl:'', time:'2026-06-21T12:00' },
-    { gameNumber:'1009', competitionName:'Division 4 Södra', homeTeamName:'FBK Balkan',     awayTeamName:'FC Rosengård',    homeTeamImageUrl:'', awayTeamImageUrl:'', time:'2026-07-04T17:00' },
-    { gameNumber:'1010', competitionName:'Division 4 Södra', homeTeamName:'Höganäs BK',     awayTeamName:'FBK Balkan',      homeTeamImageUrl:'', awayTeamImageUrl:'', time:'2026-07-12T15:00' },
-    { gameNumber:'1011', competitionName:'Skånecupen',       homeTeamName:'FBK Balkan',     awayTeamName:'Malmö FF U23',    homeTeamImageUrl:'', awayTeamImageUrl:'', time:'2026-07-19T14:00' },
-    { gameNumber:'1012', competitionName:'Division 4 Södra', homeTeamName:'FBK Balkan',     awayTeamName:'Svalövs FK',      homeTeamImageUrl:'', awayTeamImageUrl:'', time:'2026-08-02T15:00' },
-  ];
-
-  /* ── State ── */
-  const PAGE_SIZE  = 6;
-  let currentSort  = 'asc';
-  let currentPage  = 1;
-  let filteredData = [];
-
-  /* ── Helpers ── */
-  const parseDate   = iso => new Date(iso);
-  const daysFromNow = iso => Math.ceil((parseDate(iso) - Date.now()) / 86400000);
-  const fmtDate     = iso => new Date(iso).toLocaleDateString('sv-SE', { day:'numeric', month:'short', year:'numeric' });
-  const fmtTime     = iso => new Date(iso).toLocaleTimeString('sv-SE', { hour:'2-digit', minute:'2-digit' });
-
-  /* Shield SVG fallback for missing crests */
-  const SHIELD = `<svg class="w-8 h-8 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-      <path stroke-linecap="round" stroke-linejoin="round"
-        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944
-           a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9
-           c0 5.591 3.824 10.29 9 11.622C17.176 19.29 21 14.591 21 9
-           c0-1.042-.133-2.052-.382-3.016z"/>
-    </svg>`;
-
-  function crestHTML(url, name) {
-    if (!url) return SHIELD;
-    const safe = SHIELD.replace(/"/g,"'");
-    return `<img src="${url}" alt="${name}" class="w-full h-full object-contain"
-                   onerror="this.parentElement.innerHTML='${safe}'" />`;
-  }
-
-  /* ── Populate league dropdown ── */
-  function populateLeagues() {
-    const sel = document.getElementById('filter-league');
-    [...new Set(MATCHES.map(m => m.competitionName))].sort().forEach(l => {
-      const o = document.createElement('option');
-      o.value = l; o.textContent = l;
-      sel.appendChild(o);
-    });
-  }
-
-  /* ── Filter + sort ── */
-
-  // function applyFilters() {
-  //   const league = document.getElementById('filter-league').value;
-  //   const date   = document.getElementById('filter-date').value;
-  //
-  //   filteredData = MATCHES
-  //           .filter(m => (!league || m.competitionName === league) && (!date || m.time.startsWith(date)))
-  //           .sort((a,b) => {
-  //             const d = parseDate(a.time) - parseDate(b.time);
-  //             return currentSort === 'asc' ? d : -d;
-  //           });
-  //
-  //   currentPage = 1;
-  //   render();
-  // }
-
-  /* ── Filter + sort ── */
-  function applyFilters() {
-    const league = document.getElementById('filter-league').value;
-    const date   = document.getElementById('filter-date').value; // Returns "YYYY-MM-DD"
-
-    filteredData = MATCHES
-            .filter(m => {
-              // 1. League Filter
-              const matchesLeague = !league || m.competitionName === league;
-
-              // 2. Date Filter
-              // We split the ISO string (2026-05-03T14:00) to get only the date part (2026-05-03)
-              const matchDate = m.time ? m.time.split('T')[0] : '';
-              const matchesDate = !date || matchDate === date;
-
-              return matchesLeague && matchesDate;
-            })
-            .sort((a,b) => {
-              const d = parseDate(a.time) - parseDate(b.time);
-              return currentSort === 'asc' ? d : -d;
-            });
-
-    currentPage = 1;
-    render();
-  }
-
-  /* ── Sort toggle ── */
-  function setSort(dir) {
-    currentSort = dir;
-    const asc  = document.getElementById('sort-asc');
-    const desc = document.getElementById('sort-desc');
-    const ON   = 'bg-navy text-white hover:bg-navy/90';
-    const OFF  = 'bg-base-200 text-base-content/50 hover:bg-base-300';
-    asc.className  = asc.className.replace(/bg-\S+|text-white|text-base-content\/50/g,'').trim()  + ' ' + (dir==='asc'  ? ON : OFF);
-    desc.className = desc.className.replace(/bg-\S+|text-white|text-base-content\/50/g,'').trim() + ' ' + (dir==='desc' ? ON : OFF);
-    applyFilters();
-  }
-
-  /* ── Reset ── */
-  function resetFilters() {
-    document.getElementById('filter-league').value = '';
-    document.getElementById('filter-date').value   = '';
-    setSort('asc');
-  }
-
-  /* ── Render ── */
-  function render() {
-    const grid  = document.getElementById('matches-grid');
-    const pag   = document.getElementById('pagination');
-    const total = filteredData.length;
-    const pages = Math.ceil(total / PAGE_SIZE);
-    const slice = filteredData.slice((currentPage-1)*PAGE_SIZE, currentPage*PAGE_SIZE);
-
-    document.getElementById('match-count').textContent = MATCHES.length;
-    document.getElementById('results-text').innerHTML =
-            `Visar <span class="text-navy">${total}</span> ${total===1?'match':'matcher'}`;
-    document.getElementById('page-indicator').textContent =
-            pages > 1 ? `Sida ${currentPage} av ${pages}` : '';
-
-    /* ── Empty state ── */
-    grid.innerHTML = '';
-    if (!slice.length) {
-      grid.innerHTML = `
-          <div class="col-span-full card bg-base-100 border-2 border-dashed border-base-300 py-16 text-center shadow-none rounded-2xl">
-            <div class="card-body items-center gap-4 py-0">
-              <div class="w-16 h-16 rounded-full bg-base-200 flex items-center justify-center">
-                <svg class="w-7 h-7 opacity-25" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-              </div>
-              <div>
-                <p class="font-display font-bold text-sm tracking-widest uppercase text-base-content/40">Inga matcher hittades</p>
-                <p class="text-xs text-base-content/30 mt-1">Prova att ändra eller ta bort dina filter.</p>
-              </div>
-              <button onclick="resetFilters()"
-                      class="btn btn-sm bg-navy text-white border-none hover:bg-navy/90 font-display font-bold text-[10px] tracking-[.14em] uppercase gap-2">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                </svg>
-                Rensa filter
-              </button>
-            </div>
-          </div>`;
-      pag.innerHTML = '';
-      return;
-    }
-
-    /* ── Cards ── */
-    slice.forEach((m, i) => {
-      const days    = daysFromNow(m.time);
-      const daysLbl = days === 0 ? 'Idag' : days === 1 ? 'Imorgon' : `${days} dagar`;
-      const isSoon  = days <= 7;
-
-      const card = document.createElement('article');
-      card.className = [
-        'card bg-base-100 border border-base-300 shadow-sm overflow-hidden',
-        'hover:shadow-xl hover:-translate-y-1 hover:border-gold/50',
-        'transition-all duration-300 card-stagger',
-      ].join(' ');
-      card.style.animationDelay = `${i * 55}ms`;
-
-      card.innerHTML = `
-          <!-- Header -->
-          <div class="bg-navy px-5 py-2.5 flex items-center justify-between gap-3">
-            <div class="flex items-center gap-2 min-w-0">
-              <svg class="w-3.5 h-3.5 text-gold flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M5 4h14a1 1 0 011 1v2a5 5 0 01-4 4.9V13a4 4 0 01-3 3.87V19h3a1 1 0 110 2H8a1 1 0 110-2h3v-2.13A4 4 0 018 13v-1.1A5 5 0 014 7V5a1 1 0 011-1zm1 2v1a3 3 0 002 2.83V6H6zm10 0v3.83A3 3 0 0018 7V6h-2z"/>
-              </svg>
-              <span class="font-display font-bold text-[11px] tracking-[.14em] uppercase text-white/90 truncate">
-                ${m.competitionName || 'Match'}
-              </span>
-            </div>
-            <div class="badge bg-gold text-navy border-none font-display font-black text-[9px] tracking-[.18em] uppercase gap-1.5 flex-shrink-0">
-              <span class="w-1.5 h-1.5 rounded-full bg-navy animate-pulse-dot"></span>
-              Upcoming
-            </div>
-          </div>
-
-          <!-- Body -->
-          <div class="card-body p-5 gap-0">
-            <!-- Date / time -->
-            <div class="flex items-center justify-between flex-wrap gap-2 pb-4 mb-4 border-b border-base-200">
-              <div class="flex items-center gap-1.5 text-sm font-semibold">
-                <svg class="w-4 h-4 text-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-                ${fmtDate(m.time)}
-              </div>
-              <div class="flex items-center gap-1.5 text-sm font-semibold">
-                <svg class="w-4 h-4 text-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                ${fmtTime(m.time)}
-              </div>
-              <div class="badge badge-sm font-display font-bold text-[9px] tracking-[.1em] uppercase border-none
-                          ${isSoon ? 'bg-gold/20 text-yellow-700' : 'bg-base-200 text-navy'}">
-                ${daysLbl}
-              </div>
-            </div>
-
-            <!-- Teams -->
-            <div class="flex items-center justify-between gap-2">
-              <!-- Home -->
-              <div class="flex flex-col items-center text-center flex-1 min-w-0">
-                <div class="w-16 h-16 sm:w-[72px] sm:h-[72px] bg-base-200 rounded-xl border border-base-300
-                            flex items-center justify-center p-2 mb-2
-                            transition-transform duration-300 hover:scale-105">
-                  ${crestHTML(m.homeTeamImageUrl, m.homeTeamName)}
-                </div>
-                <span class="font-display font-bold text-sm truncate w-full">${m.homeTeamName}</span>
-                <span class="font-display font-bold text-[9px] tracking-[.18em] uppercase opacity-35 mt-0.5">Hemma</span>
-              </div>
-
-              <!-- VS divider -->
-              <div class="flex flex-col items-center px-1">
-                <span class="w-px h-5 bg-base-300 block"></span>
-                <span class="font-display font-black text-2xl text-gold italic leading-none my-1">VS</span>
-                <span class="w-px h-5 bg-base-300 block"></span>
-              </div>
-
-              <!-- Away -->
-              <div class="flex flex-col items-center text-center flex-1 min-w-0">
-                <div class="w-16 h-16 sm:w-[72px] sm:h-[72px] bg-base-200 rounded-xl border border-base-300
-                            flex items-center justify-center p-2 mb-2
-                            transition-transform duration-300 hover:scale-105">
-                  ${crestHTML(m.awayTeamImageUrl, m.awayTeamName)}
-                </div>
-                <span class="font-display font-bold text-sm truncate w-full">${m.awayTeamName}</span>
-                <span class="font-display font-bold text-[9px] tracking-[.18em] uppercase opacity-35 mt-0.5">Borta</span>
-              </div>
-            </div>
-
-            <!-- CTA -->
-            <div class="mt-5 pt-4 border-t border-base-200">
-              <a href="/match-details/${m.gameNumber}"
-                 class="btn btn-sm w-full bg-base-200 text-navy border-none
-                        hover:bg-navy hover:text-white
-                        font-display font-bold text-[10px] tracking-[.16em] uppercase no-underline transition-all">
-                Matchdetaljer →
-              </a>
-            </div>
-          </div>
-        `;
-      grid.appendChild(card);
-    });
-
-    /* ── Pagination ── */
-    pag.innerHTML = '';
-    if (pages <= 1) return;
-
-    const makeBtn = (html, targetPage, disabled) => {
-      const b = document.createElement('button');
-      b.className = [
-        'btn btn-sm border border-base-300 bg-base-100 font-display font-bold text-xs',
-        'hover:bg-navy hover:text-white hover:border-navy',
-        targetPage === currentPage ? '!bg-navy !text-white !border-navy' : '',
-      ].join(' ');
-      b.disabled  = disabled || false;
-      b.innerHTML = html;
-      if (!disabled) b.onclick = () => {
-        currentPage = targetPage;
-        render();
-        window.scrollTo({ top: 300, behavior: 'smooth' });
-      };
-      return b;
-    };
-
-    pag.appendChild(makeBtn(
-            `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>`,
-            currentPage - 1, currentPage === 1
-    ));
-    for (let p = 1; p <= pages; p++) pag.appendChild(makeBtn(p, p));
-    pag.appendChild(makeBtn(
-            `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>`,
-            currentPage + 1, currentPage === pages
-    ));
-  }
-
-  /* ── Init ── */
-  populateLeagues();
-  applyFilters();
-</script>
 </body>
 </html>
