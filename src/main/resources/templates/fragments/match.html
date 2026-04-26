@@ -161,3 +161,70 @@
 
 
 </div>
+
+
+<!-- START OF FRAGMENT: match-list -->
+<div th:fragment="match-calendar-list(matches)" class="space-y-3">
+  <!-- Match Row -->
+  <div th:each="match : ${matches}"
+       class="group relative bg-primary flex flex-col md:flex-row items-center gap-4  hover:bg-neutral/10 border border-white/10 p-4 md:p-6 transition-all duration-300 rounded-xl overflow-hidden">
+
+    <!-- Subtle Glow Effect on Hover -->
+    <div class="absolute inset-0 bg-gradient-to-r from-secondary/0 via-secondary/5 to-secondary/0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+
+    <!-- 1. Date Block -->
+    <div class="flex flex-row md:flex-col items-center justify-center min-w-[80px] text-center border-b md:border-b-0 md:border-r border-white/10 pb-2 md:pb-0 md:pr-6">
+            <span class="text-secondary font-black text-2xl md:text-3xl leading-none italic uppercase"
+                  th:text="${#temporals.format(match.timeAsDateTime, 'dd')}">14</span>
+      <span class="text-white/60 font-bold text-xs uppercase tracking-widest ml-2 md:ml-0"
+            th:text="${#temporals.format(match.timeAsDateTime, 'MMM')}">MAJ</span>
+    </div>
+
+    <!-- 2. Competition -->
+    <div class="flex items-center gap-3 md:w-1/4">
+      <div class="w-8 h-8 flex-shrink-0 bg-navy rounded-full border border-white/10 p-1.5">
+        <img src="/img/league-logo-placeholder.png" class="w-full h-full object-contain opacity-80" alt="League">
+      </div>
+      <div class="flex flex-col">
+        <span class="text-[10px] font-black text-secondary uppercase tracking-widest">Competition</span>
+        <span class="text-white text-xs font-bold truncate" th:text="${match.competitionName != null ? match.competitionName : 'Division 2'}">Division 2 Södra Götaland</span>
+      </div>
+    </div>
+
+    <!-- 3. The Matchup (Main Focus) -->
+    <div class="flex-1 flex items-center justify-center gap-4 md:gap-8 w-full py-4 md:py-0">
+      <!-- Home -->
+      <div class="flex flex-1 items-center justify-end gap-3 text-right">
+        <span class="text-white font-bold text-sm md:text-lg uppercase italic tracking-tight truncate max-w-[120px] md:max-w-none" th:text="${match.homeTeamName}">FBK Balkan</span>
+        <img th:src="${match.homeTeamImageUrl}" class="w-8 h-8 md:w-10 md:h-10 object-contain" alt="">
+      </div>
+
+      <!-- Score or VS -->
+      <div class="flex flex-col items-center justify-center min-w-[60px] md:min-w-[100px]">
+        <div th:if="${match.goalsScoredHomeTeam != -1}" class="bg-white/10 px-3 py-1 rounded text-xl md:text-2xl font-black text-secondary">
+          <span th:text="${match.goalsScoredHomeTeam}">2</span>
+          <span class="text-white/30 mx-1">-</span>
+          <span th:text="${match.goalsScoredAwayTeam}">1</span>
+        </div>
+        <div th:if="${match.goalsScoredHomeTeam == -1}" class="flex flex-col items-center">
+          <span class="text-white/20 font-black italic text-lg">VS</span>
+          <span class="text-[10px] text-white/40 font-bold" th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')}">14:00</span>
+        </div>
+      </div>
+
+      <!-- Away -->
+      <div class="flex flex-1 items-center justify-start gap-3 text-left">
+        <img th:src="${match.awayTeamImageUrl}" class="w-8 h-8 md:w-10 md:h-10 object-contain" alt="">
+        <span class="text-white font-bold text-sm md:text-lg uppercase italic tracking-tight truncate max-w-[120px] md:max-w-none" th:text="${match.awayTeamName}">IFK Malmö</span>
+      </div>
+    </div>
+
+    <!-- 4. CTA -->
+    <div class="md:w-1/6 flex justify-end">
+      <a th:href="@{'/match-details/' + ${match.gameNumber}}"
+         class="btn btn-sm md:btn-md btn-outline border-white/20 text-white hover:bg-secondary hover:text-navy hover:border-secondary font-black uppercase italic tracking-widest text-[10px]">
+        Visa detaljer
+      </a>
+    </div>
+  </div>
+</div>
