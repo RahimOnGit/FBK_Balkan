@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spelschema — FBK Balkan</title>
+
+  <!-- DaisyUI + Tailwind -->
+  <link th:href="@{/css/output.css}" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Roboto+Condensed:ital,wght@0,400;0,700;1,700&display=swap" rel="stylesheet" />
+
+  <style>
+    .font-virage { font-family: 'Roboto Condensed', sans-serif; }
+    .hero-glow {
+      background: radial-gradient(circle at 50% 50%, rgba(245, 197, 24, 0.15) 0%, transparent 70%);
+    }
+  </style>
+</head>
+
+<body class="bg-base-100 font-virage text-white antialiased">
+
+<header class="sticky top-0 z-[100] bg-primary/95 backdrop-blur-md border-b border-white/10">
+  <div th:replace="~{fragments/navbar::navbar}"></div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="relative bg-primary  pt-24 pb-20 overflow-hidden">
+    <div class="absolute inset-0 hero-glow"></div>
+    <!-- Decorative Blobs -->
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-secondary/10 rounded-full blur-[100px]"></div>
+
+    <div class="container mx-auto px-4 relative z-10 text-center">
+      <div class="inline-flex items-center gap-3 mb-6">
+        <span class="h-[1px] w-8 bg-secondary"></span>
+        <span class="text-secondary font-black uppercase tracking-[0.3em] text-xs">Säsongen 2024/25</span>
+        <span class="h-[1px] w-8 bg-secondary"></span>
+      </div>
+      <h1 class="text-6xl md:text-9xl font-black italic uppercase tracking-tighter mb-4 leading-none">
+        Spel<span class="text-secondary">schema</span>
+      </h1>
+      <p class="text-white/50 text-lg md:text-xl max-w-2xl mx-auto uppercase tracking-wide">
+        Följ FBK Balkans herrlag i Division 2 Södra Götaland.
+      </p>
+    </div>
+  </section>
+
+  <!-- FIXTURES LIST -->
+  <!-- Inside matches.html -->
+
+  <section class="pb-24">
+    <div class="container mx-auto px-4 max-w-5xl">
+
+      <!-- Filter Tabs -->
+      <div class="flex flex-wrap items-center justify-center gap-4 mb-16 border-b border-neutral-100 pb-6">
+        <button class="text-secondary border-b-2 border-secondary pb-2 px-4 font-black uppercase italic tracking-widest text-sm">Alla Matcher</button>
+        <button class="text-primary/40 hover:text-primary pb-2 px-4 font-black uppercase italic tracking-widest text-sm transition-colors">Herrar A</button>
+        <button class="text-primary/40 hover:text-primary pb-2 px-4 font-black uppercase italic tracking-widest text-sm transition-colors">Ungdom</button>
+      </div>
+
+      <!-- THE LIST -->
+      <div class="space-y-24">
+
+        <!-- Grouping: Upcoming Matches -->
+        <div class="space-y-8">
+          <div class="flex items-center gap-6">
+            <h2 class="text-2xl font-black italic text-primary uppercase tracking-tight">Kommande <span class="text-secondary">matcher</span></h2>
+            <div class="h-[1px] flex-1 bg-neutral-100"></div>
+          </div>
+
+          <!-- CALL THE NEW ROW CARD FRAGMENT -->
+          <div th:replace="~{fragments/match :: match-calendar-list(${upcomingMatches})}"></div>
+        </div>
+
+        <!-- Grouping: Recent Results -->
+        <div class="space-y-8">
+          <div class="flex items-center gap-6">
+            <h2 class="text-2xl font-black italic text-primary/30 uppercase tracking-tight">Senaste <span class="text-neutral-200">Resultat</span></h2>
+            <div class="h-[1px] flex-1 bg-neutral-100"></div>
+          </div>
+
+          <!-- CALL THE NEW ROW CARD FRAGMENT -->
+          <div th:replace="~{fragments/match :: match-row-card(matches=${pastMatches})}"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BOX -->
+
+</main>
+
+<footer th:replace="~{fragments/footer::footer}"></footer>
+
+</body>
+</html>

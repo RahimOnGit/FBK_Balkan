@@ -45,6 +45,7 @@ public class SecurityConfig {
                                 .requestMatchers("/sponsors").permitAll()
                                 .requestMatchers("/ungdomsportalen").permitAll()
                                 .requestMatchers("/verksamhet").permitAll()
+                                .requestMatchers("/matcher", "/match-details/**").permitAll()
 
 
 //                      roles-based access control

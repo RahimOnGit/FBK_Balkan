@@ -76,10 +76,14 @@
                                         <span th:text="${user.email}">email@example.com</span>
                                     </div>
                                     <!-- Phone NEW-->
-                                    <div class="flex items-center gap-2 text-slate-500 text-xs mt-1"
-                                         th:if="${user.phone}">
+<!--                                    <div class="flex items-center gap-2 text-slate-500 text-xs mt-1"-->
+<!--                                         th:if="${user.phone}">-->
+<!--                                        <i class="fa-solid fa-phone opacity-50"></i>-->
+<!--                                        <span th:text="${user.phone}">070...</span>-->
+<!--                                    </div>-->
+                                    <div class="flex items-center gap-2 text-slate-500 text-xs mt-1">
                                         <i class="fa-solid fa-phone opacity-50"></i>
-                                        <span th:text="${user.phone}">070...</span>
+                                        <span th:text="${user.phoneDisplay}"></span>
                                     </div>
                                 </td>
                                 <td class="py-4 px-6">

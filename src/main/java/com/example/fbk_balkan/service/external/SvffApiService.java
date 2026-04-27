@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -26,7 +27,9 @@ public class SvffApiService {
     @Cacheable("svffGames")
     public List<GameDTO> fetchGames()
     {
-        String url = baseUrl + "/club/upcoming-games?from=2026-03-01&to=2026-04-30";
+        String from = LocalDate.now().minusMonths(2).toString();
+        String to = LocalDate.now().plusMonths(2).toString();
+        String url = baseUrl + "/club/upcoming-games?from="+from+"&to="+to;
         HttpHeaders headers = new HttpHeaders();
         headers.add("ApiKey", apiKey);
         headers.add("Cache-Control" , "no-cache");

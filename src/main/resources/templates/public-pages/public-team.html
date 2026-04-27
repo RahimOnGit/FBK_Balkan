@@ -96,27 +96,25 @@
                         <div th:each="match : ${recentResults}"
                              class="mb-4 p-6 bg-white border border-subtle rounded-xl">
                             <div class="flex justify-between items-center text-xs text-neutral-400 mb-3 font-bold uppercase tracking-widest">
-                                <span th:text="${match.date}">Datum</span>
-                                <span class="px-2 py-0.5 rounded text-xs font-bold"
-                                      th:classappend="${match.win} ? 'bg-green-100 text-green-700' : (${match.draw} ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700')"
-                                      th:text="${match.win} ? 'VINST' : (${match.draw} ? 'OAVGJORT' : 'FÖRLUST')">Resultat</span>
+                                <span th:text="${#temporals.format(match.timeAsDateTime, 'dd MMM yyyy')}">12 APR</span>
+                                <span class="text-xs text-neutral-400" th:text="${match.competitionName}"></span>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="font-bold text-lg" th:text="${match.homeTeam}">Hemmalag</span>
-                                <span class="text-2xl font-black text-primary px-4" th:text="${match.score}">2–1</span>
-                                <span class="font-bold text-lg" th:text="${match.awayTeam}">Bortalag</span>
+                                <div class="flex items-center gap-2 flex-1">
+                                    <img th:src="${match.homeTeamImageUrl}" class="h-8 w-8 object-contain" alt="">
+                                    <span class="font-bold text-lg truncate" th:text="${match.homeTeamName}">Hemmalag</span>
+                                </div>
+                                <span class="text-2xl font-black text-primary px-4"
+                                      th:text="${match.goalsScoredHomeTeam} + ' – ' + ${match.goalsScoredAwayTeam}">2–1</span>
+                                <div class="flex items-center gap-2 flex-1 justify-end">
+                                    <span class="font-bold text-lg truncate" th:text="${match.awayTeamName}">Bortalag</span>
+                                    <img th:src="${match.awayTeamImageUrl}" class="h-8 w-8 object-contain" alt="">
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div th:unless="${recentResults != null and not #lists.isEmpty(recentResults)}"
                          class="p-10 bg-white border border-subtle rounded-xl text-center">
-                        <div class="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-neutral-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="10"/>
-                                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
-                                <path d="M2 12h20"/>
-                            </svg>
-                        </div>
                         <p class="text-neutral-400 font-bold uppercase tracking-widest text-sm">Inga resultat ännu</p>
                         <p class="text-neutral-400 text-xs mt-1">Resultat visas här efter matcherna spelats</p>
                     </div>
@@ -129,39 +127,29 @@
                         <div th:each="match : ${upcomingMatches}"
                              class="mb-4 p-6 bg-white border border-subtle rounded-xl">
                             <div class="flex justify-between items-center text-xs text-neutral-400 mb-3 font-bold uppercase tracking-widest">
-                                <span th:text="${match.date}">Datum</span>
-                                <span class="flex items-center gap-1">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                    </svg>
-                                    <span th:text="${match.venue}">Arena</span>
-                                </span>
+                                <span th:text="${#temporals.format(match.timeAsDateTime, 'dd MMM yyyy')}">Datum</span>
+                                <span th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')}">Tid</span>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="font-bold text-lg" th:text="${match.homeTeam}">Hemmalag</span>
+                                <div class="flex items-center gap-2 flex-1">
+                                    <img th:src="${match.homeTeamImageUrl}" class="h-15 w-10 object-contain" alt="">
+                                    <span class="font-bold text-lg truncate" th:text="${match.homeTeamName}">Hemmalag</span>
+                                </div>
                                 <span class="text-sm font-black text-neutral-300 px-4">VS</span>
-                                <span class="font-bold text-lg" th:text="${match.awayTeam}">Bortalag</span>
+                                <div class="flex items-center gap-2 flex-1 justify-end">
+                                    <span class="font-bold text-lg truncate" th:text="${match.awayTeamName}">Bortalag</span>
+                                    <img th:src="${match.awayTeamImageUrl}" class="h-8 w-8 object-contain" alt="">
+                                </div>
                             </div>
-                            <div class="mt-3 text-xs text-neutral-400 font-bold" th:if="${match.time}">
-                                <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 6v6l4 2"/>
-                                </svg>
-                                <span th:text="${match.time}">00:00</span>
-                            </div>
+                            <p class="text-xs text-neutral-400 mt-3" th:text="${match.competitionName}"></p>
                         </div>
                     </div>
                     <div th:unless="${upcomingMatches != null and not #lists.isEmpty(upcomingMatches)}"
                          class="p-10 bg-white border border-subtle rounded-xl text-center">
-                        <div class="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-neutral-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                            </svg>
-                        </div>
                         <p class="text-neutral-400 font-bold uppercase tracking-widest text-sm">Inga kommande matcher</p>
                         <p class="text-neutral-400 text-xs mt-1">Schema uppdateras löpande under säsongen</p>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
