@@ -1,5 +1,6 @@
 package com.example.fbk_balkan.service;
 
+import com.example.fbk_balkan.dto.ChangePasswordDto;
 import com.example.fbk_balkan.dto.UserCreateUpdateDto;
 import com.example.fbk_balkan.dto.UserListItemDTO;
 import com.example.fbk_balkan.dto.UserProfileViewDto;
@@ -17,6 +18,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.AccessDeniedException;
+
+import com.example.fbk_balkan.security.CustomUserDetails;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -148,6 +154,8 @@ public class UserService {
                     // Combine both counts into teamCount
                     dto.setTeamCount(headCoachTeams + (int) assistantTeams);
                     dto.setEnabled(user.isEnabled());
+                    // New
+                    dto.setPhone(user.getPhone());
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -165,9 +173,10 @@ public class UserService {
         return userRepository.existsByEmail(email.trim().toLowerCase());
     }
 
-    public UserProfileViewDto getCurrentUserProfile(String email) {
-
-        User user = userRepository.findByEmail(email)
+//    public UserProfileViewDto getCurrentUserProfile(String email) {
+public UserProfileViewDto getCurrentUserProfile(Long userId) {
+//        User user = userRepository.findByEmail(email)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         UserProfileViewDto dto = new UserProfileViewDto();
@@ -176,12 +185,16 @@ public class UserService {
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
         dto.setPhone(user.getPhone());
+        // SAFE ROLE MAPPING (real-world approach)
+        dto.setRoleLabel(mapRoleToLabel(user.getRole()));
 
         return dto;
     }
     @Transactional
-    public void updatePhone(String email, String phone) {
-        User user = userRepository.findByEmail(email)
+    public void updatePhone(Long userId, String phone) {
+//        User user = userRepository.findByEmail(email)
+        User user = userRepository.findById(userId)
+
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         user.setPhone(
@@ -190,4 +203,38 @@ public class UserService {
                         : null
         );
     }
+    private String mapRoleToLabel(Role role) {
+        if (role == null) return "—";
+
+        return switch (role) {
+            case ADMIN -> "Admin";
+            case COACH -> "Tränare";
+            case ASSISTANT_COACH -> "Assisterande tränare";
+            case SOCIAL_ADMIN -> "Social Admin";
+        };
+    }
+    @Transactional
+    public void changePassword(Long userId, ChangePasswordDto dto) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        //Wrong current password
+        if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Nuvarande lösenord är fel");
+        }
+
+        // New passwords don't match
+        if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
+            throw new IllegalArgumentException("Lösenorden matchar inte");
+        }
+
+        // Prevent reuse
+        if (passwordEncoder.matches(dto.getNewPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Du kan inte återanvända ditt gamla lösenord");
+        }
+
+        user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+    }
+
 }
