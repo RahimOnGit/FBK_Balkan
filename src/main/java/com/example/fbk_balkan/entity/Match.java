@@ -29,6 +29,7 @@ public class Match {
 
    private String competitionName;
    private String seasonName;
+   private String venueName;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     LocalDateTime timeAsDateTime;
 

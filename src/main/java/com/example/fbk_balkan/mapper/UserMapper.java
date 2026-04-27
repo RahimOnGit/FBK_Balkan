@@ -44,7 +44,7 @@ public class UserMapper {
         entity.setRole(dto.getRole());
         entity.setEnabled(dto.isEnabled());
         // lösenord hanteras separat i service
-        // ✅ Safe phone handling
+        // Safe phone handling
         entity.setPhone(
                 dto.getPhone() != null && !dto.getPhone().isBlank()
                         ? dto.getPhone().trim()
