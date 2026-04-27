@@ -17,7 +17,7 @@ public record GameDTO(
         Integer goalsScoredAwayTeam,
         String competitionName,
         String seasonName,
-
+        String venueName,
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
         LocalDateTime timeAsDateTime
 ) {}

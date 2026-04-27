@@ -12,4 +12,7 @@ public class UserListItemDTO {
     private int teamCount;
     private boolean enabled;
     private String phone;
+    public String getPhoneDisplay() {
+        return (phone != null && !phone.isBlank()) ? phone : "—";
+    }
 }

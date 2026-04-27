@@ -20,6 +20,7 @@ public class MatchMapper {
         match.setCompetitionName(dto.competitionName());
         match.setSeasonName(dto.seasonName());
         match.setTimeAsDateTime(dto.timeAsDateTime());
+        match.setVenueName(dto.venueName());
         return match;
     }
     public GameDTO toDto(Match entity) {
@@ -33,7 +34,9 @@ public class MatchMapper {
                 entity.getGoalsScoredAwayTeam(),
                 entity.getCompetitionName(),
                 entity.getSeasonName(),
+                entity.getVenueName(),
                 entity.getTimeAsDateTime()
+
         );
     }
 }
