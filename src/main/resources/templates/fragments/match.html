@@ -31,8 +31,7 @@
   <div id="upcoming-slider" class="flex overflow-x-auto scroll-smooth gap-4 no-scrollbar p-4">
 
     <!-- Upcoming Match Card -->
-    <div th:each="match : ${matches}"
-         th:if="${match.goalsScoredHomeTeam == -1}"
+    <div th:each="match : ${upcomingMatches}"
          class="flex-none w-[280px] md:w-[320px] bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-5 hover:bg-white/10 transition-all">
 
       <!-- Date & Venue -->
@@ -295,4 +294,4 @@
       </a>
     </div>
   </div>
-</div>
+</div> 
