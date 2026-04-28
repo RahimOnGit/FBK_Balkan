@@ -25,6 +25,19 @@ public class MatchService {
                 .toList();
     }
 
+    public List<GameDTO> fetchUpcomingMatchesWithinMonths(int months) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime cutoff = now.plusMonths(months);
+        return matchRepository.findAll().stream()
+                .map(matchMapper::toDto)
+                .filter(m -> m.timeAsDateTime() != null
+                        && !m.timeAsDateTime().isBefore(now)
+                        && !m.timeAsDateTime().isAfter(cutoff))
+                .sorted(Comparator.comparing(GameDTO::timeAsDateTime,
+                        Comparator.nullsLast(Comparator.naturalOrder())))
+                .toList();
+    }
+
     public List<GameDTO> fetchMatchesForTeam(Long svffTeamId) {
         if (svffTeamId == null) return List.of();
 
