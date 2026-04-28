@@ -40,7 +40,8 @@ public class HomeController {
 //      fetch Match results
         List<GameDTO> matches = matchService.fetchMatches();
         model.addAttribute("matches" , matches);
-        System.out.println("NEW Match results: " + matchService.fetchMatches());
+//        System.out.println("NEW Match results: " + matchService.fetchMatches());
+        model.addAttribute("upcomingMatches", matchService.fetchUpcomingMatchesWithinMonths(2));
         return "index";
     }
 
