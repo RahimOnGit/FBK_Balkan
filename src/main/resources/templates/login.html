@@ -9,7 +9,7 @@
 </head>
 <body class="min-h-screen bg-base-200">
 <!-- Navbar -->
-<div class="absolute top-0 left-0 z-[10] right-0 bg-primary" >
+<div class="absolute top-0 left-0 z-[10] right-0 bg-primary">
   <div th:replace="~{fragments/navbar::navbar}"></div>
 </div>
 
@@ -17,38 +17,50 @@
 <div class="min-h-screen flex items-center justify-center px-4 py-20">
   <div class="card w-full max-w-md bg-base-100 shadow-xl">
     <div class="card-body">
-      <h2 class="card-title justify-center text-3xl mb-6">Login</h2>
+      <h2 class="card-title justify-center text-3xl mb-6">Logga in</h2>
 
       <div th:if="${error}" class="alert alert-error mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
         <span th:text="${error}"></span>
+      </div>
+
+      <div th:if="${info}" class="alert alert-info mb-4">
+        <span th:text="${info}"></span>
       </div>
 
       <form th:action="@{/login}" method="post">
         <div class="form-control mb-4">
           <label class="label">
-            <span class="label-text">Username</span>
+            <span class="label-text">E-post</span>
           </label>
-          <input type="text" name="username" placeholder="Enter your username"
+          <input type="email" name="username" placeholder="namn@exempel.se"
                  class="input input-bordered w-full" required autofocus/>
         </div>
 
-        <div class="form-control mb-6">
+        <div class="form-control mb-2">
           <label class="label">
-            <span class="label-text">Password</span>
+            <span class="label-text">Lösenord</span>
           </label>
-          <input type="password" name="password" placeholder="Enter your password"
+          <input type="password" name="password" placeholder="Ditt lösenord"
                  class="input input-bordered w-full" required/>
+        </div>
+
+        <div class="form-control mb-6 text-right">
+          <a th:href="@{/forgot-password}" class="link link-primary text-sm">Glömt lösenord?</a>
         </div>
 
         <div class="form-control mb-6">
           <label class="label cursor-pointer justify-start gap-2">
             <input type="checkbox" name="remember-me" class="checkbox checkbox-primary">
-            <span class="label-text">kom ihåg mig</span>
+            <span class="label-text">Kom ihåg mig</span>
           </label>
         </div>
 
         <div class="form-control">
-          <button type="submit" onclick="" class="btn btn-primary w-full">Logga in</button>
+          <button type="submit" class="btn btn-primary w-full">Logga in</button>
         </div>
       </form>
     </div>
