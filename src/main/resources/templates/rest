@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Återställ lösenord - FBK Balkan</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-base-200">
+<div class="absolute top-0 left-0 z-[10] right-0 bg-primary">
+    <div th:replace="~{fragments/navbar::navbar}"></div>
+</div>
+
+<div class="min-h-screen flex items-center justify-center px-4 py-20">
+    <div class="card w-full max-w-md bg-base-100 shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title justify-center text-2xl mb-6">Återställ lösenord</h2>
+
+            <div th:if="${success}" class="alert alert-success mb-4">
+                <span th:text="${success}"></span>
+            </div>
+
+            <div th:if="${error}" class="alert alert-error mb-4">
+                <span th:text="${error}"></span>
+            </div>
+
+            <!-- Success state: link to login -->
+            <div th:if="${success}" class="text-center">
+                <a th:href="@{/login}" class="btn btn-primary w-full">Gå till login</a>
+            </div>
+
+            <!-- Invalid token state: only offer to request a new link -->
+            <div th:if="${invalidToken}" class="text-center mt-2">
+                <a th:href="@{/forgot-password}" class="btn btn-primary w-full">Begär en ny återställningslänk</a>
+            </div>
+
+            <!-- Reset form: only show if we have a token and no success/invalidToken -->
+            <form th:if="${token != null and !invalidToken and !success}"
+                  th:action="@{/reset-password}" method="post">
+                <input type="hidden" name="token" th:value="${token}"/>
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Nytt lösenord</span>
+                    </label>
+                    <input type="password" name="password" placeholder="Minst 8 tecken"
+                           class="input input-bordered w-full" required minlength="8" autofocus/>
+                </div>
+
+                <div class="form-control mb-6">
+                    <label class="label">
+                        <span class="label-text">Bekräfta lösenord</span>
+                    </label>
+                    <input type="password" name="confirmPassword" placeholder="Upprepa lösenordet"
+                           class="input input-bordered w-full" required minlength="8"/>
+                </div>
+
+                <div class="form-control">
+                    <button type="submit" class="btn btn-primary w-full">Spara nytt lösenord</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="mt-8">
+    <div th:replace="~{fragments/footer::footer}"></div>
+</div>
+</body>
+</html>
