@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,14 @@ public class User {
 
     @Builder.Default
     private boolean enabled = true;
+
+    // ============= Brute-force protection =============
+    @Builder.Default
+    @Column(name = "failed_login_attempts", nullable = false)
+    private int failedLoginAttempts = 0;
+
+    @Column(name = "locked_until")
+    private LocalDateTime lockedUntil;
 
     @Builder.Default
     @OneToMany(mappedBy = "coach", cascade = CascadeType.ALL, orphanRemoval = true)
