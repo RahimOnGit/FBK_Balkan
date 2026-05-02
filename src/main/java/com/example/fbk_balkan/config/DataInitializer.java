@@ -1,20 +1,23 @@
 package com.example.fbk_balkan.config;
 
 import com.example.fbk_balkan.dto.match.GameDTO;
+import com.example.fbk_balkan.dto.match.MatchDetailsDTO;
 import com.example.fbk_balkan.dto.svff.SvffTeamDto;
-import com.example.fbk_balkan.entity.Match;
-import com.example.fbk_balkan.entity.Team;
-import com.example.fbk_balkan.entity.User;
-import com.example.fbk_balkan.entity.Role;
+import com.example.fbk_balkan.entity.*;
+import com.example.fbk_balkan.mapper.MatchDetailsMapper;
 import com.example.fbk_balkan.mapper.MatchMapper;
+import com.example.fbk_balkan.repository.MatchDetailsRepository;
 import com.example.fbk_balkan.repository.MatchRepository;
 import com.example.fbk_balkan.repository.TeamRepository;
 import com.example.fbk_balkan.repository.UserRepository;
+import com.example.fbk_balkan.service.MatchService;
 import com.example.fbk_balkan.service.external.SvffApiService;
 import com.example.fbk_balkan.service.external.SvffTeamConverter;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +33,9 @@ private final MatchMapper matchMapper;
 private final MatchRepository matchRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MatchDetailsRepository matchDetailsRepository;
+    private final MatchDetailsMapper matchDetailsMapper;
+    private final MatchService matchService;
 
     @Override
     public void run(String... args) {
@@ -191,4 +197,5 @@ private final MatchRepository matchRepository;
             System.out.println(" SvFF sync failed: " + e.getMessage());
         }
     }
+
 }
