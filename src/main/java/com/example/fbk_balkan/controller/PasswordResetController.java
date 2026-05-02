@@ -18,7 +18,8 @@ public class PasswordResetController {
     // ---------- Forgot password (request a reset link) ----------
 
     @GetMapping("/forgot-password")
-    public String showForgotForm() {
+    public String showForgotForm(Model model) {
+        model.addAttribute("success", false);
         return "forgot-password";
     }
 
@@ -43,9 +44,12 @@ public class PasswordResetController {
             model.addAttribute("error",
                     "Återställningslänken är ogiltig eller har gått ut. Begär en ny.");
             model.addAttribute("invalidToken", true);
-            return "reset-password";
+            model.addAttribute("showForm", false);
+        } else {
+            model.addAttribute("token", token);
+            model.addAttribute("invalidToken", false);
+            model.addAttribute("showForm", true);
         }
-        model.addAttribute("token", token);
         return "reset-password";
     }
 
@@ -57,11 +61,15 @@ public class PasswordResetController {
         if (password == null || password.length() < 8) {
             model.addAttribute("error", "Lösenordet måste vara minst 8 tecken.");
             model.addAttribute("token", token);
+            model.addAttribute("invalidToken", false);
+            model.addAttribute("showForm", true);
             return "reset-password";
         }
         if (!password.equals(confirmPassword)) {
             model.addAttribute("error", "Lösenorden matchar inte.");
             model.addAttribute("token", token);
+            model.addAttribute("invalidToken", false);
+            model.addAttribute("showForm", true);
             return "reset-password";
         }
 
@@ -70,21 +78,35 @@ public class PasswordResetController {
             model.addAttribute("error",
                     "Återställningslänken är ogiltig eller har gått ut. Begär en ny.");
             model.addAttribute("invalidToken", true);
+            model.addAttribute("showForm", false);
             return "reset-password";
         }
 
         model.addAttribute("success",
                 "Ditt lösenord har uppdaterats. Du kan nu logga in.");
+        model.addAttribute("invalidToken", false);
+        model.addAttribute("showForm", false);
         return "reset-password";
     }
 
     private String buildBaseUrl(HttpServletRequest request) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(request.getScheme()).append("://").append(request.getServerName());
+        String scheme = request.getScheme();
+        String serverName = request.getServerName();
         int port = request.getServerPort();
-        boolean isDefault = (port == 80 && "http".equals(request.getScheme()))
-                || (port == 443 && "https".equals(request.getScheme()));
-        if (!isDefault) sb.append(":").append(port);
+        // Honour X-Forwarded-Proto / X-Forwarded-Host for reverse-proxy / Replit deployments
+        String forwardedProto = request.getHeader("X-Forwarded-Proto");
+        String forwardedHost  = request.getHeader("X-Forwarded-Host");
+        if (forwardedProto != null && !forwardedProto.isBlank()) scheme = forwardedProto.trim();
+        if (forwardedHost  != null && !forwardedHost.isBlank())  {
+            serverName = forwardedHost.trim();
+            port = -1; // host header already includes port if needed
+        }
+        StringBuilder sb = new StringBuilder(scheme).append("://").append(serverName);
+        if (port > 0) {
+            boolean isDefault = (port == 80 && "http".equals(scheme))
+                    || (port == 443 && "https".equals(scheme));
+            if (!isDefault) sb.append(":").append(port);
+        }
         return sb.toString();
     }
 }
