@@ -32,6 +32,13 @@ public class Match {
    private String venueName;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     LocalDateTime timeAsDateTime;
+    private Boolean isFinished;
+    private String result;
+    private String competitionCategoryName;
+    private String refereeName;
+    private String assistant1Name;
+    private String ageCategoryName;
+    private  String venuePitchTypeName;
 
 
 }

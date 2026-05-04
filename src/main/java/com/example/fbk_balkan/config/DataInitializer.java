@@ -13,7 +13,6 @@ import com.example.fbk_balkan.repository.UserRepository;
 import com.example.fbk_balkan.service.external.SvffApiService;
 import com.example.fbk_balkan.service.external.SvffTeamConverter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -124,6 +123,17 @@ private final MatchRepository matchRepository;
                             existing.setAwayTeamName(resolvedAway);
                             changed = true;
                         }
+                        if(dto.isFinished()!=null) {existing.setIsFinished(dto.isFinished());}
+                        if(dto.result()!=null) {existing.setResult(dto.result());}
+                        if(dto.refereeName()!=null) {existing.setRefereeName(dto.refereeName());}
+                        if (dto.competitionCategoryName() != null) {
+                            existing.setCompetitionCategoryName(dto.competitionCategoryName()); changed = true;
+                        }
+                        if (dto.ageCategoryName() != null) {
+                            existing.setAgeCategoryName(dto.ageCategoryName());
+                            changed = true;
+                        }
+
                         if (changed) matchRepository.save(existing);
                     });
                     updated++;
@@ -137,6 +147,7 @@ private final MatchRepository matchRepository;
                 matchRepository.save(match);
                 created++;
             }
+
             System.out.println("saved " + created + " new matches, updated " + updated + " existing matches");
         }
         catch (Exception e) {

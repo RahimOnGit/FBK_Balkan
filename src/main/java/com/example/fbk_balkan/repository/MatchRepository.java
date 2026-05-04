@@ -4,7 +4,6 @@ import com.example.fbk_balkan.entity.Match;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface MatchRepository extends JpaRepository<Match,Long> {
 
@@ -15,5 +14,6 @@ public interface MatchRepository extends JpaRepository<Match,Long> {
     java.util.Optional<Match> findByGameNumber(Long gameNumber);
 
     List<Match> findByHomeTeamSvffIdOrAwayTeamSvffId(Long homeTeamSvffId, Long awayTeamSvffId);
+
 
 }

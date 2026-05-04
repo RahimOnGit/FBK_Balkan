@@ -111,4 +111,10 @@ public class MatchService {
                 .limit(5)
                 .toList();
     }
+    public GameDTO getMatchByGameNumber(Long gameNumber) {
+        Match match = matchRepository.findByGameNumber(gameNumber).orElseThrow(()-> new RuntimeException("Match not found"));
+        return matchMapper
+                .toDto(match);
+         }
+
 }
