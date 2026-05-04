@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${match != null} ? ${match.homeTeamName} + ' vs ' + ${match.awayTeamName} + ' – Matchcenter' : 'Matchcenter – FBK Balkan'">FBK Balkan Matchcenter</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Ensure Virage font (matching your existing design) */
+
+        body {
+            background: white;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-white">
+
+<!-- Navbar  -->
+<div class="bg-primary">
+<div th:replace="~{fragments/navbar::navbar}"></div>
+</div>
+<main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+    <!-- Match not found -->
+    <div th:if="${match == null}" class="text-center py-16 bg-gray-50 rounded-2xl border border-gray-200 shadow-sm">
+        <svg class="w-16 h-16 mx-auto text-primary/30 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <h2 class="text-2xl font-bold text-primary">Match kunde inte hittas</h2>
+        <p class="text-gray-500 mt-2">Kontrollera länken eller gå tillbaka till matcher.</p>
+        <a href="/matcher" class="inline-block mt-6 bg-secondary text-primary px-6 py-2 rounded-lg font-bold text-sm uppercase tracking-wider hover:bg-primary hover:text-white transition">← Tillbaka till matcher</a>
+    </div>
+
+    <!-- Match details -->
+    <div th:if="${match != null}" class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
+        <!-- Hero header with teams (light version) -->
+        <div class="bg-gradient-to-r from-gray-50 to-white px-6 py-8 md:p-10 text-center border-b border-gray-200">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <!-- Home team -->
+                <div class="flex flex-col items-center md:items-end flex-1">
+                    <div class="w-24 h-24 bg-white rounded-2xl p-3 shadow-md border border-gray-100 mb-3">
+                        <img th:src="${match.homeTeamImageUrl != null ? match.homeTeamImageUrl : '/images/default-team.png'}"
+                             th:alt="${match.homeTeamName}" class="w-full h-full object-contain">
+                    </div>
+                    <h2 class="text-xl md:text-2xl font-virage font-black uppercase italic tracking-tight text-primary" th:text="${match.homeTeamName}">FBK Balkan</h2>
+                </div>
+
+                <!-- Score / VS area -->
+                <div class="flex flex-col items-center justify-center min-w-[140px]">
+                    <div th:if="${match.goalsScoredHomeTeam != null and match.goalsScoredHomeTeam != -1}"
+                         class="flex items-center gap-4 bg-gray-100 backdrop-blur px-6 py-3 rounded-2xl">
+                        <span class="text-5xl md:text-6xl font-black text-secondary" th:text="${match.goalsScoredHomeTeam}">3</span>
+                        <span class="text-3xl font-black text-primary">—</span>
+                        <span class="text-5xl md:text-6xl font-black text-secondary" th:text="${match.goalsScoredAwayTeam}">1</span>
+                    </div>
+                    <div th:unless="${match.goalsScoredHomeTeam != null and match.goalsScoredHomeTeam != -1}"
+                         class="relative">
+                        <div class="px-6 py-2 bg-secondary text-white text-sm font-black italic rounded-lg skew-x-[-12deg] shadow-md shadow-secondary/30">
+                            VS
+                        </div>
+                        <p class="text-primary/60 text-xs font-bold mt-2" th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')}">14:00</p>
+                    </div>
+                </div>
+
+                <!-- Away team -->
+                <div class="flex flex-col items-center md:items-start flex-1">
+                    <div class="w-24 h-24 bg-white rounded-2xl p-3 shadow-md border border-gray-100 mb-3">
+                        <img th:src="${match.awayTeamImageUrl != null ? match.awayTeamImageUrl : '/images/default-team.png'}"
+                             th:alt="${match.awayTeamName}" class="w-full h-full object-contain">
+                    </div>
+                    <h2 class="text-xl md:text-2xl font-virage font-black uppercase italic tracking-tight text-primary" th:text="${match.awayTeamName}">Råå IF</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Match info grid (light background) -->
+        <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Left column -->
+            <div class="space-y-5">
+                <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-primary/40 text-xs font-bold uppercase tracking-wider">Datum & tid</p>
+                        <p class="text-primary font-virage font-bold text-lg" th:text="${#temporals.format(match.timeAsDateTime, 'EEEE d MMMM yyyy')}">lördag 12 april 2025</p>
+                        <p class="text-primary/70 text-sm" th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')} + ' – ' + ${#temporals.format(match.timeAsDateTime.plusHours(2), 'HH:mm')}">14:00 – 16:00</p>
+                    </div>
+                </div>
+
+                <div th:if="${match.venueName != null and !#strings.isEmpty(match.venueName)}" class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-primary/40 text-xs font-bold uppercase tracking-wider">Arena</p>
+                        <p class="text-primary font-virage font-bold text-lg" th:text="${match.venueName}">Kirsebergs IP</p>
+                    </div>
+                </div>
+
+                <div th:if="${match.competitionName != null and !#strings.isEmpty(match.competitionName)}" class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-primary/40 text-xs font-bold uppercase tracking-wider">Tävling</p>
+                        <p class="text-primary font-virage font-bold text-lg" th:text="${match.competitionName}">Division 2 Södra Götaland</p>
+                        <p th:if="${match.ageCategoryName != null}" class="text-primary/60 text-sm" th:text="${match.ageCategoryName} + ' – ' + ${match.competitionCategoryName != null ? match.competitionCategoryName : ''}">Senior</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right column -->
+            <div class="space-y-5">
+                <div th:if="${match.refereeName != null and !#strings.isEmpty(match.refereeName)}" class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-primary/40 text-xs font-bold uppercase tracking-wider">Domare</p>
+                        <p class="text-primary font-virage font-bold" th:text="${match.refereeName}">Johan Andersson</p>
+                    </div>
+                </div>
+
+                <div th:if="${match.result != null and !#strings.isEmpty(match.result)}" class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-primary/40 text-xs font-bold uppercase tracking-wider">Slutresultat</p>
+                        <p class="text-primary font-virage font-bold text-lg" th:text="${match.result}">3 – 1</p>
+                    </div>
+                </div>
+
+                <!-- Upcoming match info -->
+                <div th:unless="${match.goalsScoredHomeTeam != null and match.goalsScoredHomeTeam != -1}" class="bg-secondary/5 rounded-xl p-4 border border-secondary/20">
+                    <p class="text-secondary text-xs font-black uppercase tracking-wider flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Kommande match
+                    </p>
+                    <p class="text-primary/70 text-sm mt-1">Resultat rapporteras efter avslutad match.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer actions -->
+        <div class="border-t border-gray-200 p-6 md:p-8 flex flex-wrap justify-between items-center gap-4 bg-gray-50">
+            <a href="/matcher" class="text-primary/60 hover:text-secondary text-sm font-bold uppercase tracking-wider transition flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Alla matcher
+            </a>
+
+<!--            use this if you impl match report-->
+<!--            <a th:if="${match.goalsScoredHomeTeam != null and match.goalsScoredHomeTeam != -1}"-->
+<!--               th:href="@{'/match-details/' + ${match.gameNumber} + '/report'}"-->
+<!--               class="inline-block bg-secondary text-white px-6 py-2 rounded-lg text-xs font-black uppercase tracking-wider hover:bg-primary hover:text-white transition shadow-md">-->
+<!--                Matchrapport →-->
+<!--            </a>-->
+        </div>
+    </div>
+</main>
+
+<!-- Footer fragment -->
+<div th:replace="~{fragments/footer::footer}"></div>
+
+</body>
+</html>

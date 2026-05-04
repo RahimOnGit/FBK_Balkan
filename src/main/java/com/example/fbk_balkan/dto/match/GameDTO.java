@@ -21,5 +21,21 @@ public record GameDTO(
         String seasonName,
         String venueName,
         @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-        LocalDateTime timeAsDateTime
-) {}
+        LocalDateTime timeAsDateTime ,
+        Boolean isFinished,
+        String result,
+        String competitionCategoryName,
+        String assistant1Name,
+        String ageCategoryName,
+        String venuePitchTypeName ,
+         RefereesDTO referees   // ← nested object, matches JSON key exactly
+) {
+        // helper methods so the rest of the code doesn't need to change
+        public String refereeName() {
+                return referees != null ? referees.name() : null;
+        }
+
+        public String assistant1Name() {
+                return referees != null ? referees.assistant1Name() : null;
+        }
+}
