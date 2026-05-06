@@ -183,7 +183,7 @@ public class ProfileController {
     } catch (IllegalArgumentException e) {
 
            populateModel(model, userId);
-
+//
 //            BindingResult newResult = new BeanPropertyBindingResult(dto, "passwordForm");
 //            newResult.rejectValue("currentPassword", "error.password", e.getMessage());
 //
