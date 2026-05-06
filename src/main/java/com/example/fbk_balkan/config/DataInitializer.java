@@ -33,11 +33,11 @@ private final MatchRepository matchRepository;
 
     @Override
     public void run(String... args) {
-        if (!userRepository.findByEmail("abdalraheem.saif7777@gmail.com").isPresent()) {
+        if (!userRepository.findByEmail("coach@fbkbalkan.se").isPresent()) {
             User coach = new User();
             coach.setFirstName("Rahim");
             coach.setLastName("Elhaj");
-            coach.setEmail("abdalraheem.saif7777@gmail.com");
+            coach.setEmail("coach@fbkbalkan.se");
             coach.setPassword(passwordEncoder.encode("password"));
             coach.setRole(Role.COACH);
             coach.setEnabled(true);

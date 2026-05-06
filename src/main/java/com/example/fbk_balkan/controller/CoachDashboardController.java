@@ -62,22 +62,27 @@ public class CoachDashboardController {
             model.addAttribute("teamCount", teams.size());
 
             // Trial registration requests assigned to this coach ---
-            List<TrialRegistrationDTO> trialRequests = trialService.fetchTrialRegistrationByCoach(coach.getId());
-            model.addAttribute("trialRequests", trialRequests);
+            List<TrialRegistrationDTO> allRequests = trialService.fetchTrialRegistrationByCoach(coach.getId());
 
-            // Count only PENDING requests to show as a badge/counter
-            long pendingCount = trialRequests.stream()
-                    .filter(t -> t.getStatus() != null &&
-                            t.getStatus().name().equals("PENDING"))
-                    .count();
-            model.addAttribute("requestSize", trialRequests.size());
-            model.addAttribute("pendingCount", pendingCount);
+            // Split into active (all PENDING) and history (APPROVED/REJECTED, last 3 months)
+            List<TrialRegistrationDTO> activeRequests = allRequests.stream()
+                    .filter(t -> t.getStatus() != null && t.getStatus() == TrialStatus.PENDING)
+                    .toList();
+            List<TrialRegistrationDTO> historyRequests = allRequests.stream()
+                    .filter(t -> t.getStatus() != null && t.getStatus() != TrialStatus.PENDING)
+                    .toList();
+
+            model.addAttribute("activeRequests", activeRequests);
+            model.addAttribute("historyRequests", historyRequests);
+            model.addAttribute("pendingCount", (long) activeRequests.size());
+            model.addAttribute("requestSize", allRequests.size());
 
         } else {
             model.addAttribute("coachName", "Coach");
             model.addAttribute("teams", List.of());
             model.addAttribute("teamCount", 0);
-            model.addAttribute("trialRequests", List.of());
+            model.addAttribute("activeRequests", List.of());
+            model.addAttribute("historyRequests", List.of());
             model.addAttribute("requestSize", 0);
             model.addAttribute("pendingCount", 0);
         }

@@ -142,14 +142,17 @@ public class TrialRegistrationService {
     }
 
     // ==
-    // FETCH — returns all trial registrations for a given coach
+    // FETCH — returns all PENDING registrations (any age) plus
+    //         APPROVED/REJECTED from the last 3 months for a given coach,
     //         ordered newest first
     // ===
     public List<TrialRegistrationDTO> fetchTrialRegistrationByCoach(Long coachId) {
         userRepository.findById(coachId)
                 .orElseThrow(() -> new IllegalArgumentException("Coach not found with id: " + coachId));
 
-        return trialRegistrationRepository.findByCoachIdOrderByCreatedAtDesc(coachId)
+        LocalDateTime cutoff = LocalDateTime.now().minusMonths(3);
+
+        return trialRegistrationRepository.findActiveAndRecentByCoachId(coachId, cutoff)
                 .stream()
                 .map(TrialRegistrationDTO::fromEntity)
                 .toList();
@@ -168,8 +171,8 @@ public class TrialRegistrationService {
 
 
 
-// Sanitization helper
-private String sanitize(String value) {
-    if (value == null) return null;
-    return value.trim().replaceAll("<.*?>", ""); // remove HTML tags
-}}
+    // Sanitization helper
+    private String sanitize(String value) {
+        if (value == null) return null;
+        return value.trim().replaceAll("<.*?>", ""); // remove HTML tags
+    }}

@@ -88,25 +88,26 @@
                 </a>
             </div>
 
-            <!-- Trial requests table -->
+            <!-- AKTIVA: All PENDING trial requests -->
             <div class="card bg-white shadow-lg mb-6">
                 <div class="card-body">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="card-title text-slate-800">
-                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="text-primary">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="text-warning">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                             </svg>
-                            Provträningsförfrågningar
+                            Aktiva förfrågningar
                         </h2>
                         <span th:if="${pendingCount > 0}" class="badge badge-warning badge-md" th:text="${pendingCount} + ' väntar'">0 väntar</span>
+                        <span th:if="${pendingCount == 0}" class="badge badge-ghost badge-md">Inga aktiva</span>
                     </div>
 
-                    <div th:if="${requestSize == 0}" class="text-center py-10 text-slate-400">
-                        <div class="text-5xl mb-3">📋</div>
-                        <p class="font-medium">Inga provträningsförfrågningar ännu.</p>
+                    <div th:if="${#lists.isEmpty(activeRequests)}" class="text-center py-8 text-slate-400">
+                        <div class="text-4xl mb-2">✅</div>
+                        <p class="font-medium">Inga väntande förfrågningar.</p>
                     </div>
 
-                    <div th:unless="${requestSize == 0}" class="overflow-x-auto">
+                    <div th:unless="${#lists.isEmpty(activeRequests)}" class="overflow-x-auto">
                         <table class="table table-zebra w-full">
                             <thead>
                             <tr class="text-slate-500 text-xs uppercase tracking-wider">
@@ -114,12 +115,13 @@
                                 <th>Född</th>
                                 <th>Kontaktperson</th>
                                 <th>Önskat datum</th>
+                                <th>Inkommen</th>
                                 <th>Status</th>
                                 <th>Åtgärder</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="req : ${trialRequests}">
+                            <tr th:each="req : ${activeRequests}">
                                 <td class="font-semibold text-slate-700" th:text="${req.firstName} + ' ' + ${req.lastName}">Namn</td>
                                 <td class="text-slate-500 text-sm" th:text="${req.birthDate}">2013-01-01</td>
                                 <td>
@@ -129,13 +131,12 @@
                                        class="text-xs text-primary hover:underline break-all">email@example.com</a>
                                 </td>
                                 <td class="text-slate-500 text-sm" th:text="${req.preferredTrainingDate}">2025-01-01</td>
+                                <td class="text-slate-400 text-xs" th:text="${#temporals.format(req.createdAt, 'yyyy-MM-dd')}">2025-01-01</td>
                                 <td>
-                                    <span th:if="${req.status != null and req.status.name() == 'PENDING'}" class="badge badge-warning badge-sm">Väntar</span>
-                                    <span th:if="${req.status != null and req.status.name() == 'APPROVED'}" class="badge badge-success badge-sm">Godkänd</span>
-                                    <span th:if="${req.status != null and req.status.name() == 'REJECTED'}" class="badge badge-error badge-sm">Avvisad</span>
+                                    <span class="badge badge-warning badge-sm">Väntar</span>
                                 </td>
                                 <td>
-                                    <div th:if="${req.status != null and req.status.name() == 'PENDING'}" class="flex gap-2">
+                                    <div class="flex gap-2">
                                         <form th:action="@{/coach/trial/{id}/approve(id=${req.id})}" method="post" style="display:inline">
                                             <button type="submit" class="btn btn-ghost btn-xs text-success">Godkänn</button>
                                         </form>
@@ -143,6 +144,60 @@
                                             <button type="submit" class="btn btn-ghost btn-xs text-error">Avvisa</button>
                                         </form>
                                     </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HISTORIK: APPROVED/REJECTED from last 3 months -->
+            <div class="card bg-white shadow-lg mb-6">
+                <div class="card-body">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="card-title text-slate-800">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="text-slate-400">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Historik
+                            <span class="text-sm font-normal text-slate-400">(senaste 3 månaderna)</span>
+                        </h2>
+                        <span class="badge badge-ghost badge-md" th:text="${#lists.size(historyRequests)} + ' ärenden'">0 ärenden</span>
+                    </div>
+
+                    <div th:if="${#lists.isEmpty(historyRequests)}" class="text-center py-8 text-slate-400">
+                        <div class="text-4xl mb-2">📋</div>
+                        <p class="font-medium">Ingen historik de senaste 3 månaderna.</p>
+                    </div>
+
+                    <div th:unless="${#lists.isEmpty(historyRequests)}" class="overflow-x-auto">
+                        <table class="table table-zebra w-full">
+                            <thead>
+                            <tr class="text-slate-500 text-xs uppercase tracking-wider">
+                                <th>Barn</th>
+                                <th>Född</th>
+                                <th>Kontaktperson</th>
+                                <th>Önskat datum</th>
+                                <th>Inkommen</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="req : ${historyRequests}" class="opacity-80">
+                                <td class="font-semibold text-slate-600" th:text="${req.firstName} + ' ' + ${req.lastName}">Namn</td>
+                                <td class="text-slate-400 text-sm" th:text="${req.birthDate}">2013-01-01</td>
+                                <td>
+                                    <div class="text-sm text-slate-600" th:text="${req.relativeName}">Förälder</div>
+                                    <a th:href="'mailto:' + ${req.relativeEmail}"
+                                       th:text="${req.relativeEmail}"
+                                       class="text-xs text-slate-400 hover:underline break-all">email@example.com</a>
+                                </td>
+                                <td class="text-slate-400 text-sm" th:text="${req.preferredTrainingDate}">2025-01-01</td>
+                                <td class="text-slate-400 text-xs" th:text="${#temporals.format(req.createdAt, 'yyyy-MM-dd')}">2025-01-01</td>
+                                <td>
+                                    <span th:if="${req.status != null and req.status.name() == 'APPROVED'}" class="badge badge-success badge-sm">Godkänd</span>
+                                    <span th:if="${req.status != null and req.status.name() == 'REJECTED'}" class="badge badge-error badge-sm">Avvisad</span>
                                 </td>
                             </tr>
                             </tbody>
@@ -202,4 +257,5 @@
 </script>
 </body>
 </html>
+
 
