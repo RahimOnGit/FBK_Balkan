@@ -180,18 +180,22 @@ public class ProfileController {
             ra.addFlashAttribute("success", "Lösenord uppdaterat!");
             return "redirect:/profile";
 
-        } catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
 
-            populateModel(model, userId);
+           populateModel(model, userId);
 
-            BindingResult newResult = new BeanPropertyBindingResult(dto, "passwordForm");
-            newResult.rejectValue("currentPassword", "error.password", e.getMessage());
-
-            model.addAttribute("org.springframework.validation.BindingResult.passwordForm", newResult);
+//            BindingResult newResult = new BeanPropertyBindingResult(dto, "passwordForm");
+//            newResult.rejectValue("currentPassword", "error.password", e.getMessage());
+//
+//            model.addAttribute("org.springframework.validation.BindingResult.passwordForm", newResult);
+//            model.addAttribute("passwordForm", dto);
+//
+//            return "private-pages/profile";
+//        }
+            result.rejectValue("currentPassword", "error.password", e.getMessage());
             model.addAttribute("passwordForm", dto);
-
-            return "private-pages/profile";
-        }
+                return "private-pages/profile";
+            }
     }
 
     // =========================
@@ -201,7 +205,10 @@ public class ProfileController {
         UserProfileViewDto profile = userService.getCurrentUserProfile(userId);
 
         model.addAttribute("user", profile);
-        model.addAttribute("phoneForm", new UserProfileUpdateDto());
-        model.addAttribute("passwordForm", new ChangePasswordDto());
+        UserProfileUpdateDto phoneForm = new UserProfileUpdateDto();
+        phoneForm.setPhone(profile.getPhone());
+        //model.addAttribute("phoneForm", new UserProfileUpdateDto());
+//        model.addAttribute("passwordForm", new ChangePasswordDto());
+        model.addAttribute("phoneForm", phoneForm);
     }
 }
