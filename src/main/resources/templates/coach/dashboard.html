@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -233,7 +234,7 @@
                                 </p>
                                 <p th:if="${team.description}" class="text-sm text-slate-500 line-clamp-2" th:text="${team.description}">Beskrivning</p>
                                 <div class="card-actions justify-end mt-2">
-                                    <a th:href="@{/team/{id}(id=${team.id})}" class="btn btn-ghost btn-xs text-primary">Visa detaljer →</a>
+                                    <a th:href="@{/coach/team/{id}(id=${team.id})}" class="btn btn-ghost btn-xs text-primary">Visa detaljer →</a>
                                 </div>
                             </div>
                         </div>
@@ -257,5 +258,3 @@
 </script>
 </body>
 </html>
-
-

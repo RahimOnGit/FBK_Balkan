@@ -1,14 +1,20 @@
 package com.example.fbk_balkan.controller;
 
 import com.example.fbk_balkan.dto.TrialRegistrationDTO;
+import com.example.fbk_balkan.dto.match.GameDTO;
 import com.example.fbk_balkan.dto.team.TeamDto;
+import com.example.fbk_balkan.entity.Player;
+import com.example.fbk_balkan.entity.Team;
 import com.example.fbk_balkan.entity.TrialRegistration;
 import com.example.fbk_balkan.entity.TrialStatus;
 import com.example.fbk_balkan.entity.User;
+import com.example.fbk_balkan.repository.PlayerRepository;
 import com.example.fbk_balkan.repository.TrialRegistrationRepository;
 import com.example.fbk_balkan.repository.UserRepository;
+import com.example.fbk_balkan.service.MatchService;
 import com.example.fbk_balkan.service.TeamService;
 import com.example.fbk_balkan.service.TrialRegistrationService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.UnsupportedEncodingException;
@@ -31,15 +38,21 @@ public class CoachDashboardController {
     private final TeamService teamService;
     private final TrialRegistrationService trialService;
     private final TrialRegistrationRepository trialRegistrationRepository;
+    private final PlayerRepository playerRepository;
+    private final MatchService matchService;
 
     public CoachDashboardController(UserRepository coachRepository,
                                     TeamService teamService,
                                     TrialRegistrationService trialService,
-                                    TrialRegistrationRepository trialRegistrationRepository) {
+                                    TrialRegistrationRepository trialRegistrationRepository,
+                                    PlayerRepository playerRepository,
+                                    MatchService matchService) {
         this.coachRepository = coachRepository;
         this.teamService = teamService;
         this.trialService = trialService;
         this.trialRegistrationRepository = trialRegistrationRepository;
+        this.playerRepository = playerRepository;
+        this.matchService = matchService;
     }
 
     @GetMapping("/coach/dashboard")
@@ -92,6 +105,35 @@ public class CoachDashboardController {
         }
 
         return "coach/dashboard";
+    }
+
+    @GetMapping("/coach/team/{id}")
+    @PreAuthorize("hasRole('COACH')")
+    public String teamDetail(@PathVariable Long id,
+                             Model model,
+                             @AuthenticationPrincipal UserDetails userDetails) {
+
+        String coachEmail = userDetails.getUsername();
+        User coach = coachRepository.findByEmail(coachEmail).orElse(null);
+        if (coach == null) return "redirect:/coach/dashboard";
+
+        Team team = teamService.getTeamById(id);
+        if (team == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Lag hittades inte");
+
+        boolean ownsTeam = team.getCoach() != null && team.getCoach().getId().equals(coach.getId());
+        if (!ownsTeam) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Du har inte tillgång till detta lag");
+
+        List<Player> players = playerRepository.findByTeamIdAndActiveTrueOrderByLastNameAsc(team.getId());
+        List<GameDTO> upcomingMatches = matchService.fetchUpcomingMatchesForTeam(team.getSvffTeamId());
+        List<GameDTO> recentResults   = matchService.fetchRecentResultsForTeam(team.getSvffTeamId());
+
+        model.addAttribute("coachName", coach.getFirstName() + " " + coach.getLastName());
+        model.addAttribute("team", team);
+        model.addAttribute("players", players);
+        model.addAttribute("upcomingMatches", upcomingMatches);
+        model.addAttribute("recentResults", recentResults);
+
+        return "coach/team-detail";
     }
 
     @PostMapping("/coach/trial/{id}/approve")
