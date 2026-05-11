@@ -18,6 +18,7 @@
 
 
 
+
         /* YouTube player chrome */
         .yt-player { border-radius: 14px; overflow: hidden; background: #111; border: 1px solid rgba(255,255,255,.07); box-shadow: 0 32px 80px rgba(0,0,0,.5); }
         .yt-chrome { display: flex; align-items: center; gap: 6px; padding: 10px 14px; background: #1a1a1a; border-bottom: 1px solid rgba(255,255,255,.05); }
@@ -84,35 +85,13 @@
 
     <!--
        CONTENT CONTAINER
-       Added pt-32 (small screens) and lg:pt-20 (large screens)
-       to push text below your absolute navbar
     -->
     <div class="hero-content text-left text-white relative z-10 w-full max-w-7xl px-6 md:px-12 pt-40 lg:pt-32 pb-12 self-center">
         <div class="flex flex-col lg:flex-row lg:justify-between w-full">
-            <div class="lg:w-2/3 xl:w-1/2 px-10">
-
-                <!-- Main Headline -->
-                <h1 class="font leading-[0.8] mb-8 select-none ">
-<!--                                                          min-size on mobile-screen,PREFERRED "ideal" size, max-size on desktop-screen>     -->
-                    <span class="block text-secondary italic text-[clamp(4.5rem,9vw,5rem)] drop-shadow-2xl mb-5">
-                        Teknik
-
-                    </span>
-                    <span class="block text-white uppercase tracking-tighter text-[clamp(2.5rem,7.5vw,3.5rem)] opacity-95">
-                        Före långa bollar
-                    </span>
-                </h1>
-
-                <!-- CTA Button -->
-                <div class="">
-                    <a href="/trial-registration"
-                       class="btn btn-md lg:btn-lg rounded-full font-brand px-10 bg-secondary border-none text-primary hover:bg-white hover:scale-105 transition-all shadow-xl shadow-secondary/20">
-                        Registrera ditt barn
-                    </a>
-                </div>
+            <div class="lg:w-2/3 xl:w-1/2 px-10 flex flex-col h-full min-h-[60vh]">                <!-- Main Headline -->
 
                 <!-- News Section -->
-                <div th:if="${latestNews != null}" class="mt-20 group max-w-md">
+                <div th:if="${latestNews != null}" class="mt-auto pt-20 group max-w-md">
                     <div class="flex items-center gap-3 mb-4">
                         <span class="px-2 py-0.5 bg-secondary text-primary text-[10px] font-bold uppercase tracking-widest rounded">
                             Senaste Nyhet
@@ -320,24 +299,6 @@
             </div>
         </div>
     </div>
-
-    <script>
-        (() => {
-            const iframe = document.getElementById('ytEmbed');
-            const placeholder = document.getElementById('ytPlaceholder');
-            if (!iframe) return;
-            const cid = iframe.getAttribute('cid');
-            fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id=' + cid)}`)
-                .then(r => r.json())
-                .then(data => {
-                    const id = data.items[0].link.split('=')[1];
-                    iframe.src = `https://youtube.com/embed/${id}?autoplay=0&rel=0&modestbranding=1`;
-                    iframe.onload = () => { iframe.style.opacity = '1'; placeholder.style.display = 'none'; };
-                })
-                .catch(() => { placeholder.innerHTML = '<p style="font-size:12px;color:rgba(255,255,255,.2);">Videon är inte tillgänglig just nu.</p>'; });
-        })();
-    </script>
-</section>
 
 <!-- ══════════════ FAQ ══════════════ -->
 <section class="bg-white py-20">
