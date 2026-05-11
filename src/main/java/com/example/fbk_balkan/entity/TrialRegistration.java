@@ -16,7 +16,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "trial_registrations")
+//@Table(name = "trial_registrations")
+@Table(
+        name = "trial_registrations",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_trial_registration_email_firstname",
+                        columnNames = {"relative_email", "first_name"}
+                )
+        }
+)
 public class TrialRegistration {
 
     @Id

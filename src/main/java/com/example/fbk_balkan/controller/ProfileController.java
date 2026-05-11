@@ -184,10 +184,9 @@ public class ProfileController {
 
             populateModel(model, userId);
 
-            BindingResult newResult = new BeanPropertyBindingResult(dto, "passwordForm");
-            newResult.rejectValue("currentPassword", "error.password", e.getMessage());
+            result.rejectValue("currentPassword", "error.password", e.getMessage());
 
-            model.addAttribute("org.springframework.validation.BindingResult.passwordForm", newResult);
+            model.addAttribute("org.springframework.validation.BindingResult.passwordForm", result);
             model.addAttribute("passwordForm", dto);
 
             return "private-pages/profile";
@@ -201,7 +200,18 @@ public class ProfileController {
         UserProfileViewDto profile = userService.getCurrentUserProfile(userId);
 
         model.addAttribute("user", profile);
-        model.addAttribute("phoneForm", new UserProfileUpdateDto());
-        model.addAttribute("passwordForm", new ChangePasswordDto());
+        // phone form
+        if (!model.containsAttribute("phoneForm")) {
+            UserProfileUpdateDto phoneForm = new UserProfileUpdateDto();
+            phoneForm.setPhone(profile.getPhone());
+            model.addAttribute("phoneForm", phoneForm);
+        }
+
+        // password form
+        if (!model.containsAttribute("passwordForm")) {
+            model.addAttribute("passwordForm", new ChangePasswordDto());
+        }
+
     }
+
 }
