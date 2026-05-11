@@ -10,11 +10,13 @@ import com.example.fbk_balkan.repository.UserRepository;
 import com.example.fbk_balkan.repository.TeamRepository;
 import com.example.fbk_balkan.repository.TrialRegistrationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,6 +30,9 @@ public class TrialRegistrationService {
 
     @Autowired
     private TeamRepository teamRepository;
+    @Value("${trial.registration.duplicate-window-days:30}")
+    private int duplicateWindowDays;
+
 
     // ====
     // CREATE — saves a new trial registration and auto-assigns
@@ -45,6 +50,7 @@ public class TrialRegistrationService {
             throw new IllegalArgumentException("Datum kan inte vara i det förflutna.");
         }
 
+
         //  Max 60 days ahead
         if (date.isAfter(LocalDate.now().plusDays(60))) {
             throw new IllegalArgumentException("Du kan bara boka upp till 60 dagar framåt.");
@@ -58,6 +64,42 @@ public class TrialRegistrationService {
         String relativeNumber = sanitize(trialRegistrationDTO.getRelativeNumber());
         String currentClub = sanitize(trialRegistrationDTO.getCurrentClub());
         String referralOther = sanitize(trialRegistrationDTO.getReferralOther());
+
+        String normalizedFirstName = normalize(firstName);
+        String normalizedEmail = normalize(relativeEmail);
+        List<String> errors = new ArrayList<>();
+        boolean duplicateEmailFirstName =
+                trialRegistrationRepository
+                        .existsByRelativeEmailIgnoreCaseAndFirstNameIgnoreCase(
+                                normalizedEmail,
+                                normalizedFirstName
+                        );
+
+        String normalizedLastName = normalize(lastName);
+
+        boolean duplicateSameTraining =
+                trialRegistrationRepository
+                        .existsByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndBirthDateAndPreferredTrainingDate(
+                                normalizedFirstName,
+                                normalizedLastName,
+                                trialRegistrationDTO.getBirthDate(),
+                                trialRegistrationDTO.getPreferredTrainingDate()
+                        );
+
+// PRIORITY LOGIC
+        if (duplicateEmailFirstName) {
+            throw new IllegalStateException(
+                    "Ett barn med detta förnamn är redan registrerat för denna e-postadress."
+            );
+        }
+
+        if (duplicateSameTraining) {
+            throw new IllegalStateException(
+                    "Barnet är redan registrerat för detta provträningstillfälle."
+            );
+        }
+
+
         // Map DTO to entity
         var trialRegistration = new com.example.fbk_balkan.entity.TrialRegistration();
         trialRegistration.setFirstName(firstName);
@@ -79,25 +121,25 @@ public class TrialRegistrationService {
         );
 
         trialRegistration.setStatus(com.example.fbk_balkan.entity.TrialStatus.PENDING);
-//        trialRegistration.setCreatedAt(LocalDate.from(LocalDateTime.now()));
+        //trialRegistration.setCreatedAt(LocalDate.from(LocalDateTime.now()));
         // Duplicate check
-        boolean exists = trialRegistrationRepository
-                .existsByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndBirthDateAndPreferredTrainingDate(
-                        firstName,
-                        lastName,
-                        trialRegistrationDTO.getBirthDate(),
-                        trialRegistrationDTO.getPreferredTrainingDate()
-                );
-
-        if (exists) {
-            throw new IllegalStateException("Barnet är redan registrerat för detta provträningstillfälle.");
-        }
-        try {
-            trialRegistrationRepository.save(trialRegistration);
-            //Handles race conditions
-        } catch (DataIntegrityViolationException ex) {
-            throw new IllegalStateException("Barnet är redan registrerat för detta provträningstillfälle.");
-        }
+//        boolean exists = trialRegistrationRepository
+//                .existsByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndBirthDateAndPreferredTrainingDate(
+//                        firstName,
+//                        lastName,
+//                        trialRegistrationDTO.getBirthDate(),
+//                        trialRegistrationDTO.getPreferredTrainingDate()
+//                );
+//
+//        if (exists) {
+//            throw new IllegalStateException("Barnet är redan registrerat för detta provträningstillfälle.");
+//        }
+//        try {
+//            trialRegistrationRepository.save(trialRegistration);
+//            //Handles race conditions
+//        } catch (DataIntegrityViolationException ex) {
+//            throw new IllegalStateException("Barnet är redan registrerat för detta provträningstillfälle.");
+//        }
         String birthYear = String.valueOf(trialRegistrationDTO.getBirthDate().getYear());
         Team.Gender teamGender = mapToTeamGender(trialRegistrationDTO.getGender());
 
@@ -115,7 +157,7 @@ public class TrialRegistrationService {
             trialRegistration.setCoach(assignedCoach);
         }
         // If still no match → coach remains null → admin assigns later
-
+        trialRegistration.setCreatedAt(LocalDateTime.now());//Used to enforce 30-day duplicate registration rule
         // Save entity
         trialRegistrationRepository.save(trialRegistration);
 
@@ -172,4 +214,14 @@ public class TrialRegistrationService {
 private String sanitize(String value) {
     if (value == null) return null;
     return value.trim().replaceAll("<.*?>", ""); // remove HTML tags
-}}
+}
+    private String normalize(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        return value.trim()
+                .replaceAll("\\s+", " ")
+                .toLowerCase();
+    }
+}

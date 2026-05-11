@@ -28,6 +28,10 @@ public interface TrialRegistrationRepository extends JpaRepository<TrialRegistra
             LocalDate birthDate,
             LocalDate preferredTrainingDate
     );
+    boolean existsByRelativeEmailIgnoreCaseAndFirstNameIgnoreCase(
+            String relativeEmail,
+            String firstName
+    );
 
 
 }
