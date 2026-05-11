@@ -11,12 +11,12 @@ import com.example.fbk_balkan.repository.TeamRepository;
 import com.example.fbk_balkan.repository.TrialRegistrationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,9 +30,9 @@ public class TrialRegistrationService {
 
     @Autowired
     private TeamRepository teamRepository;
+
     @Value("${trial.registration.duplicate-window-days:30}")
     private int duplicateWindowDays;
-
 
     // ====
     // CREATE — saves a new trial registration and auto-assigns
@@ -50,13 +50,12 @@ public class TrialRegistrationService {
             throw new IllegalArgumentException("Datum kan inte vara i det förflutna.");
         }
 
-
-        //  Max 60 days ahead
+        // Max 60 days ahead
         if (date.isAfter(LocalDate.now().plusDays(60))) {
             throw new IllegalArgumentException("Du kan bara boka upp till 60 dagar framåt.");
         }
 
-        // Sanitize all string fields
+        // Sanitize string fields
         String firstName = sanitize(trialRegistrationDTO.getFirstName());
         String lastName = sanitize(trialRegistrationDTO.getLastName());
         String relativeName = sanitize(trialRegistrationDTO.getRelativeName());
@@ -65,43 +64,37 @@ public class TrialRegistrationService {
         String currentClub = sanitize(trialRegistrationDTO.getCurrentClub());
         String referralOther = sanitize(trialRegistrationDTO.getReferralOther());
 
+        // Normalize for duplicate checking
         String normalizedFirstName = normalize(firstName);
-        String normalizedEmail = normalize(relativeEmail);
-        List<String> errors = new ArrayList<>();
-        boolean duplicateEmailFirstName =
-                trialRegistrationRepository
-                        .existsByRelativeEmailIgnoreCaseAndFirstNameIgnoreCase(
-                                normalizedEmail,
-                                normalizedFirstName
-                        );
-
         String normalizedLastName = normalize(lastName);
+        String normalizedEmail = normalize(relativeEmail);
 
-        boolean duplicateSameTraining =
-                trialRegistrationRepository
-                        .existsByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndBirthDateAndPreferredTrainingDate(
-                                normalizedFirstName,
-                                normalizedLastName,
-                                trialRegistrationDTO.getBirthDate(),
-                                trialRegistrationDTO.getPreferredTrainingDate()
-                        );
+        // Check for duplicates: Same Email + First Name
+        boolean duplicateEmailFirstName = trialRegistrationRepository
+                .existsByRelativeEmailIgnoreCaseAndFirstNameIgnoreCase(
+                        normalizedEmail,
+                        normalizedFirstName
+                );
 
-// PRIORITY LOGIC
+        // Check for duplicates: Same child on the same training date
+        boolean duplicateSameTraining = trialRegistrationRepository
+                .existsByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndBirthDateAndPreferredTrainingDate(
+                        normalizedFirstName,
+                        normalizedLastName,
+                        trialRegistrationDTO.getBirthDate(),
+                        trialRegistrationDTO.getPreferredTrainingDate()
+                );
+
         if (duplicateEmailFirstName) {
-            throw new IllegalStateException(
-                    "Ett barn med detta förnamn är redan registrerat för denna e-postadress."
-            );
+            throw new IllegalStateException("Ett barn med detta förnamn är redan registrerat för denna e-postadress.");
         }
 
         if (duplicateSameTraining) {
-            throw new IllegalStateException(
-                    "Barnet är redan registrerat för detta provträningstillfälle."
-            );
+            throw new IllegalStateException("Barnet är redan registrerat för detta provträningstillfälle.");
         }
 
-
         // Map DTO to entity
-        var trialRegistration = new com.example.fbk_balkan.entity.TrialRegistration();
+        TrialRegistration trialRegistration = new TrialRegistration();
         trialRegistration.setFirstName(firstName);
         trialRegistration.setLastName(lastName);
         trialRegistration.setBirthDate(trialRegistrationDTO.getBirthDate());
@@ -109,10 +102,12 @@ public class TrialRegistrationService {
         trialRegistration.setRelativeEmail(relativeEmail);
         trialRegistration.setRelativeNumber(relativeNumber);
         trialRegistration.setPreferredTrainingDate(trialRegistrationDTO.getPreferredTrainingDate());
-        trialRegistration.setGender(trialRegistrationDTO.getGender());          // NEW
-        trialRegistration.setCurrentClub(currentClub); // NEW
-        trialRegistration.setClubYears(trialRegistrationDTO.getClubYears());     // NEW
-        trialRegistration.setReferralSource(trialRegistrationDTO.getReferralSource());// NEW
+        trialRegistration.setGender(trialRegistrationDTO.getGender());
+        trialRegistration.setCurrentClub(currentClub);
+        trialRegistration.setClubYears(trialRegistrationDTO.getClubYears());
+        trialRegistration.setReferralSource(trialRegistrationDTO.getReferralSource());
+        trialRegistration.setCreatedAt(LocalDateTime.now());
+        trialRegistration.setStatus(com.example.fbk_balkan.entity.TrialStatus.PENDING);
 
         trialRegistration.setReferralOther(
                 trialRegistrationDTO.getReferralSource() == ReferralSource.OTHER
@@ -120,48 +115,28 @@ public class TrialRegistrationService {
                         : null
         );
 
-        trialRegistration.setStatus(com.example.fbk_balkan.entity.TrialStatus.PENDING);
-        //trialRegistration.setCreatedAt(LocalDate.from(LocalDateTime.now()));
-        // Duplicate check
-//        boolean exists = trialRegistrationRepository
-//                .existsByFirstNameIgnoreCaseAndLastNameIgnoreCaseAndBirthDateAndPreferredTrainingDate(
-//                        firstName,
-//                        lastName,
-//                        trialRegistrationDTO.getBirthDate(),
-//                        trialRegistrationDTO.getPreferredTrainingDate()
-//                );
-//
-//        if (exists) {
-//            throw new IllegalStateException("Barnet är redan registrerat för detta provträningstillfälle.");
-//        }
-//        try {
-//            trialRegistrationRepository.save(trialRegistration);
-//            //Handles race conditions
-//        } catch (DataIntegrityViolationException ex) {
-//            throw new IllegalStateException("Barnet är redan registrerat för detta provträningstillfälle.");
-//        }
+        // Coach assignment logic
         String birthYear = String.valueOf(trialRegistrationDTO.getBirthDate().getYear());
         Team.Gender teamGender = mapToTeamGender(trialRegistrationDTO.getGender());
 
         List<Team> matchingTeams = teamRepository.findActiveTeamsByBirthYearAndGender(birthYear, teamGender);
 
         if (matchingTeams.isEmpty() && teamGender == Team.Gender.MIXED) {
-            // Fallback for MIXED: search by year only
             matchingTeams = teamRepository.findActiveTeamsByBirthYear(birthYear);
         }
 
         if (!matchingTeams.isEmpty()) {
-            // Take the first matching team's coach
-            // (If multiple teams same year/gender exist, first active one wins)
             User assignedCoach = matchingTeams.get(0).getCoach();
             trialRegistration.setCoach(assignedCoach);
         }
-        // If still no match → coach remains null → admin assigns later
-        trialRegistration.setCreatedAt(LocalDateTime.now());//Used to enforce 30-day duplicate registration rule
-        // Save entity
-        trialRegistrationRepository.save(trialRegistration);
 
-        // used here  builder methode to add new fields any time easily.
+        // Save entity with safety for race conditions
+        try {
+            trialRegistrationRepository.save(trialRegistration);
+        } catch (DataIntegrityViolationException ex) {
+            throw new IllegalStateException("Barnet är redan registrerat för detta provträningstillfälle.");
+        }
+
         return TrialRegistrationDTO.builder()
                 .id(trialRegistration.getId())
                 .firstName(trialRegistration.getFirstName())
@@ -171,55 +146,49 @@ public class TrialRegistrationService {
                 .relativeEmail(trialRegistration.getRelativeEmail())
                 .relativeNumber(trialRegistration.getRelativeNumber())
                 .preferredTrainingDate(trialRegistration.getPreferredTrainingDate())
-                .gender(trialRegistration.getGender())          // NEW
-                .currentClub(trialRegistration.getCurrentClub()) // NEW
-                .clubYears(trialRegistration.getClubYears())    // NEW
-                .referralSource(trialRegistration.getReferralSource())  // NEW
-                .referralOther(trialRegistration.getReferralOther())// NEW
+                .gender(trialRegistration.getGender())
+                .currentClub(trialRegistration.getCurrentClub())
+                .clubYears(trialRegistration.getClubYears())
+                .referralSource(trialRegistration.getReferralSource())
+                .referralOther(trialRegistration.getReferralOther())
                 .status(trialRegistration.getStatus())
-//                .createdAt(trialRegistration.getCreatedAt().atStartOfDay())
                 .coachId(trialRegistration.getCoach() != null ? trialRegistration.getCoach().getId() : null)
                 .build();
-
     }
 
-    // ==
-    // FETCH — returns all trial registrations for a given coach
-    //         ordered newest first
+    // ===
+    // FETCH — returns all PENDING registrations plus
+    //         APPROVED/REJECTED from the last 3 months
     // ===
     public List<TrialRegistrationDTO> fetchTrialRegistrationByCoach(Long coachId) {
         userRepository.findById(coachId)
                 .orElseThrow(() -> new IllegalArgumentException("Coach not found with id: " + coachId));
 
-        return trialRegistrationRepository.findByCoachIdOrderByCreatedAtDesc(coachId)
+        LocalDateTime cutoff = LocalDateTime.now().minusMonths(3);
+
+        return trialRegistrationRepository.findActiveAndRecentByCoachId(coachId, cutoff)
                 .stream()
                 .map(TrialRegistrationDTO::fromEntity)
                 .toList();
     }
 
     // =========================================================
+
     private Team.Gender mapToTeamGender(Gender gender) {
         if (gender == null) return Team.Gender.MIXED;
         return switch (gender) {
             case MALE, ANNAT, VillEjAnge, FEMALE -> Team.Gender.MALE;
-
-            //change this if they made a female team right now there is no
-//            case FEMALE -> Team.Gender.FEMALE;
+            // Note: If female teams are added, uncomment logic here.
         };
     }
 
+    private String sanitize(String value) {
+        if (value == null) return null;
+        return value.trim().replaceAll("<.*?>", ""); // remove HTML tags
+    }
 
-
-// Sanitization helper
-private String sanitize(String value) {
-    if (value == null) return null;
-    return value.trim().replaceAll("<.*?>", ""); // remove HTML tags
-}
     private String normalize(String value) {
-        if (value == null) {
-            return null;
-        }
-
+        if (value == null) return null;
         return value.trim()
                 .replaceAll("\\s+", " ")
                 .toLowerCase();

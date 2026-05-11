@@ -1,5 +1,7 @@
 package com.example.fbk_balkan.config;
 
+import com.example.fbk_balkan.security.CustomAuthenticationFailureHandler;
+import com.example.fbk_balkan.security.CustomAuthenticationSuccessHandler;
 import com.example.fbk_balkan.security.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +31,10 @@ public class SecurityConfig {
     private CustomUserDetailsService userDetailsService;
     @Autowired
     private DataSource dataSource;
+    @Autowired
+    private CustomAuthenticationFailureHandler authFailureHandler;
+    @Autowired
+    private CustomAuthenticationSuccessHandler authSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -38,6 +44,7 @@ public class SecurityConfig {
 
 //                        publicly accessible URLs
                                 .requestMatchers("/", "/css/**", "/images/**","/uploads/**", "/login", "/login-error").permitAll()
+                                .requestMatchers("/forgot-password", "/reset-password").permitAll()
                                 .requestMatchers("/trial-registration", "/trial-registration/success","/about").permitAll()
                                 .requestMatchers("/kontakt").permitAll()
                                 .requestMatchers("/trial-registration", "/trial-registration/success","/about","/faq").permitAll()
@@ -67,19 +74,8 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .successHandler((request, response, authentication) -> {
-                            String role = authentication.getAuthorities().iterator().next().getAuthority();
-                            if (role.equals("ROLE_ADMIN")) {
-                                response.sendRedirect("/admin/dashboard");
-                            } else if (role.equals("ROLE_COACH")) {
-                                response.sendRedirect("/coach/dashboard");
-                            } else if (role.equals("ROLE_SOCIAL_ADMIN")) {
-                                response.sendRedirect("/socialadmin/dashboard");
-                            } else {
-                                response.sendRedirect("/");
-                            }
-                        })
-                        .failureUrl("/login-error")
+                        .successHandler(authSuccessHandler)
+                        .failureHandler(authFailureHandler)
                         .permitAll()
                 )
                 .rememberMe(rememberMe -> rememberMe

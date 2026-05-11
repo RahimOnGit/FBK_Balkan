@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sv" data-theme="corporate" xmlns:th="http://www.thymeleaf.org">
+<html lang="sv" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,16 +20,15 @@
 </head>
 
 <body class="bg-base-100 font-virage text-white antialiased">
-<div class="bg-primary">
-  <div th:replace="~{fragments/navbar::navbar}"></div>
 
-</div>
+<header class="sticky top-0 z-[100] bg-primary/95 backdrop-blur-md border-b border-white/10">
+  <div th:replace="~{fragments/navbar::navbar}"></div>
+</header>
 
 <main>
   <!-- HERO -->
   <section class="relative bg-primary pt-16 pb-12 sm:pt-20 sm:pb-16 md:pt-24 md:pb-20 overflow-hidden">
     <div class="absolute inset-0 hero-glow"></div>
-    <!-- Decorative Blobs -->
     <div class="absolute -top-24 -left-24 w-72 h-72 sm:w-96 sm:h-96 bg-secondary/10 rounded-full blur-[100px]"></div>
 
     <div class="container mx-auto px-4 sm:px-6 relative z-10">
@@ -38,10 +37,10 @@
         <span class="text-secondary font-black uppercase tracking-[0.25em] sm:tracking-[0.3em] text-[10px] sm:text-xs">Säsongen 2024/25</span>
       </div>
       <h1 class="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black italic uppercase tracking-tighter mb-3 sm:mb-4 leading-none break-words">
-        Spelschema <span class="text-secondary">&amp; Resultat</span>
+        Alla <span class="text-secondary">matcher</span>
       </h1>
       <p class="text-white/50 text-sm sm:text-base md:text-lg max-w-2xl uppercase tracking-wide">
-        Följ FBK Balkans matcher — kommande och senaste resultat.
+        Filtrera FBK Balkans matcher på vy, tävling, lag eller motståndare.
       </p>
     </div>
   </section>
@@ -50,77 +49,149 @@
   <section class="bg-base-100 pb-16 sm:pb-20 md:pb-24 text-primary">
     <div class="container mx-auto px-4 sm:px-6 max-w-7xl">
 
-      <!-- Section Tabs (visual) -->
-      <div class="filter-tabs flex items-center justify-start sm:justify-center gap-1 sm:gap-2 mt-8 sm:mt-10 mb-8 sm:mb-10 border-b border-neutral-200 overflow-x-auto">
-        <a href="#kommande"
-           class="text-primary border-b-2 border-secondary pb-3 px-3 sm:px-5 font-black uppercase italic tracking-widest text-xs sm:text-sm whitespace-nowrap">Kommande</a>
-        <a href="#resultat"
-           class="text-primary/40 hover:text-primary border-b-2 border-transparent pb-3 px-3 sm:px-5 font-black uppercase italic tracking-widest text-xs sm:text-sm whitespace-nowrap transition-colors">Senaste resultat</a>
-      </div>
+      <!-- ========== FILTER FORM ========== -->
+      <form th:action="@{/matcher}" method="get"
+            class="bg-neutral-50 border border-neutral-200 rounded-2xl p-5 sm:p-6 md:p-7 mt-8 sm:mt-10 mb-8 sm:mb-10 shadow-sm">
 
-      <!-- Competition Filter Pills (visual) -->
-      <div class="filter-tabs flex flex-wrap items-center gap-2 mb-10 sm:mb-12">
-        <span class="px-4 py-2 bg-primary text-white rounded-full text-[10px] sm:text-xs font-black uppercase tracking-widest">Alla tävlingar</span>
-        <span class="px-4 py-2 bg-neutral-50 hover:bg-neutral-100 text-primary/60 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-widest cursor-default">Division 2</span>
-        <span class="px-4 py-2 bg-neutral-50 hover:bg-neutral-100 text-primary/60 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-widest cursor-default">DM Herr</span>
-        <span class="px-4 py-2 bg-neutral-50 hover:bg-neutral-100 text-primary/60 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-widest cursor-default">Cup</span>
-      </div>
+        <!-- View tabs (radio buttons styled as pills) -->
+        <div class="filter-tabs flex items-center gap-2 mb-6 overflow-x-auto pb-1">
+          <span class="text-primary/50 text-[10px] sm:text-xs font-black uppercase tracking-widest mr-2 hidden sm:inline">Visa:</span>
 
-      <!-- ===== KOMMANDE ===== -->
-      <div id="kommande" class="space-y-12 sm:space-y-16 mb-20 sm:mb-24 scroll-mt-24">
-        <div class="flex items-center gap-3 sm:gap-6">
-          <h2 class="text-2xl sm:text-3xl md:text-4xl font-black italic text-primary uppercase tracking-tight whitespace-nowrap">
-            Kommande <span class="text-secondary">matcher</span>
-          </h2>
-          <div class="h-[1px] flex-1 bg-neutral-200"></div>
+          <label class="cursor-pointer">
+            <input type="radio" name="view" value="upcoming" class="peer sr-only"
+                   th:checked="${selectedView == 'upcoming'}"
+                   onchange="this.form.submit()" />
+            <span class="px-4 py-2 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-widest whitespace-nowrap inline-block transition
+                         bg-white text-primary/60 border border-neutral-200
+                         peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary">
+              Kommande
+            </span>
+          </label>
+
+          <label class="cursor-pointer">
+            <input type="radio" name="view" value="results" class="peer sr-only"
+                   th:checked="${selectedView == 'results'}"
+                   onchange="this.form.submit()" />
+            <span class="px-4 py-2 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-widest whitespace-nowrap inline-block transition
+                         bg-white text-primary/60 border border-neutral-200
+                         peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary">
+              Resultat
+            </span>
+          </label>
+
+          <label class="cursor-pointer">
+            <input type="radio" name="view" value="all" class="peer sr-only"
+                   th:checked="${selectedView == 'all'}"
+                   onchange="this.form.submit()" />
+            <span class="px-4 py-2 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-widest whitespace-nowrap inline-block transition
+                         bg-white text-primary/60 border border-neutral-200
+                         peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary">
+              Alla
+            </span>
+          </label>
         </div>
 
-        <!-- Empty state -->
-        <div th:if="${upcomingByMonth == null or upcomingByMonth.isEmpty()}"
-             class="bg-neutral-50 border border-neutral-100 rounded-2xl p-10 sm:p-14 text-center">
-          <p class="text-primary/40 font-black uppercase italic tracking-widest text-sm">
-            Inga kommande matcher just nu
-          </p>
+        <!-- Filter row: competition + team + search -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
+          <!-- Competition -->
+          <div>
+            <label for="competition"
+                   class="block text-primary/60 text-[10px] sm:text-xs font-black uppercase tracking-widest mb-2">
+              Tävling
+            </label>
+            <select id="competition" name="competition"
+                    class="select select-bordered w-full bg-white text-primary font-bold text-sm">
+              <option value="">Alla tävlingar</option>
+              <option th:each="c : ${competitions}"
+                      th:value="${c}"
+                      th:text="${c}"
+                      th:selected="${selectedCompetition != null and selectedCompetition == c}"></option>
+            </select>
+          </div>
+
+          <!-- Team -->
+          <div>
+            <label for="team"
+                   class="block text-primary/60 text-[10px] sm:text-xs font-black uppercase tracking-widest mb-2">
+              FBK-lag
+            </label>
+            <select id="team" name="team"
+                    class="select select-bordered w-full bg-white text-primary font-bold text-sm">
+              <option value="">Alla lag</option>
+              <option th:each="t : ${fbkTeams}"
+                      th:value="${t}"
+                      th:text="${t}"
+                      th:selected="${selectedTeam != null and selectedTeam == t}"></option>
+            </select>
+          </div>
+
+          <!-- Search -->
+          <div>
+            <label for="q"
+                   class="block text-primary/60 text-[10px] sm:text-xs font-black uppercase tracking-widest mb-2">
+              Sök motståndare
+            </label>
+            <input id="q" name="q" type="text"
+                   placeholder="t.ex. AIK, IFK..."
+                   th:value="${searchQuery}"
+                   class="input input-bordered w-full bg-white text-primary font-bold text-sm placeholder:text-primary/30 placeholder:font-normal" />
+          </div>
         </div>
 
-        <!-- Month groups -->
-        <div th:each="entry : ${upcomingByMonth}" class="space-y-6 sm:space-y-8">
+        <!-- Action row -->
+        <div class="flex flex-wrap items-center justify-between gap-3 mt-5 pt-5 border-t border-neutral-200">
+          <div class="text-primary/60 text-xs sm:text-sm">
+            <span class="font-black text-primary" th:text="${totalCount}">0</span>
+            <span th:text="${totalCount == 1 ? 'match hittad' : 'matcher hittade'}">matcher hittade</span>
+          </div>
+
+          <div class="flex items-center gap-2 sm:gap-3">
+            <a th:if="${hasFilters}" th:href="@{/matcher}"
+               class="btn btn-ghost btn-sm text-primary/60 hover:text-primary font-black uppercase tracking-widest text-[10px] sm:text-xs">
+              Rensa filter
+            </a>
+            <button type="submit"
+                    class="btn btn-sm bg-primary hover:bg-primary/90 text-white border-none font-black uppercase tracking-widest text-[10px] sm:text-xs">
+              Filtrera
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- ========== RESULTS HEADER ========== -->
+      <div class="flex items-center gap-3 sm:gap-6 mb-8 sm:mb-10">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black italic text-primary uppercase tracking-tight whitespace-nowrap">
+          <span th:if="${selectedView == 'upcoming'}">Kommande <span class="text-secondary">matcher</span></span>
+          <span th:if="${selectedView == 'results'}">Senaste <span class="text-secondary">resultat</span></span>
+          <span th:if="${selectedView == 'all'}">Alla <span class="text-secondary">matcher</span></span>
+        </h2>
+        <div class="h-[1px] flex-1 bg-neutral-200"></div>
+      </div>
+
+      <!-- ========== EMPTY STATE ========== -->
+      <div th:if="${matchesByMonth == null or matchesByMonth.isEmpty()}"
+           class="bg-neutral-50 border border-neutral-100 rounded-2xl p-10 sm:p-14 text-center">
+        <p class="text-primary/40 font-black uppercase italic tracking-widest text-sm">
+          <span th:if="${hasFilters}">Inga matcher matchar valda filter</span>
+          <span th:unless="${hasFilters}">Inga matcher just nu</span>
+        </p>
+        <a th:if="${hasFilters}" th:href="@{/matcher}"
+           class="inline-block mt-4 text-secondary hover:text-secondary/80 font-black uppercase italic tracking-widest text-xs underline underline-offset-4">
+          Rensa filter →
+        </a>
+      </div>
+
+      <!-- ========== MONTH GROUPS ========== -->
+      <div th:unless="${matchesByMonth == null or matchesByMonth.isEmpty()}"
+           class="space-y-12 sm:space-y-16">
+        <div th:each="entry : ${matchesByMonth}" class="space-y-6 sm:space-y-8">
           <h3 class="text-xl sm:text-2xl md:text-3xl font-black italic text-primary uppercase tracking-tight"
               th:text="${entry.key}">APRIL 2026</h3>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
             <div th:each="match : ${entry.value}">
-              <div th:replace="~{fragments/match :: fixture-card(${match}, false)}"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== SENASTE RESULTAT ===== -->
-      <div id="resultat" class="space-y-12 sm:space-y-16 scroll-mt-24">
-        <div class="flex items-center gap-3 sm:gap-6">
-          <h2 class="text-2xl sm:text-3xl md:text-4xl font-black italic text-primary uppercase tracking-tight whitespace-nowrap">
-            Senaste <span class="text-secondary">resultat</span>
-          </h2>
-          <div class="h-[1px] flex-1 bg-neutral-200"></div>
-        </div>
-
-        <!-- Empty state -->
-        <div th:if="${recentByMonth == null or recentByMonth.isEmpty()}"
-             class="bg-neutral-50 border border-neutral-100 rounded-2xl p-10 sm:p-14 text-center">
-          <p class="text-primary/40 font-black uppercase italic tracking-widest text-sm">
-            Inga senaste resultat
-          </p>
-        </div>
-
-        <!-- Month groups -->
-        <div th:each="entry : ${recentByMonth}" class="space-y-6 sm:space-y-8">
-          <h3 class="text-xl sm:text-2xl md:text-3xl font-black italic text-primary uppercase tracking-tight"
-              th:text="${entry.key}">MARS 2026</h3>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
-            <div th:each="match : ${entry.value}">
-              <div th:replace="~{fragments/match :: fixture-card(${match}, true)}"></div>
+              <!-- "played" if a real score exists on the match -->
+              <div th:replace="~{fragments/match :: fixture-card(${match}, ${match.goalsScoredHomeTeam() != null and match.goalsScoredHomeTeam() ge 0})}"></div>
             </div>
           </div>
         </div>
@@ -128,7 +199,6 @@
 
     </div>
   </section>
-
 </main>
 
 <footer th:replace="~{fragments/footer::footer}"></footer>

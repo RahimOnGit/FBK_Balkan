@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="sv" data-theme="fbkbalkan" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="'Coach – ' + ${team.name}">Coach – Lag</title>
+  <link th:href="@{/css/output.css}" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <div th:replace="~{fragments/dashboard-sidebar :: sidebar-styles}"></div>
+</head>
+<body class="bg-slate-100">
+
+<div class="dashboard-wrapper">
+
+  <div th:replace="~{fragments/dashboard-sidebar :: sidebar('teams')}"></div>
+
+  <div class="dashboard-main">
+    <div class="dashboard-topbar">
+            <span class="dashboard-topbar-title">
+                <a href="/coach/dashboard" class="text-slate-400 hover:text-primary mr-2 transition-colors">← Dashboard</a>
+                <span th:text="${team.name}">Lagnamn</span>
+            </span>
+      <a href="/coach/dashboard" class="text-sm text-slate-500 hover:text-primary font-medium transition-colors">
+        Tillbaka
+      </a>
+    </div>
+
+    <div class="dashboard-content">
+
+      <!-- Team hero card -->
+      <div class="card bg-primary text-white shadow-lg mb-6">
+        <div class="card-body">
+          <div class="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-widest text-yellow-400 mb-1"
+                 th:text="${team.ageGroup}">Åldersgrupp</p>
+              <h1 class="text-4xl font-black italic uppercase leading-tight"
+                  th:text="${team.name}">Lagnamn</h1>
+              <p class="text-white/60 text-sm mt-2"
+                 th:if="${team.description}"
+                 th:text="${team.description}">Beskrivning</p>
+            </div>
+            <div class="flex flex-col gap-2 text-right">
+              <span th:if="${team.active}" class="badge badge-success badge-md">Aktiv</span>
+              <span th:unless="${team.active}" class="badge badge-error badge-md">Inaktiv</span>
+              <span class="text-white/50 text-xs" th:if="${team.trainingLocation}"
+                    th:text="'📍 ' + ${team.trainingLocation}">Plats</span>
+            </div>
+          </div>
+
+          <!-- Stats row -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+            <div class="bg-white/10 rounded-xl p-3 text-center">
+              <div class="text-3xl font-black" th:text="${#lists.size(players)}">0</div>
+              <div class="text-white/60 text-xs mt-1 uppercase tracking-wide">Spelare</div>
+            </div>
+            <div class="bg-white/10 rounded-xl p-3 text-center">
+              <div class="text-3xl font-black" th:text="${#lists.size(upcomingMatches)}">0</div>
+              <div class="text-white/60 text-xs mt-1 uppercase tracking-wide">Kommande matcher</div>
+            </div>
+            <div class="bg-white/10 rounded-xl p-3 text-center">
+              <div class="text-3xl font-black" th:text="${#lists.size(recentResults)}">0</div>
+              <div class="text-white/60 text-xs mt-1 uppercase tracking-wide">Senaste resultat</div>
+            </div>
+            <div class="bg-white/10 rounded-xl p-3 text-center">
+              <div class="text-3xl font-black"
+                   th:text="${team.assistantCoaches != null ? #lists.size(team.assistantCoaches) : 0}">0</div>
+              <div class="text-white/60 text-xs mt-1 uppercase tracking-wide">Assistenter</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coaching staff -->
+      <div class="card bg-white shadow mb-6">
+        <div class="card-body">
+          <h2 class="card-title text-slate-800 mb-4">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="text-primary">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+            Tränarteam
+          </h2>
+          <div class="flex flex-wrap gap-4">
+            <!-- Head coach -->
+            <div th:if="${team.coach != null}" class="flex items-center gap-3 bg-primary/5 border border-primary/20 rounded-xl px-4 py-3">
+              <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-black text-sm"
+                   th:text="${#strings.substring(team.coach.firstName,0,1) + #strings.substring(team.coach.lastName,0,1)}">TN</div>
+              <div>
+                <p class="font-bold text-slate-800 text-sm"
+                   th:text="${team.coach.firstName} + ' ' + ${team.coach.lastName}">Tränare</p>
+                <p class="text-xs text-primary font-semibold">Huvudtränare</p>
+              </div>
+            </div>
+            <!-- Assistant coaches -->
+            <div th:each="asst : ${team.assistantCoaches}"
+                 class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
+              <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-black text-sm"
+                   th:text="${#strings.substring(asst.firstName,0,1) + #strings.substring(asst.lastName,0,1)}">AN</div>
+              <div>
+                <p class="font-bold text-slate-800 text-sm"
+                   th:text="${asst.firstName} + ' ' + ${asst.lastName}">Assistent</p>
+                <p class="text-xs text-slate-400 font-semibold">Assistenttränare</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Players roster -->
+      <div class="card bg-white shadow mb-6">
+        <div class="card-body">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="card-title text-slate-800">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="text-primary">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              Spelartrupp
+            </h2>
+            <span class="badge badge-primary badge-md" th:text="${#lists.size(players)} + ' spelare'">0 spelare</span>
+          </div>
+
+          <div th:if="${#lists.isEmpty(players)}" class="text-center py-10 text-slate-400">
+            <div class="text-5xl mb-3">⚽</div>
+            <p class="font-medium">Inga spelare registrerade ännu.</p>
+          </div>
+
+          <div th:unless="${#lists.isEmpty(players)}" class="overflow-x-auto">
+            <table class="table table-zebra w-full">
+              <thead>
+              <tr class="text-slate-500 text-xs uppercase tracking-wider">
+                <th>#</th>
+                <th>Namn</th>
+                <th>Position</th>
+                <th>Födelsedag</th>
+                <th>Status</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="player, stat : ${players}">
+                <td class="text-slate-400 text-sm font-mono" th:text="${stat.count}">1</td>
+                <td class="font-semibold text-slate-700"
+                    th:text="${player.firstName} + ' ' + ${player.lastName}">Namn</td>
+                <td>
+                  <span class="badge badge-ghost badge-sm" th:text="${player.position}">Position</span>
+                </td>
+                <td class="text-slate-500 text-sm" th:text="${player.birthDate}">2013-01-01</td>
+                <td>
+                  <span th:if="${player.active}" class="badge badge-success badge-sm">Aktiv</span>
+                  <span th:unless="${player.active}" class="badge badge-ghost badge-sm">Inaktiv</span>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Matches: two columns -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+
+        <!-- Kommande matcher -->
+        <div class="card bg-white shadow">
+          <div class="card-body">
+            <h2 class="card-title text-slate-800 mb-4">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="text-primary">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+              Kommande matcher
+            </h2>
+
+            <div th:if="${#lists.isEmpty(upcomingMatches)}" class="text-center py-8 text-slate-400">
+              <div class="text-4xl mb-2">📅</div>
+              <p class="font-medium text-sm">Inga kommande matcher.</p>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(upcomingMatches)}" class="flex flex-col gap-3">
+              <div th:each="match : ${upcomingMatches}"
+                   class="border border-slate-100 rounded-xl p-3">
+                <div class="flex justify-between text-xs text-slate-400 mb-2 font-semibold uppercase tracking-wider">
+                  <span th:text="${#temporals.format(match.timeAsDateTime, 'dd MMM yyyy')}">Datum</span>
+                  <span th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')}">Tid</span>
+                </div>
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-2 flex-1 min-w-0">
+                    <img th:src="${match.homeTeamImageUrl}" class="h-6 w-6 object-contain flex-shrink-0" alt="">
+                    <span class="font-bold text-sm text-slate-700 truncate" th:text="${match.homeTeamName}">Hemma</span>
+                  </div>
+                  <span class="text-xs font-black text-slate-300 px-2 flex-shrink-0">VS</span>
+                  <div class="flex items-center gap-2 flex-1 min-w-0 justify-end">
+                    <span class="font-bold text-sm text-slate-700 truncate" th:text="${match.awayTeamName}">Borta</span>
+                    <img th:src="${match.awayTeamImageUrl}" class="h-6 w-6 object-contain flex-shrink-0" alt="">
+                  </div>
+                </div>
+                <p class="text-xs text-slate-400 mt-1" th:text="${match.competitionName}"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Senaste resultat -->
+        <div class="card bg-white shadow">
+          <div class="card-body">
+            <h2 class="card-title text-slate-800 mb-4">
+              <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="text-success">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+              </svg>
+              Senaste resultat
+            </h2>
+
+            <div th:if="${#lists.isEmpty(recentResults)}" class="text-center py-8 text-slate-400">
+              <div class="text-4xl mb-2">🏆</div>
+              <p class="font-medium text-sm">Inga resultat ännu.</p>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(recentResults)}" class="flex flex-col gap-3">
+              <div th:each="match : ${recentResults}"
+                   class="border border-slate-100 rounded-xl p-3">
+                <div class="flex justify-between text-xs text-slate-400 mb-2 font-semibold uppercase tracking-wider">
+                  <span th:text="${#temporals.format(match.timeAsDateTime, 'dd MMM yyyy')}">Datum</span>
+                  <span class="text-xs" th:text="${match.competitionName}"></span>
+                </div>
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-2 flex-1 min-w-0">
+                    <img th:src="${match.homeTeamImageUrl}" class="h-6 w-6 object-contain flex-shrink-0" alt="">
+                    <span class="font-bold text-sm text-slate-700 truncate" th:text="${match.homeTeamName}">Hemma</span>
+                  </div>
+                  <span class="text-lg font-black text-primary px-2 flex-shrink-0"
+                        th:text="${match.goalsScoredHomeTeam} + '–' + ${match.goalsScoredAwayTeam}">0–0</span>
+                  <div class="flex items-center gap-2 flex-1 min-w-0 justify-end">
+                    <span class="font-bold text-sm text-slate-700 truncate" th:text="${match.awayTeamName}">Borta</span>
+                    <img th:src="${match.awayTeamImageUrl}" class="h-6 w-6 object-contain flex-shrink-0" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

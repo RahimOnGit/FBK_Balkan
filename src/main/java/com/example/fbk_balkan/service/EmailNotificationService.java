@@ -2,6 +2,7 @@ package com.example.fbk_balkan.service;
 
 import com.example.fbk_balkan.entity.News;
 import com.example.fbk_balkan.entity.Sponsor;
+import com.example.fbk_balkan.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,34 @@ public class EmailNotificationService {
             log.info("News published notification sent to {} for news '{}'", adminEmail, news.getTitle());
         } catch (Exception e) {
             log.error("Failed to send news published notification: {}", e.getMessage());
+        }
+    }
+
+    public void sendPasswordResetEmail(User user, String resetLink, int validityMinutes) {
+        if (mailSender == null) {
+            log.warn("Mail not configured. Password reset link for {}: {}", user.getEmail(), resetLink);
+            return;
+        }
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(fromEmail);
+            message.setTo(user.getEmail());
+            message.setSubject("FBK Balkan – Återställ ditt lösenord");
+            message.setText(
+                    "Hej " + user.getFirstName() + "!\n\n" +
+                            "Vi har mottagit en begäran om att återställa lösenordet till ditt FBK Balkan-konto.\n\n" +
+                            "Klicka på länken nedan för att välja ett nytt lösenord. " +
+                            "Länken är giltig i " + validityMinutes + " minuter och kan endast användas en gång.\n\n" +
+                            resetLink + "\n\n" +
+                            "Om du inte begärt en lösenordsåterställning kan du bortse från detta meddelande.\n\n" +
+                            "Med vänliga hälsningar,\nFBK Balkan"
+            );
+            mailSender.send(message);
+            log.info("Password reset email sent to {}", user.getEmail());
+        } catch (Exception e) {
+            log.error("Failed to send password reset email to {}: {}", user.getEmail(), e.getMessage());
+            // Fallback: log the link so an admin can deliver it manually
+            log.warn("Fallback reset link for {}: {}", user.getEmail(), resetLink);
         }
     }
 
