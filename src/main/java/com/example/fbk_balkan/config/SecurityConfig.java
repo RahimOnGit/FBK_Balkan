@@ -53,6 +53,8 @@ public class SecurityConfig {
                                 .requestMatchers("/ungdomsportalen").permitAll()
                                 .requestMatchers("/verksamhet").permitAll()
                                 .requestMatchers("/matcher", "/match-details/**").permitAll()
+                                .requestMatchers("/api/youtube/**").permitAll()
+
 
 
 //                      roles-based access control
