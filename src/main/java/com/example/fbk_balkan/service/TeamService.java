@@ -5,13 +5,18 @@ import com.example.fbk_balkan.dto.team.*;
 import com.example.fbk_balkan.entity.Role;
 import com.example.fbk_balkan.entity.User;
 import com.example.fbk_balkan.entity.Team;
+import com.example.fbk_balkan.entity.TrialRegistration;
+import com.example.fbk_balkan.enums.Gender;
+import com.example.fbk_balkan.repository.TrialRegistrationRepository;
 import com.example.fbk_balkan.repository.UserRepository;
 import com.example.fbk_balkan.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -28,13 +33,16 @@ public class TeamService {
 
     @Autowired
     private TeamMapper teamMapper;
-//    private UserRepository coachRepository;
+    //    private UserRepository coachRepository;
     @Autowired
     private PublicTeamMapper publicTeamMapper;
 
+    @Autowired
+    private TrialRegistrationRepository trialRegistrationRepository;
+
 
     @Transactional
-public TeamDto createTeam(TeamCreateDto teamCreateDto) {
+    public TeamDto createTeam(TeamCreateDto teamCreateDto) {
         if (teamRepository.existsByNameAndAgeGroup(
                 teamCreateDto.getName(),
                 teamCreateDto.getAgeGroup()
@@ -87,6 +95,10 @@ public TeamDto createTeam(TeamCreateDto teamCreateDto) {
         Team savedTeam = teamRepository.save(team);
         //  access to coach while transaction is open
         savedTeam.getCoach().getEmail();
+
+        // Bulk-reassign existing trial registrations that match this team's birth year + gender
+        reassignTrialRegistrations(savedTeam, coach);
+
 //    convert entity to DTO and return
         return teamMapper.toDto(savedTeam);
     }
@@ -104,38 +116,38 @@ public TeamDto createTeam(TeamCreateDto teamCreateDto) {
                 .map(teamMapper::toDto)
                 .collect(Collectors.toList());
     }
-//
-public List<TeamListItemDTO> findAllForAdminList() {
-    return teamRepository.findAll().stream()
-            .map(team -> {
-                TeamListItemDTO dto = new TeamListItemDTO();
-                dto.setId(team.getId());
-                dto.setName(team.getName());
-                dto.setAgeGroup(team.getAgeGroup());
-                dto.setGender(team.getGender());
-                dto.setActive(team.isActive());
-                dto.setCoachName(
-                        team.getCoach() != null
-                                ? team.getCoach().getFirstName() + " " + team.getCoach().getLastName()
-                                : "—"
-                );
-                // Add assistant coaches names
-                dto.setAssistantNames(
-                        team.getAssistantCoaches().stream()
-                                .map(u -> u.getFirstName() + " " + u.getLastName())
-                                .collect(Collectors.joining(", "))
-                );
+    //
+    public List<TeamListItemDTO> findAllForAdminList() {
+        return teamRepository.findAll().stream()
+                .map(team -> {
+                    TeamListItemDTO dto = new TeamListItemDTO();
+                    dto.setId(team.getId());
+                    dto.setName(team.getName());
+                    dto.setAgeGroup(team.getAgeGroup());
+                    dto.setGender(team.getGender());
+                    dto.setActive(team.isActive());
+                    dto.setCoachName(
+                            team.getCoach() != null
+                                    ? team.getCoach().getFirstName() + " " + team.getCoach().getLastName()
+                                    : "—"
+                    );
+                    // Add assistant coaches names
+                    dto.setAssistantNames(
+                            team.getAssistantCoaches().stream()
+                                    .map(u -> u.getFirstName() + " " + u.getLastName())
+                                    .collect(Collectors.joining(", "))
+                    );
 
-                return dto;
-            })
-            .toList();
-}
+                    return dto;
+                })
+                .toList();
+    }
 
 
-public List<Team> getActiveTeams() {
-    return teamRepository.findByActiveTrue();
-    // only active teams
-}
+    public List<Team> getActiveTeams() {
+        return teamRepository.findByActiveTrue();
+        // only active teams
+    }
     public List<PublicTeamDto> getSortedPublicTeams() {
         return getActiveTeams().stream()
                 .map(publicTeamMapper::toDto)
@@ -259,6 +271,9 @@ public List<Team> getActiveTeams() {
         team.setUpdatedDate(LocalDateTime.now());
 
         teamRepository.save(team);
+
+        // Bulk-reassign existing trial registrations that match this team's birth year + gender
+        reassignTrialRegistrations(team, coach);
     }
 
     @Transactional
@@ -271,7 +286,61 @@ public List<Team> getActiveTeams() {
         teamRepository.delete(team);
     }
 
+    /**
+     * After a team's coach is set (create or update), find all existing trial
+     * registrations whose child's birth year matches the team's ageGroup and whose
+     * gender maps to the team's gender, then set their coach to the new coach.
+     *
+     * This ensures registrations submitted before a coach was assigned to a team
+     * automatically appear on the coach's dashboard.
+     */
+    private void reassignTrialRegistrations(Team team, User coach) {
+        String ageGroup = team.getAgeGroup();
+        if (ageGroup == null || ageGroup.isBlank()) return;
+
+        // Extract all 4-digit years from the ageGroup string (e.g. "Pojkar 2013", "2014-2015", "U19 2024")
+        Matcher m = Pattern.compile("(\\d{4})").matcher(ageGroup);
+        List<Integer> birthYears = new ArrayList<>();
+        while (m.find()) {
+            int year = Integer.parseInt(m.group(1));
+            // Only treat values that are plausible birth years (1990-2020)
+            if (year >= 1990 && year <= 2020) {
+                birthYears.add(year);
+            }
+        }
+
+        if (birthYears.isEmpty()) return;
+
+        Team.Gender teamGender = team.getGender();
+
+        for (int birthYear : birthYears) {
+            LocalDate startDate = LocalDate.of(birthYear, 1, 1);
+            LocalDate endDate   = LocalDate.of(birthYear + 1, 1, 1);
+
+            List<TrialRegistration> registrations =
+                    trialRegistrationRepository.findByBirthDateYear(startDate, endDate);
+
+            List<TrialRegistration> toUpdate = registrations.stream()
+                    .filter(r -> r.getGender() != null && registrationMatchesTeamGender(r.getGender(), teamGender))
+                    .peek(r -> r.setCoach(coach))
+                    .toList();
+
+            if (!toUpdate.isEmpty()) {
+                trialRegistrationRepository.saveAll(toUpdate);
+            }
+        }
+    }
+
+    /**
+     * Maps a trial registration's gender to a Team.Gender, mirroring the logic
+     * in TrialRegistrationService, so the same registrations get picked up.
+     */
+    private boolean registrationMatchesTeamGender(Gender regGender, Team.Gender teamGender) {
+        if (teamGender == Team.Gender.MIXED) return true;
+        Team.Gender mapped = switch (regGender) {
+            case MALE, ANNAT, VillEjAnge, FEMALE -> Team.Gender.MALE;
+        };
+        return mapped == teamGender;
+    }
+
 }
-
-
-
