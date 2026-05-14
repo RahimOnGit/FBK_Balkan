@@ -84,12 +84,21 @@
                         </svg>
                     </div>
                     <div>
-                        <p class="text-primary/40 text-xs font-bold uppercase tracking-wider">Datum & tid</p>
-                        <p class="text-primary font-virage font-bold text-lg" th:text="${#temporals.format(match.timeAsDateTime, 'EEEE d MMMM yyyy')}">lördag 12 april 2025</p>
-                        <p class="text-primary/70 text-sm" th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')} + ' – ' + ${#temporals.format(match.timeAsDateTime.plusHours(2), 'HH:mm')}">14:00 – 16:00</p>
+                        <p class="text-primary/40 text-xs font-bold uppercase tracking-wider">
+                            Datum & tid
+                        </p>
+
+                        <p class="text-primary font-virage font-bold text-lg"
+                           th:text="${#temporals.format(match.timeAsDateTime, 'EEEE d MMMM yyyy', T(java.util.Locale).forLanguageTag('sv-SE'))}">
+                            lördag 12 april 2025
+                        </p>
+
+                        <p class="text-primary/70 text-sm"
+                           th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')} + ' – ' + ${#temporals.format(match.timeAsDateTime.plusHours(2), 'HH:mm')}">
+                            14:00 – 16:00
+                        </p>
                     </div>
                 </div>
-
                 <div th:if="${match.venueName != null and !#strings.isEmpty(match.venueName)}" class="flex items-start gap-4">
                     <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center shrink-0">
                         <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
