@@ -43,7 +43,7 @@
             font-size: 0.9rem;
             letter-spacing: 0.07em;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.82);
+            color: white;
             text-decoration: none;
             padding: 0.4rem 0;
             position: relative;
@@ -77,7 +77,7 @@
             font-size: 0.9rem;
             letter-spacing: 0.07em;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.82);
+            color: white;
             background: none;
             border: none;
             cursor: pointer;
@@ -552,7 +552,7 @@
                     Kontakta oss
                 </a>
                 <div class="nbr-mob-divider"></div>
-                <div class="nbr-mob-section-label">Våra Lag</div>
+                <div class="nbr-mob-section-label ">Våra Lag</div>
                 <a th:each="team : ${navbarTeams}" th:href="@{/public-teams/{id}(id=${team.id})}"
                    th:text="${team.ageGroup}" class="nbr-mob-team-link"></a>
             </div>
@@ -620,7 +620,7 @@
                 <a href="/about" class="nbr-link">Om Klubben</a>
                 <a href="/trial-registration" class="nbr-link">Intresseanmälan</a>
                 <div class="nbr-dropdown-wrap">
-                    <button class="nbr-dropdown-btn">
+                    <button class="nbr-dropdown-btn text-white">
                         Våra Lag
                         <svg class="nbr-chevron" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                     </button>
