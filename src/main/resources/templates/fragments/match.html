@@ -1,212 +1,637 @@
-<!-- Upcoming Matches Section (Carousel Version) -->
+<!--&lt;!&ndash; Upcoming Matches Section (Carousel Version) &ndash;&gt;-->
+<!--<div th:fragment="upcoming-match" class="w-full relative group px-4 md:px-0">-->
+
+
+<!--  &lt;!&ndash; Section Header &ndash;&gt;-->
+<!--  <div class="flex items-center justify-between mb-6 px-4">-->
+<!--    <h3 class="text-white text-xl font-bold uppercase tracking-wider flex items-center gap-2">-->
+<!--      <span class="w-2 h-8 bg-secondary rounded-full"></span>-->
+<!--      Kommande Matcher-->
+<!--    </h3>-->
+<!--    <a href="/matcher" class="text-sm text-gray-300 hover:text-white underline underline-offset-4">-->
+<!--      Visa alla-->
+<!--    </a>-->
+<!--  </div>-->
+
+
+<!--  &lt;!&ndash; Navigation Buttons &ndash;&gt;-->
+<!--  <button onclick="scrollCarousel('upcoming-slider', -340)"-->
+<!--          class="absolute left-2 top-1/2 -translate-y-1/2 z-30 bg-black/60 hover:bg-secondary p-2 text-white rounded-full transition-all opacity-0 group-hover:opacity-100 hidden md:block border border-white/10">-->
+<!--    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5">-->
+<!--      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />-->
+<!--    </svg>-->
+<!--  </button>-->
+
+
+<!--  <button onclick="scrollCarousel('upcoming-slider', 340)"-->
+<!--          class="absolute right-2 top-1/2 -translate-y-1/2 z-30 bg-black/60 hover:bg-secondary p-2 text-white rounded-full transition-all opacity-0 group-hover:opacity-100 hidden md:block border border-white/10">-->
+<!--    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5">-->
+<!--      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />-->
+<!--    </svg>-->
+<!--  </button>-->
+
+
+<!--  &lt;!&ndash; Carousel Container &ndash;&gt;-->
+<!--  <div id="upcoming-slider" class="flex overflow-x-auto scroll-smooth gap-4 no-scrollbar p-4">-->
+
+
+<!--    &lt;!&ndash; Upcoming Match Card &ndash;&gt;-->
+<!--    <div th:each="match : ${upcomingMatches}"-->
+<!--         class="flex-none w-[280px] md:w-[320px] bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-5 hover:bg-white/10 transition-all">-->
+
+
+<!--      &lt;!&ndash; Date & Venue &ndash;&gt;-->
+<!--      <div class="flex flex-col gap-1 mb-4">-->
+<!--        <div class="flex items-center justify-between">-->
+<!--          <span class="bg-secondary text-black text-[10px] font-black px-2 py-0.5 rounded uppercase"-->
+<!--                th:text="${#temporals.format(match.timeAsDateTime, 'dd MMM')}">12 APR</span>-->
+<!--          <span class="text-white/60 text-xs font-bold"-->
+<!--                th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')}">14:00</span>-->
+<!--        </div>-->
+<!--        <div class="flex items-center gap-1 text-[10px] text-white/40 mt-2">-->
+<!--          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
+<!--            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>-->
+<!--          </svg>-->
+<!--          <span th:text="${match.venueName ?: 'Unknown venue'}"></span>-->
+<!--        </div>-->
+<!--      </div>-->
+
+
+<!--      &lt;!&ndash; Teams Area &ndash;&gt;-->
+<!--      <div class="space-y-4">-->
+<!--        &lt;!&ndash; Home — was w-12 h-12, now w-14 h-14 &ndash;&gt;-->
+<!--        <div class="flex items-center gap-3">-->
+<!--          <div class="w-14 h-14 bg-white rounded-lg p-1 shadow-inner flex items-center justify-center shrink-0">-->
+<!--            <img th:src="${match.homeTeamImageUrl}" alt="Home" class="w-full h-full object-contain" style="image-rendering: -webkit-optimize-contrast;">-->
+<!--          </div>-->
+<!--          <span th:text="${match.homeTeamName}" class="font-virage font-bold text-sm text-white truncate">FBK Balkan</span>-->
+<!--        </div>-->
+
+
+<!--        <div class="relative flex justify-center">-->
+<!--          <span class="absolute inset-y-1/2 w-full h-[1px] bg-white/10"></span>-->
+<!--          <span class="relative bg-[#1a1a1a] px-3 text-[10px] font-black text-white/30 italic">VS</span>-->
+<!--        </div>-->
+
+
+<!--        &lt;!&ndash; Away — was w-12 h-12, now w-14 h-14 &ndash;&gt;-->
+<!--        <div class="flex items-center gap-3">-->
+<!--          <div class="w-14 h-14 bg-white rounded-lg p-1 shadow-inner flex items-center justify-center shrink-0">-->
+<!--            <img th:src="${match.awayTeamImageUrl}" alt="Away" class="w-full h-full object-contain" style="image-rendering: -webkit-optimize-contrast;">-->
+<!--          </div>-->
+<!--          <span th:text="${match.awayTeamName}" class="font-virage font-bold text-sm text-white truncate">Råå IF</span>-->
+<!--        </div>-->
+<!--      </div>-->
+
+
+<!--      <div class="mt-6">-->
+<!--        <a th:href="@{'/match-details/' + ${match.gameNumber}}"-->
+<!--           class="block disabled text-center bg-white/10 hover:bg-secondary hover:text-black py-2 rounded-lg text-xs font-bold transition-colors uppercase tracking-widest">-->
+<!--          Matchdetaljer-->
+<!--        </a>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+
+<!--  <script>-->
+<!--    function scrollCarousel(id, distance) {-->
+<!--      const container = document.getElementById(id);-->
+<!--      container.scrollBy({ left: distance, behavior: 'smooth' });-->
+<!--    }-->
+<!--  </script>-->
+<!--</div>-->
+
+
+
+
+
+
+<!--&lt;!&ndash; Match Results Carousel Section &ndash;&gt;-->
+<!--<div th:fragment="match-result" class="relative w-full group">-->
+
+
+<!--  <button onclick="scrollCarousel('match-slider', -340)"-->
+<!--          class="absolute left-0 top-1/2 -translate-y-1/2 z-30 bg-black/50 hover:bg-secondary p-2 text-white rounded-r-lg transition-all opacity-0 group-hover:opacity-100 hidden md:block">-->
+<!--    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">-->
+<!--      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />-->
+<!--    </svg>-->
+<!--  </button>-->
+
+
+<!--  <div id="match-slider" class="flex overflow-x-auto scroll-smooth gap-5 no-scrollbar p-2">-->
+
+
+<!--    <div th:each="match : ${matches}" class="flex-none w-[300px] md:w-[320px]">-->
+<!--      <div class="bg-base-200/95 backdrop-blur-sm rounded-xl border border-white/10 p-5 hover:border-secondary/50 transition-all shadow-xl">-->
+<!--        <a th:href="@{'/match-details/' + ${match.gameNumber}}" class="block">-->
+<!--          <div class="flex items-center justify-between border-b border-white/10 pb-2 mb-3">-->
+<!--            <div class="flex items-center gap-2">-->
+<!--              <span class="h-1.5 w-1.5 rounded-full bg-secondary"></span>-->
+<!--              <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">Resultat</span>-->
+<!--            </div>-->
+<!--            <span th:text="${#temporals.format(match.timeAsDateTime, 'd MMM')}" class="text-[10px] font-bold opacity-60 uppercase"></span>-->
+<!--          </div>-->
+
+
+<!--          <div class="space-y-3">-->
+<!--            &lt;!&ndash; Home — was h-10 w-10, now h-12 w-12 &ndash;&gt;-->
+<!--            <div class="flex items-center justify-between">-->
+<!--              <div class="flex items-center gap-3">-->
+<!--                <img th:src="${match.homeTeamImageUrl}" class="h-12 w-12 object-contain" alt="" style="image-rendering: -webkit-optimize-contrast;">-->
+<!--                <span th:text="${match.homeTeamName}" class="font-virage italic font-bold text-sm truncate w-32"></span>-->
+<!--              </div>-->
+<!--              <span th:text="${match.goalsScoredHomeTeam}" class="text-xl font-black text-secondary"></span>-->
+<!--            </div>-->
+<!--            &lt;!&ndash; Away — was h-10 w-10, now h-12 w-12 &ndash;&gt;-->
+<!--            <div class="flex items-center justify-between">-->
+<!--              <div class="flex items-center gap-3">-->
+<!--                <img th:src="${match.awayTeamImageUrl}" class="h-12 w-12 object-contain" alt="" style="image-rendering: -webkit-optimize-contrast;">-->
+<!--                <span th:text="${match.awayTeamName}" class="font-virage italic font-bold text-sm truncate w-32"></span>-->
+<!--              </div>-->
+<!--              <span th:text="${match.goalsScoredAwayTeam}" class="text-xl font-black text-secondary"></span>-->
+<!--            </div>-->
+<!--          </div>-->
+
+
+<!--          <div class="mt-4 text-center">-->
+<!--            <span class="text-[10px] font-bold uppercase tracking-tighter text-white/40 group-hover:text-secondary">Visa Matchdetaljer →</span>-->
+<!--          </div>-->
+<!--        </a>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+
+<!--  <button onclick="scrollCarousel('match-slider', 340)"-->
+<!--          class="absolute right-0 top-1/2 -translate-y-1/2 z-30 bg-black/50 hover:bg-secondary p-2 text-white rounded-l-lg transition-all opacity-0 group-hover:opacity-100 hidden md:block">-->
+<!--    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">-->
+<!--      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />-->
+<!--    </svg>-->
+<!--  </button>-->
+<!--</div>-->
+
+
+
+
+<!--&lt;!&ndash; START OF FRAGMENT: match-list &ndash;&gt;-->
+<!--<div th:fragment="match-calendar-list(matches)" class="space-y-3 sm:space-y-4">-->
+<!--  <div th:each="match : ${matches}"-->
+<!--       class="group relative bg-primary grid grid-cols-[auto,1fr] sm:grid-cols-[auto,1fr,auto] lg:grid-cols-[auto,minmax(0,1fr),minmax(0,2fr),auto] items-center gap-x-4 gap-y-3 sm:gap-x-5 lg:gap-x-6 hover:bg-neutral/10 border border-white/10 p-4 sm:p-5 lg:p-6 transition-all duration-300 rounded-xl overflow-hidden">-->
+
+
+<!--    <div class="absolute inset-0 bg-gradient-to-r from-secondary/0 via-secondary/5 to-secondary/0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>-->
+
+
+<!--    <div class="relative flex flex-col items-center justify-center min-w-[56px] sm:min-w-[72px] text-center sm:border-r sm:border-white/10 sm:pr-4 lg:pr-6">-->
+<!--      <span class="text-secondary font-black text-2xl sm:text-3xl leading-none italic uppercase"-->
+<!--            th:text="${#temporals.format(match.timeAsDateTime, 'dd')}">14</span>-->
+<!--      <span class="text-white/60 font-bold text-[10px] sm:text-xs uppercase tracking-widest mt-1"-->
+<!--            th:text="${#temporals.format(match.timeAsDateTime, 'MMM')}">MAJ</span>-->
+<!--    </div>-->
+
+
+<!--    <div class="relative flex items-center min-w-0 lg:pr-4">-->
+<!--      <span class="text-white text-xs sm:text-sm font-bold truncate"-->
+<!--            th:text="${match.competitionName != null ? match.competitionName : 'Division 2'}">Division 2 Södra Götaland</span>-->
+<!--    </div>-->
+
+
+<!--    <div class="relative col-span-2 sm:col-span-3 lg:col-span-1 flex items-center justify-between sm:justify-center gap-3 sm:gap-4 lg:gap-6 w-full pt-3 sm:pt-4 lg:pt-0 border-t border-white/10 sm:border-t-0">-->
+<!--      &lt;!&ndash; Home — was w-10…w-11…w-12, now w-12…w-14…w-16 &ndash;&gt;-->
+<!--      <div class="flex flex-1 min-w-0 items-center justify-end gap-2 sm:gap-3 text-right">-->
+<!--        <span class="text-white font-bold text-sm sm:text-base lg:text-lg uppercase italic tracking-tight truncate"-->
+<!--              th:text="${match.homeTeamName}">FBK Balkan</span>-->
+<!--        <img th:src="${match.homeTeamImageUrl}"-->
+<!--             class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 object-contain shrink-0"-->
+<!--             alt="" style="image-rendering: -webkit-optimize-contrast;">-->
+<!--      </div>-->
+
+
+<!--      <div class="flex flex-col items-center justify-center shrink-0 min-w-[52px] sm:min-w-[64px] lg:min-w-[88px]">-->
+<!--        <span class="text-white/20 font-black italic text-base sm:text-lg">VS</span>-->
+<!--        <span class="text-[10px] text-white/40 font-bold"-->
+<!--              th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')}">14:00</span>-->
+<!--      </div>-->
+
+
+<!--      &lt;!&ndash; Away — was w-10…w-11…w-12, now w-12…w-14…w-16 &ndash;&gt;-->
+<!--      <div class="flex flex-1 min-w-0 items-center justify-start gap-2 sm:gap-3 text-left">-->
+<!--        <img th:src="${match.awayTeamImageUrl}"-->
+<!--             class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 object-contain shrink-0"-->
+<!--             alt="" style="image-rendering: -webkit-optimize-contrast;">-->
+<!--        <span class="text-white font-bold text-sm sm:text-base lg:text-lg uppercase italic tracking-tight truncate"-->
+<!--              th:text="${match.awayTeamName}">IFK Malmö</span>-->
+<!--      </div>-->
+<!--    </div>-->
+
+
+<!--    <div class="relative col-span-2 sm:col-span-3 lg:col-span-1 flex justify-stretch sm:justify-center lg:justify-end pt-2 sm:pt-3 lg:pt-0 border-t border-white/10 sm:border-t-0 lg:border-t-0">-->
+<!--      <a th:href="@{'/match-details/' + ${match.gameNumber}}"-->
+<!--         class="btn btn-sm md:btn-md btn-outline border-white/20 text-white hover:bg-secondary hover:text-navy hover:border-secondary font-black uppercase italic tracking-widest text-[10px] w-full sm:w-auto">-->
+<!--        Visa detaljer-->
+<!--      </a>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+
+
+<!--&lt;!&ndash; PSG-INSPIRED FIXTURE CARD &ndash;&gt;-->
+<!--<div th:fragment="fixture-card(match, played)"-->
+<!--     class="group relative bg-white border border-neutral-100 rounded-2xl overflow-hidden hover:shadow-xl hover:border-secondary/40 transition-all duration-300 flex flex-col">-->
+
+
+<!--  <div class="pointer-events-none absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary/40"></div>-->
+
+
+<!--  <div class="relative p-5 sm:p-6 flex flex-col flex-1">-->
+
+
+<!--    <div class="flex items-center gap-2 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-primary/70 mb-5">-->
+<!--      <span class="inline-block w-1.5 h-1.5 rounded-full bg-secondary"></span>-->
+<!--      <span class="truncate" th:text="${match.competitionName != null ? match.competitionName : 'Match'}">Division 2</span>-->
+<!--    </div>-->
+
+
+<!--    <div class="space-y-3 mb-5">-->
+<!--      &lt;!&ndash; Home — was w-11 sm:w-12, now w-14 sm:w-16 &ndash;&gt;-->
+<!--      <div class="flex items-center justify-between gap-3">-->
+<!--        <div class="flex items-center gap-3 min-w-0 flex-1">-->
+<!--          <div class="w-14 h-14 sm:w-16 sm:h-16 bg-neutral-50 rounded-lg p-1 flex items-center justify-center shrink-0 border border-neutral-100">-->
+<!--            <img th:src="${match.homeTeamImageUrl}" alt="" class="max-w-full max-h-full object-contain" style="image-rendering: -webkit-optimize-contrast;">-->
+<!--          </div>-->
+<!--          <span class="font-black text-base sm:text-lg text-primary uppercase italic tracking-tight truncate"-->
+<!--                th:text="${match.homeTeamName}">FBK Balkan</span>-->
+<!--        </div>-->
+<!--        <span th:if="${played}"-->
+<!--              class="text-2xl sm:text-3xl font-black text-primary tabular-nums shrink-0"-->
+<!--              th:text="${match.goalsScoredHomeTeam != null and match.goalsScoredHomeTeam >= 0 ? match.goalsScoredHomeTeam : '–'}">2</span>-->
+<!--      </div>-->
+
+
+<!--      &lt;!&ndash; Away — was w-11 sm:w-12, now w-14 sm:w-16 &ndash;&gt;-->
+<!--      <div class="flex items-center justify-between gap-3">-->
+<!--        <div class="flex items-center gap-3 min-w-0 flex-1">-->
+<!--          <div class="w-14 h-14 sm:w-16 sm:h-16 bg-neutral-50 rounded-lg p-1 flex items-center justify-center shrink-0 border border-neutral-100">-->
+<!--            <img th:src="${match.awayTeamImageUrl}" alt="" class="max-w-full max-h-full object-contain" style="image-rendering: -webkit-optimize-contrast;">-->
+<!--          </div>-->
+<!--          <span class="font-black text-base sm:text-lg text-primary uppercase italic tracking-tight truncate"-->
+<!--                th:text="${match.awayTeamName}">Råå IF</span>-->
+<!--        </div>-->
+<!--        <span th:if="${played}"-->
+<!--              class="text-2xl sm:text-3xl font-black text-primary tabular-nums shrink-0"-->
+<!--              th:text="${match.goalsScoredAwayTeam != null and match.goalsScoredAwayTeam >= 0 ? match.goalsScoredAwayTeam : '–'}">1</span>-->
+<!--      </div>-->
+
+
+<!--      <div th:unless="${played}" class="flex items-center justify-center gap-2 pt-1">-->
+<!--        <span class="h-[1px] flex-1 bg-neutral-100"></span>-->
+<!--        <span class="px-3 py-1 bg-primary text-white text-[10px] font-black italic tracking-wider rounded">-->
+<!--          VS · <span th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')}">14:00</span>-->
+<!--        </span>-->
+<!--        <span class="h-[1px] flex-1 bg-neutral-100"></span>-->
+<!--      </div>-->
+<!--    </div>-->
+
+
+<!--    <div class="space-y-1.5 pt-4 border-t border-neutral-100 text-xs sm:text-sm">-->
+<!--      <div class="flex items-center gap-2 text-primary font-bold">-->
+<!--        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
+<!--          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>-->
+<!--        </svg>-->
+<!--        <span th:text="${#temporals.format(match.timeAsDateTime, 'd MMMM yyyy')} + ' · ' + ${#temporals.format(match.timeAsDateTime, 'HH:mm')}">3 April 2026 · 14:45</span>-->
+<!--      </div>-->
+<!--      <div th:if="${match.venueName != null and !#strings.isEmpty(match.venueName)}"-->
+<!--           class="flex items-center gap-2 text-neutral-500">-->
+<!--        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
+<!--          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>-->
+<!--          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>-->
+<!--        </svg>-->
+<!--        <span class="truncate" th:text="${match.venueName}">Kirsebergs IP</span>-->
+<!--      </div>-->
+<!--    </div>-->
+
+
+<!--    <a th:href="@{'/match-details/' + ${match.gameNumber}}"-->
+<!--       class="mt-5 block text-center bg-neutral-50 hover:bg-primary hover:text-white text-primary text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] py-3 rounded-lg transition-colors">-->
+<!--      Matchcenter →-->
+<!--    </a>-->
+
+
+<!--  </div>-->
+<!--</div>-->
+
+
+
+
+<!--&lt;!&ndash; match-row-card &ndash;&gt;-->
+<!--<div th:fragment="match-row-card(matches)" class="space-y-4">-->
+<!--  <div th:each="match : ${matches}"-->
+<!--       class="group bg-white border border-neutral-100 rounded-2xl p-5 md:p-8 hover:shadow-2xl hover:border-secondary/30 transition-all duration-300">-->
+
+
+<!--    <div class="flex flex-wrap justify-between items-center text-[10px] font-bold uppercase tracking-[0.2em] mb-6 pb-4 border-b border-neutral-50">-->
+<!--      <div class="flex items-center gap-4">-->
+<!--        <div class="flex items-center gap-2 text-primary">-->
+<!--          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>-->
+<!--          <span th:text="${#temporals.format(match.timeAsDateTime, 'dd MMM yyyy')}">12 APR 2024</span>-->
+<!--        </div>-->
+<!--        <span class="w-1 h-1 bg-neutral-200 rounded-full"></span>-->
+<!--        <span class="text-neutral-400" th:text="${match.competitionName}">Division 2 Södra</span>-->
+<!--      </div>-->
+<!--      <div th:if="${match.goalsScoredHomeTeam == -1}" class="bg-neutral-50 text-primary px-3 py-1 rounded-full flex items-center gap-2">-->
+<!--        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>-->
+<!--        <span th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')}">14:00</span>-->
+<!--      </div>-->
+<!--    </div>-->
+
+
+<!--    <div class="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4">-->
+
+
+<!--      &lt;!&ndash; Home — was w-14 h-14 md:w-20 md:h-20, now w-16 h-16 md:w-24 md:h-24 &ndash;&gt;-->
+<!--      <div class="flex flex-1 items-center gap-4 w-full md:justify-end">-->
+<!--        <span class="font-black text-xl md:text-2xl text-primary uppercase italic tracking-tighter order-2 md:order-1 text-left md:text-right flex-1 md:flex-none"-->
+<!--              th:text="${match.homeTeamName}">FBK Balkan</span>-->
+<!--        <div class="w-16 h-16 md:w-24 md:h-24 bg-neutral-50 rounded-xl p-1.5 flex items-center justify-center order-1 md:order-2 border border-neutral-100 group-hover:scale-110 transition-transform shrink-0">-->
+<!--          <img th:src="${match.homeTeamImageUrl}" class="max-w-full max-h-full object-contain" alt="" style="image-rendering: -webkit-optimize-contrast;">-->
+<!--        </div>-->
+<!--      </div>-->
+
+
+<!--      <div class="flex flex-col items-center justify-center min-w-[120px]">-->
+<!--        <div th:if="${match.goalsScoredHomeTeam != -1}" class="flex items-center gap-3">-->
+<!--          <span class="text-4xl md:text-5xl font-black text-primary" th:text="${match.goalsScoredHomeTeam}">2</span>-->
+<!--          <span class="text-2xl font-black text-secondary">—</span>-->
+<!--          <span class="text-4xl md:text-5xl font-black text-primary" th:text="${match.goalsScoredAwayTeam}">0</span>-->
+<!--        </div>-->
+<!--        <div th:if="${match.goalsScoredHomeTeam == -1}" class="relative">-->
+<!--          <div class="px-6 py-2 bg-primary text-white text-xs font-black italic rounded-lg skew-x-[-12deg] shadow-lg shadow-primary/20">-->
+<!--            VS-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+
+<!--      &lt;!&ndash; Away — was w-14 h-14 md:w-20 md:h-20, now w-16 h-16 md:w-24 md:h-24 &ndash;&gt;-->
+<!--      <div class="flex flex-1 items-center gap-4 w-full md:justify-start">-->
+<!--        <div class="w-16 h-16 md:w-24 md:h-24 bg-neutral-50 rounded-xl p-1.5 flex items-center justify-center border border-neutral-100 group-hover:scale-110 transition-transform shrink-0">-->
+<!--          <img th:src="${match.awayTeamImageUrl}" class="max-w-full max-h-full object-contain" alt="" style="image-rendering: -webkit-optimize-contrast;">-->
+<!--        </div>-->
+<!--        <span class="font-black text-xl md:text-2xl text-primary uppercase italic tracking-tighter text-left flex-1 md:flex-none"-->
+<!--              th:text="${match.awayTeamName}">Helsingborg FC</span>-->
+<!--      </div>-->
+<!--    </div>-->
+
+
+<!--    <div class="mt-8 pt-4 border-t border-neutral-50 flex justify-center">-->
+<!--      <a th:href="@{'/match-details/' + ${match.gameNumber}}"-->
+<!--         class="text-[10px] font-black uppercase tracking-[0.3em] text-neutral-400 hover:text-secondary transition-colors flex items-center gap-2 group/link">-->
+<!--        Se Matchcenter-->
+<!--        <svg class="w-3 h-3 transform group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/></svg>-->
+<!--      </a>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<!--////////-->
+<!--
+ SHARED UTILITIES
+ .no-scrollbar::-webkit-scrollbar { display: none; }
+ .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+-->
+
+
+<!-- Upcoming Matches Section -->
 <div th:fragment="upcoming-match" class="w-full relative group px-4 md:px-0">
+
 
   <!-- Section Header -->
   <div class="flex items-center justify-between mb-6 px-4">
-    <h3 class="text-white text-xl font-bold uppercase tracking-wider flex items-center gap-2">
-      <span class="w-2 h-8 bg-secondary rounded-full"></span>
+    <h3 class="text-white text-xl font-bold uppercase tracking-wider flex items-center gap-3">
+      <span class="w-1.5 h-7 bg-secondary rounded-full"></span>
       Kommande Matcher
     </h3>
-    <a href="/matcher" class="text-sm text-gray-300 hover:text-white underline underline-offset-4">
+    <!--    <a href="/matcher" class="text-sm text-gray-400 hover:text-white transition-colors underline underline-offset-4">-->
+    <!--      Visa alla-->
+    <!--    </a>-->
+
+
+    <a href="/matcher" class="text-sm text-white hover:text-secondary transition-colors underline underline-offset-4">
       Visa alla
     </a>
   </div>
 
+
   <!-- Navigation Buttons -->
-  <button onclick="scrollCarousel('upcoming-slider', -340)"
-          class="absolute left-2 top-1/2 -translate-y-1/2 z-30 bg-black/60 hover:bg-secondary p-2 text-white rounded-full transition-all opacity-0 group-hover:opacity-100 hidden md:block border border-white/10">
+  <button onclick="scrollCarousel('upcoming-slider', 'left')" aria-label="Scroll left"
+          class="absolute left-2 top-1/2 -translate-y-1/2 z-30 bg-black/60 hover:bg-secondary p-2 text-white rounded-full transition-all opacity-0 group-hover:opacity-100 hidden md:block border border-white/10 backdrop-blur-sm">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5">
       <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
     </svg>
   </button>
 
-  <button onclick="scrollCarousel('upcoming-slider', 340)"
-          class="absolute right-2 top-1/2 -translate-y-1/2 z-30 bg-black/60 hover:bg-secondary p-2 text-white rounded-full transition-all opacity-0 group-hover:opacity-100 hidden md:block border border-white/10">
+
+  <button onclick="scrollCarousel('upcoming-slider', 'right')" aria-label="Scroll right"
+          class="absolute right-2 top-1/2 -translate-y-1/2 z-30 bg-black/60 hover:bg-secondary p-2 text-white rounded-full transition-all opacity-0 group-hover:opacity-100 hidden md:block border border-white/10 backdrop-blur-sm">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5">
       <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
     </svg>
   </button>
 
+
   <!-- Carousel Container -->
   <div id="upcoming-slider" class="flex overflow-x-auto scroll-smooth gap-4 no-scrollbar p-4">
-
-    <!-- Upcoming Match Card -->
     <div th:each="match : ${upcomingMatches}"
-         class="flex-none w-[280px] md:w-[320px] bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-5 hover:bg-white/10 transition-all">
+         class="flex-none w-[280px] md:w-[320px] bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-5 hover:bg-white/10 transition-all duration-300 group/card">
+
 
       <!-- Date & Venue -->
-      <div class="flex flex-col gap-1 mb-4">
+      <div class="flex flex-col gap-2 mb-5">
         <div class="flex items-center justify-between">
-                    <span class="bg-secondary text-black text-[10px] font-black px-2 py-0.5 rounded uppercase"
-                          th:text="${#temporals.format(match.timeAsDateTime, 'dd MMM')}">12 APR</span>
+         <span class="bg-secondary text-black text-[10px] font-black px-2 py-0.5 rounded uppercase"
+               th:text="${#temporals.format(match.timeAsDateTime, 'dd MMM')}">12 APR</span>
           <span class="text-white/60 text-xs font-bold"
                 th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')}">14:00</span>
         </div>
-        <div class="flex items-center gap-1 text-[10px] text-white/40 mt-2">
-          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="flex items-center gap-1.5 text-[11px] text-white/40">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
           </svg>
-          <!--          <span th:text="${match.venue != null ? match.venue : 'Kirsebergs IP'}" class="truncate">Kirsebergs IP</span>-->
-          <span th:text="${match.venueName ?: 'Unknown venue'}"></span>
+          <span th:text="${match.venueName ?: 'Okänd arena'}">Venue Name</span>
         </div>
       </div>
 
-      <!-- Teams Area -->
+
+      <!-- Matchup Area -->
       <div class="space-y-4">
-        <!-- Home -->
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-white rounded-lg p-1.5 shadow-inner">
-            <img th:src="${match.homeTeamImageUrl}" alt="Home" class="w-full h-full object-contain">
+        <div class="flex items-center gap-4">
+          <!-- INCREASED SIZE & REMOVED BG -->
+          <div class="w-20 h-20 flex items-center justify-center shrink-0">
+            <img th:src="${match.homeTeamImageUrl}" alt="Home Team" class="w-full h-full object-contain" style="image-rendering: -webkit-optimize-contrast;">
           </div>
-          <span th:text="${match.homeTeamName}" class="font-virage font-bold text-sm text-white truncate">FBK Balkan</span>
+          <span th:text="${match.homeTeamName}" class="font-virage font-bold text-base text-white truncate">Home Team</span>
         </div>
 
-        <div class="relative flex justify-center">
-          <span class="absolute inset-y-1/2 w-full h-[1px] bg-white/10"></span>
-          <span class="relative bg-[#1a1a1a] px-3 text-[10px] font-black text-white/30 italic">VS</span>
+
+        <div class="relative flex justify-center items-center">
+          <div class="absolute inset-0 flex items-center"><div class="w-full h-[1px] bg-white/10"></div></div>
+          <span class="relative bg-[#1a1a1a] px-3 text-[10px] font-black text-white/40 italic">VS</span>
         </div>
 
-        <!-- Away -->
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-white rounded-lg p-1.5 shadow-inner">
-            <img th:src="${match.awayTeamImageUrl}" alt="Away" class="w-full h-full object-contain">
+
+        <div class="flex items-center gap-4">
+          <!-- INCREASED SIZE & REMOVED BG -->
+          <div class="w-20 h-20 flex items-center justify-center shrink-0">
+            <img th:src="${match.awayTeamImageUrl}" alt="Away Team" class="w-full h-full object-contain" style="image-rendering: -webkit-optimize-contrast;">
           </div>
-          <span th:text="${match.awayTeamName}" class="font-virage font-bold text-sm text-white truncate">Råå IF</span>
+          <span th:text="${match.awayTeamName}" class="font-virage font-bold text-base text-white truncate">Away Team</span>
         </div>
       </div>
+
 
       <div class="mt-6">
         <a th:href="@{'/match-details/' + ${match.gameNumber}}"
-           class="block disabled text-center bg-white/10 hover:bg-secondary hover:text-black py-2 rounded-lg text-xs font-bold transition-colors uppercase tracking-widest">
+           class="block text-center bg-white/10 hover:bg-secondary hover:text-black py-2.5 rounded-lg text-xs font-bold transition-all uppercase tracking-widest">
           Matchdetaljer
         </a>
       </div>
     </div>
   </div>
 
-  <!-- Reusable Script (Only needs to be in the file once) -->
+
   <script>
-    function scrollCarousel(id, distance) {
+    function scrollCarousel(id, direction) {
       const container = document.getElementById(id);
-      container.scrollBy({ left: distance, behavior: 'smooth' });
+      const card = container.firstElementChild;
+      if (!card) return;
+      const scrollAmount = card.offsetWidth + 16;
+      container.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
     }
   </script>
 </div>
 
 
-
-<!-- Match Results Carousel Section -->
+<!-- Match Results Carousel -->
 <div th:fragment="match-result" class="relative w-full group">
-
-  <!-- Left Button -->
-  <button onclick="scrollCarousel('match-slider', -340)"
+  <button onclick="scrollCarousel('match-slider', 'left')" aria-label="Scroll left"
           class="absolute left-0 top-1/2 -translate-y-1/2 z-30 bg-black/50 hover:bg-secondary p-2 text-white rounded-r-lg transition-all opacity-0 group-hover:opacity-100 hidden md:block">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
       <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
     </svg>
   </button>
 
-  <!-- Carousel Container -->
+
   <div id="match-slider" class="flex overflow-x-auto scroll-smooth gap-5 no-scrollbar p-2">
+    <div th:each="match : ${matches}" class="flex-none w-[300px] md:w-[320px]">
+      <a th:href="@{'/match-details/' + ${match.gameNumber}}"
+         class="block bg-base-200/95 backdrop-blur-sm rounded-xl border border-white/10 p-5 hover:border-secondary/50 transition-all shadow-xl group/card">
 
-    <!-- Match Card Loop -->
-    <div  th:each="match : ${matches}"
-          class="flex-none w-[300px] md:w-[320px]">
 
-      <div class="bg-base-200/95 backdrop-blur-sm rounded-xl border border-white/10 p-5 hover:border-secondary/50 transition-all shadow-xl">
-        <a th:href="@{'/match-details/' + ${match.gameNumber}}" class="block">
-          <!-- Header -->
-          <div class="flex items-center justify-between border-b border-white/10 pb-2 mb-3">
-            <div class="flex items-center gap-2">
-              <span class="h-1.5 w-1.5 rounded-full bg-secondary"></span>
-              <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">Resultat</span>
-            </div>
-            <span th:text="${#temporals.format(match.timeAsDateTime, 'd MMM')}" class="text-[10px] font-bold opacity-60 uppercase"></span>
+        <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-4">
+          <div class="flex items-center gap-2">
+            <span class="h-1.5 w-1.5 rounded-full bg-secondary"></span>
+            <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">Resultat</span>
           </div>
+          <span th:text="${#temporals.format(match.timeAsDateTime, 'd MMM')}" class="text-[10px] font-bold opacity-60 uppercase"></span>
+        </div>
 
-          <!-- Teams Row -->
-          <div class="space-y-3">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <img th:src="${match.homeTeamImageUrl}" class="h-8 w-8 object-contain" alt="">
-                <span th:text="${match.homeTeamName}" class="font-virage italic font-bold text-sm truncate w-32"></span>
-              </div>
-              <span th:text="${match.goalsScoredHomeTeam}" class="text-xl font-black text-secondary"></span>
-            </div>
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <img th:src="${match.awayTeamImageUrl}" class="h-8 w-8 object-contain" alt="">
-                <span th:text="${match.awayTeamName}" class="font-virage italic font-bold text-sm truncate w-32"></span>
-              </div>
-              <span th:text="${match.goalsScoredAwayTeam}" class="text-xl font-black text-secondary"></span>
-            </div>
-          </div>
 
-          <div class="mt-4 text-center">
-            <span class="text-[10px] font-bold uppercase tracking-tighter text-white/40 group-hover:text-secondary">Visa Matchdetaljer →</span>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4 min-w-0">
+              <!-- INCREASED SIZE -->
+              <img th:src="${match.homeTeamImageUrl}" class="h-16 w-16 object-contain shrink-0" alt="" style="image-rendering: -webkit-optimize-contrast;">
+              <span th:text="${match.homeTeamName}" class="font-virage italic font-bold text-sm truncate">Team Name</span>
+            </div>
+            <span th:text="${match.goalsScoredHomeTeam}" class="text-xl font-black text-secondary tabular-nums">0</span>
           </div>
-        </a>
-      </div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4 min-w-0">
+              <!-- INCREASED SIZE -->
+              <img th:src="${match.awayTeamImageUrl}" class="h-16 w-16 object-contain shrink-0" alt="" style="image-rendering: -webkit-optimize-contrast;">
+              <span th:text="${match.awayTeamName}" class="font-virage italic font-bold text-sm truncate">Team Name</span>
+            </div>
+            <span th:text="${match.goalsScoredAwayTeam}" class="text-xl font-black text-secondary tabular-nums">0</span>
+          </div>
+        </div>
+
+
+        <div class="mt-5 text-center">
+          <span class="text-[10px] font-bold uppercase tracking-tighter text-white/40 group-hover/card:text-secondary transition-colors">Visa Matchdetaljer →</span>
+        </div>
+      </a>
     </div>
   </div>
 
-  <!-- Right Button -->
-  <button onclick="scrollCarousel('match-slider', 340)"
+
+  <button onclick="scrollCarousel('match-slider', 'right')" aria-label="Scroll right"
           class="absolute right-0 top-1/2 -translate-y-1/2 z-30 bg-black/50 hover:bg-secondary p-2 text-white rounded-l-lg transition-all opacity-0 group-hover:opacity-100 hidden md:block">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
       <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
     </svg>
   </button>
-
-
 </div>
 
 
-<!-- START OF FRAGMENT: match-list -->
+<!-- Match Calendar List -->
 <div th:fragment="match-calendar-list(matches)" class="space-y-3 sm:space-y-4">
-  <!-- Match Row -->
   <div th:each="match : ${matches}"
        class="group relative bg-primary grid grid-cols-[auto,1fr] sm:grid-cols-[auto,1fr,auto] lg:grid-cols-[auto,minmax(0,1fr),minmax(0,2fr),auto] items-center gap-x-4 gap-y-3 sm:gap-x-5 lg:gap-x-6 hover:bg-neutral/10 border border-white/10 p-4 sm:p-5 lg:p-6 transition-all duration-300 rounded-xl overflow-hidden">
 
-    <!-- Subtle Glow Effect on Hover -->
+
     <div class="absolute inset-0 bg-gradient-to-r from-secondary/0 via-secondary/5 to-secondary/0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
 
-    <!-- 1. Date Block -->
+
+    <!-- Date Block -->
     <div class="relative flex flex-col items-center justify-center min-w-[56px] sm:min-w-[72px] text-center sm:border-r sm:border-white/10 sm:pr-4 lg:pr-6">
-      <span class="text-secondary font-black text-2xl sm:text-3xl leading-none italic uppercase"
-            th:text="${#temporals.format(match.timeAsDateTime, 'dd')}">14</span>
+     <span class="text-secondary font-black text-2xl sm:text-3xl leading-none italic uppercase"
+           th:text="${#temporals.format(match.timeAsDateTime, 'dd')}">14</span>
       <span class="text-white/60 font-bold text-[10px] sm:text-xs uppercase tracking-widest mt-1"
             th:text="${#temporals.format(match.timeAsDateTime, 'MMM')}">MAJ</span>
     </div>
 
-    <!-- 2. Competition -->
+
+    <!-- Competition -->
     <div class="relative flex items-center min-w-0 lg:pr-4">
-      <span class="text-white text-xs sm:text-sm font-bold truncate" th:text="${match.competitionName != null ? match.competitionName : 'Division 2'}">Division 2 Södra Götaland</span>
+     <span class="text-white text-xs sm:text-sm font-bold truncate"
+           th:text="${match.competitionName ?: 'Division 2'}">Competition Name</span>
     </div>
 
-    <!-- 3. The Matchup (Main Focus) -->
+
+    <!-- Team Matchup -->
     <div class="relative col-span-2 sm:col-span-3 lg:col-span-1 flex items-center justify-between sm:justify-center gap-3 sm:gap-4 lg:gap-6 w-full pt-3 sm:pt-4 lg:pt-0 border-t border-white/10 sm:border-t-0">
-      <!-- Home -->
       <div class="flex flex-1 min-w-0 items-center justify-end gap-2 sm:gap-3 text-right">
-        <span class="text-white font-bold text-sm sm:text-base lg:text-lg uppercase italic tracking-tight truncate" th:text="${match.homeTeamName}">FBK Balkan</span>
-        <img th:src="${match.homeTeamImageUrl}" class="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 object-contain shrink-0" alt="">
+       <span class="text-white font-bold text-sm sm:text-base lg:text-lg uppercase italic tracking-tight truncate"
+             th:text="${match.homeTeamName}">Home Team</span>
+        <!-- INCREASED SIZE -->
+        <img th:src="${match.homeTeamImageUrl}" class="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 object-contain shrink-0" alt="">
       </div>
 
-      <!-- VS + Time (upcoming matches only — no score) -->
+
       <div class="flex flex-col items-center justify-center shrink-0 min-w-[52px] sm:min-w-[64px] lg:min-w-[88px]">
         <span class="text-white/20 font-black italic text-base sm:text-lg">VS</span>
-        <span class="text-[10px] text-white/40 font-bold" th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')}">14:00</span>
+        <span class="text-[10px] text-white/40 font-bold"
+              th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')}">14:00</span>
       </div>
 
-      <!-- Away -->
+
       <div class="flex flex-1 min-w-0 items-center justify-start gap-2 sm:gap-3 text-left">
-        <img th:src="${match.awayTeamImageUrl}" class="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 object-contain shrink-0" alt="">
-        <span class="text-white font-bold text-sm sm:text-base lg:text-lg uppercase italic tracking-tight truncate" th:text="${match.awayTeamName}">IFK Malmö</span>
+        <!-- INCREASED SIZE -->
+        <img th:src="${match.awayTeamImageUrl}" class="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 object-contain shrink-0" alt="">
+        <span class="text-white font-bold text-sm sm:text-base lg:text-lg uppercase italic tracking-tight truncate"
+              th:text="${match.awayTeamName}">Away Team</span>
       </div>
     </div>
 
-    <!-- 4. CTA -->
-    <div class="relative col-span-2 sm:col-span-3 lg:col-span-1 flex justify-stretch sm:justify-center lg:justify-end pt-2 sm:pt-3 lg:pt-0 border-t border-white/10 sm:border-t-0 lg:border-t-0">
+
+    <div class="relative col-span-2 sm:col-span-3 lg:col-span-1 flex justify-stretch sm:justify-center lg:justify-end pt-2 sm:pt-3 lg:pt-0 border-t border-white/10 sm:border-t-0">
       <a th:href="@{'/match-details/' + ${match.gameNumber}}"
          class="btn btn-sm md:btn-md btn-outline border-white/20 text-white hover:bg-secondary hover:text-navy hover:border-secondary font-black uppercase italic tracking-widest text-[10px] w-full sm:w-auto">
         Visa detaljer
@@ -215,63 +640,66 @@
   </div>
 </div>
 
-<!-- PSG-INSPIRED FIXTURE CARD: shows score for played, VS for upcoming -->
+
+<!-- Fixture Card -->
 <div th:fragment="fixture-card(match, played)"
      class="group relative bg-white border border-neutral-100 rounded-2xl overflow-hidden hover:shadow-xl hover:border-secondary/40 transition-all duration-300 flex flex-col">
 
-  <!-- Decorative top accent stripe -->
+
   <div class="pointer-events-none absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary/40"></div>
 
-  <div class="relative p-5 sm:p-6 flex flex-col flex-1">
 
-    <!-- Top: Competition Badge -->
+  <div class="relative p-5 sm:p-6 flex flex-col flex-1">
     <div class="flex items-center gap-2 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-primary/70 mb-5">
       <span class="inline-block w-1.5 h-1.5 rounded-full bg-secondary"></span>
-      <span class="truncate" th:text="${match.competitionName != null ? match.competitionName : 'Match'}">Division 2</span>
+      <span class="truncate" th:text="${match.competitionName ?: 'Match'}">Competition</span>
     </div>
 
-    <!-- Teams + Score/VS -->
+
     <div class="space-y-3 mb-5">
-      <!-- Home Team Row -->
+      <!-- Home Team -->
       <div class="flex items-center justify-between gap-3">
-        <div class="flex items-center gap-3 min-w-0 flex-1">
-          <div class="w-9 h-9 sm:w-10 sm:h-10 bg-neutral-50 rounded-lg p-1.5 flex items-center justify-center shrink-0 border border-neutral-100">
+        <div class="flex items-center gap-4 min-w-0 flex-1">
+          <!-- INCREASED SIZE & REMOVED BG -->
+          <div class="w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center shrink-0">
             <img th:src="${match.homeTeamImageUrl}" alt="" class="max-w-full max-h-full object-contain">
           </div>
           <span class="font-black text-base sm:text-lg text-primary uppercase italic tracking-tight truncate"
-                th:text="${match.homeTeamName}">FBK Balkan</span>
+                th:text="${match.homeTeamName}">Home Team</span>
         </div>
         <span th:if="${played}"
               class="text-2xl sm:text-3xl font-black text-primary tabular-nums shrink-0"
-              th:text="${match.goalsScoredHomeTeam != null and match.goalsScoredHomeTeam >= 0 ? match.goalsScoredHomeTeam : '–'}">2</span>
+              th:text="${match.goalsScoredHomeTeam >= 0 ? match.goalsScoredHomeTeam : '–'}">0</span>
       </div>
 
-      <!-- Away Team Row -->
+
+      <!-- Away Team -->
       <div class="flex items-center justify-between gap-3">
-        <div class="flex items-center gap-3 min-w-0 flex-1">
-          <div class="w-9 h-9 sm:w-10 sm:h-10 bg-neutral-50 rounded-lg p-1.5 flex items-center justify-center shrink-0 border border-neutral-100">
+        <div class="flex items-center gap-4 min-w-0 flex-1">
+          <!-- INCREASED SIZE & REMOVED BG -->
+          <div class="w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center shrink-0">
             <img th:src="${match.awayTeamImageUrl}" alt="" class="max-w-full max-h-full object-contain">
           </div>
           <span class="font-black text-base sm:text-lg text-primary uppercase italic tracking-tight truncate"
-                th:text="${match.awayTeamName}">Råå IF</span>
+                th:text="${match.awayTeamName}">Away Team</span>
         </div>
         <span th:if="${played}"
               class="text-2xl sm:text-3xl font-black text-primary tabular-nums shrink-0"
-              th:text="${match.goalsScoredAwayTeam != null and match.goalsScoredAwayTeam >= 0 ? match.goalsScoredAwayTeam : '–'}">1</span>
+              th:text="${match.goalsScoredAwayTeam >= 0 ? match.goalsScoredAwayTeam : '–'}">0</span>
       </div>
 
-      <!-- Upcoming match: VS divider + kickoff -->
-      <div th:unless="${played}"
-           class="flex items-center justify-center gap-2 pt-1">
+
+      <div th:unless="${played}" class="flex items-center justify-center gap-2 pt-1">
         <span class="h-[1px] flex-1 bg-neutral-100"></span>
-        <span class="px-3 py-1 bg-primary text-white text-[10px] font-black italic tracking-wider rounded">
-          VS · <span th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')}">14:00</span>
-        </span>
+        <span class="px-3 py-1 bg-primary text-white text-[10px] font-black italic tracking-wider rounded shadow-sm">
+         VS · <span th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')}">14:00</span>
+       </span>
         <span class="h-[1px] flex-1 bg-neutral-100"></span>
       </div>
     </div>
 
-    <!-- Date & Venue -->
+
+    <!-- Footer Info -->
     <div class="space-y-1.5 pt-4 border-t border-neutral-100 text-xs sm:text-sm">
       <div class="flex items-center gap-2 text-primary font-bold">
         <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -283,28 +711,26 @@
            class="flex items-center gap-2 text-neutral-500">
         <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
         </svg>
-        <span class="truncate" th:text="${match.venueName}">Kirsebergs IP</span>
+        <span class="truncate" th:text="${match.venueName}">Venue</span>
       </div>
     </div>
 
-    <!-- CTA -->
+
     <a th:href="@{'/match-details/' + ${match.gameNumber}}"
-       class="mt-5 block text-center bg-neutral-50 hover:bg-primary hover:text-white text-primary text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] py-3 rounded-lg transition-colors">
+       class="mt-5 block text-center bg-neutral-50 hover:bg-primary hover:text-white text-primary text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] py-3 rounded-lg transition-all">
       Matchcenter →
     </a>
-
   </div>
 </div>
 
 
-<!-- NEW FRAGMENT: match-row-card (Based on public-team.html design) -->
+<!-- Match Row Card -->
 <div th:fragment="match-row-card(matches)" class="space-y-4">
   <div th:each="match : ${matches}"
        class="group bg-white border border-neutral-100 rounded-2xl p-5 md:p-8 hover:shadow-2xl hover:border-secondary/30 transition-all duration-300">
 
-    <!-- Top Info: Date & Competition -->
+
     <div class="flex flex-wrap justify-between items-center text-[10px] font-bold uppercase tracking-[0.2em] mb-6 pb-4 border-b border-neutral-50">
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-2 text-primary">
@@ -312,54 +738,54 @@
           <span th:text="${#temporals.format(match.timeAsDateTime, 'dd MMM yyyy')}">12 APR 2024</span>
         </div>
         <span class="w-1 h-1 bg-neutral-200 rounded-full"></span>
-        <span class="text-neutral-400" th:text="${match.competitionName}">Division 2 Södra</span>
+        <span class="text-neutral-400" th:text="${match.competitionName}">Competition</span>
       </div>
-
-      <!-- Time Badge for upcoming matches -->
       <div th:if="${match.goalsScoredHomeTeam == -1}" class="bg-neutral-50 text-primary px-3 py-1 rounded-full flex items-center gap-2">
         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         <span th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')}">14:00</span>
       </div>
     </div>
 
-    <!-- Main Match Row -->
-    <div class="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4">
 
-      <!-- Home Team -->
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-4">
+      <!-- Home -->
       <div class="flex flex-1 items-center gap-4 w-full md:justify-end">
-        <span class="font-black text-xl md:text-2xl text-primary uppercase italic tracking-tighter order-2 md:order-1 text-left md:text-right flex-1 md:flex-none" th:text="${match.homeTeamName}">FBK Balkan</span>
-        <div class="w-12 h-12 md:w-16 md:h-16 bg-neutral-50 rounded-xl p-2 flex items-center justify-center order-1 md:order-2 border border-neutral-100 group-hover:scale-110 transition-transform">
+       <span class="font-black text-xl md:text-2xl text-primary uppercase italic tracking-tighter order-2 md:order-1 text-left md:text-right flex-1 md:flex-none"
+             th:text="${match.homeTeamName}">Home Team</span>
+        <!-- INCREASED SIZE & REMOVED BG -->
+        <div class="w-20 h-20 md:w-32 md:h-32 flex items-center justify-center order-1 md:order-2 group-hover:scale-110 transition-transform shrink-0">
           <img th:src="${match.homeTeamImageUrl}" class="max-w-full max-h-full object-contain" alt="">
         </div>
       </div>
 
-      <!-- Score / VS Center Area -->
-      <div class="flex flex-col items-center justify-center min-w-[120px]">
-        <!-- Played Match: Score -->
-        <div th:if="${match.goalsScoredHomeTeam != -1}" class="flex items-center gap-3">
-          <span class="text-4xl md:text-5xl font-black text-primary" th:text="${match.goalsScoredHomeTeam}">2</span>
-          <span class="text-2xl font-black text-secondary">—</span>
-          <span class="text-4xl md:text-5xl font-black text-primary" th:text="${match.goalsScoredAwayTeam}">0</span>
-        </div>
 
-        <!-- Upcoming Match: VS Badge -->
+      <!-- Score/VS -->
+      <div class="flex flex-col items-center justify-center min-w-[120px]">
+        <div th:if="${match.goalsScoredHomeTeam != -1}" class="flex items-center gap-3">
+          <span class="text-4xl md:text-5xl font-black text-primary tabular-nums" th:text="${match.goalsScoredHomeTeam}">2</span>
+          <span class="text-2xl font-black text-secondary">—</span>
+          <span class="text-4xl md:text-5xl font-black text-primary tabular-nums" th:text="${match.goalsScoredAwayTeam}">0</span>
+        </div>
         <div th:if="${match.goalsScoredHomeTeam == -1}" class="relative">
-          <div class="px-6 py-2 bg-primary text-white text-xs font-black italic rounded-lg skew-x-[-12deg] shadow-lg shadow-primary/20">
+          <div class="px-6 py-2 bg-primary text-white text-xs font-black italic rounded-lg shadow-lg shadow-primary/20">
             VS
           </div>
         </div>
       </div>
 
-      <!-- Away Team -->
+
+      <!-- Away -->
       <div class="flex flex-1 items-center gap-4 w-full md:justify-start">
-        <div class="w-12 h-12 md:w-16 md:h-16 bg-neutral-50 rounded-xl p-2 flex items-center justify-center border border-neutral-100 group-hover:scale-110 transition-transform">
+        <!-- INCREASED SIZE & REMOVED BG -->
+        <div class="w-20 h-20 md:w-32 md:h-32 flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
           <img th:src="${match.awayTeamImageUrl}" class="max-w-full max-h-full object-contain" alt="">
         </div>
-        <span class="font-black text-xl md:text-2xl text-primary uppercase italic tracking-tighter text-left flex-1 md:flex-none" th:text="${match.awayTeamName}">Helsingborg FC</span>
+        <span class="font-black text-xl md:text-2xl text-primary uppercase italic tracking-tighter text-left flex-1 md:flex-none"
+              th:text="${match.awayTeamName}">Away Team</span>
       </div>
     </div>
 
-    <!-- Footer: Action Link -->
+
     <div class="mt-8 pt-4 border-t border-neutral-50 flex justify-center">
       <a th:href="@{'/match-details/' + ${match.gameNumber}}"
          class="text-[10px] font-black uppercase tracking-[0.3em] text-neutral-400 hover:text-secondary transition-colors flex items-center gap-2 group/link">
