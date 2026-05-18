@@ -31,6 +31,7 @@ public class MatchService {
                 .toList();
     }
 
+
     public List<GameDTO> fetchUpcomingMatchesWithinMonths(int months) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime cutoff = now.plusMonths(months);
@@ -38,7 +39,8 @@ public class MatchService {
                 .map(matchMapper::toDto)
                 .filter(m -> m.timeAsDateTime() != null
                         && !m.timeAsDateTime().isBefore(now)
-                        && !m.timeAsDateTime().isAfter(cutoff))
+                        && !m.timeAsDateTime().isAfter(cutoff)
+                        && Boolean.FALSE.equals(m.isFinished()))
                 .sorted(Comparator.comparing(GameDTO::timeAsDateTime,
                         Comparator.nullsLast(Comparator.naturalOrder())))
                 .toList();
@@ -53,7 +55,9 @@ public class MatchService {
                         && m.timeAsDateTime().isBefore(now)
                         && !m.timeAsDateTime().isBefore(cutoff)
                         && m.goalsScoredHomeTeam() != null
-                        && m.goalsScoredHomeTeam() != -1)
+                        && m.goalsScoredHomeTeam() != -1
+                        && Boolean.TRUE.equals(m.isFinished()))
+
                 .sorted(Comparator.comparing(GameDTO::timeAsDateTime,
                         Comparator.nullsLast(Comparator.reverseOrder())))
                 .toList();
@@ -124,7 +128,8 @@ public class MatchService {
         } else if ("results".equals(v)) {
             stream = stream.filter(m -> m.timeAsDateTime().isBefore(now)
                     && m.goalsScoredHomeTeam() != null
-                    && m.goalsScoredHomeTeam() != -1);
+                    && m.goalsScoredHomeTeam() != -1
+                    && Boolean.TRUE.equals(m.isFinished()));
         }
 
         // Competition filter

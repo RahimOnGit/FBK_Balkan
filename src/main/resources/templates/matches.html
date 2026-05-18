@@ -14,14 +14,14 @@
     .hero-glow {
       background: radial-gradient(circle at 50% 50%, rgba(245, 197, 24, 0.15) 0%, transparent 70%);
     }
-    .filter-tabs::-webkit-scrollbar { display: none; }
-    .filter-tabs { scrollbar-width: none; }
+
   </style>
 </head>
 
 <body class="bg-base-100 font-virage text-white antialiased">
 
-<header class="sticky top-0 z-[100] bg-primary/95 backdrop-blur-md border-b border-white/10">
+
+<header class="sticky top-0 z-[100] w-full bg-primary shadow-lg">
   <div th:replace="~{fragments/navbar::navbar}"></div>
 </header>
 
@@ -32,10 +32,6 @@
     <div class="absolute -top-24 -left-24 w-72 h-72 sm:w-96 sm:h-96 bg-secondary/10 rounded-full blur-[100px]"></div>
 
     <div class="container mx-auto px-4 sm:px-6 relative z-10">
-      <div class="inline-flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-        <span class="h-[1px] w-6 sm:w-8 bg-secondary"></span>
-        <span class="text-secondary font-black uppercase tracking-[0.25em] sm:tracking-[0.3em] text-[10px] sm:text-xs">Säsongen 2024/25</span>
-      </div>
       <h1 class="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black italic uppercase tracking-tighter mb-3 sm:mb-4 leading-none break-words">
         Alla <span class="text-secondary">matcher</span>
       </h1>
@@ -191,8 +187,8 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
             <div th:each="match : ${entry.value}">
               <!-- "played" if a real score exists on the match -->
-              <div th:replace="~{fragments/match :: fixture-card(${match}, ${match.goalsScoredHomeTeam() != null and match.goalsScoredHomeTeam() ge 0})}"></div>
-            </div>
+              <!--  använder isFinished() precis som du ville -->
+              <div th:replace="~{fragments/match :: fixture-card(${match}, ${match.isFinished() == true})}"></div>            </div>
           </div>
         </div>
       </div>

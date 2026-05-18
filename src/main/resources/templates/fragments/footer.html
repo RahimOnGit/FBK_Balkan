@@ -1,42 +1,98 @@
 <!-- Footer -->
 <footer th:fragment="footer" class="bg-primary text-white pt-16  border-white/10">
 
+
     <!-- Top Section: Partner/Sponsor Bar -->
     <div class="container mx-auto px-6 mb-16">
         <div class="flex flex-col items-center">
             <h4 class="text-[10px] font-bold tracking-[.3em] uppercase text-white/40 mb-8">Våra Partners</h4>
-            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 hover:opacity-100 transition-opacity duration-500">
-                <!-- Replace these placeholders with actual sponsor logos -->
-                <img src="https://www.stadium.se/INTERSHOP/static/WFS/Stadium-SwedenB2C-Site/-/-/sv_SE/img/Stadium-Logo-black.svg" alt="Sponsor" class="h-8 md:h-12 grayscale hover:grayscale-0 transition cursor-pointer">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEd_ZlWLtaw4tnqCWbjH7QcxkawHrdLp2iHw&s" alt="Sponsor" class="h-8 md:h-12 grayscale hover:grayscale-0 transition cursor-pointer">
-                <img src="https://bimeks.se/wp-content/uploads/2018/02/logo-01-1.png" alt="Sponsor" class="h-8 md:h-12 grayscale hover:grayscale-0 transition cursor-pointer">
+            <!--            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 hover:opacity-100 transition-opacity duration-500">-->
+            <!--                &lt;!&ndash; Replace these placeholders with actual sponsor logos &ndash;&gt;-->
+            <!--                <img src="https://www.stadium.se/INTERSHOP/static/WFS/Stadium-SwedenB2C-Site/-/-/sv_SE/img/Stadium-Logo-black.svg" alt="Sponsor" class="h-8 md:h-12 brightness-0 invert hover:scale-105 transition duration-300 cursor-pointer">-->
+            <!--                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEd_ZlWLtaw4tnqCWbjH7QcxkawHrdLp2iHw&s" alt="Sponsor" class="h-8 md:h-12 brightness-0 invert hover:scale-105 transition duration-300 cursor-pointer">-->
+            <!--                <img src="https://bimeks.se/wp-content/uploads/2018/02/logo-01-1.png" alt="Sponsor" class="h-8 md:h-12 brightness-0 invert hover:scale-105 transition duration-300 cursor-pointer">-->
+            <!--            </div>-->
+
+
+            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-70 hover:opacity-100 transition-opacity duration-500">
+
+
+                <img
+                        src="https://www.stadium.se/INTERSHOP/static/WFS/Stadium-SwedenB2C-Site/-/-/sv_SE/img/Stadium-Logo-black.svg"
+                        alt="Sponsor"
+                        class="h-8 md:h-12 hover:scale-105 transition duration-300 cursor-pointer"
+                        style="filter: brightness(0) invert(1);"
+                >
+
+
+                <!--                <img-->
+                <!--                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEd_ZlWLtaw4tnqCWbjH7QcxkawHrdLp2iHw&s"-->
+                <!--                        alt="Sponsor"-->
+                <!--                        class="h-8 md:h-12 hover:scale-105 transition duration-300 cursor-pointer"-->
+                <!--                        style="filter: brightness(0) invert(1);"-->
+                <!--                >-->
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEd_ZlWLtaw4tnqCWbjH7QcxkawHrdLp2iHw&s" alt="Sponsor" class="h-8 md:h-12  hover:scale-105 transition duration-300 cursor-pointer">
+
+
+
+
+                <img
+                        src="https://bimeks.se/wp-content/uploads/2018/02/logo-01-1.png"
+                        alt="Sponsor"
+                        class="h-8 md:h-12 hover:scale-105 transition duration-300 cursor-pointer"
+                        style="filter: brightness(0) invert(1);"
+                >
+
+
             </div>
         </div>
     </div>
+
 
     <!-- Middle Section: Main Navigation -->
     <div class="container mx-auto px-6 pb-12">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
 
+
             <!-- Branding Column -->
             <div class="flex flex-col">
-    <img src="/images/FBK_BALKAN_logo.png" alt="fbk balkan" class="h-18 w-14 mb-8">
+                <img src="/images/FBK_BALKAN_logo.png" alt="fbk balkan" class="h-18 w-14 mb-8">
                 <p class="text-white/50 text-sm leading-relaxed mb-6 max-w-xs">
                     FBK Balkan ska vara en förening där fotboll blir en väg till gemenskap, utbildning och personlig utveckling.                <div class="flex space-x-4">
-                    <!-- X (Twitter) -->
-                    <a href="https://x.com/fbk_balkan" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-[#0F1C38] transition-all">
-                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                    </a>
-                    <!-- YouTube -->
-                    <a href="https://www.youtube.com/@Malm%C3%B6Fotboll" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-[#FF0000] hover:border-[#FF0000] transition-all">
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg>
-                    </a>
-                    <!-- Instagram/Facebook -->
-                    <a href="https://www.facebook.com/p/FBK-Balkan-100063544570480/" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-[#0F1C38] transition-all">
-                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path></svg>
-                    </a>
-                </div>
+                <!-- X (Twitter) -->
+                <a href="https://x.com/fbk_balkan" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-[#0F1C38] transition-all">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <!-- YouTube -->
+                <a href="https://www.youtube.com/@Malm%C3%B6Fotboll" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-[#FF0000] hover:border-[#FF0000] transition-all">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg>
+                </a>
+                <!-- Instagram/Facebook -->
+                <a href="https://www.facebook.com/p/FBK-Balkan-100063544570480/" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-[#0F1C38] transition-all">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path></svg>
+                </a>
+
+
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/fbkbalkan_ungdom/" target="_blank"
+                   class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-[#0F1C38] transition-all">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                        <path d="M7.75 2C4.574 2 2 4.574 2 7.75v8.5C2 19.426 4.574 22 7.75 22h8.5C19.426 22 22 19.426 22 16.25v-8.5C22 4.574 19.426 2 16.25 2h-8.5zm0 2h8.5A3.75 3.75 0 0120 7.75v8.5A3.75 3.75 0 0116.25 20h-8.5A3.75 3.75 0 014 16.25v-8.5A3.75 3.75 0 017.75 4zm8.75 1a1.25 1.25 0 100 2.5 1.25 1.25 0 000-2.5zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6z"/>
+                    </svg>
+                </a>
+
+
+                <!-- TikTok -->
+                <a href="https://www.tiktok.com/@fbkbalkan_ungdom" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                        <path d="M19.589 6.686a4.793 4.793 0 01-3.77-4.204V2h-3.193v13.138a2.896 2.896 0 11-2.896-2.896c.226 0 .447.024.661.069V9.067a6.09 6.09 0 00-.661-.035A6.09 6.09 0 1015.82 15.12V8.312a7.977 7.977 0 004.661 1.49V6.686h-.892z"/>
+                    </svg>
+                </a>
+
+
             </div>
+            </div>
+
 
             <!-- Links: Club -->
             <div>
@@ -49,6 +105,7 @@
                 </ul>
             </div>
 
+
             <!-- Links: Youth -->
             <div>
                 <h3 class="font-display text-xl tracking-wider text-white mb-6 uppercase">Ungdom</h3>
@@ -58,6 +115,7 @@
                     <li><a href="/matcher" class="text-white/50 hover:text-[#F5B301] text-xs font-bold uppercase tracking-widest transition">Matchschema</a></li>
                 </ul>
             </div>
+
 
             <!-- Contact/Newsletter Info -->
             <div>
@@ -78,8 +136,10 @@
                 </div>
             </div>
 
+
         </div>
     </div>
+
 
     <!-- Bottom Strip -->
     <div class="border-t border-white/5 py-8 bg-black/20">
@@ -94,3 +154,4 @@
         </div>
     </div>
 </footer>
+
