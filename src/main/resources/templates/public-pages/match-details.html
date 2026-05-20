@@ -13,116 +13,553 @@
     <link th:href="@{/css/output.css}" rel="stylesheet">
 
     <link
-            href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;600;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap"
             rel="stylesheet">
 
     <style>
+        /* ─── Reset / Base ─── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            background: white;
+            font-family: 'DM Sans', sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
+
+        .font-virage { font-family: 'Roboto Condensed', sans-serif; }
+
+        /* ─── Navbar ─── */
+        .navbar-fbk {
+            background: #153B6F;
+            box-shadow: 0 2px 12px rgba(21, 59, 111, 0.35);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        /* ─── Page wrapper ─── */
+        .page-main {
+            max-width: 56rem;
+            margin: 0 auto;
+            padding: 1.5rem 1rem 3rem;
+        }
+
+        @media (min-width: 640px) {
+            .page-main { padding: 2rem 1.5rem 4rem; }
+        }
+
+        @media (min-width: 1024px) {
+            .page-main { padding: 3rem 2rem 5rem; }
+        }
+
+        /* ─── Match Card ─── */
+        .match-card {
+            background: #fff;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 32px rgba(21, 59, 111, 0.11);
+            border: 1px solid rgba(21, 59, 111, 0.06);
+        }
+
+        @media (min-width: 640px) {
+            .match-card { border-radius: 1.25rem; }
+        }
+
+        /* ─── Hero ─── */
+        .hero-gradient {
+            background: linear-gradient(150deg, #0d2a52 0%, #153B6F 45%, #1a4a87 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 1.75rem 1rem 1.5rem;
+        }
+
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 120%, rgba(245, 179, 1, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        @media (min-width: 480px) {
+            .hero-gradient { padding: 2rem 1.5rem 1.75rem; }
+        }
+
+        @media (min-width: 768px) {
+            .hero-gradient { padding: 2.5rem 2rem 2rem; }
+        }
+
+        /* Competition pill */
+        .tag-pill {
+            display: inline-block;
+            background: rgba(245, 179, 1, 0.18);
+            color: rgba(255, 255, 255, 0.85);
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.22rem 0.75rem;
+            border-radius: 99px;
+            border: 1px solid rgba(245, 179, 1, 0.25);
+        }
+
+        @media (min-width: 480px) {
+            .tag-pill { font-size: 0.7rem; padding: 0.25rem 0.85rem; }
+        }
+
+        /* ─── Teams Row ─── */
+        .teams-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.25rem;
+        }
+
+        @media (min-width: 480px) { .teams-row { gap: 0.75rem; } }
+        @media (min-width: 768px) { .teams-row { gap: 1.25rem; } }
+
+        /* Team column */
+        .team-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            text-align: center;
+            min-width: 0;
+        }
+
+        @media (min-width: 480px) { .team-col { gap: 0.65rem; } }
+        @media (min-width: 768px) { .team-col { gap: 0.75rem; } }
+
+        /* Logo */
+        .logo-wrap {
+            width: 4rem;
+            height: 4rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.12);
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 480px) { .logo-wrap { width: 5rem; height: 5rem; } }
+        @media (min-width: 640px) { .logo-wrap { width: 6rem; height: 6rem; } }
+        @media (min-width: 768px) { .logo-wrap { width: 6.5rem; height: 6.5rem; } }
+
+        .logo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 0.4rem;
+        }
+
+        /* Team name */
+        .team-name {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: #fff;
+            line-height: 1.1;
+            font-size: clamp(0.8rem, 3.5vw, 1.4rem);
+            word-break: break-word;
+            hyphens: auto;
+        }
+
+        .team-role-label {
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.35);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            display: none;
+        }
+
+        @media (min-width: 480px) {
+            .team-role-label { display: block; }
+        }
+
+        /* ─── Score / VS block ─── */
+        .score-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+            gap: 0.4rem;
+        }
+
+        .score-pill {
+            background: rgba(0, 0, 0, 0.28);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 0.875rem;
+            padding: 0.6rem 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        @media (min-width: 480px) {
+            .score-pill { padding: 0.75rem 1.1rem; gap: 0.55rem; border-radius: 1rem; }
+        }
+
+        @media (min-width: 768px) {
+            .score-pill { padding: 0.85rem 1.5rem; gap: 0.75rem; }
+        }
+
+        .score-num {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: clamp(2.25rem, 8vw, 4rem);
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .score-sep {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: clamp(1.4rem, 4vw, 2.25rem);
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.22);
+        }
+
+        .score-label {
+            text-align: center;
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: rgba(245, 179, 1, 0.6);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-top: 0.35rem;
+        }
+
+        /* VS badge (upcoming) */
+        .vs-wrap {
+            background: rgba(0, 0, 0, 0.28);
+            border-radius: 0.875rem;
+            padding: 0.6rem 0.85rem;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        @media (min-width: 480px) {
+            .vs-wrap { padding: 0.75rem 1.1rem; border-radius: 1rem; }
+        }
+
+        .vs-badge {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: clamp(1.4rem, 6vw, 2rem);
+            font-weight: 900;
+            letter-spacing: 0.15em;
+            color: #153B6F;
+            background: #F5B301;
+            border-radius: 0.5rem;
+            padding: 0.25rem 0.9rem;
+            display: block;
+        }
+
+        .upcoming-time {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.55);
+            letter-spacing: 0.05em;
+            margin-top: 0.4rem;
+            text-align: center;
+        }
+
+        /* ─── Date Strip ─── */
+        .date-strip {
+            /*background: #F5B301;*/
+            padding: 0.55rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .date-strip-text {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: clamp(0.7rem, 2.5vw, 0.85rem);
+            font-weight: 700;
+            color: #153B6F;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        /* ─── Info Grid ─── */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+            padding: 1.5rem 1.25rem 1.25rem;
+        }
+
+        @media (min-width: 560px) {
+            .info-grid {
+                grid-template-columns: 1fr 1fr;
+                padding: 1.75rem 1.5rem 1.25rem;
+                gap: 0 1.5rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .info-grid {
+                padding: 2rem 2rem 1.5rem;
+                gap: 0 2rem;
+            }
+        }
+
+        /* Info row */
+        .info-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.875rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(21, 59, 111, 0.06);
+        }
+
+        /* On single-col, every row gets a divider below */
+        @media (max-width: 559px) {
+            .info-row:last-child { border-bottom: none; }
+        }
+
+        /* On 2-col grid: remove bottom border, add top divider for rows 3+ */
+        @media (min-width: 560px) {
+            .info-row {
+                border-bottom: none;
+                padding: 0 0 1.5rem;
+            }
+            .info-row.divider-row {
+                border-top: 1px solid rgba(21, 59, 111, 0.06);
+                padding-top: 1.5rem;
+                margin-top: 0;
+            }
+        }
+
+        .info-icon-wrap {
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 50%;
+            background: rgba(245, 179, 1, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 480px) {
+            .info-icon-wrap { width: 2.5rem; height: 2.5rem; }
+        }
+
+        .info-label {
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #153B6F;
+            opacity: 0.4;
+            margin-bottom: 0.15rem;
+        }
+
+        .info-value {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #153B6F;
+            line-height: 1.2;
+        }
+
+        @media (min-width: 480px) {
+            .info-value { font-size: 1.1rem; }
+        }
+
+        .info-value-sub {
+            font-size: 0.78rem;
+            color: #153B6F;
+            opacity: 0.55;
+            margin-top: 0.1rem;
+        }
+
+        /* ─── Card Footer ─── */
+        .card-footer {
+            border-top: 1px solid rgba(21, 59, 111, 0.06);
+            background: #f8f9fb;
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        @media (min-width: 560px) {
+            .card-footer { padding: 1.125rem 1.5rem; }
+        }
+
+        @media (min-width: 768px) {
+            .card-footer { padding: 1.125rem 2rem; }
+        }
+
+        .back-link {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(21, 59, 111, 0.45);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover { color: #F5B301; }
+
+        .footer-copy {
+            font-size: 0.65rem;
+            color: rgba(21, 59, 111, 0.28);
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        /* ─── Empty State ─── */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            background: #fff;
+            border-radius: 1rem;
+            border: 1px solid rgba(21, 59, 111, 0.08);
+            box-shadow: 0 4px 24px rgba(21, 59, 111, 0.07);
+        }
+
+        @media (min-width: 640px) {
+            .empty-state { padding: 4rem 2rem; border-radius: 1.25rem; }
+        }
+
+        .empty-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            background: #153B6F;
+            color: #F5B301;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.65rem 1.25rem;
+            border-radius: 0.625rem;
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .empty-btn:hover {
+            background: #F5B301;
+            color: #153B6F;
         }
     </style>
 </head>
 
-<body class="min-h-screen bg-white">
+<body>
 
-<!-- Navbar -->
-<div class="bg-primary">
+<!-- ─── Navbar ─── -->
+<div class="navbar-fbk">
     <div th:replace="~{fragments/navbar::navbar}"></div>
 </div>
 
-<main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+<!-- ─── Main ─── -->
+<main class="page-main">
 
-    <!-- Match not found -->
-    <div th:if="${match == null}"
-         class="text-center py-16 bg-gray-50 rounded-2xl border border-gray-200 shadow-sm">
+    <!-- ══════════════════════════════════════
+         MATCH NOT FOUND
+    ══════════════════════════════════════ -->
+    <div th:if="${match == null}" class="empty-state">
 
-        <svg class="w-16 h-16 mx-auto text-primary/30 mb-4"
-             fill="none"
-             stroke="currentColor"
-             viewBox="0 0 24 24">
-
-            <path stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                  d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <svg class="w-14 h-14 mx-auto mb-5"
+             style="width:3.5rem; height:3.5rem; display:block; margin:0 auto 1.25rem; color:rgba(21,59,111,0.18);"
+             fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"
+                  d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01
+                     M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
 
-        <h2 class="text-2xl font-bold text-primary">
+        <h2 style="font-family:'Roboto Condensed',sans-serif; font-size:clamp(1.25rem,5vw,1.75rem);
+                   font-weight:900; text-transform:uppercase; letter-spacing:0.04em; color:#153B6F;">
             Match kunde inte hittas
         </h2>
 
-        <p class="text-gray-500 mt-2">
+        <p style="color:rgba(21,59,111,0.45); font-size:0.9rem; margin-top:0.5rem; line-height:1.6;">
             Kontrollera länken eller gå tillbaka till matcher.
         </p>
 
-        <a href="/matcher"
-           class="inline-block mt-6 bg-secondary text-primary px-6 py-2 rounded-lg font-bold text-sm uppercase tracking-wider hover:bg-primary hover:text-white transition">
-            ← Tillbaka till matcher
+        <a href="/matcher" class="empty-btn">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Tillbaka till matcher
         </a>
     </div>
 
-    <!-- Match details -->
-    <div th:if="${match != null}"
-         class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
+    <!-- ══════════════════════════════════════
+         MATCH CARD
+    ══════════════════════════════════════ -->
+    <div th:if="${match != null}" class="match-card">
 
-        <!-- Hero Header -->
-        <div class="bg-gradient-to-r from-gray-50 to-white px-6 py-10 md:py-12 text-center border-b border-gray-200">
+        <!-- ── Hero Header ── -->
+        <div class="hero-gradient">
 
-            <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
+            <!-- Competition pill -->
+            <div style="text-align:center; margin-bottom:1.25rem; position:relative; z-index:1;">
+                <span class="tag-pill"
+                      th:text="${match.competitionName != null ? match.competitionName : 'FBK Balkan'}">
+                    Allsvenskan
+                </span>
+            </div>
+
+            <!-- Teams + Score/VS row -->
+            <div class="teams-row" style="position:relative; z-index:1;">
 
                 <!-- Home Team -->
-                <div class="flex flex-col items-center md:items-end flex-1 min-w-0">
-
-                    <!-- Logo - More Centered -->
-                    <div class="w-32 h-32 flex items-center justify-center mb-4 flex-shrink-0">
+                <div class="team-col">
+                    <div class="logo-wrap">
                         <img th:src="${match.homeTeamImageUrl != null ? match.homeTeamImageUrl : '/images/default-team.png'}"
                              th:alt="${match.homeTeamName}"
-                             class="max-w-full max-h-full object-contain scale-110">
+                             onerror="this.src='/images/default-team.png'">
                     </div>
-
-                    <h2 class="text-base sm:text-lg md:text-xl
-                               font-virage font-black uppercase
-                               leading-tight text-primary
-                               text-center md:text-right
-                               max-w-[220px] mx-auto md:mx-0
-                               overflow-hidden text-ellipsis whitespace-nowrap"
-                        th:text="${match.homeTeamName}">
-                        FBK Balkan
-                    </h2>
-
+                    <h2 class="team-name" th:text="${match.homeTeamName}">FBK Balkan</h2>
+                    <span class="team-role-label">Hemmalag</span>
                 </div>
 
-                <!-- Score / VS -->
-                <div class="flex flex-col items-center justify-center min-w-[140px] flex-shrink-0">
+                <!-- Centre: Score or VS -->
+                <div class="score-block">
 
-                    <!-- Played Match -->
-                    <div th:if="${match.goalsScoredHomeTeam != null and match.goalsScoredHomeTeam != -1}"
-                         class="flex items-center gap-4 bg-gray-100 px-6 py-3 rounded-2xl shadow-sm">
-
-                        <span class="text-5xl md:text-6xl font-black text-secondary"
-                              th:text="${match.goalsScoredHomeTeam}">
-                            3
-                        </span>
-
-                        <span class="text-3xl font-black text-primary">
-                            —
-                        </span>
-
-                        <span class="text-5xl md:text-6xl font-black text-secondary"
-                              th:text="${match.goalsScoredAwayTeam}">
-                            1
-                        </span>
+                    <!-- Played match → score -->
+                    <div th:if="${match.goalsScoredHomeTeam != null and match.goalsScoredHomeTeam != -1}">
+                        <div class="score-pill">
+                            <span class="score-num" th:text="${match.goalsScoredHomeTeam}">3</span>
+                            <span class="score-sep">—</span>
+                            <span class="score-num" th:text="${match.goalsScoredAwayTeam}">1</span>
+                        </div>
+                        <p class="score-label">Slutresultat</p>
                     </div>
 
-                    <!-- Upcoming Match -->
-                    <div th:unless="${match.goalsScoredHomeTeam != null and match.goalsScoredHomeTeam != -1}"
-                         class="relative">
-
-                        <div class="px-6 py-2 bg-secondary text-white text-sm font-black rounded-lg shadow-md">
-                            VS
+                    <!-- Upcoming match → VS -->
+                    <div th:unless="${match.goalsScoredHomeTeam != null and match.goalsScoredHomeTeam != -1}">
+                        <div class="vs-wrap">
+                            <span class="vs-badge">VS</span>
                         </div>
-
-                        <p class="text-primary/60 text-xs font-bold mt-2"
+                        <p class="upcoming-time"
                            th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')}">
                             14:00
                         </p>
@@ -130,118 +567,126 @@
                 </div>
 
                 <!-- Away Team -->
-                <div class="flex flex-col items-center md:items-start flex-1 min-w-0">
-
-                    <!-- Logo - More Centered -->
-                    <div class="w-32 h-32 flex items-center justify-center mb-4 flex-shrink-0">
+                <div class="team-col">
+                    <div class="logo-wrap">
                         <img th:src="${match.awayTeamImageUrl != null ? match.awayTeamImageUrl : '/images/default-team.png'}"
                              th:alt="${match.awayTeamName}"
-                             class="max-w-full max-h-full object-contain scale-110">
+                             onerror="this.src='/images/default-team.png'">
                     </div>
-
-                    <h2 class="text-base sm:text-lg md:text-xl
-                               font-virage font-black uppercase
-                               leading-tight text-primary
-                               text-center md:text-left
-                               max-w-[220px] mx-auto md:mx-0
-                               overflow-hidden text-ellipsis whitespace-nowrap"
-                        th:text="${match.awayTeamName}">
-                        Råå IF
-                    </h2>
-
+                    <h2 class="team-name" th:text="${match.awayTeamName}">Råå IF</h2>
+                    <span class="team-role-label">Bortalag</span>
                 </div>
+
             </div>
         </div>
 
-        <!-- باقي الصفحة (Match Info + Footer) بدون تغيير -->
-        <!-- Match Info -->
-        <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-
-            <!-- Left Column -->
-            <div class="space-y-5">
-
-                <div class="flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center shrink-0">
-                        <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <p class="text-primary/40 text-xs font-bold uppercase tracking-wider">Datum & tid</p>
-                        <p class="text-primary font-virage font-bold text-lg"
-                           th:text="${#temporals.format(match.timeAsDateTime, 'EEEE d MMMM yyyy', T(java.util.Locale).forLanguageTag('sv-SE'))}">
-                        </p>
-                        <p class="text-primary/70 text-sm"
-                           th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')} + ' – ' + ${#temporals.format(match.timeAsDateTime.plusHours(2), 'HH:mm')}">
-                        </p>
-                    </div>
-                </div>
-
-                <div th:if="${match.venueName != null and !#strings.isEmpty(match.venueName)}" class="flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center shrink-0">
-                        <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <p class="text-primary/40 text-xs font-bold uppercase tracking-wider">Arena</p>
-                        <p class="text-primary font-virage font-bold text-lg" th:text="${match.venueName}"></p>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Right Column -->
-            <div class="space-y-5">
-                <!-- Referee and Result sections remain the same -->
-                <div th:if="${match.refereeName != null and !#strings.isEmpty(match.refereeName)}" class="flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center shrink-0">
-                        <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M15 5v2m0 4v2m0 4v2M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <p class="text-primary/40 text-xs font-bold uppercase tracking-wider">Domare</p>
-                        <p class="text-primary font-virage font-bold" th:text="${match.refereeName}"></p>
-                    </div>
-                </div>
-
-                <div th:if="${match.result != null and !#strings.isEmpty(match.result)}" class="flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center shrink-0">
-                        <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                        </svg>
-                    </div>
-                    <div>
-                        <p class="text-primary/40 text-xs font-bold uppercase tracking-wider">Slutresultat</p>
-                        <p class="text-primary font-virage font-bold text-lg" th:text="${match.result}"></p>
-                    </div>
-                </div>
-            </div>
+        <!-- ── Yellow Date Strip ── -->
+        <div class="date-strip">
+            <svg width="13" height="13" fill="none" stroke="#153B6F" stroke-width="2"
+                 viewBox="0 0 24 24" aria-hidden="true" style="flex-shrink:0;">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            <span class="date-strip-text"
+                  th:text="${#temporals.format(match.timeAsDateTime, 'EEEE d MMMM yyyy', T(java.util.Locale).forLanguageTag('sv-SE'))}
+                           + ' · ' +
+                           ${#temporals.format(match.timeAsDateTime, 'HH:mm')}">
+                Lördag 18 Maj 2025 · 14:00
+            </span>
         </div>
 
-        <!-- Footer -->
-        <div class="border-t border-gray-200 p-6 md:p-8 flex flex-wrap justify-between items-center gap-4 bg-gray-50">
-            <a href="/matcher"
-               class="text-primary/60 hover:text-secondary text-sm font-bold uppercase tracking-wider transition flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                          d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        <!-- ── Info Grid ── -->
+        <div class="info-grid">
+
+            <!-- Datum & Tid -->
+            <div class="info-row">
+                <div class="info-icon-wrap" aria-hidden="true">
+                    <svg width="16" height="16" fill="none" stroke="#F5B301" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </div>
+                <div>
+                    <p class="info-label">Datum &amp; tid</p>
+                    <p class="info-value"
+                       th:text="${#temporals.format(match.timeAsDateTime, 'EEEE d MMMM yyyy', T(java.util.Locale).forLanguageTag('sv-SE'))}">
+                        Lördag 18 Maj 2025
+                    </p>
+                    <p class="info-value-sub"
+                       th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')} + ' – ' + ${#temporals.format(match.timeAsDateTime.plusHours(2), 'HH:mm')}">
+                        14:00 – 16:00
+                    </p>
+                </div>
+            </div>
+
+            <!-- Arena -->
+            <div class="info-row"
+                 th:if="${match.venueName != null and !#strings.isEmpty(match.venueName)}">
+                <div class="info-icon-wrap" aria-hidden="true">
+                    <svg width="16" height="16" fill="none" stroke="#F5B301" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                </div>
+                <div>
+                    <p class="info-label">Arena</p>
+                    <p class="info-value" th:text="${match.venueName}">Balkanvallen</p>
+                </div>
+            </div>
+
+            <!-- Domare -->
+            <div class="info-row divider-row"
+                 th:if="${match.refereeName != null and !#strings.isEmpty(match.refereeName)}">
+                <div class="info-icon-wrap" aria-hidden="true">
+                    <svg width="16" height="16" fill="none" stroke="#F5B301" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M15 5v2m0 4v2m0 4v2M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"/>
+                    </svg>
+                </div>
+                <div>
+                    <p class="info-label">Domare</p>
+                    <p class="info-value" th:text="${match.refereeName}">Anders Lindqvist</p>
+                </div>
+            </div>
+
+            <!-- Slutresultat -->
+            <div class="info-row divider-row"
+                 th:if="${match.result != null and !#strings.isEmpty(match.result)}">
+                <div class="info-icon-wrap" aria-hidden="true">
+                    <svg width="16" height="16" fill="none" stroke="#F5B301" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2
+                                 M9 5a2 2 0 002 2h2a2 2 0 002-2
+                                 M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                    </svg>
+                </div>
+                <div>
+                    <p class="info-label">Slutresultat</p>
+                    <p class="info-value" th:text="${match.result}">3 – 1</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ── Card Footer ── -->
+        <div class="card-footer">
+            <a href="/matcher" class="back-link">
+                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"
+                     viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                 </svg>
                 Alla matcher
             </a>
+            <span class="footer-copy">FBK Balkan &copy; 2025</span>
         </div>
-    </div>
+
+    </div><!-- /match-card -->
 
 </main>
 
-<!-- Footer -->
+<!-- ─── Footer ─── -->
 <div th:replace="~{fragments/footer::footer}"></div>
 
 </body>
