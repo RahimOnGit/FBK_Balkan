@@ -110,7 +110,15 @@
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
-                            <p th:text="${#temporals.format(latestNews.createdAt, 'dd MMM yyyy')}" class="text-[10px] font-bold uppercase tracking-widest"></p>
+<!--                            <p th:text="${#temporals.format(latestNews.createdAt, 'dd MMM yyyy')}" class="text-[10px] font-bold uppercase tracking-widest"></p>-->
+                            <!-- Latest News Date -->
+                            <p th:text="${#temporals.format(
+        latestNews.createdAt,
+        'dd MMMM yyyy',
+        T(java.util.Locale).forLanguageTag('sv-SE')
+    )}"
+                               class="text-[10px] font-bold uppercase tracking-widest">
+                            </p>
                         </div>
                     </a>
                 </div>
@@ -153,8 +161,16 @@
 
                 <div class="p-5 flex flex-col flex-1">
                     <div class="flex items-center gap-2 mb-3">
-                        <span th:text="${#temporals.format(article.createdAt, 'dd MMM yyyy')}"
-                              class="text-[10px] font-bold tracking-[.14em] uppercase text-[#F5B301]">—</span>
+<!--                        <span th:text="${#temporals.format(article.createdAt, 'dd MMM yyyy')}"-->
+<!--                              class="text-[10px] font-bold tracking-[.14em] uppercase text-[#F5B301]">—</span>-->
+                        <!-- Recent News Date -->
+                        <span th:text="${#temporals.format(
+        article.createdAt,
+        'dd MMMM yyyy',
+        T(java.util.Locale).forLanguageTag('sv-SE')
+    )}"
+                              class="text-[10px] font-bold tracking-[.14em] uppercase text-[#F5B301]">
+</span>
                         <span class="w-1 h-1 rounded-full bg-slate-300"></span>
                         <span class="text-[10px] font-bold uppercase tracking-[.1em] text-slate-400">Nyheter</span>
                     </div>

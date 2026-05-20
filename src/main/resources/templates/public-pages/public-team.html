@@ -34,6 +34,7 @@
         .border-subtle {
             border-color: rgba(0, 0, 0, 0.06);
         }
+
     </style>
 </head>
 
@@ -187,8 +188,8 @@
 
                             <div class="flex justify-between items-center text-xs text-neutral-400 mb-3 font-bold uppercase tracking-widest">
 
-                                <span th:text="${#temporals.format(match.timeAsDateTime, 'dd MMM yyyy')}">
-                                    12 APR
+                                <span th:text="${#temporals.format(match.timeAsDateTime, 'dd MMM yyyy', T(java.util.Locale).forLanguageTag('sv'))}">
+                                    12 maj
                                 </span>
 
                                 <span class="text-xs text-neutral-400"
@@ -265,12 +266,12 @@
 
                             <div class="flex justify-between items-center text-xs text-neutral-400 mb-3 font-bold uppercase tracking-widest">
 
-                                <span th:text="${#temporals.format(match.timeAsDateTime, 'dd MMM yyyy')}">
-                                    Datum
+                                <span th:text="${#temporals.format(match.timeAsDateTime, 'dd MMM yyyy', T(java.util.Locale).forLanguageTag('sv'))}">
+                                    22 maj
                                 </span>
 
                                 <span th:text="${#temporals.format(match.timeAsDateTime, 'HH:mm')}">
-                                    Tid
+                                    19:00
                                 </span>
 
                             </div>
