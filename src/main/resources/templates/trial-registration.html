@@ -170,6 +170,10 @@
                                     <span class="label-text font-bold uppercase tracking-wide text-xs opacity-75">Annat (max 50 tecken)</span>
                                 </label>
                                 <input id="referralOtherInput" class="input input-bordered w-full bg-base-100" type="text" th:field="*{referralOther}" maxlength="50" placeholder="Berätta gärna mer...">
+                                <p th:if="${#fields.hasErrors('referralOther')}"
+                                   th:errors="*{referralOther}"
+                                   class="text-error text-xs mt-1 font-semibold">
+                                </p>
                             </div>
                         </div>
 
