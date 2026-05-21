@@ -160,6 +160,12 @@
                                    th:field="*{phone}"
                                    placeholder="070-123 45 67"
                                    class="input input-bordered w-full h-12" />
+                            <label class="label" th:if="${#fields.hasErrors('phone')}">
+    <span class="label-text-alt text-error font-medium"
+          th:errors="*{phone}">
+        Telefonnummer fel
+    </span>
+                            </label>
                         </div>
                     </div>
                 </div>

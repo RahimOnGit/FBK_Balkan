@@ -214,6 +214,7 @@
                                 <th>Åldersgrupp</th>
                                 <th>Skapad</th>
                                 <th>Tränare</th>
+                                <th>Assistenttränare</th>
                                 <th>Status</th>
                             </tr>
                             </thead>
@@ -223,6 +224,11 @@
                                 <td th:text="${team.ageGroup}">Åldersgrupp</td>
                                 <td th:text="${#temporals.format(team.createdDate, 'yyyy-MM-dd HH:mm')}">Datum</td>
                                 <td th:text="${team.coachName}">—</td>
+                                <!-- Assistenttränare -->
+                                <td th:text="${team.assistantNames != null and !#strings.isEmpty(team.assistantNames)}
+                    ? ${team.assistantNames}
+                    : '—'">
+                                </td>
                                 <td>
                                     <span th:if="${team.active}" class="badge badge-success">Aktiv</span>
                                     <span th:unless="${team.active}" class="badge badge-warning">Inaktiv</span>
