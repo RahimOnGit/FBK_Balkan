@@ -28,7 +28,7 @@ public class ContactService {
         }
         try {
             SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo(adminEmail);
+            message.setTo(dto.getEmail());
             message.setSubject("Kontaktformulär: " + dto.getSubject());
             message.setReplyTo(dto.getEmail());
             message.setText(
