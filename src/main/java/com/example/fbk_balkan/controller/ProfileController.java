@@ -93,10 +93,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
+@RequestMapping("/profile")
 @PreAuthorize("isAuthenticated()")
 public class ProfileController {
 
@@ -110,7 +112,7 @@ public class ProfileController {
     // GET PROFILE
     // =========================
 
-    @GetMapping("/profile")
+    @GetMapping
     public String profile(Model model,
                           @AuthenticationPrincipal CustomUserDetails user) {
 
@@ -133,7 +135,7 @@ public class ProfileController {
     // =========================
     // UPDATE PHONE
     // =========================
-    @PostMapping("/profile/phone/update")
+    @PostMapping("/phone/update")
     public String updatePhone(
             @ModelAttribute("phoneForm") @Valid UserProfileUpdateDto dto,
             BindingResult result,
@@ -158,7 +160,7 @@ public class ProfileController {
     // =========================
     // UPDATE PASSWORD
     // =========================
-    @PostMapping("/profile/password/update")
+    @PostMapping("/password/update")
     public String updatePassword(
             @ModelAttribute("passwordForm") @Valid ChangePasswordDto dto,
             BindingResult result,
