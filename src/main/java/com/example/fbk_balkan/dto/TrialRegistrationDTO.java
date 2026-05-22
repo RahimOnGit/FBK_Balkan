@@ -22,45 +22,46 @@ public class TrialRegistrationDTO {
 
     private Long id;
 
-    @NotBlank(message = "First name is required")
-    @Size(min = 2, max = 40)
+    @NotBlank(message = "Förnamn är obligatoriskt")
+    @Size(min = 2, max = 40, message = "Måste vara mellan 2 och 40 tecken")
     @Pattern(
             regexp = "^[\\p{L} .'-]+$",
-            message = "Only letters and valid name characters allowed")
+            message = "Endast bokstäver och giltiga namntecken tillåtna")
     private String firstName;
 
-    @NotBlank(message = "Last name is required")
-    @Size(min = 2, max = 40)
+    @NotBlank(message = "Efternamn är obligatoriskt")
+    @Size(min = 2, max = 40, message = "Måste vara mellan 2 och 40 tecken")
     @Pattern(
             regexp = "^[\\p{L} .'-]+$",
-            message = "Only letters and valid name characters allowed")
+            message = "Endast bokstäver och giltiga namntecken tillåtna")
     private String lastName;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @NotNull(message = "Birth date is required")
-    @Past(message = "Birth date must be in the past")
+    @NotNull(message = "Födelsedatum är obligatoriskt")
+    @Past(message = "Födelsedatum måste vara i det förflutna")
     private LocalDate birthDate;
 
-    @NotBlank(message = "Relative name is required")
-    @Size(min = 2, max = 40)
+    @NotBlank(message = "Anhörigs namn är obligatoriskt")
+    @Size(min = 2, max = 40, message = "Måste vara mellan 2 och 40 tecken")
     @Pattern(
             regexp = "^[\\p{L} .'-]+$",
-            message = "Only letters and valid name characters allowed")
+            message = "Endast bokstäver och giltiga namntecken tillåtna")
     private String relativeName;
 
-    @NotBlank(message = "Relative email is required")
-    @Email(regexp = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")
-    @Size(max = 40, message = "Email cannot exceed 40 characters")
+    @NotBlank(message = "Anhörigs e-postadress är obligatorisk")
+    @Email(regexp = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+            message = "Ogiltig e-postadress")
+    @Size(max = 40, message = "E-postadressen får inte överstiga 40 tecken")
     private String relativeEmail;
 
-    @NotBlank(message = "Relative number is required")
+    @NotBlank(message = "Anhörigs telefonnummer är obligatoriskt")
     @Pattern(
             regexp = "^\\+?[0-9 ]{8,15}$",
-            message = "Invalid phone number")
+            message = "Ogiltigt telefonnummer")
     private String relativeNumber;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @NotNull(message = "Preferred training date is required")
+    @NotNull(message = "Önskat träningsdatum är obligatoriskt")
     private LocalDate preferredTrainingDate;
 
     private TrialStatus status;
@@ -68,36 +69,34 @@ public class TrialRegistrationDTO {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime createdAt;
 
-    @NotNull(message = "Gender is required")
+    @NotNull(message = "Kön är obligatoriskt")
     private Gender gender;
 
-    @Size(max = 40, message = "Max 40 characters")
+    @Size(max = 40, message = "Max 40 tecken")
     @Pattern(
             regexp = "^[\\p{L}0-9 .'-]*$",
-            message = "Invalid characters")
+            message = "Ogiltiga tecken")
     private String currentClub;
 
     @Min(value = 0, message = "Antal år i klubb kan inte vara negativt")
     @Max(value = 5, message = "Antal år i klubb kan inte vara mer än 5")
     private Integer clubYears;
 
-
     private ReferralSource referralSource;
 
-    @Size(max = 50, message = "Max 50 characters")
-
+    @Size(max = 50, message = "Max 50 tecken")
     @Pattern(
             regexp = "^[\\p{L}0-9 .,'\"!?-]*$",
-            message = "Invalid characters")
+            message = "Ogiltiga tecken")
     private String referralOther;
 
-    // The coach assigned to this registration (resolved from birth year + gender)
-    // Null means no matching team was found — admin must assign manually
+    // Tränaren som tilldelats denna registrering (bestäms från födelseår och kön)
+    // Null innebär att inget matchande lag hittades — admin måste tilldela manuellt
     private Long coachId;
 
     // =========================================================
-    // fromEntity — used when loading registrations from the DB
-    //              (e.g. for the coach dashboard list)
+    // fromEntity — används vid hämtning av registreringar från databasen
+    //              (t.ex. för coach dashboard listan)
     // =========================================================
     public static TrialRegistrationDTO fromEntity(TrialRegistration entity) {
         if (entity == null) return null;
@@ -118,11 +117,10 @@ public class TrialRegistrationDTO {
                 .clubYears(entity.getClubYears())
                 .referralSource(entity.getReferralSource())
                 .referralOther(entity.getReferralOther())
-                // Populate coachId so the dashboard knows which coach owns this request
+                // Sätt coachId så att dashboarden vet vilken tränare denna förfrågan tillhör
                 .coachId(entity.getCoach() != null ? entity.getCoach().getId() : null)
                 .build();
     }
-
 
     public TrialRegistration toEntity() {
         TrialRegistration e = new TrialRegistration();
@@ -144,7 +142,6 @@ public class TrialRegistrationDTO {
         e.setReferralOther(
                 this.referralSource == ReferralSource.OTHER ? this.referralOther : null
         );
-        // Note: coach is NOT set here — the service layer handles that
         return e;
     }
 }
