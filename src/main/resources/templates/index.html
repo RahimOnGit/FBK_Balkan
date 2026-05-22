@@ -70,38 +70,51 @@
 
 
 <!--hero-->
-<div class="hero min-h-[85vh] lg:h-[60vh] relative overflow-hidden flex items-end">
+<!--hero - Changed h-[85vh] to min-h-[85vh] to prevent squashing on short screens -->
+<div class="hero min-h-[85vh] lg:h-[90vh] relative overflow-hidden flex items-center lg:items-center">
 
-    <!-- Background image - anchored to top, never crops the top -->
-    <img class="absolute inset-0 w-full h-full object-cover object-top"
-         style="transform: scale(1.05); transform-origin: center top;"
-         th:src="${latestNews != null and latestNews.imageUrl != null} ? ${latestNews.imageUrl} : (${latestNews != null and latestNews.externalImageUrl != null} ? ${latestNews.externalImageUrl} : '/images/hero-image.png')"
-         alt="">
+    <!-- blurred background image -->
+    <div class="absolute inset-0 bg-cover bg-center"
+         th:style="${latestNews != null and latestNews.imageUrl != null} ? 'background-image: url(' + ${latestNews.imageUrl} + ')' : (${latestNews != null and latestNews.externalImageUrl != null} ? 'background-image: url(' + ${latestNews.externalImageUrl} + ')' : 'background-image: url(/images/hero-image.png)')"
+         style="filter: blur(10px); transform: scale(1.05);">
+    </div>
 
-    <!-- Gradient overlay -->
+    <!-- Professional Gradient: Darker at the top to make navbar readable, darker at bottom for depth -->
     <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-primary/40 to-primary"></div>
 
-    <!-- Content at bottom left -->
-    <div class="hero-content text-left text-white relative z-10 w-full max-w-7xl px-6 md:px-12 pb-8 lg:pb-12 self-end">
-        <div class="w-full">
-            <div th:if="${latestNews != null}" class="group max-w-md">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="px-2 py-0.5 bg-secondary text-primary text-[10px] font-bold uppercase tracking-widest rounded">
-                        Senaste Nyhet
-                    </span>
-                    <div class="h-[1px] w-24 bg-white/20"></div>
-                </div>
-                <a th:href="@{/news/{id}(id=${latestNews.id})}" class="block transition-all duration-300 group-hover:translate-x-2">
-                    <h4 th:text="${latestNews.title}"
-                        class="font-virage italic text-2xl md:text-3xl text-white/95 leading-tight group-hover:text-secondary transition-colors">
-                    </h4>
-                    <div class="flex items-center gap-2 mt-3 text-white/50">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                        <p th:text="${#temporals.format(latestNews.createdAt, 'dd MMM yyyy')}" class="text-[10px] font-bold uppercase tracking-widest"></p>
+    <!--
+       CONTENT CONTAINER
+       Added pt-32 (small screens) and lg:pt-20 (large screens)
+       to push text below your absolute navbar
+    -->
+    <div class="hero-content text-left text-white relative z-10 w-full max-w-7xl px-6 md:px-12 pt-40 lg:pt-32 pb-12 self-center">
+        <div class="flex flex-col lg:flex-row lg:justify-between w-full">
+            <div class="lg:w-2/3 xl:w-1/2 px-10">
+
+
+
+                <!-- News Section -->
+                <div th:if="${latestNews != null}" class="mt-20 group max-w-md">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-2 py-0.5 bg-secondary text-primary text-[10px] font-bold uppercase tracking-widest rounded">
+                            Senaste Nyhet
+                        </span>
+                        <div class="h-[1px] flex-1 bg-white/20"></div>
                     </div>
-                </a>
+
+                    <a th:href="@{/news/{id}(id=${latestNews.id})}" class="block transition-all duration-300 group-hover:translate-x-2">
+                        <h4 th:text="${latestNews.title}"
+                            class="font-virage italic text-2xl md:text-3xl text-white/95 leading-tight group-hover:text-secondary transition-colors">
+                        </h4>
+                        <div class="flex items-center gap-2 mt-3 text-white/50">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <p th:text="${#temporals.format(latestNews.createdAt, 'dd MMM yyyy')}" class="text-[10px] font-bold uppercase tracking-widest"></p>
+                        </div>
+                    </a>
+                </div>
+
             </div>
         </div>
     </div>
@@ -140,8 +153,12 @@
 
                 <div class="p-5 flex flex-col flex-1">
                     <div class="flex items-center gap-2 mb-3">
-                        <span th:text="${#temporals.format(article.createdAt, 'dd MMM yyyy')}"
-                              class="text-[10px] font-bold tracking-[.14em] uppercase text-[#F5B301]">—</span>
+              <span th:text="${#temporals.format(
+        article.createdAt,
+        'dd MMMM yyyy',
+        T(java.util.Locale).forLanguageTag('sv-SE')
+    )}"
+                    class="text-[10px] font-bold tracking-[.14em] uppercase text-[#F5B301]">—</span>
                         <span class="w-1 h-1 rounded-full bg-slate-300"></span>
                         <span class="text-[10px] font-bold uppercase tracking-[.1em] text-slate-400">Nyheter</span>
                     </div>
