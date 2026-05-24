@@ -1,6 +1,6 @@
 # FBK Balkan 
 
-![FBK Balkan](src/main/resources/static/images/FBK_BALKAN_logo.png) <!-- Lägg gärna till en riktig banner här -->
+![FBK Balkan](src/main/resources/static/images/FBK_BALKAN_logo.png) 
 
 ## Om klubben
 
@@ -48,7 +48,9 @@ Webbplatsen är en fullstack-applikation som hjälper klubben att digitalisera o
 - Responsiv och modern design
 
 ### Databas
-- **SQLite** (`fbkbalkan.db`)
+- **SQLite** (`fbkbalkan.db`) : Dev
+- **Postgresql** : Prod
+ 
 
 ---
 
@@ -57,7 +59,7 @@ Webbplatsen är en fullstack-applikation som hjälper klubben att digitalisera o
 ### Förutsättningar
 - Java 21
 - Maven
-- Node.js (för CSS-bearbetning)
+- Node.js
 
 ### Steg-för-steg
 
