@@ -17,10 +17,9 @@ public class TrialEmailService {
         this.mailSender = mailSender;
     }
 
-    /**
-     * Skickar godkännandemejl till förälderns e-postadress.
-     * Returnerar true om det lyckades, false annars.
-     */
+//      Skickar godkännandemejl till förälderns e-postadress.
+//     Returnerar true om det lyckades, false annars.
+//     
     public boolean sendApprovalEmail(TrialRegistration reg) {
         String subject = "Provträning godkänd – FBK Balkan";
 
@@ -61,10 +60,10 @@ public class TrialEmailService {
         return sendEmail(reg.getRelativeEmail(), subject, body);
     }
 
-    /**
-     * Skickar avslagsmejl till förälderns e-postadress.
-     * Returnerar true om det lyckades, false annars.
-     */
+//
+//      Skickar avslagsmejl till förälderns e-postadress.
+//      Returnerar true om det lyckades, false annars.
+//
     public boolean sendRejectionEmail(TrialRegistration reg) {
         String subject = "Angående din provträningsansökan – FBK Balkan";
 
@@ -88,7 +87,7 @@ public class TrialEmailService {
         return sendEmail(reg.getRelativeEmail(), subject, body);
     }
 
-    // ── privat hjälpmetod ──────────────────────────────────────────────────────
+    // ── privat hjälpmetod
 
     private boolean sendEmail(String to, String subject, String body) {
         try {
@@ -110,10 +109,10 @@ public class TrialEmailService {
         }
     }
 
-    /**
-     * Hämtar avsändaradressen från spring.mail.username om möjligt,
-     * annars används en fast fallback.
-     */
+
+     // Hämtar avsändaradressen från spring.mail.username om möjligt,
+     // annars används en fast fallback.
+
     private String getFromAddress() {
         // Spring injicerar inte properties hit, men mailSender är redan konfigurerad
         // med rätt avsändare via application.properties.
