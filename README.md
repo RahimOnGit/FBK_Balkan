@@ -49,22 +49,10 @@ Systemet är uppdelat i fyra huvudsakliga behörighetsnivåer:
 *   Maven 3.6+
 *   Node.js (för CSS-processering)
 
-### Installation
-1.  **Klona repot:**
-    `git clone https://github.com/RahimOnGit/FBK_Balkan.git`
-2.  **Konfigurera miljö:**
-    Kopiera `application-example.properties` till `application.properties` och fyll i API-nycklar för SvFF och e-postinställningar.
-3.  **Bygg och kör:**
-    `mvn clean install`
-    `mvn spring-boot:run`
-4.  **Access:**
-    Öppna [http://localhost:8080](http://localhost:8080) i din webbläsare.
-
 ## 🗄 Databasschema
 De centrala entiteterna i systemet inkluderar:
 *   **Users:** Hanterar inloggning och roller.
 *   **Teams:** Information om åldersgrupper och lag.
-*   **Players:** Spelarregister och kopplingar till lag.
 *   **News:** Artiklar och media.
 *   **TrialRegistration:** Spårar provträningsansökningar och deras status.
 
