@@ -1,6 +1,6 @@
-# FBK Balkan – Ungdomsverksamhet
+# FBK Balkan 
 
-![FBK Balkan](https://via.placeholder.com/800x200?text=FBK+Balkan+Banner) <!-- Lägg gärna till en riktig banner här -->
+![FBK Balkan](src/main/resources/static/images/FBK_BALKAN_logo.png) <!-- Lägg gärna till en riktig banner här -->
 
 ## Om klubben
 
