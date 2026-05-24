@@ -13,6 +13,7 @@ import com.example.fbk_balkan.repository.TrialRegistrationRepository;
 import com.example.fbk_balkan.repository.UserRepository;
 import com.example.fbk_balkan.service.MatchService;
 import com.example.fbk_balkan.service.TeamService;
+import com.example.fbk_balkan.service.TrialEmailService;
 import com.example.fbk_balkan.service.TrialRegistrationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,33 +28,36 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Controller
 public class CoachDashboardController {
+
     private final UserRepository coachRepository;
     private final TeamService teamService;
     private final TrialRegistrationService trialService;
     private final TrialRegistrationRepository trialRegistrationRepository;
     private final PlayerRepository playerRepository;
     private final MatchService matchService;
+    private final TrialEmailService trialEmailService;   // ← ny
 
     public CoachDashboardController(UserRepository coachRepository,
                                     TeamService teamService,
                                     TrialRegistrationService trialService,
                                     TrialRegistrationRepository trialRegistrationRepository,
                                     PlayerRepository playerRepository,
-                                    MatchService matchService) {
+                                    MatchService matchService,
+                                    TrialEmailService trialEmailService) {
         this.coachRepository = coachRepository;
         this.teamService = teamService;
         this.trialService = trialService;
         this.trialRegistrationRepository = trialRegistrationRepository;
         this.playerRepository = playerRepository;
         this.matchService = matchService;
+        this.trialEmailService = trialEmailService;
     }
+
+    // ── Dashboard
 
     @GetMapping("/coach/dashboard")
     @PreAuthorize("hasRole('COACH')")
@@ -61,35 +65,30 @@ public class CoachDashboardController {
                             @AuthenticationPrincipal UserDetails userDetails,
                             @RequestParam(value = "show", required = false) String show) {
 
-        // Get coach details from userDetails and add to model
         String coachEmail = userDetails.getUsername();
         User coach = coachRepository.findByEmail(coachEmail).orElse(null);
 
         if (coach != null) {
-            // --- Coach identity ---
             model.addAttribute("coachName", coach.getFirstName() + " " + coach.getLastName());
 
-            // --- Teams ---
             List<TeamDto> teams = teamService.getTeamsByCoachId(coach.getId());
             model.addAttribute("teams", teams);
             model.addAttribute("teamCount", teams.size());
 
-            // Trial registration requests assigned to this coach ---
-            List<TrialRegistrationDTO> allRequests = trialService.fetchTrialRegistrationByCoach(coach.getId());
+            List<TrialRegistrationDTO> allRequests =
+                    trialService.fetchTrialRegistrationByCoach(coach.getId());
 
-            // Split into active (all PENDING) and history (APPROVED/REJECTED, last 3 months)
             List<TrialRegistrationDTO> activeRequests = allRequests.stream()
-                    .filter(t -> t.getStatus() != null && t.getStatus() == TrialStatus.PENDING)
+                    .filter(t -> t.getStatus() == TrialStatus.PENDING)
                     .toList();
             List<TrialRegistrationDTO> historyRequests = allRequests.stream()
-                    .filter(t -> t.getStatus() != null && t.getStatus() != TrialStatus.PENDING)
+                    .filter(t -> t.getStatus() != TrialStatus.PENDING)
                     .toList();
 
             model.addAttribute("activeRequests", activeRequests);
             model.addAttribute("historyRequests", historyRequests);
             model.addAttribute("pendingCount", (long) activeRequests.size());
             model.addAttribute("requestSize", allRequests.size());
-
         } else {
             model.addAttribute("coachName", "Coach");
             model.addAttribute("teams", List.of());
@@ -107,6 +106,8 @@ public class CoachDashboardController {
         return "coach/dashboard";
     }
 
+    // ── Lagdetaljsida
+
     @GetMapping("/coach/team/{id}")
     @PreAuthorize("hasRole('COACH')")
     public String teamDetail(@PathVariable Long id,
@@ -118,16 +119,24 @@ public class CoachDashboardController {
         if (coach == null) return "redirect:/coach/dashboard";
 
         Team team = teamService.getTeamById(id);
-        if (team == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Lag hittades inte");
+        if (team == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Lag hittades inte");
 
-        boolean ownsTeam = team.getCoach() != null && team.getCoach().getId().equals(coach.getId());
-        if (!ownsTeam) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Du har inte tillgång till detta lag");
+        boolean ownsTeam = team.getCoach() != null
+                && team.getCoach().getId().equals(coach.getId());
+        if (!ownsTeam)
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                    "Du har inte tillgång till detta lag");
 
-        List<Player> players = playerRepository.findByTeamIdAndActiveTrueOrderByLastNameAsc(team.getId());
-        List<GameDTO> upcomingMatches = matchService.fetchUpcomingMatchesForTeam(team.getSvffTeamId());
-        List<GameDTO> recentResults   = matchService.fetchRecentResultsForTeam(team.getSvffTeamId());
+        List<Player> players =
+                playerRepository.findByTeamIdAndActiveTrueOrderByLastNameAsc(team.getId());
+        List<GameDTO> upcomingMatches =
+                matchService.fetchUpcomingMatchesForTeam(team.getSvffTeamId());
+        List<GameDTO> recentResults =
+                matchService.fetchRecentResultsForTeam(team.getSvffTeamId());
 
-        model.addAttribute("coachName", coach.getFirstName() + " " + coach.getLastName());
+        model.addAttribute("coachName",
+                coach.getFirstName() + " " + coach.getLastName());
         model.addAttribute("team", team);
         model.addAttribute("players", players);
         model.addAttribute("upcomingMatches", upcomingMatches);
@@ -136,149 +145,87 @@ public class CoachDashboardController {
         return "coach/team-detail";
     }
 
+    // ── Godkänn provträning
+
     @PostMapping("/coach/trial/{id}/approve")
     @PreAuthorize("hasRole('COACH')")
     public String approveTrialRequest(@PathVariable Long id,
                                       @AuthenticationPrincipal UserDetails userDetails,
-                                      RedirectAttributes redirectAttributes) {
+                                      RedirectAttributes ra) {
 
-        try {
-            TrialRegistration registration = trialRegistrationRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("Provträning hittades inte"));
+        TrialRegistration reg = findAndVerifyOwnership(id, userDetails, ra);
+        if (reg == null) return "redirect:/coach/dashboard";
 
-            // Verify this coach owns this request
-            String coachEmail = userDetails.getUsername();
-            User coach = coachRepository.findByEmail(coachEmail).orElse(null);
+        // Spara status
+        reg.setStatus(TrialStatus.APPROVED);
+        trialRegistrationRepository.save(reg);
 
-            if (coach == null || !registration.getCoach().getId().equals(coach.getId())) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Du har inte behörighet att hantera denna förfrågan");
-                return "redirect:/coach/dashboard";
-            }
+        // Skicka mejl direkt via SMTP – inget Outlook behövs
+        boolean sent = trialEmailService.sendApprovalEmail(reg);
 
-            // Update status to APPROVED
-            registration.setStatus(TrialStatus.APPROVED);
-            trialRegistrationRepository.save(registration);
-
-            // Build mailto link for approval email
-            String mailtoLink = buildApprovalMailto(registration);
-
-            redirectAttributes.addFlashAttribute("successMessage", "Status uppdaterad till godkänd");
-            redirectAttributes.addFlashAttribute("mailtoLink", mailtoLink);
-
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Något gick fel: " + e.getMessage());
+        if (sent) {
+            ra.addFlashAttribute("successMessage",
+                    "Provträning godkänd och bekräftelsemejl skickat till "
+                            + reg.getRelativeEmail());
+        } else {
+            ra.addFlashAttribute("successMessage",
+                    "Provträning godkänd. (Mejlet kunde inte skickas – kontrollera SMTP-inställningarna.)");
         }
 
         return "redirect:/coach/dashboard";
     }
+
+    // ── Avvisa provträning
 
     @PostMapping("/coach/trial/{id}/reject")
     @PreAuthorize("hasRole('COACH')")
     public String rejectTrialRequest(@PathVariable Long id,
                                      @AuthenticationPrincipal UserDetails userDetails,
-                                     RedirectAttributes redirectAttributes) {
+                                     RedirectAttributes ra) {
 
-        try {
-            TrialRegistration registration = trialRegistrationRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("Provträning hittades inte"));
+        TrialRegistration reg = findAndVerifyOwnership(id, userDetails, ra);
+        if (reg == null) return "redirect:/coach/dashboard";
 
-            // Verify this coach owns this request
-            String coachEmail = userDetails.getUsername();
-            User coach = coachRepository.findByEmail(coachEmail).orElse(null);
+        // Spara status
+        reg.setStatus(TrialStatus.REJECTED);
+        trialRegistrationRepository.save(reg);
 
-            if (coach == null || !registration.getCoach().getId().equals(coach.getId())) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Du har inte behörighet att hantera denna förfrågan");
-                return "redirect:/coach/dashboard";
-            }
+        // Skicka mejl direkt via SMTP
+        boolean sent = trialEmailService.sendRejectionEmail(reg);
 
-            // Update status to REJECTED
-            registration.setStatus(TrialStatus.REJECTED);
-            trialRegistrationRepository.save(registration);
-
-            // Build mailto link for rejection email
-            String mailtoLink = buildRejectionMailto(registration);
-
-            redirectAttributes.addFlashAttribute("successMessage", "Status uppdaterad till avvisad");
-            redirectAttributes.addFlashAttribute("mailtoLink", mailtoLink);
-
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Något gick fel: " + e.getMessage());
+        if (sent) {
+            ra.addFlashAttribute("successMessage",
+                    "Provträning avvisad och meddelande skickat till "
+                            + reg.getRelativeEmail());
+        } else {
+            ra.addFlashAttribute("successMessage",
+                    "Provträning avvisad. (Mejlet kunde inte skickas – kontrollera SMTP-inställningarna.)");
         }
 
         return "redirect:/coach/dashboard";
     }
 
-    // Helper method to build approval mailto link
-    private String buildApprovalMailto(TrialRegistration registration) {
-        String subject = "Provträning godkänd – FBK Balkan";
+    // ── Hjälpmetod: hämta & verifiera ägarskap
 
-        String body = "Hej " + registration.getRelativeName() + "!\n\n" +
-                "Vi är glada att meddela att " +
-                registration.getFirstName() + " " + registration.getLastName() +
-                " har blivit godkänd för provträning hos FBK Balkan.\n\n" +
-                "Vi ser fram emot att träffa er!\n\n" +
-                "info\n" +
-                "\n" +
-                "\n" +
-                "Det är väldigt trång på parkeringen, snälla hitta andra alternativ när ni ska hämta och lämna barn inför deras aktiviteter. \n" +
-                "Jag skickar en karta på andra alternativ man måste inte stå vid dom röda pilarna det går även bra att stå vid dom gula Pilarna vid upphämtning \n" +
-                "Det finns andra lag som tränar efter oss så vi måste hjälpas åt att komma in och ut på ett smidigt sätt.  \n" +
-                "\n" +
-                " \n" +
-                "Parkerings karta \n" +
-                "Allt med rött är där man kan parkera glöm inte att sätta klockan på appen även om det är gratis så måste den aktiveras koden finns på \n" +
-                "\n" +
-                "parkeringsplatsen \n" +
-                "Allt med Gult är lämna och upphämtnings zone, man får inte parkera på den gula markerade gatan  men man kan sitta i bilen\n" +
-                "och vänta på sitt barn träna färdigt eller komma förbi och plocka upp \n" +
-                "\n" +
-                "Den gröna är ett parkeringshus om man planerar att var där en längre tid\n" +
-                "\n" +
-                "\n" +
-                "\n" +
-                "Den ljusblåa / Turkos \n" +
-                "Är gången barnen kan gå igenom från parkeringen till Upphämtning platsen som är markerad med gult \n Röd Parkeing \n" +
-                "Grön långtidsparkering \n" +
-                "Gul Lämna och hämta upp \n" +
-                "Turkos - Stig för barnen att ta sig till Gul markering"+
-                "Välkommen till laget!\n\n" +
-                "Med vänliga hälsningar,\n" +
-                "FBK Balkan";
-
-        return buildMailtoLink(registration.getRelativeEmail(), subject, body);
-    }
-
-    // Helper method to build rejection mailto link
-    private String buildRejectionMailto(TrialRegistration registration) {
-        String subject = "Angående din provträningsansökan – FBK Balkan";
-
-        String body = "Hej " + registration.getRelativeName() + "!\n\n" +
-                "Tack för att ni visade intresse för FBK Balkan.\n\n" +
-                "Vi har tyvärr inte möjlighet att erbjuda " +
-                registration.getFirstName() + " " + registration.getLastName() +
-                " en plats hos oss just nu.\n\n" +
-                "Vi önskar er lycka till och hoppas att ni hittar ett bra lag.\n\n" +
-                "Med vänliga hälsningar,\n" +
-                "FBK Balkan";
-
-        return buildMailtoLink(registration.getRelativeEmail(), subject, body);
-    }
-
-    // Helper method to construct mailto URL with proper encoding
-    private String buildMailtoLink(String email, String subject, String body) {
-        try {
-            // Using %20 for spaces instead of + (URLEncoder uses + for form data)
-            String encodedSubject = URLEncoder.encode(subject, StandardCharsets.UTF_8.toString())
-                    .replace("+", "%20");
-            String encodedBody = URLEncoder.encode(body, StandardCharsets.UTF_8.toString())
-                    .replace("+", "%20");
-
-            return "mailto:" + email +
-                    "?subject=" + encodedSubject +
-                    "&body=" + encodedBody;
-        } catch (UnsupportedEncodingException e) {
-            // Fallback without encoding
-            return "mailto:" + email;
+    private TrialRegistration findAndVerifyOwnership(Long id,
+                                                     UserDetails userDetails,
+                                                     RedirectAttributes ra) {
+        TrialRegistration reg = trialRegistrationRepository.findById(id)
+                .orElse(null);
+        if (reg == null) {
+            ra.addFlashAttribute("errorMessage", "Provträning hittades inte");
+            return null;
         }
+
+        User coach = coachRepository.findByEmail(userDetails.getUsername()).orElse(null);
+        if (coach == null
+                || reg.getCoach() == null
+                || !reg.getCoach().getId().equals(coach.getId())) {
+            ra.addFlashAttribute("errorMessage",
+                    "Du har inte behörighet att hantera denna förfrågan");
+            return null;
+        }
+
+        return reg;
     }
 }

@@ -16,9 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -211,7 +209,19 @@ public class TeamService {
                     dto.setCoachName(team.getCoach() != null
                             ? team.getCoach().getFirstName() + " " + team.getCoach().getLastName()
                             : "—");
-
+                    dto.setAssistantNames(
+                            Optional.ofNullable(team.getAssistantCoaches())
+                                    .orElse(Collections.emptyList())
+                                    .stream()
+                                    .filter(Objects::nonNull)
+                                    .map(u -> {
+                                        String first = Optional.ofNullable(u.getFirstName()).orElse("");
+                                        String last = Optional.ofNullable(u.getLastName()).orElse("");
+                                        return (first + " " + last).trim();
+                                    })
+                                    .filter(name -> !name.isBlank())
+                                    .collect(Collectors.joining(", "))
+                    );
                     dto.setGenderDisplay(switch (team.getGender()) {
                         case MALE -> "Kille";
                         case FEMALE -> "Tjej";

@@ -6,48 +6,63 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
 public class ContactService {
 
-//    @Autowired(required = false)
     @Autowired
     private JavaMailSender mailSender;
 
-    @Value("${contact.admin.email:admin@fbkbalkan.se}")
+    @Value("${contact.admin.email:info@fbkbalkan.se}")
     private String adminEmail;
 
+    @Async
     public void sendContactEmail(ContactFormDTO dto) {
         if (mailSender == null) {
-            log.warn("E-postserver ej konfigurerad. Kontaktformulär inskickat av: {} – {}",
-                    dto.getName(), dto.getEmail());
+            log.warn("E-postserver ej konfigurerad.");
             return;
         }
+
         try {
             SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(adminEmail);
             message.setTo(adminEmail);
-            message.setSubject("Kontaktformulär: " + dto.getSubject());
             message.setReplyTo(dto.getEmail());
-            message.setText(
-                    "Nytt meddelande via kontaktformuläret på fbkbalkan.se\n" +
-                            "═══════════════════════════════════════════\n\n" +
-                            "Namn:    " + dto.getName() + "\n" +
-                            "E-post:  " + dto.getEmail() + "\n" +
-                            (dto.getPhone() != null && !dto.getPhone().isBlank()
-                                    ? "Telefon: " + dto.getPhone() + "\n" : "") +
-                            "Ämne:    " + dto.getSubject() + "\n\n" +
-                            "Meddelande:\n" +
-                            "───────────────────────────────────────────\n" +
-                            dto.getMessage() + "\n" +
-                            "───────────────────────────────────────────\n"
+            message.setSubject("🔵 Ny kontaktförfrågan: " + dto.getSubject());
+
+            String body = """
+                    Ny meddelande via kontaktformuläret på FBK Balkan
+
+                    Namn:    %s
+                    E-post:  %s
+                    Telefon: %s
+                    Ämne:    %s
+
+                    Meddelande:
+                    ───────────────────────────────────────────
+                    %s
+                    ───────────────────────────────────────────
+
+                    Skickat: %s
+                    """.formatted(
+                    dto.getName(),
+                    dto.getEmail(),
+                    dto.getPhone() != null && !dto.getPhone().isBlank() ? dto.getPhone() : "(ej angivet)",
+                    dto.getSubject(),
+                    dto.getMessage(),
+                    java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
             );
+
+            message.setText(body);
+
             mailSender.send(message);
-            log.info("Kontaktformulär skickat från: {}", dto.getEmail());
+            log.info("✅ Kontaktmejl skickat asynkront till {}", adminEmail);
+
         } catch (Exception e) {
-            log.error("Kunde inte skicka kontaktformuläret via e-post", e);
+            log.error("❌ Kunde inte skicka kontaktmejl", e);
         }
     }
 }
