@@ -117,6 +117,6 @@ public class TrialEmailService {
         // Spring injicerar inte properties hit, men mailSender är redan konfigurerad
         // med rätt avsändare via application.properties.
         // Returnera något rimligt – SMTP-servern sätter den faktiska From-adressen.
-        return "noreply@fbkbalkan.se";
+        return "ungdom@fbkbalkan.se";
     }
 }

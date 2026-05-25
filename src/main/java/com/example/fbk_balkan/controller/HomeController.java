@@ -106,7 +106,7 @@ public class HomeController {
 
     @GetMapping("/ungdomsportalen")
     public String ungdomsportalen() {
-        return "ungdomsportalen";
+        return "Ungdomsportalen";
     }
 
 
