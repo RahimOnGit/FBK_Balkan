@@ -26,6 +26,8 @@ private final TeamService teamService;
     private final PublicTeamMapper publicTeamMapper;
     private final MatchService matchService;
 
+
+
     public PublicTeamController(TeamService teamService, PublicTeamMapper publicTeamMapper, MatchService matchService) {
         this.teamService = teamService;
         this.publicTeamMapper = publicTeamMapper;
@@ -33,6 +35,7 @@ private final TeamService teamService;
     }
     @GetMapping("/{id}")
     public String showTeamPage(@PathVariable Long id, Model model) {
+
         Team team = teamService.getActiveTeamById(id);
 
         if (team == null) {
@@ -48,11 +51,11 @@ private final TeamService teamService;
 
 //        add matches model (upcoming matches , latest results)
         Long svffId = team.getSvffTeamId();
-        model.addAttribute("upcomingMatches", matchService.fetchUpcomingMatchesForTeam(svffId));
-        model.addAttribute("recentResults",   matchService.fetchRecentResultsForTeam(svffId));
+        List<GameDTO> upcoming = matchService.fetchUpcomingMatchesForTeam(svffId);
+        List<GameDTO> recent   = matchService.fetchRecentResultsForTeam(svffId);
+        model.addAttribute("upcomingMatches", upcoming);
+        model.addAttribute("recentResults",   recent);
         System.out.println("svffId: " + svffId);
-        System.out.println("upcoming  " +matchService.fetchUpcomingMatchesForTeam(svffId));
-        System.out.println("recent  " +matchService.fetchRecentResultsForTeam(svffId));
         return "public-pages/public-team";
     }
 

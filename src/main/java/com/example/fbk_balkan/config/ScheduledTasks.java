@@ -22,6 +22,9 @@ public class ScheduledTasks {
     private SponsorService sponsorService;
 
     @Autowired
+    private DataInitializer dataInitializer;
+
+    @Autowired
     private EmailNotificationService emailNotificationService;
 
     @Scheduled(cron = "0 0 8 * * MON")
@@ -42,5 +45,10 @@ public class ScheduledTasks {
         if (!expiring7.isEmpty()) {
             emailNotificationService.sendSponsorExpiryNotification(expiring7, 7);
         }
+    }
+    @Scheduled(cron = "0 0 3 * * *")
+    public void syncSvffData() {
+        dataInitializer.initGamesFromSvff();
+        dataInitializer.initTeamsFromSvff();
     }
 }

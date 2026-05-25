@@ -96,10 +96,17 @@ private final MatchRepository matchRepository;
             System.out.println("Default admin created - :"+ assistant.getEmail()   +", Password: password");
         }
     }
-    private void initGamesFromSvff()
+    public void initGamesFromSvff()
     {
+
         try
         {
+            long existingCount = matchRepository.count();
+            if (existingCount > 0) {
+                System.out.println("Matches already in DB (" + existingCount + "), skipping SVFF sync.");
+                return;
+            }
+
             List<GameDTO> games = svffApiService.fetchGames();
             int created = 0;
             int updated = 0;
@@ -163,12 +170,15 @@ private final MatchRepository matchRepository;
                 .orElse(fallbackName);
     }
 
-    private void initTeamsFromSvff() {
+    public void initTeamsFromSvff() {
         try {
             List<SvffTeamDto> svffTeams = svffApiService.fetchTeams();
             int created = 0;
             for (SvffTeamDto svff : svffTeams) {
-
+                if (teamRepository.count() > 0) {
+                    System.out.println("Teams already in DB, skipping SVFF team sync.");
+                    return;
+                }
                 //skip teams with no numbers in name (i.e senior and hj -> skip , fbk balkan 2014 -> OK )
                 if(!svff.getName().matches(".*\\d+.*"))
                 {
