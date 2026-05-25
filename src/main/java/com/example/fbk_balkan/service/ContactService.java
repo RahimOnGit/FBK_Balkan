@@ -16,7 +16,7 @@ public class ContactService {
     @Autowired
     private JavaMailSender mailSender;
 
-    @Value("${contact.admin.email:info@fbkbalkan.se}")
+    @Value("${contact.admin.email:ungdom@fbkbalkan.se}")
     private String adminEmail;
 
     @Async
