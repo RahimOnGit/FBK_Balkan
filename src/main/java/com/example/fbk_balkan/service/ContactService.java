@@ -62,7 +62,9 @@ public class ContactService {
             log.info("✅ Kontaktmejl skickat asynkront till {}", adminEmail);
 
         } catch (Exception e) {
-            log.error("❌ Kunde inte skicka kontaktmejl", e);
+            log.error("❌ Mail fel: {}", e.getMessage()); // <-- shows the real reason
+            throw new RuntimeException(e); // <-- makes it visible in Render logs
+
         }
     }
 }
