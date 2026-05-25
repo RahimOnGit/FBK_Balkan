@@ -3,23 +3,30 @@ package com.example.fbk_balkan.service;
 import com.example.fbk_balkan.entity.TrialRegistration;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+
 @Service
 public class TrialEmailService {
 
+    private static final Logger log = LoggerFactory.getLogger(TrialEmailService.class);
     private final JavaMailSender mailSender;
+
+    // Grabs the exact email used for SMTP auth from application.properties
+    @Value("${spring.mail.username}")
+    private String fromEmail;
 
     public TrialEmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
-//      Skickar godkännandemejl till förälderns e-postadress.
-//     Returnerar true om det lyckades, false annars.
-//     
     public boolean sendApprovalEmail(TrialRegistration reg) {
         String subject = "Provträning godkänd – FBK Balkan";
 
@@ -60,10 +67,6 @@ public class TrialEmailService {
         return sendEmail(reg.getRelativeEmail(), subject, body);
     }
 
-//
-//      Skickar avslagsmejl till förälderns e-postadress.
-//      Returnerar true om det lyckades, false annars.
-//
     public boolean sendRejectionEmail(TrialRegistration reg) {
         String subject = "Angående din provträningsansökan – FBK Balkan";
 
@@ -87,8 +90,6 @@ public class TrialEmailService {
         return sendEmail(reg.getRelativeEmail(), subject, body);
     }
 
-    // ── privat hjälpmetod
-
     private boolean sendEmail(String to, String subject, String body) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -96,27 +97,18 @@ public class TrialEmailService {
 
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setText(body, false); // false = plain text, inte HTML
-            helper.setFrom("FBK Balkan <" + getFromAddress() + ">");
+            helper.setText(body, false);
+
+            // This is the correct way to set a sender name + email address safely
+            helper.setFrom(fromEmail, "FBK Balkan");
 
             mailSender.send(message);
             return true;
 
-        } catch (MessagingException | MailException e) {
-            // Logga felet men kasta inte – status har redan sparats i DB
-            System.err.println("[TrialEmailService] Kunde inte skicka mejl till " + to + ": " + e.getMessage());
+        } catch (MessagingException | MailException | UnsupportedEncodingException e) {
+            // Using the proper logger prints the complete error stack trace to Render
+            log.error("[TrialEmailService] Kunde inte skicka mejl till {}: ", to, e);
             return false;
         }
-    }
-
-
-     // Hämtar avsändaradressen från spring.mail.username om möjligt,
-     // annars används en fast fallback.
-
-    private String getFromAddress() {
-        // Spring injicerar inte properties hit, men mailSender är redan konfigurerad
-        // med rätt avsändare via application.properties.
-        // Returnera något rimligt – SMTP-servern sätter den faktiska From-adressen.
-        return "ungdom@fbkbalkan.se";
     }
 }
