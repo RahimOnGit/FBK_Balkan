@@ -1,5 +1,6 @@
 package com.example.fbk_balkan.config;
 
+import com.example.fbk_balkan.security.CustomAuthenticationEntryPoint;
 import com.example.fbk_balkan.security.CustomAuthenticationFailureHandler;
 import com.example.fbk_balkan.security.CustomAuthenticationSuccessHandler;
 import com.example.fbk_balkan.security.CustomUserDetailsService;
@@ -35,6 +36,8 @@ public class SecurityConfig {
     private CustomAuthenticationFailureHandler authFailureHandler;
     @Autowired
     private CustomAuthenticationSuccessHandler authSuccessHandler;
+    @Autowired
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -42,29 +45,29 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
 
-//                        publicly accessible URLs
-                                .requestMatchers("/", "/css/**", "/images/**","/uploads/**", "/login", "/login-error").permitAll()
+// publicly accessible URLs
+                                .requestMatchers("/", "/css/**", "/images/**", "/uploads/**",
+                                        "/login", "/login-error", "/error", "/error/**", "/not-found")
+                                .permitAll()
                                 .requestMatchers("/forgot-password", "/reset-password").permitAll()
-                                .requestMatchers("/trial-registration", "/trial-registration/success","/about").permitAll()
+                                .requestMatchers("/trial-registration", "/trial-registration/success", "/about").permitAll()
                                 .requestMatchers("/kontakt").permitAll()
-                                .requestMatchers("/trial-registration", "/trial-registration/success","/about","/faq").permitAll()
-                                .requestMatchers("/news", "/news/**","/public-teams/**").permitAll()
+                                .requestMatchers("/trial-registration", "/trial-registration/success", "/about", "/faq").permitAll()
+                                .requestMatchers("/news", "/news/**", "/public-teams/**").permitAll()
                                 .requestMatchers("/sponsors").permitAll()
                                 .requestMatchers("/ungdomsportalen").permitAll()
                                 .requestMatchers("/verksamhet").permitAll()
                                 .requestMatchers("/matcher", "/match-details/**").permitAll()
                                 .requestMatchers("/api/youtube/**").permitAll()
 
-
-
-//                      roles-based access control
+// roles-based access control
                                 .requestMatchers("/coach/**").hasAnyRole("COACH", "ADMIN")
                                 .requestMatchers("/socialadmin/**").hasRole("SOCIAL_ADMIN")
                                 .requestMatchers("/admin/news/**").hasAnyRole("SOCIAL_ADMIN", "ADMIN")
-                                .requestMatchers("/admin/dashboard", "/admin/teams", "/admin/age-groups", "/admin/coaches", "/admin/trials", "/admin/faqs/**")
+                                .requestMatchers("/admin/dashboard", "/admin/teams", "/admin/age-groups",
+                                        "/admin/coaches", "/admin/trials", "/admin/faqs/**")
                                 .hasRole("ADMIN")
                                 .requestMatchers("/team-register").hasRole("ADMIN")
-
 
                                 // Role-based access control
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -95,6 +98,9 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID", "remember-me")
                         .clearAuthentication(true)
                         .permitAll()
+                )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
                 );
 
         return http.build();
@@ -110,7 +116,7 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-//    @Bean
+    //    @Bean
 //    public PersistentTokenRepository persistentTokenRepository() {
 //        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
 //        tokenRepository.setDataSource(dataSource);
@@ -142,10 +148,9 @@ public class SecurityConfig {
             System.err.println("Error ensuring persistent_logins table exists: " + e.getMessage());
         }
 
-        //  We set this to FALSE because we handled the creation manually above.
+        // We set this to FALSE because we handled the creation manually above.
         tokenRepository.setCreateTableOnStartup(false);
 
         return tokenRepository;
     }
-
 }
