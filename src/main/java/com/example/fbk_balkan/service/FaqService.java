@@ -18,11 +18,15 @@ public class FaqService {
         this.faqRepository = faqRepository;
     }
 
-public List<Faq> getAllFaqs() {
-    return faqRepository.findAll(Sort.by("displayOrder"));
-}
+    public List<Faq> getAllFaqs() {
+        return faqRepository.findAll(Sort.by("displayOrder"));
+    }
     public List<Faq> getVisibleFaqs() {
         return faqRepository.findByVisibleTrueOrderByDisplayOrderAsc();
+    }
+
+    public List<Faq> getTop3VisibleFaqs() {
+        return faqRepository.findTop3ByVisibleTrueOrderByDisplayOrderAsc();
     }
 
     public Faq getById(Long id) {
