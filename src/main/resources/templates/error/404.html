@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="sv" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 – Sidan hittades inte | FBK Balkan</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,400;0,700;1,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: #0d2447;
+            font-family: 'Roboto Condensed', sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .error-page {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle background pattern */
+        .error-page::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(21,59,111,0.9) 0%, transparent 70%),
+                    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(245,179,1,0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        /* Big decorative 404 number behind content */
+        .error-bg-number {
+            position: absolute;
+            font-size: clamp(12rem, 35vw, 22rem);
+            font-weight: 900;
+            font-style: italic;
+            color: rgba(255,255,255,0.03);
+            letter-spacing: -0.05em;
+            user-select: none;
+            pointer-events: none;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
+            line-height: 1;
+        }
+
+        .error-card {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 580px;
+            width: 100%;
+        }
+
+        /* Football icon with gold ring */
+        .error-icon-wrap {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            background: rgba(245,179,1,0.1);
+            border: 2px solid rgba(245,179,1,0.3);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .error-icon-wrap::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 1px solid rgba(245,179,1,0.12);
+        }
+
+        .error-code {
+            font-size: clamp(4.5rem, 14vw, 7rem);
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            margin-bottom: 0.75rem;
+            background: linear-gradient(135deg, #F5B301 0%, #ffd055 50%, #F5B301 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .error-title {
+            font-size: clamp(1.4rem, 4vw, 2rem);
+            font-weight: 700;
+            font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .error-divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #F5B301, transparent);
+            margin: 0 auto 1.5rem;
+            border-radius: 2px;
+        }
+
+        .error-desc {
+            font-size: 1.05rem;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.85rem 2rem;
+            background: #F5B301;
+            color: #153B6F;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 20px rgba(245,179,1,0.3);
+        }
+        .btn-home:hover {
+            background: #ffd055;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(245,179,1,0.4);
+        }
+
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.85rem 2rem;
+            background: rgba(255,255,255,0.07);
+            color: rgba(255,255,255,0.8);
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: all 0.25s ease;
+        }
+        .btn-ghost:hover {
+            background: rgba(255,255,255,0.13);
+            color: white;
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Quick links row */
+        .error-quicklinks {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.07);
+        }
+        .error-quicklinks-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.25);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .error-quicklinks-row {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .error-quicklink {
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.2s;
+        }
+        .error-quicklink:hover {
+            color: #F5B301;
+            border-color: rgba(245,179,1,0.3);
+            background: rgba(245,179,1,0.05);
+        }
+
+        /* Animated football SVG */
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+        .football-spin {
+            animation: spin-slow 8s linear infinite;
+        }
+    </style>
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="error-page">
+
+    <div class="error-bg-number">404</div>
+
+    <div class="error-card">
+
+        <!-- Football icon -->
+        <div class="error-icon-wrap">
+            <svg class="football-spin" width="44" height="44" viewBox="0 0 44 44" fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+                <circle cx="22" cy="22" r="20" stroke="#F5B301" stroke-width="1.5" fill="none" opacity="0.3"/>
+                <circle cx="22" cy="22" r="20" fill="none"/>
+                <!-- Football pentagon pattern -->
+                <path d="M22 6 L27 10 L25 16 L19 16 L17 10 Z" fill="#F5B301" opacity="0.9"/>
+                <path d="M22 6 L27 10 L35 8 L38 14 L32 18" fill="none" stroke="#F5B301" stroke-width="1" opacity="0.5"/>
+                <path d="M22 6 L17 10 L9 8 L6 14 L12 18" fill="none" stroke="#F5B301" stroke-width="1" opacity="0.5"/>
+                <path d="M25 16 L32 18 L34 26 L28 30 L22 26" fill="#F5B301" opacity="0.5"/>
+                <path d="M19 16 L12 18 L10 26 L16 30 L22 26" fill="#F5B301" opacity="0.5"/>
+                <path d="M22 26 L16 30 L18 37 L22 38 L26 37 L28 30 Z" fill="#F5B301" opacity="0.7"/>
+                <circle cx="22" cy="22" r="5" fill="#F5B301" opacity="0.9"/>
+            </svg>
+        </div>
+
+        <!-- Error code -->
+        <div class="error-code">404</div>
+
+        <!-- Title -->
+        <h1 class="error-title">Sidan hittades inte</h1>
+
+        <div class="error-divider"></div>
+
+        <!-- Description -->
+        <p class="error-desc">
+            Sidan du letar efter verkar ha försvunnit — precis som ett skott utanför mål.<br>
+            Den kan ha flyttats, tagits bort eller så var adressen felaktig.
+        </p>
+
+        <!-- CTA buttons -->
+        <div class="error-actions">
+            <a href="/" class="btn-home">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 21V12h6v9"/>
+                </svg>
+                Till startsidan
+            </a>
+            <a href="javascript:history.back()" class="btn-ghost">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5m7-7l-7 7 7 7"/>
+                </svg>
+                Gå tillbaka
+            </a>
+        </div>
+
+        <!-- Quick links -->
+        <div class="error-quicklinks">
+            <div class="error-quicklinks-label">Populära sidor</div>
+            <div class="error-quicklinks-row">
+                <a href="/news" class="error-quicklink">Nyheter</a>
+                <a href="/about" class="error-quicklink">Om klubben</a>
+                <a href="/trial-registration" class="error-quicklink">Provträning</a>
+                <a href="/kontakt" class="error-quicklink">Kontakt</a>
+                <a href="/faq" class="error-quicklink">FAQ</a>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+</body>
+</html>
