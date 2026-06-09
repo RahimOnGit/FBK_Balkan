@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
-//gives the mail sending asynchronous
+//1.gives the mail sending asynchronous - 2. to fetch game daily
 @EnableAsync
 public class FbkBalkanApplication implements CommandLineRunner {
 
