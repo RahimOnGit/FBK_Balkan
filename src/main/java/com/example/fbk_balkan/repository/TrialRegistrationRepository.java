@@ -57,5 +57,10 @@ public interface TrialRegistrationRepository extends JpaRepository<TrialRegistra
             String firstName
     );
 
+    /**
+     * Returns all trial registrations whose preferred training date is before the given cutoff.
+     * Used by the GDPR retention job to find expired records eligible for deletion.
+     */
+    List<TrialRegistration> findByPreferredTrainingDateBefore(LocalDate cutoff);
 
 }
