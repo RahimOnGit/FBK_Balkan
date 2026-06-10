@@ -1,5 +1,6 @@
 package com.example.fbk_balkan.config;
 
+import com.example.fbk_balkan.security.CustomAuthenticationEntryPoint;
 import com.example.fbk_balkan.security.CustomAuthenticationFailureHandler;
 import com.example.fbk_balkan.security.CustomAuthenticationSuccessHandler;
 import com.example.fbk_balkan.security.CustomUserDetailsService;
