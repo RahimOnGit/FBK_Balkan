@@ -1,60 +1,3 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="sv" xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>Min profil</title>-->
-<!--    <link th:href="@{/css/output.css}" rel="stylesheet">-->
-<!--</head>-->
-
-<!--<body class="bg-slate-100">-->
-
-<!--<div class="max-w-xl mx-auto mt-10">-->
-
-<!--    <div class="card bg-white shadow-lg">-->
-<!--        <div class="card-body">-->
-
-<!--            <h2 class="text-2xl font-bold mb-4">Min profil</h2>-->
-
-<!--            &lt;!&ndash; Success &ndash;&gt;-->
-<!--            <div th:if="${success}" class="alert alert-success mb-4">-->
-<!--                <span th:text="${success}"></span>-->
-<!--            </div>-->
-
-<!--            <form th:action="@{/profile}" th:object="${user}" method="post">-->
-
-<!--                <input type="hidden" th:field="*{id}"/>-->
-
-<!--                &lt;!&ndash; First Name &ndash;&gt;-->
-<!--                <div class="mb-3">-->
-<!--                    <label class="label">Förnamn</label>-->
-<!--                    <input type="text" th:field="*{firstName}" class="input input-bordered w-full"/>-->
-<!--                </div>-->
-
-<!--                &lt;!&ndash; Last Name &ndash;&gt;-->
-<!--                <div class="mb-3">-->
-<!--                    <label class="label">Efternamn</label>-->
-<!--                    <input type="text" th:field="*{lastName}" class="input input-bordered w-full"/>-->
-<!--                </div>-->
-
-<!--                &lt;!&ndash; Email &ndash;&gt;-->
-<!--                <div class="mb-3">-->
-<!--                    <label class="label">E-post</label>-->
-<!--                    <input type="email" th:field="*{email}" class="input input-bordered w-full"/>-->
-<!--                </div>-->
-
-<!--                <button type="submit" class="btn btn-primary w-full mt-4">-->
-<!--                    Spara ändringar-->
-<!--                </button>-->
-
-<!--            </form>-->
-
-<!--        </div>-->
-<!--    </div>-->
-
-<!--</div>-->
-
-<!--</body>-->
-<!--</html>-->
 <!DOCTYPE html>
 <html lang="sv"
       data-theme="fbkbalkan"
@@ -63,6 +6,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon"
+          type="image/x-icon"
+          th:href="@{/images/fbkbalkan.ico}">
+
     <title>Min profil - FBK Balkan</title>
 
     <!-- Fonts -->

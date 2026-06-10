@@ -24,7 +24,7 @@ public class SvffApiService {
     private String baseUrl;
 
     private final RestTemplate restTemplate = new RestTemplate();
-    @Cacheable("svffGames")
+//    @Cacheable("svffGames")
     public List<GameDTO> fetchGames()
     {
         String from = LocalDate.now().minusMonths(2).toString();

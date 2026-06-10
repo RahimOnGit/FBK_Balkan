@@ -4,14 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - FBK Balkan</title>
+  <link rel="icon"
+        type="image/x-icon"
+        th:href="@{/images/fbkbalkan.ico}">
+
   <link th:href="@{/css/output.css}" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
 </head>
 <body class="min-h-screen bg-base-200">
 <!-- Navbar -->
-<div class="absolute top-0 left-0 z-[10] right-0 bg-primary">
-  <div th:replace="~{fragments/navbar::navbar}"></div>
-</div>
 
 <!-- Login Form -->
 <div class="min-h-screen flex items-center justify-center px-4 py-20">
@@ -67,9 +68,5 @@
   </div>
 </div>
 
-<!-- Footer -->
-<div class="mt-8">
-  <div th:replace="~{fragments/footer::footer}"></div>
-</div>
 </body>
 </html>

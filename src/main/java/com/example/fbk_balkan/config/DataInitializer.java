@@ -10,6 +10,7 @@ import com.example.fbk_balkan.mapper.MatchMapper;
 import com.example.fbk_balkan.repository.MatchRepository;
 import com.example.fbk_balkan.repository.TeamRepository;
 import com.example.fbk_balkan.repository.UserRepository;
+import com.example.fbk_balkan.service.MatchSyncService;
 import com.example.fbk_balkan.service.external.SvffApiService;
 import com.example.fbk_balkan.service.external.SvffTeamConverter;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ private final MatchMapper matchMapper;
 private final MatchRepository matchRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MatchSyncService matchSyncService;
 
     @Override
     public void run(String... args) {
@@ -44,7 +46,9 @@ private final MatchRepository matchRepository;
             System.out.println("Default coach created");
         }
         initTeamsFromSvff();
-        initGamesFromSvff();
+//        initGamesFromSvff();
+        matchSyncService.syncGames();
+
 
         // Create a default social admin if none exists, or fix role if wrong
         var socialAdminOpt = userRepository.findByEmail("social@fbkbalkan.se");
@@ -138,6 +142,21 @@ private final MatchRepository matchRepository;
                         }
                         if (dto.ageCategoryName() != null) {
                             existing.setAgeCategoryName(dto.ageCategoryName());
+                            changed = true;
+                        }
+                        if (dto.goalsScoredHomeTeam() != null && !dto.goalsScoredHomeTeam().equals(existing.getGoalsScoredHomeTeam())) {
+                            existing.setGoalsScoredHomeTeam(dto.goalsScoredHomeTeam());
+                            changed = true;
+                        }
+                        if (dto.goalsScoredAwayTeam() != null && !dto.goalsScoredAwayTeam().equals(existing.getGoalsScoredAwayTeam())) {
+                            existing.setGoalsScoredAwayTeam(dto.goalsScoredAwayTeam());
+                            changed = true;
+                        }
+                        // tvinga uppdatering när matchen är färdig
+                        if (Boolean.TRUE.equals(dto.isFinished()) &&
+                                (existing.getGoalsScoredHomeTeam() == null || existing.getGoalsScoredHomeTeam() == 0)) {
+                            existing.setGoalsScoredHomeTeam(dto.goalsScoredHomeTeam());
+                            existing.setGoalsScoredAwayTeam(dto.goalsScoredAwayTeam());
                             changed = true;
                         }
 
