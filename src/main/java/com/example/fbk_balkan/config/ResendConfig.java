@@ -13,6 +13,12 @@ public class ResendConfig {
 
     @Bean
     public Resend resendClient() {
+        if (apiKey == null || apiKey.isBlank()) {
+            System.err.println("WARNING: RESEND_API_KEY is not set!");
+        }
         return new Resend(apiKey);
     }
 }
+
+
+
