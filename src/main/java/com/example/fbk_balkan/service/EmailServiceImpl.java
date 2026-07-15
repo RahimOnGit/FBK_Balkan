@@ -1,5 +1,6 @@
 package com.example.fbk_balkan.service;
 
+import com.example.fbk_balkan.dto.ContactFormDTO;
 import com.example.fbk_balkan.entity.TrialRegistration;
 import com.resend.Resend;
 import com.resend.core.exception.ResendException;
@@ -90,6 +91,49 @@ public class EmailServiceImpl implements EmailService {
                 """.formatted(reg.getRelativeName(), reg.getFirstName(), reg.getLastName());
 
         return sendSimpleEmail(reg.getRelativeEmail(), subject, body);
+    }
+
+    @Override
+    public void sendContactForm(String adminEmail, ContactFormDTO dto) {
+        String subject = "🔵 Ny kontaktförfrågan: " + dto.getSubject();
+        String body = """
+            Ny meddelande via kontaktformuläret på FBK Balkan
+
+            Namn:    %s
+            E-post:  %s
+            Telefon: %s
+            Ämne:    %s
+
+            Meddelande:
+            ───────────────────────────────────────────
+            %s
+            ───────────────────────────────────────────
+
+            Skickat: %s
+            """.formatted(
+                dto.getName(),
+                dto.getEmail(),
+                dto.getPhone() != null && !dto.getPhone().isBlank() ? dto.getPhone() : "(ej angivet)",
+                dto.getSubject(),
+                dto.getMessage(),
+                java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+        );
+
+        try {
+            CreateEmailOptions options = CreateEmailOptions.builder()
+                    .from(fromName + " <" + fromEmail + ">")
+                    .to(adminEmail)
+                    .replyTo(dto.getEmail())   // important: reply-to the user
+                    .subject(subject)
+                    .text(body)
+                    .build();
+
+            resend.emails().send(options);
+            log.info("✅ Kontaktmejl skickat till {}", adminEmail);
+        } catch (ResendException e) {
+            log.error("❌ Misslyckades att skicka kontaktmejl: {}", e.getMessage());
+            throw new RuntimeException(e);  // rethrow so caller knows
+        }
     }
 
     // Stub methods for now - we can fill them later

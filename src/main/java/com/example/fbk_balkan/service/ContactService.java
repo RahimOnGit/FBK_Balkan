@@ -8,63 +8,26 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
 @Service
 @Slf4j
 public class ContactService {
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private final EmailService emailService;
+    private final String adminEmail;
 
-    @Value("${contact.admin.email:ungdom@fbkbalkan.se}")
-    private String adminEmail;
+    public ContactService(EmailService emailService,
+                          @Value("${contact.admin.email:ungdom@fbkbalkan.se}") String adminEmail) {
+        this.emailService = emailService;
+        this.adminEmail = adminEmail;
+    }
 
     @Async
     public void sendContactEmail(ContactFormDTO dto) {
-        if (mailSender == null) {
-            log.warn("E-postserver ej konfigurerad.");
-            return;
-        }
-
         try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(adminEmail);
-            message.setTo(adminEmail);
-            message.setReplyTo(dto.getEmail());
-            message.setSubject("🔵 Ny kontaktförfrågan: " + dto.getSubject());
-
-            String body = """
-                    Ny meddelande via kontaktformuläret på FBK Balkan
-
-                    Namn:    %s
-                    E-post:  %s
-                    Telefon: %s
-                    Ämne:    %s
-
-                    Meddelande:
-                    ───────────────────────────────────────────
-                    %s
-                    ───────────────────────────────────────────
-
-                    Skickat: %s
-                    """.formatted(
-                    dto.getName(),
-                    dto.getEmail(),
-                    dto.getPhone() != null && !dto.getPhone().isBlank() ? dto.getPhone() : "(ej angivet)",
-                    dto.getSubject(),
-                    dto.getMessage(),
-                    java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-            );
-
-            message.setText(body);
-
-            mailSender.send(message);
-            log.info("✅ Kontaktmejl skickat asynkront till {}", adminEmail);
-
+            emailService.sendContactForm(adminEmail, dto);
         } catch (Exception e) {
-            log.error("❌ Mail fel: {}", e.getMessage());
-            throw new RuntimeException(e); // <-- makes it visible in Render logs
-
+            log.error("Kunde inte skicka kontaktmejl: {}", e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 }
