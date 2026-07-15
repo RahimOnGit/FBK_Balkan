@@ -1,63 +1,54 @@
 package com.example.fbk_balkan.service;
 
 import com.example.fbk_balkan.entity.TrialRegistration;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
+import com.resend.Resend;
+import com.resend.core.exception.ResendException;
+import com.resend.services.emails.model.CreateEmailOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.MailException;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
-import java.io.UnsupportedEncodingException;
 
 @Service
 public class TrialEmailService {
 
     private static final Logger log = LoggerFactory.getLogger(TrialEmailService.class);
-    private final JavaMailSender mailSender;
 
-    // Grabs the exact email used for SMTP auth from application.properties
-    @Value("${spring.mail.username}")
+    private final Resend resend;
+
+    @Value("${mail.from}")
     private String fromEmail;
 
-    public TrialEmailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
+    @Value("${mail.from-name:FBK Balkan Juniorklubb}")
+    private String fromName;
+
+    public TrialEmailService(Resend resend) {
+        this.resend = resend;
     }
 
     public boolean sendApprovalEmail(TrialRegistration reg) {
-        String subject = "Provträning godkänd – FBK Balkan";
+        String subject = "Provträning godkänd – Välkommen till FBK Balkan! ⚽";
 
         String body = """
                 Hej %s!
 
-                Vi är glada att meddela att %s %s har blivit godkänd för provträning hos FBK Balkan.
+                Vi är glada att meddela att %s %s har blivit **godkänd** för provträning hos FBK Balkan.
 
-                Vi ser fram emot att träffa er!
-
-                ────────────────────────────────
-                PARKERING – viktig information
-                ────────────────────────────────
-                Det är trångt på parkeringen. Vänligen hitta andra alternativ
-                när ni hämtar och lämnar barn.
-
-                • Röda markeringar  = parkeringsplatser (glöm inte att aktivera
-                  parkeringsappen – det är gratis men kräver aktivering)
-                • Gula markeringar  = lämna/hämta-zon (man FÅR stå kvar i bilen)
-                • Grön markering    = parkeringshus för längre besök
-                • Turkos markering  = gångväg för barnen från parkering till
-                  hämtningsplatsen
-
-                Tänk på att andra lag tränar efter oss – hjälp oss att komma in
-                och ut smidigt!
+                Vi ser fram emot att träffa er på planen!
 
                 ────────────────────────────────
+                VIKTIG PARKERINGSINFORMATION
+                ────────────────────────────────
+                • Röda markeringar = parkeringsplatser (aktivera parkeringsappen)
+                • Gula markeringar = lämna/hämta-zon (får stå kvar i bilen)
+                • Grön markering   = parkeringshus
+                • Turkos markering = gångväg för barnen
+
+                Tänk på att andra lag tränar efter oss – hjälp oss hålla flytet!
+
                 Välkommen till laget!
-
                 Med vänliga hälsningar,
-                FBK Balkan
+                FBK Balkan Juniorklubb
                 """.formatted(
                 reg.getRelativeName(),
                 reg.getFirstName(),
@@ -75,12 +66,12 @@ public class TrialEmailService {
 
                 Tack för att ni visade intresse för FBK Balkan.
 
-                Vi har tyvärr inte möjlighet att erbjuda %s %s en plats hos oss just nu.
+                Vi har tyvärr inte möjlighet att erbjuda %s %s en plats just nu.
 
                 Vi önskar er lycka till och hoppas att ni hittar ett bra lag.
 
                 Med vänliga hälsningar,
-                FBK Balkan
+                FBK Balkan Juniorklubb
                 """.formatted(
                 reg.getRelativeName(),
                 reg.getFirstName(),
@@ -90,24 +81,21 @@ public class TrialEmailService {
         return sendEmail(reg.getRelativeEmail(), subject, body);
     }
 
-    private boolean sendEmail(String to, String subject, String body) {
+    private boolean sendEmail(String to, String subject, String textBody) {
         try {
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
+            CreateEmailOptions options = CreateEmailOptions.builder()
+                    .from(fromName + " <" + fromEmail + ">")
+                    .to(to)
+                    .subject(subject)
+                    .text(textBody)
+                    .build();
 
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setText(body, false);
-
-            // This is the correct way to set a sender name + email address safely
-            helper.setFrom(fromEmail, "FBK Balkan");
-
-            mailSender.send(message);
+            resend.emails().send(options);
+            log.info("✅ Trial email sent successfully to: {}", to);
             return true;
 
-        } catch (MessagingException | MailException | UnsupportedEncodingException e) {
-            // Using the proper logger prints the complete error stack trace to Render
-            log.error("[TrialEmailService] Kunde inte skicka mejl till {}: ", to, e);
+        } catch (ResendException e) {
+            log.error("❌ Failed to send trial email to {}: {}", to, e.getMessage(), e);
             return false;
         }
     }
